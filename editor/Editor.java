@@ -526,7 +526,9 @@ public class Editor {
 		    		}
 		    		else if (filterName == "Outline")
 		    		{
-//		    			addFilter(new Outline(Color.BLACK));
+		    			Outline outline = (Outline)filters.get(i);
+		    			Color color = JColorChooser.showDialog(frame, "Select a color", outline.getColor());
+		    			filters.set(i, new Outline(color));
 		    		}
 		    	}
 		    });

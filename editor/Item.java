@@ -53,6 +53,10 @@ public class Item {
 		image = new Image(imgPath, color, level);
 		image.setX(xPos * 0.25);
 		image.setY(yPos * 0.25);
+		for (int i = 0; i < filters.size(); i++)
+		{
+			image.addFilter(filters.get(i));
+		}
 	}
 	public Image getImage()
 	{

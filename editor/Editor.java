@@ -277,7 +277,7 @@ public class Editor {
         });
 	    drawing.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-            	if (frameList.getSelectedIndex() != -1 && animList.getSelectedIndex() != -1)
+            	if (frameList.getSelectedIndex() != -1 && animList.getSelectedIndex() != -1 && objectList.getSelectedIndex() != -1)
             	{
             		Frame curFrame = activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex());
                 	curFrame.processMousePress(editing.isSelected(), objectList.getSelectedIndex(), evt.getPoint());
@@ -285,7 +285,7 @@ public class Editor {
                 
             }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-            	if (animList.getSelectedIndex() != -1 && frameList.getSelectedIndex() != -1)
+            	if (animList.getSelectedIndex() != -1 && frameList.getSelectedIndex() != -1 && objectList.getSelectedIndex() != -1)
             	{
             		Frame curFrame = activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex());
                 	curFrame.processMouseRelease(editing.isSelected(), cascade.isSelected(), objectList.getSelectedIndex(), evt.getPoint());
@@ -296,7 +296,7 @@ public class Editor {
         });
 	    editing.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		if (animList.getSelectedIndex() != -1 && frameList.getSelectedIndex() != -1)
+	    		if (animList.getSelectedIndex() != -1 && frameList.getSelectedIndex() != -1 && objectList.getSelectedIndex() != -1)
 	    		{
 	    			updateDrawing(activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex()), drawing,
 	    					editing.isSelected(), rotate.isSelected(), scale.isSelected(), objectList.getSelectedIndex());
@@ -305,20 +305,24 @@ public class Editor {
 	    });
 	    addVertex.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		if (animList.getSelectedIndex() != -1 && frameList.getSelectedIndex() != -1)
+	    		if (animList.getSelectedIndex() != -1 && frameList.getSelectedIndex() != -1 && objectList.getSelectedIndex() != -1)
 	    		{
 	    			Frame curFrame = activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex());
 	    			curFrame.addVertex(objectList.getSelectedIndex());
+	    			updateDrawing(activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex()), drawing,
+	    					editing.isSelected(), rotate.isSelected(), scale.isSelected(), objectList.getSelectedIndex());
 	    		}
 	    	}
 	    });
 	    setColor.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		if (animList.getSelectedIndex() != -1 && frameList.getSelectedIndex() != -1)
+	    		if (animList.getSelectedIndex() != -1 && frameList.getSelectedIndex() != -1 && objectList.getSelectedIndex() != -1)
 	    		{
 	    			Frame curFrame = activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex());
 	    			Color color = JColorChooser.showDialog(frame, "Select a color", curFrame.getObject(objectList.getSelectedIndex()).getColor());    
 	    			curFrame.setColor(objectList.getSelectedIndex(), color); 
+	    			updateDrawing(activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex()), drawing,
+	    					editing.isSelected(), rotate.isSelected(), scale.isSelected(), objectList.getSelectedIndex());
 	    		}
 	    	}
 	    });

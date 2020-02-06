@@ -22,12 +22,16 @@ public class Frame {
 	private int selectedPoint;
 	private Frame parent;
 	private Frame child = null;
+	private int frameTime;
+	private int timePassed;
 	
 	public Frame(String frameName, Boolean master)
 	{
 		name = frameName;
 		objects = new ArrayList<Item>();
 		isMaster = master;
+		frameTime = 100;
+		timePassed = 0;
 	}
 	
 	public Frame(String frameName, Frame parentFrame)
@@ -37,6 +41,8 @@ public class Frame {
 		isMaster = false;
 		parent = parentFrame;
 		parent.setChild(this);
+		frameTime = 100;
+		timePassed = 0;
 		
 		for (int i = 0; i < parent.getObjects().size(); i++)
 		{
@@ -226,5 +232,21 @@ public class Frame {
 
 	public void setChild(Frame child) {
 		this.child = child;
+	}
+
+	public int getFrameTime() {
+		return frameTime;
+	}
+
+	public void setFrameTime(int frameTime) {
+		this.frameTime = frameTime;
+	}
+
+	public int getTimePassed() {
+		return timePassed;
+	}
+
+	public void setTimePassed(int timePassed) {
+		this.timePassed = timePassed;
 	}
 }

@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.util.List;
@@ -25,6 +27,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
@@ -46,6 +49,9 @@ public class Editor {
 	private static SpriteSheet activeSprite;
 	private static LevelManager manager;
 	private static Level demoLevel;
+	private static int TIME_STEP = 10;
+	private static boolean playing = false;
+	private static boolean shouldReRender = false;
 
 	public static void main(String[] args) {
 		activeSprite = new SpriteSheet();
@@ -76,8 +82,6 @@ public class Editor {
 		filePanel.add(selectButton);
 		JButton newButton = new JButton("New");
 	    filePanel.add(newButton);
-	    JButton draw = new JButton("Draw");
-	    filePanel.add(draw);
 	    JButton render = new JButton("Render");
 	    filePanel.add(render);
 		filePanel.setLayout(new FlowLayout());
@@ -231,15 +235,7 @@ public class Editor {
 	    		curFrame.addObject(objectName);
 	    		objectList.setListData(curFrame.getObjectNames());
 	    		objectList.setSelectedIndex(curFrame.getObjects().size() - 1);
-	    	}
-	    });
-	    draw.addActionListener(new ActionListener() {
-	    	public void actionPerformed(ActionEvent e) {
-	    		if (animList.getSelectedIndex() != -1 && frameList.getSelectedIndex() != -1)
-	    		{
-	    			updateDrawing(activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex()), drawing,
-	    					editing.isSelected(), rotate.isSelected(), scale.isSelected(), objectList.getSelectedIndex());
-	    		}
+	    		shouldReRender = true;
 	    	}
 	    });
         objectList.addListSelectionListener(new ListSelectionListener() {
@@ -291,6 +287,7 @@ public class Editor {
                 	curFrame.processMouseRelease(editing.isSelected(), cascade.isSelected(), objectList.getSelectedIndex(), evt.getPoint());
     				updateDrawing(activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex()), drawing,
     						editing.isSelected(), rotate.isSelected(), scale.isSelected(), objectList.getSelectedIndex());
+    				shouldReRender = true;
             	}
             }
         });
@@ -311,6 +308,7 @@ public class Editor {
 	    			curFrame.addVertex(objectList.getSelectedIndex());
 	    			updateDrawing(activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex()), drawing,
 	    					editing.isSelected(), rotate.isSelected(), scale.isSelected(), objectList.getSelectedIndex());
+	    			shouldReRender = true;
 	    		}
 	    	}
 	    });
@@ -323,6 +321,7 @@ public class Editor {
 	    			curFrame.setColor(objectList.getSelectedIndex(), color); 
 	    			updateDrawing(activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex()), drawing,
 	    					editing.isSelected(), rotate.isSelected(), scale.isSelected(), objectList.getSelectedIndex());
+	    			shouldReRender = true;
 	    		}
 	    	}
 	    });
@@ -337,11 +336,8 @@ public class Editor {
 	    		if (animList.getSelectedIndex() != -1 && frameList.getSelectedIndex() != -1)
 	    		{
 	    			Frame curFrame = activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex());
-	    			for (int i = 0; i < curFrame.getObjects().size(); i++)
-	    			{
-	    				curFrame.getObject(i).makeImage(demoLevel);
-	    			}
-	    			updateRender(curFrame, renderArea);
+	    			shouldReRender = true;
+	    			updateRender(frameList, curFrame, renderArea, false);
 	    		}
 	    	}
 	    });
@@ -357,9 +353,45 @@ public class Editor {
 		    		curObject.addNewFilter(filterName);
 		    		
 		    		setFilterButtons(filterPanel, frame, curObject, curObject.getFilters());
+		    		shouldReRender = true;
 	    		}
 	    	}
 	    });
+		ActionListener renderUpdater = new ActionListener() { // Timer event to update the render
+			public void actionPerformed(ActionEvent evt) {
+	    		if (animList.getSelectedIndex() != -1 && frameList.getSelectedIndex() != -1)
+	    		{
+	    			Frame curFrame = activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex());
+	    			updateRender(frameList, curFrame, renderArea, playing);
+	    		}
+			}
+		};
+		Timer timer = new Timer(TIME_STEP, renderUpdater);
+		timer.start();
+	    play.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		playing = true;
+	    	}
+	    });
+	    play.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		playing = true;
+	    	}
+	    });
+	    pause.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		playing = false;
+	    	}
+	    });
+	    frame.addWindowListener(new WindowAdapter(){
+	    	public void windowClosing(WindowEvent e){
+	    		timer.stop();
+	    		System.exit(0);
+	    	}
+	    });
+
+
+	    
 	    
 		frame.add(drawing);
 		frame.add(filePanel);
@@ -378,15 +410,39 @@ public class Editor {
 		frame.setVisible(true);
 	}
 
-	private static void updateRender(Frame curFrame, JPanel render)
+	private static void updateRender(JList<String> frameList, Frame curFrame, JPanel render, boolean advanceFrame)
 	{
-		Graphics2D g2d = (Graphics2D)render.getGraphics();
-		g2d.setColor(Color.WHITE);
-		g2d.fillRect(0, 0, 150, 150);
-		List<Item> objects = curFrame.getObjects();
-		for (int i = 0; i < objects.size(); i++)
+		if (shouldReRender)
 		{
-			objects.get(i).getImage().render(g2d, false);
+			Graphics2D g2d = (Graphics2D)render.getGraphics();
+			g2d.setColor(Color.WHITE);
+			g2d.fillRect(0, 0, 150, 150);
+			List<Item> objects = curFrame.getObjects();
+			for (int i = 0; i < objects.size(); i++)
+			{
+				objects.get(i).makeImage(demoLevel);
+				objects.get(i).getImage().render(g2d, false);
+			}
+			shouldReRender = false;
+		}
+		
+		if (advanceFrame)
+		{
+		curFrame.setTimePassed(curFrame.getTimePassed() + TIME_STEP);
+			if (curFrame.getTimePassed() >= curFrame.getFrameTime())
+			{
+				curFrame.setTimePassed(0);
+				// Go to next frame
+				if (frameList.getSelectedIndex() >= frameList.getModel().getSize() - 1)
+				{
+					frameList.setSelectedIndex(0);
+				}
+				else
+				{
+					frameList.setSelectedIndex(frameList.getSelectedIndex() + 1);
+				}
+				shouldReRender = true;
+			}
 		}
 	}
 	private static void updateDrawing(Frame curFrame, JPanel panel, Boolean editing, Boolean rotating, Boolean scaling, int curObject)

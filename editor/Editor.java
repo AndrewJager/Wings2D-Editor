@@ -52,11 +52,13 @@ public class Editor {
 	private static int TIME_STEP = 10;
 	private static boolean playing = false;
 	private static boolean shouldReRender = false;
+	private static Options options;
 
 	public static void main(String[] args) {
 		activeSprite = new SpriteSheet();
 		manager = new LevelManager();
 		demoLevel = new Level(manager, 0);
+		options = new Options();
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -160,16 +162,19 @@ public class Editor {
 		editOptions.setBounds(500, 240, 350, 180);
 		editOptions.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		JCheckBox cascade = new JCheckBox("Cascade transforms");
-		cascade.setSelected(true);
+		cascade.setSelected(options.getCascadeChanges());
 		editOptions.add(cascade);
 		SpinnerModel spinModel = new SpinnerNumberModel(0.25, 0.001, 2, 0.05);
 		JSpinner imgScale = new JSpinner(spinModel);
 		manager.setScale((double) imgScale.getValue());
 		JCheckBox editing = new JCheckBox("Editing");
+		editing.setSelected(options.getEditing());
 		editOptions.add(editing);
 		JCheckBox rotate = new JCheckBox("Rotation Handle");
+		rotate.setSelected(options.getRotating());
 		editOptions.add(rotate);
 		JCheckBox scale = new JCheckBox("Scale Handles");
+		scale.setSelected(options.getScaling());
 		editOptions.add(scale);
 		editOptions.add(imgScale);
 		editOptions.setLayout(new GridLayout(3, 2));
@@ -224,6 +229,7 @@ public class Editor {
 		    		}
 		    		frameList.setListData(curAnim.getFrameNames());
 		    		frameList.setSelectedIndex(curAnim.getFrames().size() - 1);
+		    		activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex()).setOptions(options);;
 	    		}
 	    	}
 	    });
@@ -232,10 +238,18 @@ public class Editor {
 	    		String objectName = (String)JOptionPane.showInputDialog(frame, "","Add object",
 	    				JOptionPane.PLAIN_MESSAGE, null, null, "Object");
 	    		Frame curFrame = activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex());
-	    		curFrame.addObject(objectName);
-	    		objectList.setListData(curFrame.getObjectNames());
-	    		objectList.setSelectedIndex(curFrame.getObjects().size() - 1);
-	    		shouldReRender = true;
+	    		if (curFrame.getObjectByName(objectName) == null)
+	    		{ // Object with this name does not exist
+		    		curFrame.addObject(objectName);
+		    		objectList.setListData(curFrame.getObjectNames());
+		    		objectList.setSelectedIndex(curFrame.getObjects().size() - 1);
+		    		shouldReRender = true;
+	    		}
+	    		else
+	    		{
+	    			JOptionPane.showMessageDialog(frame,
+	    					"Object with this name already exists", "Invalid input", JOptionPane.WARNING_MESSAGE);
+	    		}
 	    	}
 	    });
         objectList.addListSelectionListener(new ListSelectionListener() {
@@ -244,7 +258,7 @@ public class Editor {
                 if (!evt.getValueIsAdjusting()) {
                 	editing.setSelected(false);
         			updateDrawing(activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex()), drawing,
-        					editing.isSelected(), rotate.isSelected(), scale.isSelected(), objectList.getSelectedIndex());
+        					objectList.getSelectedIndex());
                 }
             }
         });
@@ -266,7 +280,7 @@ public class Editor {
 	                	}
 	                	objectList.setListData(curFrame.getObjectNames());
 	        			updateDrawing(activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex()), drawing,
-	        					editing.isSelected(), rotate.isSelected(), scale.isSelected(), objectList.getSelectedIndex());
+	        					objectList.getSelectedIndex());
                 	}
                 }
             }
@@ -276,7 +290,7 @@ public class Editor {
             	if (frameList.getSelectedIndex() != -1 && animList.getSelectedIndex() != -1 && objectList.getSelectedIndex() != -1)
             	{
             		Frame curFrame = activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex());
-                	curFrame.processMousePress(editing.isSelected(), objectList.getSelectedIndex(), evt.getPoint());
+                	curFrame.processMousePress(objectList.getSelectedIndex(), evt.getPoint());
             	}
                 
             }
@@ -284,9 +298,9 @@ public class Editor {
             	if (animList.getSelectedIndex() != -1 && frameList.getSelectedIndex() != -1 && objectList.getSelectedIndex() != -1)
             	{
             		Frame curFrame = activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex());
-                	curFrame.processMouseRelease(editing.isSelected(), cascade.isSelected(), objectList.getSelectedIndex(), evt.getPoint());
+                	curFrame.processMouseRelease(curFrame.getObject(objectList.getSelectedIndex()).getName(), evt.getPoint());
     				updateDrawing(activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex()), drawing,
-    						editing.isSelected(), rotate.isSelected(), scale.isSelected(), objectList.getSelectedIndex());
+    						objectList.getSelectedIndex());
     				shouldReRender = true;
             	}
             }
@@ -295,8 +309,9 @@ public class Editor {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if (animList.getSelectedIndex() != -1 && frameList.getSelectedIndex() != -1 && objectList.getSelectedIndex() != -1)
 	    		{
+	    			options.setEditing(editing.isSelected());
 	    			updateDrawing(activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex()), drawing,
-	    					editing.isSelected(), rotate.isSelected(), scale.isSelected(), objectList.getSelectedIndex());
+	    					objectList.getSelectedIndex());
 	    		}
 	    	}
 	    });
@@ -307,7 +322,7 @@ public class Editor {
 	    			Frame curFrame = activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex());
 	    			curFrame.addVertex(objectList.getSelectedIndex());
 	    			updateDrawing(activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex()), drawing,
-	    					editing.isSelected(), rotate.isSelected(), scale.isSelected(), objectList.getSelectedIndex());
+	    					objectList.getSelectedIndex());
 	    			shouldReRender = true;
 	    		}
 	    	}
@@ -320,7 +335,7 @@ public class Editor {
 	    			Color color = JColorChooser.showDialog(frame, "Select a color", curFrame.getObject(objectList.getSelectedIndex()).getColor());    
 	    			curFrame.setColor(objectList.getSelectedIndex(), color); 
 	    			updateDrawing(activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex()), drawing,
-	    					editing.isSelected(), rotate.isSelected(), scale.isSelected(), objectList.getSelectedIndex());
+	    					objectList.getSelectedIndex());
 	    			shouldReRender = true;
 	    		}
 	    	}
@@ -389,6 +404,31 @@ public class Editor {
 	    		System.exit(0);
 	    	}
 	    });
+	    cascade.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		options.setCascadeChanges(cascade.isSelected());
+	    	}
+	    });
+	    rotate.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		if (animList.getSelectedIndex() != -1 && frameList.getSelectedIndex() != -1 && objectList.getSelectedIndex() != -1)
+	    		{
+	    			options.setRotating(rotate.isSelected());
+	    			updateDrawing(activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex()), drawing,
+	    					objectList.getSelectedIndex());
+	    		}
+	    	}
+	    });
+	    scale.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		if (animList.getSelectedIndex() != -1 && frameList.getSelectedIndex() != -1 && objectList.getSelectedIndex() != -1)
+	    		{
+	    			options.setScaling(scale.isSelected());
+	    			updateDrawing(activeSprite.getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex()), drawing,
+	    					objectList.getSelectedIndex());
+	    		}
+	    	}
+	    });
 
 
 	    
@@ -445,7 +485,7 @@ public class Editor {
 			}
 		}
 	}
-	private static void updateDrawing(Frame curFrame, JPanel panel, Boolean editing, Boolean rotating, Boolean scaling, int curObject)
+	private static void updateDrawing(Frame curFrame, JPanel panel, int curObject)
 	{
 		Graphics2D g2d = (Graphics2D)panel.getGraphics();
 		g2d.setColor(Color.WHITE);
@@ -469,7 +509,7 @@ public class Editor {
 				g2d.setColor(Color.RED);
 		    	if (i == curObject)
 		    	{
-					if (editing)
+					if (curFrame.getOptions().getEditing())
 					{    
 					    for (int j = 0; j < objects.get(i).getPoints().size(); j++)
 					    {
@@ -481,7 +521,7 @@ public class Editor {
 						drawHandle(path.getBounds2D().getCenterX(), path.getBounds2D().getCenterY(), g2d);
 					}
 					
-					if (rotating)
+					if (curFrame.getOptions().getRotating())
 					{
 						drawHandle(path.getBounds2D().getCenterX(), path.getBounds2D().getY(), g2d);
 					}

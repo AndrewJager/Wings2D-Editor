@@ -22,6 +22,7 @@ public class Frame {
 	private int selectedPoint;
 	private Frame parent;
 	private Frame child = null;
+	private Options options;
 	private int frameTime;
 	private int timePassed;
 	
@@ -50,11 +51,11 @@ public class Frame {
 		}
 	}
 	
-	public void processMousePress(Boolean editing, int selected, Point mouseLoc)
+	public void processMousePress(int selected, Point mouseLoc)
 	{
 		isMoving = false;
 		Item object = getObject(selected);
-		if (editing)
+		if (options.getEditing())
 		{   
 		    List<Ellipse2D> circles = new ArrayList<Ellipse2D>();
 		    for (int i = 0; i < object.getPoints().size(); i++)
@@ -86,7 +87,7 @@ public class Frame {
 			}
 		}
 	}
-	public void processMouseRelease(Boolean editing, Boolean cascade, int selected, Point mouseLoc)
+	public void processMouseRelease(String selected, Point mouseLoc)
 	{
 		
 		if (isMoving)
@@ -94,56 +95,65 @@ public class Frame {
 			isMoving = false;
 			double xTranslate = mouseLoc.x - objLoc.getX();
 			double yTranslate = mouseLoc.y - objLoc.getY();
-			if (editing)
+			if (options.getEditing())
 			{
 				Point2D newPointLoc = new Point2D.Double(mouseLoc.getX(), mouseLoc.getY());
-				Item object = getObject(selected);
-				object.setPoint(selectedPoint, newPointLoc);
-				if (child != null)
+				Item object = getObjectByName(selected);
+				if (object != null)
 				{
-					child.childCopyPoints(object, selected, object.getPoints());
+					object.setPoint(selectedPoint, newPointLoc);
+					if (child != null)
+					{
+						child.childCopyPoints(object, selected, object.getPoints());
+					}
 				}
 			}
 			else
 			{	
-				moveObject(selected, cascade, xTranslate, yTranslate);
+				moveObject(selected, xTranslate, yTranslate);
 			}
 		}
 	}
 
-	private void childCopyPoints(Item parentObj, int obj, List<Point2D> points)
+	private void childCopyPoints(Item parentObj, String obj, List<Point2D> points)
 	{
-		Item object = getObject(obj);
-		double xOffset = object.getPath().getBounds2D().getX() - parentObj.getPath().getBounds2D().getX();
-		double yOffset = object.getPath().getBounds2D().getY() - parentObj.getPath().getBounds2D().getY();
-		object.setPoints(new ArrayList<Point2D>());
-		for (int i = 0; i < points.size(); i++)
+		Item object = getObjectByName(obj);
+		if (object != null)
 		{
-			object.addPoint(points.get(i).getX(), points.get(i).getY());
-		}
-		AffineTransform transform = new AffineTransform();
-		transform.translate(xOffset, yOffset);
-		object.getPath().transform(transform);
-		
-		if (child != null)
-		{
-			child.childCopyPoints(parentObj, obj, points);
+			double xOffset = object.getPath().getBounds2D().getX() - parentObj.getPath().getBounds2D().getX();
+			double yOffset = object.getPath().getBounds2D().getY() - parentObj.getPath().getBounds2D().getY();
+			object.setPoints(new ArrayList<Point2D>());
+			for (int i = 0; i < points.size(); i++)
+			{
+				object.addPoint(points.get(i).getX(), points.get(i).getY());
+			}
+			AffineTransform transform = new AffineTransform();
+			transform.translate(xOffset, yOffset);
+			object.getPath().transform(transform);
+			
+			if (child != null)
+			{
+				child.childCopyPoints(parentObj, obj, points);
+			}
 		}
 	}
 	
-	private void moveObject(int obj, Boolean cascade, double xTranslate, double yTranslate)
+	private void moveObject(String obj, double xTranslate, double yTranslate)
 	{
-		Item object = getObject(obj);
-		AffineTransform transform = new AffineTransform();
-		transform.translate(xTranslate, yTranslate);
-		for (int i = 0; i < object.getPoints().size(); i++)
+		Item object = getObjectByName(obj);
+		if (object != null)
 		{
-			object.getPoint(i).setLocation(object.getPoint(i).getX() + xTranslate, object.getPoint(i).getY() + yTranslate);
-		}
-		object.getPath().transform(transform);
-		if (child != null && cascade)
-		{
-			child.moveObject(obj, cascade, xTranslate, yTranslate);
+			AffineTransform transform = new AffineTransform();
+			transform.translate(xTranslate, yTranslate);
+			for (int i = 0; i < object.getPoints().size(); i++)
+			{
+				object.getPoint(i).setLocation(object.getPoint(i).getX() + xTranslate, object.getPoint(i).getY() + yTranslate);
+			}
+			object.getPath().transform(transform);
+			if (child != null && options.getCascadeChanges())
+			{
+				child.moveObject(obj, xTranslate, yTranslate);
+			}
 		}
 	}
 
@@ -166,15 +176,38 @@ public class Frame {
 		{
 			Item curObject = objects.get(selectedObj);
 			curObject.setColor(color);
-			if (child != null)
+			if (child != null && options.getCascadeChanges())
 			{
 				child.setColor(selectedObj, color);
+			}
+		}
+	}
+	public void setColor(String obj, Color color)
+	{
+		Item curObject = getObjectByName(obj);
+		if (curObject != null)
+		{
+			curObject.setColor(color);
+			if (child != null && options.getCascadeChanges())
+			{
+				child.setColor(obj, color);
 			}
 		}
 	}
 	public Item getObject(int obj)
 	{
 		return objects.get(obj);
+	}
+	public Item getObjectByName(String name)
+	{
+		for (int i = 0; i < objects.size(); i++)
+		{
+			if (objects.get(i).getName().equals(name))
+			{
+				return objects.get(i);
+			}
+		}
+		return null; // No object found
 	}
 	public List<Item> getObjects()
 	{
@@ -248,5 +281,13 @@ public class Frame {
 
 	public void setTimePassed(int timePassed) {
 		this.timePassed = timePassed;
+	}
+
+	public Options getOptions() {
+		return options;
+	}
+
+	public void setOptions(Options options) {
+		this.options = options;
 	}
 }

@@ -1,4 +1,4 @@
-package editor;
+package editor.objects;
 
 public class Options {
 	private Boolean cascadeChanges;

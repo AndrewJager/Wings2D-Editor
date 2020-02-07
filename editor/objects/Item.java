@@ -1,4 +1,4 @@
-package editor;
+package editor.objects;
 
 import java.awt.Color;
 import java.awt.geom.AffineTransform;

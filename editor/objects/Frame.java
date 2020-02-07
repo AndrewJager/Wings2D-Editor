@@ -1,4 +1,4 @@
-package editor;
+package editor.objects;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -11,6 +11,7 @@ import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import framework.Image;
 
 public class Frame {

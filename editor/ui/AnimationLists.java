@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -18,8 +17,10 @@ import javax.swing.event.ListSelectionListener;
 
 import editor.objects.Animation;
 import editor.objects.Frame;
+import editor.objects.Item;
 
 public class AnimationLists {
+	private Editor editor;
 	private JPanel animsPanel;
 	private JPanel framesPanel;
 	private JPanel objectsPanel;
@@ -36,8 +37,9 @@ public class AnimationLists {
 	private JScrollPane frameScroll;
 	private JScrollPane objectScroll;
 	
-	public AnimationLists()
+	public AnimationLists(Editor edit)
 	{
+		editor = edit;
 		animsPanel = new JPanel();
 		animsPanel.setBounds(10, 70, 150, 600);
 		animsPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -75,11 +77,12 @@ public class AnimationLists {
 		objectsPanel.setLayout(new BoxLayout(objectsPanel, BoxLayout.PAGE_AXIS));
 	}
 	
-	public void createEvents(EditOptions editOptions, DrawingArea drawing, JFrame frame, Editor editor)
+	public void createEvents()
 	{
+		AnimationLists ani = editor.getAnimLists();
 		newAnim.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		String animName = (String)JOptionPane.showInputDialog(frame, "","Add animation",
+	    		String animName = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Add animation",
 	    				JOptionPane.PLAIN_MESSAGE, null, null, "Animation");
 	    		editor.getActiveSprite().addAnimation(animName);
 	    		animList.setListData(editor.getActiveSprite().getAnimNames());
@@ -90,7 +93,7 @@ public class AnimationLists {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if (animList.getSelectedIndex() != -1)
 	    		{
-		    		Animation curAnim = editor.getActiveSprite().getAnimation(animList.getSelectedIndex());
+		    		Animation curAnim = ani.getSelectedAnimation();
 		    		String frameName = curAnim.getName()
 		    				+ "_" + frameList.getModel().getSize();
 		    		if (frameList.getModel().getSize() <= 0)
@@ -103,15 +106,15 @@ public class AnimationLists {
 		    		}
 		    		frameList.setListData(curAnim.getFrameNames());
 		    		frameList.setSelectedIndex(curAnim.getFrames().size() - 1);
-		    		editor.getActiveSprite().getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex()).setOptions(editor.getOptions());;
+		    		ani.getSelectedFrame().setOptions(editor.getOptions());;
 	    		}
 	    	}
 	    });
 	    newObject.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		String objectName = (String)JOptionPane.showInputDialog(frame, "","Add object",
+	    		String objectName = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Add object",
 	    				JOptionPane.PLAIN_MESSAGE, null, null, "Object");
-	    		Frame curFrame = editor.getActiveSprite().getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex());
+	    		Frame curFrame = ani.getSelectedFrame();
 	    		if (curFrame.getObjectByName(objectName) == null)
 	    		{ // Object with this name does not exist
 		    		curFrame.addObject(objectName);
@@ -121,7 +124,7 @@ public class AnimationLists {
 	    		}
 	    		else
 	    		{
-	    			JOptionPane.showMessageDialog(frame,
+	    			JOptionPane.showMessageDialog(editor.getFrame(),
 	    					"Object with this name already exists", "Invalid input", JOptionPane.WARNING_MESSAGE);
 	    		}
 	    	}
@@ -130,9 +133,8 @@ public class AnimationLists {
             @Override
             public void valueChanged(ListSelectionEvent evt) {
                 if (!evt.getValueIsAdjusting()) {
-                	editOptions.getEditing().setSelected(false);
-        			editor.updateDrawing(editor.getActiveSprite().getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex()), drawing.getPanel(),
-        					objectList.getSelectedIndex());
+                	editor.getEditOptions().getEditing().setSelected(false);
+        			editor.updateDrawing(ani);
                 }
             }
         });
@@ -140,27 +142,38 @@ public class AnimationLists {
             @Override
             public void valueChanged(ListSelectionEvent evt) {
                 if (!evt.getValueIsAdjusting()) {
-                	editOptions.getEditing().setSelected(false);
-                	if (animList.getSelectedIndex() != -1 && frameList.getSelectedIndex() != -1)
+                	editor.getEditOptions().getEditing().setSelected(false);
+                	if (ani.getIsFrameSelected())
                 	{
-	                	Frame curFrame = editor.getActiveSprite().getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex());
+	                	Frame curFrame = ani.getSelectedFrame();
 	                	if (curFrame.getIsMaster())
 	                	{
-	                		editOptions.getEditing().setEnabled(true);
+	                		editor.getEditOptions().getEditing().setEnabled(true);
 	                	}
 	                	else
 	                	{
-	                		editOptions.getEditing().setEnabled(false);
+	                		editor.getEditOptions().getEditing().setEnabled(false);
 	                	}
 	                	objectList.setListData(curFrame.getObjectNames());
-	        			editor.updateDrawing(editor.getActiveSprite().getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex()), drawing.getPanel(),
-	        					objectList.getSelectedIndex());
+	        			editor.updateDrawing(editor.getAnimLists());
                 	}
                 }
             }
         });
 	}
-	
+	public Animation getSelectedAnimation()
+	{
+		return editor.getActiveSprite().getAnimation(animList.getSelectedIndex());
+	}
+	public Frame getSelectedFrame()
+	{
+		return editor.getActiveSprite().getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex());
+	}
+	public Item getSelectedObject()
+	{
+		return editor.getActiveSprite().getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex())
+				.getObject(objectList.getSelectedIndex());
+	}
 	public Boolean getIsObjectSelected()
 	{
 		if (animList.getSelectedIndex() != -1 && frameList.getSelectedIndex() != -1 && objectList.getSelectedIndex() != -1)
@@ -172,7 +185,17 @@ public class AnimationLists {
 			return false;
 		}
 	}
-	
+	public Boolean getIsFrameSelected()
+	{
+		if (animList.getSelectedIndex() != -1 && frameList.getSelectedIndex() != -1)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 	public JList<String> getAnimList()
 	{
 		return animList;

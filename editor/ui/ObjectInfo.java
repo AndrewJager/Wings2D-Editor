@@ -47,8 +47,7 @@ public class ObjectInfo {
 	    		{
 	    			Frame curFrame = editor.getActiveSprite().getAnimation(ani.getAnimList().getSelectedIndex()).getFrame(ani.getFrameList().getSelectedIndex());
 	    			curFrame.addVertex(ani.getObjectList().getSelectedIndex());
-	    			editor.updateDrawing(editor.getActiveSprite().getAnimation(ani.getAnimList().getSelectedIndex()).getFrame(ani.getFrameList().getSelectedIndex()),
-	    					drawing.getPanel(), ani.getObjectList().getSelectedIndex());
+	    			editor.updateDrawing(ani);
 	    			editor.setShouldReRender(true);
 	    		}
 	    	}
@@ -60,8 +59,7 @@ public class ObjectInfo {
 	    			Frame curFrame = editor.getActiveSprite().getAnimation(ani.getAnimList().getSelectedIndex()).getFrame(ani.getFrameList().getSelectedIndex());
 	    			Color color = JColorChooser.showDialog(frame, "Select a color", curFrame.getObject(ani.getObjectList().getSelectedIndex()).getColor());    
 	    			curFrame.setColor(ani.getObjectList().getSelectedIndex(), color); 
-	    			editor.updateDrawing(editor.getActiveSprite().getAnimation(ani.getAnimList().getSelectedIndex()).getFrame(ani.getFrameList().getSelectedIndex()),
-	    					drawing.getPanel(), ani.getObjectList().getSelectedIndex());
+	    			editor.updateDrawing(ani);
 	    			editor.setShouldReRender(true);
 	    		}
 	    	}
@@ -78,7 +76,7 @@ public class ObjectInfo {
 		    				JOptionPane.PLAIN_MESSAGE, null, filters, "Basic Variance");
 		    		curObject.addNewFilter(filterName);
 		    		
-		    		editor.setFilterButtons(filter.getPanel(), frame, curObject, curObject.getFilters());
+		    		filter.setFilterButtons(filter.getPanel(), frame, curObject, curObject.getFilters());
 		    		editor.setShouldReRender(true);
 	    		}
 	    	}

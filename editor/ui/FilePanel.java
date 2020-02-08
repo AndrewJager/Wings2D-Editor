@@ -8,9 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 
 import editor.objects.Frame;
@@ -42,12 +40,13 @@ public class FilePanel {
 		panel.setLayout(new FlowLayout());
 	}
 	
-	public void createEvents(JList<String> animList, JList<String> frameList, JPanel render, JFrame frame, Editor editor)
+	public void createEvents(Editor editor)
 	{
+		AnimationLists ani = editor.getAnimLists();
 		selectButton.addActionListener(new ActionListener(){  
 	    	public void actionPerformed(ActionEvent e){  
 	    		JFileChooser file = new JFileChooser("test");
-	    		int result = file.showSaveDialog(frame);
+	    		int result = file.showSaveDialog(editor.getFrame());
 	    		if (result == JFileChooser.APPROVE_OPTION) 
 	    		{
 	    			 fileName.setText(file.getSelectedFile().getName());
@@ -64,11 +63,11 @@ public class FilePanel {
 	    }); 
 	    renderBtn.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		if (animList.getSelectedIndex() != -1 && frameList.getSelectedIndex() != -1)
+	    		if (ani.getIsFrameSelected())
 	    		{
-	    			Frame curFrame = editor.getActiveSprite().getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex());
+	    			Frame curFrame = ani.getSelectedFrame();
 	    			editor.setShouldReRender(true);
-	    			editor.updateRender(frameList, curFrame, render, false);
+	    			editor.updateRender(ani.getFrameList(), curFrame, editor.getRender().getPanel(), false);
 	    		}
 	    	}
 	    });

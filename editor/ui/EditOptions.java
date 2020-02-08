@@ -47,15 +47,15 @@ public class EditOptions {
 		panel.setLayout(new GridLayout(3, 2));
 	}
 	
-	public void createEvents(AnimationLists ani, DrawingArea drawing, Editor editor)
+	public void createEvents(Editor editor)
 	{
+		AnimationLists ani = editor.getAnimLists();
 		editing.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if (ani.getAnimList().getSelectedIndex() != -1 && ani.getFrameList().getSelectedIndex() != -1 && ani.getObjectList().getSelectedIndex() != -1)
 	    		{
 	    			editor.getOptions().setEditing(editing.isSelected());
-	    			editor.updateDrawing(editor.getActiveSprite().getAnimation(ani.getAnimList().getSelectedIndex()).getFrame(ani.getFrameList().getSelectedIndex()), 
-	    					drawing.getPanel(), ani.getObjectList().getSelectedIndex());
+	    			editor.updateDrawing(ani);
 	    		}
 	    	}
 	    });
@@ -75,8 +75,7 @@ public class EditOptions {
 	    		if (ani.getAnimList().getSelectedIndex() != -1 && ani.getFrameList().getSelectedIndex() != -1 && ani.getObjectList().getSelectedIndex() != -1)
 	    		{
 	    			editor.getOptions().setRotating(rotate.isSelected());
-	    			editor.updateDrawing(editor.getActiveSprite().getAnimation(ani.getAnimList().getSelectedIndex()).getFrame(ani.getFrameList().getSelectedIndex()), 
-	    					drawing.getPanel(), ani.getObjectList().getSelectedIndex());
+	    			editor.updateDrawing(ani);
 	    		}
 	    	}
 	    });
@@ -85,8 +84,7 @@ public class EditOptions {
 	    		if (ani.getAnimList().getSelectedIndex() != -1 && ani.getFrameList().getSelectedIndex() != -1 && ani.getObjectList().getSelectedIndex() != -1)
 	    		{
 	    			editor.getOptions().setScaling(scale.isSelected());
-	    			editor.updateDrawing(editor.getActiveSprite().getAnimation(ani.getAnimList().getSelectedIndex()).getFrame(ani.getFrameList().getSelectedIndex()),
-	    					drawing.getPanel(),ani.getObjectList().getSelectedIndex());
+	    			editor.updateDrawing(ani);
 	    		}
 	    	}
 	    });

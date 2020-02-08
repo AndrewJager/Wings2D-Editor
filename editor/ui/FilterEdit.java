@@ -9,7 +9,6 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -23,17 +22,19 @@ import framework.imageFilters.Outline;
 import framework.imageFilters.ShadeDir;
 
 public class FilterEdit {
+	private Editor editor;
 	private JPanel panel;
 	
-	public FilterEdit()
+	public FilterEdit(Editor edit)
 	{
+		editor = edit;
 		panel = new JPanel();
 		panel.setBounds(500, 540, 350, 210);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		panel.setLayout(new FlowLayout());
 	}
 	
-	public void setFilterButtons(JPanel panel, JFrame frame, Item curObject, List<ImageFilter> filters)
+	public void setFilterButtons(Item curObject, List<ImageFilter> filters)
 	{
 		panel.removeAll();
 		for (int i = 0; i < filters.size(); i++)
@@ -63,7 +64,7 @@ public class FilterEdit {
 		    		if (filterName == "Basic Variance")
 		    		{
 		    			BasicVariance variance = (BasicVariance)filters.get(i);
-			    		String varAmount = (String)JOptionPane.showInputDialog(frame, "","Variance amount",
+			    		String varAmount = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Variance amount",
 			    				JOptionPane.PLAIN_MESSAGE, null, null, variance.getVarAmt());
 			    		int varAsInt;
 			    		try {
@@ -72,23 +73,23 @@ public class FilterEdit {
 			    		catch (NumberFormatException ex)
 			    		{
 			    		   varAsInt = 1;
-			    		   JOptionPane.showMessageDialog(frame,
+			    		   JOptionPane.showMessageDialog(editor.getFrame(),
 			    				    ex.getMessage(), "Invalid input", JOptionPane.WARNING_MESSAGE);
 			    		}
 			    		filters.set(i, new BasicVariance(varAsInt));
 		    		}
 		    		else if (filterName == "Blur Edges")
 		    		{
-			    		   JOptionPane.showMessageDialog(frame,
+			    		   JOptionPane.showMessageDialog(editor.getFrame(),
 			    				    "Nothing to change for this filter", "Go home", JOptionPane.PLAIN_MESSAGE);
 		    		}
 		    		else if (filterName == "Darken From")
 		    		{
 		    			DarkenFrom darken = (DarkenFrom)filters.get(i);
 			    		Object[] directions = {"Left", "Right", "Top", "Bottom"};
-			    		String filterDir = (String)JOptionPane.showInputDialog(frame, "","Choose Direction",
+			    		String filterDir = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Choose Direction",
 			    				JOptionPane.PLAIN_MESSAGE, null, directions, ShadeDir.getAsString(darken.getDirection()));
-			    		String varAmount = (String)JOptionPane.showInputDialog(frame, "","Variance amount",
+			    		String varAmount = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Variance amount",
 			    				JOptionPane.PLAIN_MESSAGE, null, null, darken.getAmt());
 			    		int varAsInt;
 			    		try {
@@ -97,7 +98,7 @@ public class FilterEdit {
 			    		catch (NumberFormatException ex)
 			    		{
 			    		   varAsInt = 1;
-			    		   JOptionPane.showMessageDialog(frame,
+			    		   JOptionPane.showMessageDialog(editor.getFrame(),
 			    				    ex.getMessage(), "Invalid input", JOptionPane.WARNING_MESSAGE);
 			    		}
 			    		filters.set(i, new DarkenFrom(ShadeDir.createFromString(filterDir), varAsInt));
@@ -106,9 +107,9 @@ public class FilterEdit {
 		    		{
 		    			LightenFrom lighten = (LightenFrom)filters.get(i);
 			    		Object[] directions = {"Left", "Right", "Top", "Bottom"};
-			    		String filterDir = (String)JOptionPane.showInputDialog(frame, "","Choose Direction",
+			    		String filterDir = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Choose Direction",
 			    				JOptionPane.PLAIN_MESSAGE, null, directions, ShadeDir.getAsString(lighten.getDirection()));
-			    		String varAmount = (String)JOptionPane.showInputDialog(frame, "","Amount",
+			    		String varAmount = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Amount",
 			    				JOptionPane.PLAIN_MESSAGE, null, null, lighten.getAmt());
 			    		int varAsInt;
 			    		try {
@@ -117,7 +118,7 @@ public class FilterEdit {
 			    		catch (NumberFormatException ex)
 			    		{
 			    		   varAsInt = 1;
-			    		   JOptionPane.showMessageDialog(frame,
+			    		   JOptionPane.showMessageDialog(editor.getFrame(),
 			    				    ex.getMessage(), "Invalid input", JOptionPane.WARNING_MESSAGE);
 			    		}
 			    		filters.set(i, new LightenFrom(ShadeDir.createFromString(filterDir), varAsInt));
@@ -125,7 +126,7 @@ public class FilterEdit {
 		    		else if (filterName == "Outline")
 		    		{
 		    			Outline outline = (Outline)filters.get(i);
-		    			Color color = JColorChooser.showDialog(frame, "Select a color", outline.getColor());
+		    			Color color = JColorChooser.showDialog(editor.getFrame(), "Select a color", outline.getColor());
 		    			filters.set(i, new Outline(color));
 		    		}
 		    	}
@@ -135,7 +136,7 @@ public class FilterEdit {
 		    		JLabel num = (JLabel)moveUp.getParent().getComponent(0);
 		    		int i = Integer.parseInt(num.getText());
 		    		curObject.swapFilters(i,  i - 1);
-		    		setFilterButtons(panel, frame, curObject, filters);
+		    		setFilterButtons(curObject, filters);
 		    	}
 		    });
 		    moveDown.addActionListener(new ActionListener() {
@@ -143,12 +144,12 @@ public class FilterEdit {
 		    		JLabel num = (JLabel)moveUp.getParent().getComponent(0);
 		    		int i = Integer.parseInt(num.getText());
 		    		curObject.swapFilters(i,  i + 1);
-		    		setFilterButtons(panel, frame, curObject, filters);
+		    		setFilterButtons(curObject, filters);
 		    	}
 		    });
 		}
 
-		frame.validate();
+		editor.getFrame().validate();
 	}
 
 	

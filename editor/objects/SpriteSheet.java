@@ -1,12 +1,10 @@
 package editor.objects;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SpriteSheet{
-	private static final long serialVersionUID = 1L;
 	private List<Animation> animations;
 	
 	public SpriteSheet()

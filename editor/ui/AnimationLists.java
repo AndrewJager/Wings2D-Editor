@@ -134,7 +134,7 @@ public class AnimationLists {
             public void valueChanged(ListSelectionEvent evt) {
                 if (!evt.getValueIsAdjusting()) {
                 	editor.getEditOptions().getEditing().setSelected(false);
-        			editor.updateDrawing(ani);
+        			editor.getDrawing().updateDrawing();
                 }
             }
         });
@@ -155,7 +155,7 @@ public class AnimationLists {
 	                		editor.getEditOptions().getEditing().setEnabled(false);
 	                	}
 	                	objectList.setListData(curFrame.getObjectNames());
-	        			editor.updateDrawing(editor.getAnimLists());
+	                	editor.getDrawing().updateDrawing();
                 	}
                 }
             }

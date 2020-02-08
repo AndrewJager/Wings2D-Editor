@@ -15,6 +15,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class EditOptions {
+	private Editor editor;
 	private JPanel panel;
 	private JCheckBox cascade;
 	private SpinnerModel spinModel;
@@ -23,8 +24,9 @@ public class EditOptions {
 	private JCheckBox rotate;
 	private JCheckBox scale;
 
-	public EditOptions(Editor editor)
+	public EditOptions(Editor edit)
 	{
+		editor = edit;
 		panel = new JPanel();
 		panel.setBounds(500, 240, 350, 180);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -47,15 +49,15 @@ public class EditOptions {
 		panel.setLayout(new GridLayout(3, 2));
 	}
 	
-	public void createEvents(Editor editor)
+	public void createEvents()
 	{
 		AnimationLists ani = editor.getAnimLists();
 		editing.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		if (ani.getAnimList().getSelectedIndex() != -1 && ani.getFrameList().getSelectedIndex() != -1 && ani.getObjectList().getSelectedIndex() != -1)
+	    		if (ani.getIsObjectSelected())
 	    		{
 	    			editor.getOptions().setEditing(editing.isSelected());
-	    			editor.updateDrawing(ani);
+	    			editor.getDrawing().updateDrawing();
 	    		}
 	    	}
 	    });
@@ -72,19 +74,19 @@ public class EditOptions {
 	    });
 	    rotate.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		if (ani.getAnimList().getSelectedIndex() != -1 && ani.getFrameList().getSelectedIndex() != -1 && ani.getObjectList().getSelectedIndex() != -1)
+	    		if (ani.getIsObjectSelected())
 	    		{
 	    			editor.getOptions().setRotating(rotate.isSelected());
-	    			editor.updateDrawing(ani);
+	    			editor.getDrawing().updateDrawing();
 	    		}
 	    	}
 	    });
 	    scale.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		if (ani.getAnimList().getSelectedIndex() != -1 && ani.getFrameList().getSelectedIndex() != -1 && ani.getObjectList().getSelectedIndex() != -1)
+	    		if (ani.getIsObjectSelected())
 	    		{
 	    			editor.getOptions().setScaling(scale.isSelected());
-	    			editor.updateDrawing(ani);
+	    			editor.getDrawing().updateDrawing();
 	    		}
 	    	}
 	    });

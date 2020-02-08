@@ -11,10 +11,10 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import editor.objects.Frame;
 import editor.objects.SpriteSheet;
 
 public class FilePanel {
+	private Editor editor;
 	private JPanel panel;
 	private JButton selectButton;
 	private JButton newButton;
@@ -22,8 +22,9 @@ public class FilePanel {
 	private JLabel fileLabel;
 	private JLabel fileName;
 
-	public FilePanel()
+	public FilePanel(Editor edit)
 	{
+		editor = edit;
 		panel = new JPanel();
 		panel.setBounds(10, 10, 400, 50);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -40,7 +41,7 @@ public class FilePanel {
 		panel.setLayout(new FlowLayout());
 	}
 	
-	public void createEvents(Editor editor)
+	public void createEvents()
 	{
 		AnimationLists ani = editor.getAnimLists();
 		selectButton.addActionListener(new ActionListener(){  
@@ -65,9 +66,8 @@ public class FilePanel {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if (ani.getIsFrameSelected())
 	    		{
-	    			Frame curFrame = ani.getSelectedFrame();
 	    			editor.setShouldReRender(true);
-	    			editor.updateRender(ani.getFrameList(), curFrame, editor.getRender().getPanel(), false);
+	    			editor.getRender().updateRender(false);
 	    		}
 	    	}
 	    });

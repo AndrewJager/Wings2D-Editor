@@ -8,7 +8,6 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -17,14 +16,16 @@ import editor.objects.Frame;
 import editor.objects.Item;
 
 public class ObjectInfo {
+	private Editor editor;
 	private JPanel panel;
 	private JLabel infoLabel;
 	private JButton addVertex;
 	private JButton setColor;
 	private JButton addFilter;
 
-	public ObjectInfo()
+	public ObjectInfo(Editor edit)
 	{
+		editor = edit;
 		panel = new JPanel();
 		panel.setBounds(500, 430, 350, 100);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -39,15 +40,16 @@ public class ObjectInfo {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 	}
 	
-	public void createEvents(AnimationLists ani, DrawingArea drawing, JFrame frame, FilterEdit filter, Editor editor)
+	public void createEvents()
 	{
+		AnimationLists ani = editor.getAnimLists();
 		addVertex.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if (ani.getIsObjectSelected())
 	    		{
-	    			Frame curFrame = editor.getActiveSprite().getAnimation(ani.getAnimList().getSelectedIndex()).getFrame(ani.getFrameList().getSelectedIndex());
+	    			Frame curFrame = ani.getSelectedFrame();
 	    			curFrame.addVertex(ani.getObjectList().getSelectedIndex());
-	    			editor.updateDrawing(ani);
+	    			editor.getDrawing().updateDrawing();
 	    			editor.setShouldReRender(true);
 	    		}
 	    	}
@@ -56,10 +58,10 @@ public class ObjectInfo {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if (ani.getIsObjectSelected())
 	    		{
-	    			Frame curFrame = editor.getActiveSprite().getAnimation(ani.getAnimList().getSelectedIndex()).getFrame(ani.getFrameList().getSelectedIndex());
-	    			Color color = JColorChooser.showDialog(frame, "Select a color", curFrame.getObject(ani.getObjectList().getSelectedIndex()).getColor());    
-	    			curFrame.setColor(ani.getObjectList().getSelectedIndex(), color); 
-	    			editor.updateDrawing(ani);
+	    			Item obj = ani.getSelectedObject();
+	    			Color color = JColorChooser.showDialog(editor.getFrame(), "Select a color", obj.getColor());    
+	    			obj.setColor(color);
+	    			editor.getDrawing().updateDrawing();
 	    			editor.setShouldReRender(true);
 	    		}
 	    	}
@@ -69,14 +71,13 @@ public class ObjectInfo {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if (ani.getIsObjectSelected())
 	    		{
-	    			Frame curFrame = editor.getActiveSprite().getAnimation(ani.getAnimList().getSelectedIndex()).getFrame(ani.getFrameList().getSelectedIndex());
-	    			Item curObject = curFrame.getObject(ani.getObjectList().getSelectedIndex());
+	    			Item curObject = ani.getSelectedObject();
 		    		Object[] filters = {"Basic Variance", "Blur Edges", "Darken From", "Lighten From", "Outline"};
-		    		String filterName = (String)JOptionPane.showInputDialog(frame, "","Choose Filter",
+		    		String filterName = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Choose Filter",
 		    				JOptionPane.PLAIN_MESSAGE, null, filters, "Basic Variance");
 		    		curObject.addNewFilter(filterName);
 		    		
-		    		filter.setFilterButtons(filter.getPanel(), frame, curObject, curObject.getFilters());
+		    		editor.getFilters().setFilterButtons(curObject, curObject.getFilters());
 		    		editor.setShouldReRender(true);
 	    		}
 	    	}

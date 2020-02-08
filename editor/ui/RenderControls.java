@@ -11,13 +11,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class RenderControls {
+	private Editor editor;
 	private JPanel panel;
 	private JButton play;
 	private JButton pause;
 	private JLabel currentFrame;
 
-	public RenderControls()
+	public RenderControls(Editor edit)
 	{
+		editor = edit;
 		panel = new JPanel();
 		panel.setBounds(700, 170, 150, 35);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -30,7 +32,7 @@ public class RenderControls {
 		panel.setLayout(new FlowLayout());
 	}
 	
-	public void createEvents(Editor editor)
+	public void createEvents()
 	{
 		 play.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {

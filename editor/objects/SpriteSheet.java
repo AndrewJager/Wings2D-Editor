@@ -1,5 +1,6 @@
 package editor.objects;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -75,6 +76,13 @@ public class SpriteSheet{
 							objects = frames.get(frames.size() - 1).getObjects();
 							objects.get(objects.size() - 1).addPoint(Double.parseDouble(coords[0]), Double.parseDouble(coords[1]));
 						}
+						break;
+					case "COLOR":
+						String col[] = value.split(";");
+						Color newColor = new Color(Integer.parseInt(col[0]), Integer.parseInt(col[1]), Integer.parseInt(col[2]), Integer.parseInt(col[3]));
+						frames = animations.get(animations.size() - 1).getFrames();
+						objects = frames.get(frames.size() - 1).getObjects();
+						objects.get(objects.size() - 1).setColor(newColor);
 						break;
 				}
 			}

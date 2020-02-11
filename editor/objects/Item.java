@@ -72,6 +72,8 @@ public class Item {
 			}
 		}
 		out.write("\n");
+		out.write("COLOR:");
+		out.write(color.getRed() + ";" + color.getBlue() + ";" + color.getGreen() + ";" + color.getAlpha());
 	}
 	
 	public Image getImage()

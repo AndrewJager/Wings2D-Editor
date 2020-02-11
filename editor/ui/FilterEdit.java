@@ -34,8 +34,9 @@ public class FilterEdit {
 		panel.setLayout(new FlowLayout());
 	}
 	
-	public void setFilterButtons(Item curObject, List<ImageFilter> filters)
+	public void setFilterButtons(Item curObject)
 	{
+		List<ImageFilter> filters = curObject.getFilters();
 		panel.removeAll();
 		for (int i = 0; i < filters.size(); i++)
 		{
@@ -136,7 +137,7 @@ public class FilterEdit {
 		    		JLabel num = (JLabel)moveUp.getParent().getComponent(0);
 		    		int i = Integer.parseInt(num.getText());
 		    		curObject.swapFilters(i,  i - 1);
-		    		setFilterButtons(curObject, filters);
+		    		setFilterButtons(curObject);
 		    	}
 		    });
 		    moveDown.addActionListener(new ActionListener() {
@@ -144,7 +145,7 @@ public class FilterEdit {
 		    		JLabel num = (JLabel)moveUp.getParent().getComponent(0);
 		    		int i = Integer.parseInt(num.getText());
 		    		curObject.swapFilters(i,  i + 1);
-		    		setFilterButtons(curObject, filters);
+		    		setFilterButtons(curObject);
 		    	}
 		    });
 		}

@@ -5,10 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.Scanner;
 
 import javax.swing.BorderFactory;
@@ -76,6 +73,8 @@ public class FilePanel {
 	    				Frame curFrame = curAnim.getFrame(ani.getFrameList().getSelectedIndex());
 	    				ani.getObjectList().setListData(curFrame.getObjectNames());
 	    				ani.getObjectList().setSelectedIndex(0);
+	    				editor.getFilters().setFilterButtons(curFrame.getObject(ani.getObjectList().getSelectedIndex()));
+	    				in.close();
 					} catch (FileNotFoundException e1) {
 						e1.printStackTrace();
 					}

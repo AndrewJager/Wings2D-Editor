@@ -1,16 +1,22 @@
 package editor.objects;
 
 import java.awt.Color;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+
+import framework.Utils;
+import framework.imageFilters.BasicVariance;
+import framework.imageFilters.BlurEdges;
+import framework.imageFilters.DarkenFrom;
+import framework.imageFilters.ImageFilter;
+import framework.imageFilters.LightenFrom;
+import framework.imageFilters.Outline;
+import framework.imageFilters.ShadeDir;
 
 public class SpriteSheet{
 	private List<Animation> animations;
@@ -38,7 +44,6 @@ public class SpriteSheet{
 		while(in.hasNext())
 		{
 			String line = in.next();
-			System.out.println(line);
 			if (line.strip() != "")
 			{
 				String[] split = line.split(":");
@@ -78,11 +83,45 @@ public class SpriteSheet{
 						}
 						break;
 					case "COLOR":
-						String col[] = value.split(";");
-						Color newColor = new Color(Integer.parseInt(col[0]), Integer.parseInt(col[1]), Integer.parseInt(col[2]), Integer.parseInt(col[3]));
+						Color newColor = Utils.stringToColor(value, ";");
 						frames = animations.get(animations.size() - 1).getFrames();
 						objects = frames.get(frames.size() - 1).getObjects();
 						objects.get(objects.size() - 1).setColor(newColor);
+						break;
+					case "FILTERS":
+						String[] filters = value.split(";");
+						frames = animations.get(animations.size() - 1).getFrames();
+						objects = frames.get(frames.size() - 1).getObjects();
+						Item curItem = objects.get(objects.size() - 1);
+						for (int i = 0; i < filters.length; i++)
+						{
+							String filter = filters[i];
+							String[] filterParts = filter.split(ImageFilter.delimiter);
+							switch (filterParts[0])
+							{
+								case BasicVariance.fileTitle:
+									BasicVariance basicVar = new BasicVariance(Integer.parseInt(filterParts[1]));
+									curItem.addFilter(basicVar);
+									break;
+								case BlurEdges.fileTitle:
+									curItem.addFilter(new BlurEdges());
+									break;
+								case DarkenFrom.fileTitle:
+									ShadeDir dir = ShadeDir.createFromString(filterParts[1]);
+									DarkenFrom dark = new DarkenFrom(dir, Double.parseDouble(filterParts[2]));
+									curItem.addFilter(dark);
+									break;
+								case LightenFrom.fileTitle:
+									ShadeDir alsoDir = ShadeDir.createFromString(filterParts[1]);
+									LightenFrom light = new LightenFrom(alsoDir, Double.parseDouble(filterParts[2]));
+									curItem.addFilter(light);
+									break;
+								case Outline.fileTitle:
+									Color col = Utils.stringToColor(filterParts[1], ",");
+									curItem.addFilter(new Outline(col));
+									break;
+							}
+						}
 						break;
 				}
 			}

@@ -10,6 +10,7 @@ import java.util.List;
 
 import framework.Image;
 import framework.Level;
+import framework.Utils;
 import framework.imageFilters.BasicVariance;
 import framework.imageFilters.BlurEdges;
 import framework.imageFilters.DarkenFrom;
@@ -73,7 +74,18 @@ public class Item {
 		}
 		out.write("\n");
 		out.write("COLOR:");
-		out.write(color.getRed() + ";" + color.getBlue() + ";" + color.getGreen() + ";" + color.getAlpha());
+		out.write(Utils.colorToString(color, ";"));
+		out.write("\n");
+		out.write("FILTERS:");
+		for (int i = 0; i < filters.size(); i++)
+		{
+			out.write(filters.get(i).toString());
+			if (i < filters.size() - 1)
+			{
+				out.write(";");
+			}
+		}
+		out.write("\n");
 	}
 	
 	public Image getImage()

@@ -77,7 +77,7 @@ public class ObjectInfo {
 		    				JOptionPane.PLAIN_MESSAGE, null, filters, "Basic Variance");
 		    		curObject.addNewFilter(filterName);
 		    		
-		    		editor.getFilters().setFilterButtons(curObject, curObject.getFilters());
+		    		editor.getFilters().setFilterButtons(curObject);
 		    		editor.setShouldReRender(true);
 	    		}
 	    	}

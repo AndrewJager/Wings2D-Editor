@@ -6,13 +6,13 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Frame {
 	private List<Item> objects;
 	private String name;
-	private Boolean isMaster;
 	private Boolean isMoving = false;
 	private Point2D objLoc;
 	private int selectedPoint;
@@ -22,11 +22,10 @@ public class Frame {
 	private int frameTime;
 	private int timePassed;
 	
-	public Frame(String frameName, Boolean master)
+	public Frame(String frameName)
 	{
 		name = frameName;
 		objects = new ArrayList<Item>();
-		isMaster = master;
 		frameTime = 100;
 		timePassed = 0;
 	}
@@ -35,7 +34,6 @@ public class Frame {
 	{
 		name = frameName;
 		objects = new ArrayList<Item>();
-		isMaster = false;
 		parent = parentFrame;
 		parent.setChild(this);
 		frameTime = 100;
@@ -45,6 +43,17 @@ public class Frame {
 		{
 			this.addObject(parent.getObject(i).copy());
 		}
+	}
+	
+	public void saveToFile(PrintWriter out)
+	{
+		out.write("FRAME:" + name + "\n");
+		out.write("TIME:" + frameTime + "\n");
+		for (int i = 0; i < objects.size(); i++)
+		{
+			objects.get(i).saveToFile(out);
+		}
+		out.write("\n");
 	}
 	
 	public void processMousePress(int selected, Point mouseLoc)
@@ -241,14 +250,6 @@ public class Frame {
 	public String getName()
 	{
 		return name;
-	}
-
-	public Boolean getIsMaster() {
-		return isMaster;
-	}
-
-	public void setIsMaster(Boolean isMaster) {
-		this.isMaster = isMaster;
 	}
 
 	public Frame getParent() {

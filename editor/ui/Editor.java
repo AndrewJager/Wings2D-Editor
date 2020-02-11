@@ -31,7 +31,7 @@ public class Editor {
 	private AnimTimer animTimer;
 
 	public void run() {
-		activeSprite = new SpriteSheet();
+		activeSprite = new SpriteSheet("Test");
 		manager = new LevelManager();
 		demoLevel = new Level(manager, 0);
 		options = new Options();

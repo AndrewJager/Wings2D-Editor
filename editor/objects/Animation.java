@@ -1,5 +1,6 @@
 package editor.objects;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,15 @@ public class Animation {
 	{
 		name = animName;
 		frames = new ArrayList<Frame>();
+	}
+	public void saveToFile(PrintWriter out)
+	{
+		out.write("ANIM:" + name + "\n");
+		for (int i = 0; i < frames.size(); i++)
+		{
+			frames.get(i).saveToFile(out);
+		}
+		out.write("\n");
 	}
 
 	public Frame getFrame(int frame)
@@ -32,9 +42,9 @@ public class Animation {
 		return names;
 	}
 	
-	public void addFrame(String frameName, Boolean master)
+	public void addFrame(String frameName)
 	{
-		frames.add(new Frame(frameName, master));
+		frames.add(new Frame(frameName));
 	}
 	public void addFrame(String frameName, Frame parent)
 	{

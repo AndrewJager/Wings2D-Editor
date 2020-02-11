@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +58,18 @@ public class Item {
 			image.addFilter(filters.get(i));
 		}
 	}
+	
+	public void saveToFile(PrintWriter out)
+	{
+		out.write("OBJECT:" + name + "\n");
+		out.write("POINTS:");
+		for (int i = 0; i < points.size(); i++)
+		{
+			out.write("{" + points.get(i).getX() + ", " + points.get(i).getY() + "}");
+		}
+		out.write("\n");
+	}
+	
 	public Image getImage()
 	{
 		return image;

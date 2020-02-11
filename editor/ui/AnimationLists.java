@@ -98,7 +98,7 @@ public class AnimationLists {
 		    				+ "_" + frameList.getModel().getSize();
 		    		if (frameList.getModel().getSize() <= 0)
 		    		{
-		    			curAnim.addFrame(frameName, true);
+		    			curAnim.addFrame(frameName);
 		    		}
 		    		else
 		    		{
@@ -146,14 +146,6 @@ public class AnimationLists {
                 	if (ani.getIsFrameSelected())
                 	{
 	                	Frame curFrame = ani.getSelectedFrame();
-	                	if (curFrame.getIsMaster())
-	                	{
-	                		editor.getEditOptions().getEditing().setEnabled(true);
-	                	}
-	                	else
-	                	{
-	                		editor.getEditOptions().getEditing().setEnabled(false);
-	                	}
 	                	objectList.setListData(curFrame.getObjectNames());
 	                	editor.getDrawing().updateDrawing();
                 	}

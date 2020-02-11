@@ -18,6 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import editor.objects.Animation;
+import editor.objects.Frame;
 import editor.objects.SpriteSheet;
 
 public class FilePanel {
@@ -63,8 +65,17 @@ public class FilePanel {
 	    			fileName.setText(file.getSelectedFile().getName());
 	    			try {
 	    				Scanner in = new Scanner(new FileReader(file.getSelectedFile()));
-	    				String spriteName = file.getSelectedFile().getName().substring(0, file.getSelectedFile().getName().length() - 1);
-	    				editor.setActiveSprite(new SpriteSheet(spriteName, in));
+	    				String spriteName = file.getSelectedFile().getName().substring(0, file.getSelectedFile().getName().length() - 4);
+	    				editor.setActiveSprite(new SpriteSheet(spriteName, in, editor.getOptions()));
+	    				AnimationLists ani = editor.getAnimLists();
+	    				ani.getAnimList().setListData(editor.getActiveSprite().getAnimNames());
+	    				ani.getAnimList().setSelectedIndex(0);
+	    				Animation curAnim = editor.getActiveSprite().getAnimation(ani.getAnimList().getSelectedIndex());
+	    				ani.getFrameList().setListData(curAnim.getFrameNames());
+	    				ani.getFrameList().setSelectedIndex(0);
+	    				Frame curFrame = curAnim.getFrame(ani.getFrameList().getSelectedIndex());
+	    				ani.getObjectList().setListData(curFrame.getObjectNames());
+	    				ani.getObjectList().setSelectedIndex(0);
 					} catch (FileNotFoundException e1) {
 						e1.printStackTrace();
 					}

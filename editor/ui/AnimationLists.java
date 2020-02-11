@@ -106,7 +106,7 @@ public class AnimationLists {
 		    		}
 		    		frameList.setListData(curAnim.getFrameNames());
 		    		frameList.setSelectedIndex(curAnim.getFrames().size() - 1);
-		    		ani.getSelectedFrame().setOptions(editor.getOptions());;
+		    		ani.getSelectedFrame().setOptions(editor.getOptions());
 	    		}
 	    	}
 	    });

@@ -65,7 +65,11 @@ public class Item {
 		out.write("POINTS:");
 		for (int i = 0; i < points.size(); i++)
 		{
-			out.write("{" + points.get(i).getX() + ", " + points.get(i).getY() + "}");
+			out.write(points.get(i).getX() + "," + points.get(i).getY());
+			if (i < points.size() - 1)
+			{
+				out.write(";");
+			}
 		}
 		out.write("\n");
 	}

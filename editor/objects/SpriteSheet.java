@@ -21,12 +21,19 @@ public class SpriteSheet{
 		this.name = name;
 	}
 	
-	public SpriteSheet(String name, Scanner in)
+	public SpriteSheet(String name, Scanner in, Options options)
 	{
 		animations = new ArrayList<Animation>();
 		this.name = name;
 		
-		in.useDelimiter(Pattern.compile("(\\n)|;")); // Regex. IDK
+		in.useDelimiter(Pattern.compile("(\\n)")); // Regex. IDK
+		
+		Animation newAnim;
+		Frame newFrame;
+		Item newObject;
+		
+		List<Frame> frames;
+		List<Item> objects;
 		while(in.hasNext())
 		{
 			String line = in.next();
@@ -36,8 +43,7 @@ public class SpriteSheet{
 				String[] split = line.split(":");
 				String token = split[0];
 				String value = split[1];
-				Animation newAnim;
-				Frame newFrame;
+
 				switch (token)
 				{
 					case "SPRITE":
@@ -48,11 +54,27 @@ public class SpriteSheet{
 						break;
 					case "FRAME":
 						newFrame = new Frame(value);
+						newFrame.setOptions(options);
 						animations.get(animations.size() - 1).getFrames().add(newFrame);
 						break;
 					case "TIME":
-						List<Frame> frames = animations.get(animations.size() - 1).getFrames();
+						frames = animations.get(animations.size() - 1).getFrames();
 						frames.get(frames.size() - 1).setFrameTime(Integer.parseInt(value));
+						break;
+					case "OBJECT":
+						frames = animations.get(animations.size() - 1).getFrames();
+						newObject = new Item(value, frames.get(frames.size() - 1));
+						frames.get(frames.size() - 1).addObject(newObject);
+						break;
+					case "POINTS":
+						String[] points = value.split(";");
+						for (int i = 0; i < points.length; i++)
+						{
+							String[] coords = points[i].split(",");
+							frames = animations.get(animations.size() - 1).getFrames();
+							objects = frames.get(frames.size() - 1).getObjects();
+							objects.get(objects.size() - 1).addPoint(Double.parseDouble(coords[0]), Double.parseDouble(coords[1]));
+						}
 						break;
 				}
 			}

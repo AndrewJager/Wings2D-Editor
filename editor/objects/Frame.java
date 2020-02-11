@@ -251,7 +251,10 @@ public class Frame {
 	{
 		return name;
 	}
-
+	public void setName(String n)
+	{
+		name = n;
+	}
 	public Frame getParent() {
 		return parent;
 	}

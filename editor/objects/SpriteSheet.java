@@ -157,7 +157,17 @@ public class SpriteSheet{
 		}
 		return names;
 	}
-	
+	public Animation getAnimByName(String name)
+	{
+		for (int i = 0; i < animations.size(); i++)
+		{
+			if (animations.get(i).getName().equals(name))
+			{
+				return animations.get(i);
+			}
+		}
+		return null; // No object found
+	}
 	public void addAnimation(String animName)
 	{
 		animations.add(new Animation(animName));

@@ -41,7 +41,17 @@ public class Animation {
 		}
 		return names;
 	}
-	
+	public Frame getFrameByName(String name)
+	{
+		for (int i = 0; i < frames.size(); i++)
+		{
+			if (frames.get(i).getName().equals(name))
+			{
+				return frames.get(i);
+			}
+		}
+		return null; // No object found
+	}
 	public void addFrame(String frameName)
 	{
 		frames.add(new Frame(frameName));

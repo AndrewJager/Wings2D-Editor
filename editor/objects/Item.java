@@ -178,6 +178,10 @@ public class Item {
 	{
 		return name;
 	}
+	public void setName(String n)
+	{
+		name = n;
+	}
 	public void setPath(GeneralPath newPath)
 	{
 		path = newPath;

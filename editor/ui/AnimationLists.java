@@ -133,8 +133,12 @@ public class AnimationLists {
             @Override
             public void valueChanged(ListSelectionEvent evt) {
                 if (!evt.getValueIsAdjusting()) {
-                	editor.getEditOptions().getEditing().setSelected(false);
-        			editor.getDrawing().updateDrawing();
+                	if (editor.getAnimLists().getIsObjectSelected())
+                	{
+	                	editor.getObjectInfo().getNameLabel().setText(editor.getAnimLists().getSelectedObject().getName());
+	                	editor.getEditOptions().getEditing().setSelected(false);
+	        			editor.getDrawing().updateDrawing();
+                	}
                 }
             }
         });

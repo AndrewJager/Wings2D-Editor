@@ -29,6 +29,8 @@ public class Editor {
 	private ObjectInfo objectInfo;
 	private FilterEdit filters;
 	private AnimTimer animTimer;
+	private AnimationInfo animInfo;
+	private FrameInfo frameInfo;
 
 	public void run() {
 		activeSprite = new SpriteSheet("Test");
@@ -54,6 +56,8 @@ public class Editor {
 		objectInfo = new ObjectInfo(this);
 		filters = new FilterEdit(this);
 		animTimer = new AnimTimer(this);
+		animInfo = new AnimationInfo(this);
+		frameInfo = new FrameInfo(this);
 		
 		// Events
 	    file.createEvents();
@@ -62,6 +66,8 @@ public class Editor {
 	    drawing.createEvents();
 	    renderControls.createEvents();
 	    objectInfo.createEvents();
+	    animInfo.createEvents();
+	    frameInfo.createEvents();
 		
 	    frame.addWindowListener(new WindowAdapter(){
 	    	public void windowClosing(WindowEvent e){
@@ -80,6 +86,8 @@ public class Editor {
 		frame.add(renderControls.getPanel());
 		frame.add(render.getPanel());
 		frame.add(filters.getPanel());
+		frame.add(animInfo.getPanel());
+		frame.add(frameInfo.getPanel());
 		
 		frame.setSize(1500,800);
 		frame.setLocationRelativeTo(null);

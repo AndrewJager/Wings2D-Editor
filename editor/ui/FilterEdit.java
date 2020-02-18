@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import editor.objects.Item;
+import editor.ui.filterEdits.ShadeFromEdit;
 import framework.imageFilters.BasicVariance;
 import framework.imageFilters.DarkenFrom;
 import framework.imageFilters.ImageFilter;
@@ -87,22 +88,8 @@ public class FilterEdit {
 		    		else if (filterName == "Darken From")
 		    		{
 		    			DarkenFrom darken = (DarkenFrom)filters.get(i);
-			    		Object[] directions = {"Left", "Right", "Top", "Bottom"};
-			    		String filterDir = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Choose Direction",
-			    				JOptionPane.PLAIN_MESSAGE, null, directions, ShadeDir.getAsString(darken.getDirection()));
-			    		String varAmount = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Variance amount",
-			    				JOptionPane.PLAIN_MESSAGE, null, null, darken.getAmt());
-			    		int varAsInt;
-			    		try {
-			    		   varAsInt = Integer.parseInt(varAmount);
-			    		}
-			    		catch (NumberFormatException ex)
-			    		{
-			    		   varAsInt = 1;
-			    		   JOptionPane.showMessageDialog(editor.getFrame(),
-			    				    ex.getMessage(), "Invalid input", JOptionPane.WARNING_MESSAGE);
-			    		}
-			    		filters.set(i, new DarkenFrom(ShadeDir.createFromString(filterDir), varAsInt));
+		    			ShadeFromEdit edit = new ShadeFromEdit(darken);
+			    		filters.set(i, edit.getDarken());
 		    		}
 		    		else if (filterName == "Lighten From")
 		    		{

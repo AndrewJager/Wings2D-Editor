@@ -2,6 +2,7 @@ package editor.ui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.util.List;
@@ -51,6 +52,7 @@ public class DrawingArea {
 	{
 		AnimationLists ani = editor.getAnimLists();
 		Graphics2D g2d = (Graphics2D)editor.getDrawing().getPanel().getGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setColor(Color.WHITE);
 		g2d.fillRect(0, 0, 600, 600);
 		Frame curFrame = ani.getSelectedFrame();

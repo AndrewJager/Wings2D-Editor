@@ -2,6 +2,7 @@ package editor.ui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -28,6 +29,7 @@ public class RenderArea {
 		if (editor.getShouldReRender())
 		{
 			Graphics2D g2d = (Graphics2D)editor.getRender().getPanel().getGraphics();
+			g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 			g2d.setColor(Color.WHITE);
 			g2d.fillRect(0, 0, 150, 150);
 			List<Item> objects = curFrame.getObjects();

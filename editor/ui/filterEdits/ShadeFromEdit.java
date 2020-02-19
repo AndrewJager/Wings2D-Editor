@@ -7,9 +7,16 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import framework.imageFilters.DarkenFrom;
+import framework.imageFilters.LightenFrom;
 import framework.imageFilters.ShadeDir;
+import framework.imageFilters.ShadeFrom;
 
 public class ShadeFromEdit {
 	private ShadeDir dir;
@@ -18,12 +25,13 @@ public class ShadeFromEdit {
 	private JDialog dialog;
 	private JButton okBtn;
 	private JComboBox<ShadeDir> directionSelect;
+	private SpinnerModel spinModel;
+	private JSpinner filterAmt;
 	
-	
-	public ShadeFromEdit(DarkenFrom initDark)
+	public ShadeFromEdit(ShadeFrom initShade)
 	{
-		dir = initDark.getDirection();
-		amt = initDark.getAmt();
+		dir = initShade.getDirection();
+		amt = initShade.getAmt();
 		ShadeDir[] directions = new ShadeDir[4];
 		for (int i = 0; i < ShadeDir.values().length; i++) 
 		{
@@ -38,6 +46,15 @@ public class ShadeFromEdit {
 		directionSelect.setSelectedItem(dir);
 		dialog.add(directionSelect);
 		
+		spinModel = new SpinnerNumberModel(amt, 0.001, 100, 0.05);
+		filterAmt = new JSpinner(spinModel);
+		filterAmt.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				amt = (double)filterAmt.getValue();
+			}
+		});
+		dialog.add(filterAmt);
+		
 		okBtn = new JButton("Ok");
 	    okBtn.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
@@ -49,7 +66,6 @@ public class ShadeFromEdit {
 	    });
 		dialog.add(okBtn);
 		
-		
 		dialog.setLayout(new FlowLayout());
 		dialog.setModal(true);
 		dialog.setVisible(true);
@@ -58,5 +74,9 @@ public class ShadeFromEdit {
 	public DarkenFrom getDarken()
 	{
 		return new DarkenFrom(dir, amt);
+	}
+	public LightenFrom getLighten()
+	{
+		return new LightenFrom(dir, amt);
 	}
 }

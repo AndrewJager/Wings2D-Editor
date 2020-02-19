@@ -94,22 +94,8 @@ public class FilterEdit {
 		    		else if (filterName == "Lighten From")
 		    		{
 		    			LightenFrom lighten = (LightenFrom)filters.get(i);
-			    		Object[] directions = {"Left", "Right", "Top", "Bottom"};
-			    		String filterDir = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Choose Direction",
-			    				JOptionPane.PLAIN_MESSAGE, null, directions, ShadeDir.getAsString(lighten.getDirection()));
-			    		String varAmount = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Amount",
-			    				JOptionPane.PLAIN_MESSAGE, null, null, lighten.getAmt());
-			    		int varAsInt;
-			    		try {
-			    		   varAsInt = Integer.parseInt(varAmount);
-			    		}
-			    		catch (NumberFormatException ex)
-			    		{
-			    		   varAsInt = 1;
-			    		   JOptionPane.showMessageDialog(editor.getFrame(),
-			    				    ex.getMessage(), "Invalid input", JOptionPane.WARNING_MESSAGE);
-			    		}
-			    		filters.set(i, new LightenFrom(ShadeDir.createFromString(filterDir), varAsInt));
+		    			ShadeFromEdit edit = new ShadeFromEdit(lighten);
+			    		filters.set(i, edit.getLighten());
 		    		}
 		    		else if (filterName == "Outline")
 		    		{

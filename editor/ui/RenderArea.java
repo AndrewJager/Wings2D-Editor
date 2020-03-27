@@ -7,8 +7,8 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import editor.objects.Frame;
-import editor.objects.Item;
+import framework.animation.Frame;
+import framework.animation.Joint;
 
 public class RenderArea {
 	private Editor editor;
@@ -32,10 +32,10 @@ public class RenderArea {
 			g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 			g2d.setColor(Color.WHITE);
 			g2d.fillRect(0, 0, 150, 150);
-			List<Item> objects = curFrame.getObjects();
+			List<Joint> objects = curFrame.getJoints();
 			for (int i = 0; i < objects.size(); i++)
 			{
-				objects.get(i).makeImage(editor.getDemoLevel());
+				objects.get(i).makeImage();
 				objects.get(i).getImage().render(g2d, false);
 			}
 			editor.setShouldReRender(false);

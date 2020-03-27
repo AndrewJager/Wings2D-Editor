@@ -15,9 +15,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import editor.objects.Animation;
-import editor.objects.Frame;
-import editor.objects.SpriteSheet;
+import framework.animation.Frame;
+import framework.animation.SpriteSheet;
+import framework.animation.Animation;
 
 public class FilePanel {
 	private Editor editor;
@@ -62,8 +62,7 @@ public class FilePanel {
 	    			fileName.setText(file.getSelectedFile().getName());
 	    			try {
 	    				Scanner in = new Scanner(new FileReader(file.getSelectedFile()));
-	    				String spriteName = file.getSelectedFile().getName().substring(0, file.getSelectedFile().getName().length() - 4);
-	    				editor.setActiveSprite(new SpriteSheet(spriteName, in, editor.getOptions()));
+	    				editor.setActiveSprite(new SpriteSheet(in, editor.getDemoLevel(), editor.getOptions()));
 	    				AnimationLists ani = editor.getAnimLists();
 	    				ani.getAnimList().setListData(editor.getActiveSprite().getAnimNames());
 	    				ani.getAnimList().setSelectedIndex(0);
@@ -71,9 +70,9 @@ public class FilePanel {
 	    				ani.getFrameList().setListData(curAnim.getFrameNames());
 	    				ani.getFrameList().setSelectedIndex(0);
 	    				Frame curFrame = curAnim.getFrame(ani.getFrameList().getSelectedIndex());
-	    				ani.getObjectList().setListData(curFrame.getObjectNames());
+	    				ani.getObjectList().setListData(curFrame.getJointNames());
 	    				ani.getObjectList().setSelectedIndex(0);
-	    				editor.getFilters().setFilterButtons(curFrame.getObject(ani.getObjectList().getSelectedIndex()));
+	    				editor.getFilters().setFilterButtons(curFrame.getJoint(ani.getObjectList().getSelectedIndex()));
 	    				in.close();
 					} catch (FileNotFoundException e1) {
 						e1.printStackTrace();
@@ -88,7 +87,7 @@ public class FilePanel {
 	    	public void actionPerformed(ActionEvent e){ 
 	    		String spriteName = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Name sprite",
 	    				JOptionPane.PLAIN_MESSAGE, null, null, "Object");
-	    		editor.setActiveSprite(new SpriteSheet(spriteName));
+	    		editor.setActiveSprite(new SpriteSheet(spriteName, editor.getDemoLevel()));
 	        }  
 	    }); 
 	    renderBtn.addActionListener(new ActionListener() {

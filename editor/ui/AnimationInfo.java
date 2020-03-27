@@ -11,8 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import editor.objects.Frame;
-
 public class AnimationInfo {
 	private Editor editor;
 	private JPanel panel;
@@ -38,7 +36,7 @@ public class AnimationInfo {
 		AnimationLists ani = editor.getAnimLists();
 		changeName.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		String animName = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Rename Object",
+	    		String animName = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Rename Animation",
 	    				JOptionPane.PLAIN_MESSAGE, null, null, "Object");
 	    		if (ani.getAnimList().getSelectedIndex() != -1)
 	    		{

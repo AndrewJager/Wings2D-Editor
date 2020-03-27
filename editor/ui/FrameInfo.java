@@ -43,7 +43,7 @@ public class FrameInfo {
 		AnimationLists ani = editor.getAnimLists();
 		changeName.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		String frameName = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Rename Object",
+	    		String frameName = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Rename Frame",
 	    				JOptionPane.PLAIN_MESSAGE, null, null, "Object");
 	    		if (ani.getFrameList().getSelectedIndex() != -1)
 	    		{

@@ -13,14 +13,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import editor.objects.Item;
 import editor.ui.filterEdits.ShadeFromEdit;
 import framework.imageFilters.BasicVariance;
 import framework.imageFilters.DarkenFrom;
 import framework.imageFilters.ImageFilter;
 import framework.imageFilters.LightenFrom;
 import framework.imageFilters.Outline;
-import framework.imageFilters.ShadeDir;
+import framework.animation.Joint;
 
 public class FilterEdit {
 	private Editor editor;
@@ -35,7 +34,7 @@ public class FilterEdit {
 		panel.setLayout(new FlowLayout());
 	}
 	
-	public void setFilterButtons(Item curObject)
+	public void setFilterButtons(Joint curObject)
 	{
 		List<ImageFilter> filters = curObject.getFilters();
 		panel.removeAll();

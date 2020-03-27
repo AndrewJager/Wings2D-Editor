@@ -5,10 +5,10 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import editor.objects.Options;
-import editor.objects.SpriteSheet;
 import framework.Level;
 import framework.LevelManager;
+import framework.animation.Frame;
+import framework.animation.SpriteSheet;
 
 public class Editor {
 	private SpriteSheet activeSprite;
@@ -17,7 +17,7 @@ public class Editor {
 	private boolean playing = false;
 	private boolean shouldReRender = false;
 	private Level demoLevel;
-	private Options options;
+	private Frame.EditOptions options;
 	
 	private JFrame frame;
 	private DrawingArea drawing;
@@ -33,10 +33,10 @@ public class Editor {
 	private FrameInfo frameInfo;
 
 	public void run() {
-		activeSprite = new SpriteSheet("Test");
 		manager = new LevelManager();
 		demoLevel = new Level(manager, 0);
-		options = new Options();
+		activeSprite = new SpriteSheet("Test", demoLevel);
+		options = new Frame.EditOptions();
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -113,7 +113,7 @@ public class Editor {
 	public Level getDemoLevel() {
 		return demoLevel;
 	}
-	public Options getOptions() {
+	public Frame.EditOptions getOptions() {
 		return options;
 	}
 	public JFrame getFrame() {

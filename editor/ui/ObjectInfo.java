@@ -13,8 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import editor.objects.Frame;
-import editor.objects.Item;
+import framework.animation.Frame;
+import framework.animation.Joint;
 
 public class ObjectInfo {
 	private Editor editor;
@@ -66,9 +66,9 @@ public class ObjectInfo {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if (ani.getIsObjectSelected())
 	    		{
-	    			Item obj = ani.getSelectedObject();
-	    			Color color = JColorChooser.showDialog(editor.getFrame(), "Select a color", obj.getColor());    
-	    			obj.setColor(color);
+	    		    Joint joint = ani.getSelectedObject();
+	    			Color color = JColorChooser.showDialog(editor.getFrame(), "Select a color", joint.getColor());    
+	    			joint.setColor(color);
 	    			editor.getDrawing().updateDrawing();
 	    			editor.setShouldReRender(true);
 	    		}
@@ -79,7 +79,7 @@ public class ObjectInfo {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if (ani.getIsObjectSelected())
 	    		{
-	    			Item curObject = ani.getSelectedObject();
+	    			Joint curObject = ani.getSelectedObject();
 		    		Object[] filters = {"Basic Variance", "Blur Edges", "Darken From", "Lighten From", "Outline"};
 		    		String filterName = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Choose Filter",
 		    				JOptionPane.PLAIN_MESSAGE, null, filters, "Basic Variance");
@@ -99,10 +99,10 @@ public class ObjectInfo {
 	    		if (ani.getObjectList().getSelectedIndex() != -1)
 	    		{
 	    			int index = ani.getObjectList().getSelectedIndex();
-		    		if (curFrame.getObjectByName(objectName) == null)
+		    		if (curFrame.getJointByName(objectName) == null)
 		    		{ // Object with this name does not exist
-			    		curFrame.getObject(ani.getObjectList().getSelectedIndex()).setName(objectName);
-			    		ani.getObjectList().setListData(curFrame.getObjectNames());
+			    		curFrame.getJoint(ani.getObjectList().getSelectedIndex()).setName(objectName);
+			    		ani.getObjectList().setListData(curFrame.getJointNames());
 			    		ani.getObjectList().setSelectedIndex(index);
 			    		nameLabel.setText(objectName);
 		    		}

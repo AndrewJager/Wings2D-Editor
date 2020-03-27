@@ -5,12 +5,13 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 import java.util.List;
 
 import javax.swing.JPanel;
 
-import editor.objects.Frame;
-import editor.objects.Item;
+import framework.animation.Frame;
+import framework.animation.Joint;
 
 public class DrawingArea {
 	private Editor editor;
@@ -40,7 +41,7 @@ public class DrawingArea {
             	if (ani.getIsObjectSelected())
             	{
             		Frame curFrame = ani.getSelectedFrame();
-                	curFrame.processMouseRelease(curFrame.getObject(ani.getObjectList().getSelectedIndex()).getName(), evt.getPoint());
+                	curFrame.processMouseRelease(curFrame.getJoint(ani.getObjectList().getSelectedIndex()).getName(), evt.getPoint());
     				updateDrawing();
     				editor.setShouldReRender(true);
             	}
@@ -57,12 +58,12 @@ public class DrawingArea {
 		g2d.fillRect(0, 0, 600, 600);
 		Frame curFrame = ani.getSelectedFrame();
 		int objIndex = ani.getObjectList().getSelectedIndex();
-		List<Item> objects = curFrame.getObjects();
+		List<Joint> objects = curFrame.getJoints();
 		for (int i = 0; i < objects.size(); i++)
 		{
 			if (objects.get(i).getPath() != null)
 			{
-				GeneralPath path = objects.get(i).getPath();
+				Path2D path = objects.get(i).getPath();
 				
 				if (i == objIndex)
 				{
@@ -76,7 +77,7 @@ public class DrawingArea {
 				g2d.setColor(Color.RED);
 		    	if (i == objIndex)
 		    	{
-					if (curFrame.getOptions().getEditing())
+					if (curFrame.getEditOptions().getEditing())
 					{    
 					    for (int j = 0; j < objects.get(i).getPoints().size(); j++)
 					    {
@@ -88,7 +89,7 @@ public class DrawingArea {
 						drawHandle(path.getBounds2D().getCenterX(), path.getBounds2D().getCenterY(), g2d);
 					}
 					
-					if (curFrame.getOptions().getRotating())
+					if (curFrame.getEditOptions().getRotating())
 					{
 						drawHandle(path.getBounds2D().getCenterX(), path.getBounds2D().getY(), g2d);
 					}

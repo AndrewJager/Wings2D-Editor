@@ -61,19 +61,22 @@ public class DrawingArea {
 		List<Joint> objects = curFrame.getJoints();
 		for (int i = 0; i < objects.size(); i++)
 		{
-			if (objects.get(i).getPath() != null)
+			Joint joint = objects.get(i);
+			if (joint.getPath() != null)
 			{
-				Path2D path = objects.get(i).getPath();
+				Path2D path = joint.getPath();
 				
 				if (i == objIndex)
 				{
-					g2d.setColor(objects.get(i).getColor());
+					g2d.setColor(joint.getColor());
 				}
 				else
 				{
-					g2d.setColor(objects.get(i).getFadedColor());
+					g2d.setColor(joint.getFadedColor());
 				}
+				g2d.translate(joint.getX(), joint.getY());
 				g2d.fill(path);
+				g2d.translate(-joint.getX(), -joint.getY());
 				g2d.setColor(Color.RED);
 		    	if (i == objIndex)
 		    	{
@@ -86,7 +89,7 @@ public class DrawingArea {
 					}
 					else
 					{
-						drawHandle(path.getBounds2D().getCenterX(), path.getBounds2D().getCenterY(), g2d);
+						drawHandle(path.getBounds2D().getCenterX() + joint.getX(), path.getBounds2D().getCenterY() + joint.getY(), g2d);
 					}
 					
 					if (curFrame.getEditOptions().getRotating())

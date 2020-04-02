@@ -14,7 +14,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class EditOptions {
+public class EditOptionsPanel {
 	private Editor editor;
 	private JPanel panel;
 	private JCheckBox cascade;
@@ -24,7 +24,7 @@ public class EditOptions {
 	private JCheckBox rotate;
 	private JCheckBox scale;
 
-	public EditOptions(Editor edit)
+	public EditOptionsPanel(Editor edit)
 	{
 		editor = edit;
 		panel = new JPanel();

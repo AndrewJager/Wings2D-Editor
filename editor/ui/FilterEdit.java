@@ -121,7 +121,8 @@ public class FilterEdit {
 		    	}
 		    });
 		}
-
+		panel.revalidate();
+		panel.repaint();
 		editor.getFrame().validate();
 	}
 

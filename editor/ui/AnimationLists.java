@@ -138,6 +138,7 @@ public class AnimationLists {
 	                	editor.getObjectInfo().getNameLabel().setText(editor.getAnimLists().getSelectedObject().getName());
 	                	editor.getEditOptions().getEditing().setSelected(false);
 	        			editor.getDrawing().updateDrawing();
+	        			editor.getFilters().setFilterButtons(ani.getSelectedObject());
                 	}
                 }
             }
@@ -151,6 +152,7 @@ public class AnimationLists {
                 	{
 	                	Frame curFrame = ani.getSelectedFrame();
 	                	objectList.setListData(curFrame.getJointNames());
+	                	objectList.setSelectedIndex(0);
 	                	editor.getDrawing().updateDrawing();
                 	}
                 }

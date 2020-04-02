@@ -5,6 +5,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
 import framework.Level;
 import framework.LevelManager;
 import framework.animation.Frame;
@@ -24,7 +25,7 @@ public class Editor {
 	private RenderArea render;
 	private FilePanel file;
 	private AnimationLists animLists;
-	private EditOptions editOptions;
+	private EditOptionsPanel editOptionsPanel;
 	private RenderControls renderControls;
 	private ObjectInfo objectInfo;
 	private FilterEdit filters;
@@ -51,7 +52,7 @@ public class Editor {
 		render = new RenderArea(this);
 		file = new FilePanel(this);
 		animLists = new AnimationLists(this);
-		editOptions = new EditOptions(this);
+		editOptionsPanel = new EditOptionsPanel(this);
 		renderControls = new RenderControls(this);
 		objectInfo = new ObjectInfo(this);
 		filters = new FilterEdit(this);
@@ -62,7 +63,7 @@ public class Editor {
 		// Events
 	    file.createEvents();
 	    animLists.createEvents();
-	    editOptions.createEvents();
+	    editOptionsPanel.createEvents();
 	    drawing.createEvents();
 	    renderControls.createEvents();
 	    objectInfo.createEvents();
@@ -82,7 +83,7 @@ public class Editor {
 		frame.add(animLists.getFramePanel());
 		frame.add(animLists.getObjectPanel());
 		frame.add(objectInfo.getPanel());
-		frame.add(editOptions.getPanel());
+		frame.add(editOptionsPanel.getPanel());
 		frame.add(renderControls.getPanel());
 		frame.add(render.getPanel());
 		frame.add(filters.getPanel());
@@ -131,8 +132,8 @@ public class Editor {
 	public AnimationLists getAnimLists() {
 		return animLists;
 	}
-	public EditOptions getEditOptions() {
-		return editOptions;
+	public EditOptionsPanel getEditOptions() {
+		return editOptionsPanel;
 	}
 	public RenderControls getRenderControls() {
 		return renderControls;

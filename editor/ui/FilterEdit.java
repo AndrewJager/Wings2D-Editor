@@ -1,17 +1,23 @@
 package editor.ui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 import editor.ui.filterEdits.ShadeFromEdit;
 import framework.imageFilters.BasicVariance;
@@ -24,6 +30,8 @@ import framework.animation.Joint;
 public class FilterEdit {
 	private Editor editor;
 	private JPanel panel;
+	private JPanel internal;
+	private JScrollPane pane;
 	
 	public FilterEdit(Editor edit)
 	{
@@ -31,17 +39,22 @@ public class FilterEdit {
 		panel = new JPanel();
 		panel.setBounds(500, 540, 350, 210);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		panel.setLayout(new FlowLayout());
+
+		internal = new JPanel();
+		internal.setLayout(new BoxLayout(internal, BoxLayout.Y_AXIS));
+		pane = new JScrollPane(internal, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		panel.add(pane);
+		panel.setLayout(new GridLayout());
 	}
 	
 	public void setFilterButtons(Joint curObject)
-	{
+	{				
 		List<ImageFilter> filters = curObject.getFilters();
-		panel.removeAll();
+		internal.removeAll();
 		for (int i = 0; i < filters.size(); i++)
 		{
 			JPanel btnPanel = new JPanel();
-			btnPanel.setSize(100, 40);
+			btnPanel.setPreferredSize(new Dimension(300, 40));
 			btnPanel.setBackground(Color.WHITE);
 			JLabel number = new JLabel(Integer.toString(i));
 			btnPanel.add(number);
@@ -50,11 +63,22 @@ public class FilterEdit {
 			JButton edit = new JButton("Edit");
 			btnPanel.add(edit);
 			JButton moveUp = new JButton("∧");
+			moveUp.setBorder(null);
+			moveUp.setBackground(Color.LIGHT_GRAY);
+			moveUp.setPreferredSize(new Dimension(15, 15));
 			btnPanel.add(moveUp);
 			JButton moveDown = new JButton("∨");
+			moveDown.setBorder(null);
+			moveDown.setBackground(Color.LIGHT_GRAY);
+			moveDown.setPreferredSize(new Dimension(15, 15));
 			btnPanel.add(moveDown);
+			JButton deleteFilter = new JButton("X");
+			deleteFilter.setBorder(null);
+			deleteFilter.setBackground(Color.RED);
+			deleteFilter.setPreferredSize(new Dimension(15, 15));
+			btnPanel.add(deleteFilter);
 			btnPanel.setLayout(new FlowLayout());
-			panel.add(btnPanel);
+			internal.add(btnPanel);
 			
 		    edit.addActionListener(new ActionListener() {
 		    	public void actionPerformed(ActionEvent e) {
@@ -121,8 +145,8 @@ public class FilterEdit {
 		    	}
 		    });
 		}
-		panel.revalidate();
-		panel.repaint();
+		internal.revalidate();
+		internal.repaint();
 		editor.getFrame().validate();
 	}
 

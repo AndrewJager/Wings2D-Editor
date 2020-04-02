@@ -62,7 +62,13 @@ public class FilePanel {
 	    			fileName.setText(file.getSelectedFile().getName());
 	    			try {
 	    				Scanner in = new Scanner(new FileReader(file.getSelectedFile()));
-	    				editor.setActiveSprite(new SpriteSheet(in, editor.getDemoLevel(), editor.getOptions()));
+	    				editor.setActiveSprite(new SpriteSheet(in, editor.getDemoLevel()));
+	    				for (int i = 0; i < editor.getActiveSprite().getAnimations().size(); i++)
+	    				{
+	    					for (int j = 0; j < editor.getActiveSprite().getAnimations().get(i).getFrames().size(); j++) {
+	    						editor.getActiveSprite().getAnimations().get(i).getFrames().get(j).setEditOptions(editor.getOptions());
+	    					}
+	    				}
 	    				AnimationLists ani = editor.getAnimLists();
 	    				ani.getAnimList().setListData(editor.getActiveSprite().getAnimNames());
 	    				ani.getAnimList().setSelectedIndex(0);

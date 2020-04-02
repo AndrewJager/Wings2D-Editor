@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 
 import editor.ui.filterEdits.ShadeFromEdit;
 import framework.imageFilters.BasicVariance;
@@ -42,7 +43,7 @@ public class FilterEdit {
 
 		internal = new JPanel();
 		internal.setLayout(new BoxLayout(internal, BoxLayout.Y_AXIS));
-		pane = new JScrollPane(internal, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		pane = new JScrollPane(internal, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		panel.add(pane);
 		panel.setLayout(new GridLayout());
 	}
@@ -58,7 +59,10 @@ public class FilterEdit {
 			btnPanel.setBackground(Color.WHITE);
 			JLabel number = new JLabel(Integer.toString(i));
 			btnPanel.add(number);
-			JLabel name = new JLabel(filters.get(i).getFilterName());
+			JLabel name = new JLabel(filters.get(i).getFilterName() + " | " + filters.get(i).getFilterInfoString(), SwingConstants.CENTER);
+			name.setPreferredSize(new Dimension(200, 15));
+			name.setBackground(Color.GREEN);
+			name.setOpaque(true);
 			btnPanel.add(name);
 			JButton edit = new JButton("Edit");
 			btnPanel.add(edit);
@@ -77,7 +81,7 @@ public class FilterEdit {
 			deleteFilter.setBackground(Color.RED);
 			deleteFilter.setPreferredSize(new Dimension(15, 15));
 			btnPanel.add(deleteFilter);
-			btnPanel.setLayout(new FlowLayout());
+			btnPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 0));
 			internal.add(btnPanel);
 			
 		    edit.addActionListener(new ActionListener() {

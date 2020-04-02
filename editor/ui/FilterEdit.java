@@ -138,9 +138,17 @@ public class FilterEdit {
 		    });
 		    moveDown.addActionListener(new ActionListener() {
 		    	public void actionPerformed(ActionEvent e) {
-		    		JLabel num = (JLabel)moveUp.getParent().getComponent(0);
+		    		JLabel num = (JLabel)moveDown.getParent().getComponent(0);
 		    		int i = Integer.parseInt(num.getText());
 		    		curObject.swapFilters(i,  i + 1);
+		    		setFilterButtons(curObject);
+		    	}
+		    });
+		    deleteFilter.addActionListener(new ActionListener() {
+		    	public void actionPerformed(ActionEvent e) {
+		    		JLabel num = (JLabel)deleteFilter.getParent().getComponent(0);
+		    		int i = Integer.parseInt(num.getText());
+		    		curObject.deleteFilter(i);
 		    		setFilterButtons(curObject);
 		    	}
 		    });

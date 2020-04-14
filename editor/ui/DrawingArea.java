@@ -84,7 +84,7 @@ public class DrawingArea {
 					{    
 					    for (int j = 0; j < objects.get(i).getPoints().size(); j++)
 					    {
-					    	drawHandle(objects.get(i).getPoints().get(j).getX(), objects.get(i).getPoints().get(j).getY(), g2d);
+					    	drawHandle(objects.get(i).getPoints().get(j).getX() + joint.getX(), objects.get(i).getPoints().get(j).getY() + joint.getY(), g2d);
 					    }
 					}
 					else

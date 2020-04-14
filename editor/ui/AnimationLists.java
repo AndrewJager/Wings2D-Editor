@@ -3,6 +3,7 @@ package editor.ui;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Path2D;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -120,6 +121,10 @@ public class AnimationLists {
 		    		curFrame.addNewJoint(objectName);
 		    		objectList.setListData(curFrame.getJointNames());
 		    		objectList.setSelectedIndex(curFrame.getJoints().size() - 1);
+		    		ani.getSelectedObject().setRenderOrder(objectList.getSelectedIndex());
+		    		ani.getSelectedObject().addPoint(25, 0);
+		    		ani.getSelectedObject().addPoint(50, 50);
+		    		ani.getSelectedObject().addPoint(0, 50);
 		    		editor.setShouldReRender(true);
 	    		}
 	    		else
@@ -135,7 +140,7 @@ public class AnimationLists {
                 if (!evt.getValueIsAdjusting()) {
                 	if (editor.getAnimLists().getIsObjectSelected())
                 	{
-	                	editor.getObjectInfo().getNameLabel().setText(editor.getAnimLists().getSelectedObject().getName());
+	                	editor.getObjectInfo().updateInfo(editor.getAnimLists().getSelectedObject());
 	                	editor.getEditOptions().getEditing().setSelected(false);
 	        			editor.getDrawing().updateDrawing();
 	        			editor.getFilters().setFilterButtons(ani.getSelectedObject());

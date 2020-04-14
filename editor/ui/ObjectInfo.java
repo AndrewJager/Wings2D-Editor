@@ -21,6 +21,7 @@ public class ObjectInfo {
 	private JPanel panel;
 	private JLabel infoLabel;
 	private JLabel nameLabel;
+	private JLabel orderLabel;
 	private JButton addVertex;
 	private JButton setColor;
 	private JButton addFilter;
@@ -37,6 +38,8 @@ public class ObjectInfo {
 		panel.add(infoLabel);
 		nameLabel = new JLabel("Object name");
 		panel.add(nameLabel);
+		orderLabel = new JLabel("Object order");
+		panel.add(orderLabel);
 		addVertex = new JButton("Add vertix");
 		panel.add(addVertex);
 		setColor = new JButton("Change color");
@@ -114,6 +117,12 @@ public class ObjectInfo {
 	    		}
 	    	}
 	    });
+	}
+	
+	public void updateInfo(Joint joint)
+	{
+		nameLabel.setText("Name: " + joint.getName());
+		orderLabel.setText("Order: " + joint.getRenderOrder());
 	}
 	
 	public JLabel getNameLabel()

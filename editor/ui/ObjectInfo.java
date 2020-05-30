@@ -2,6 +2,7 @@ package editor.ui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,14 +12,11 @@ import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 import framework.animation.Frame;
 import framework.animation.Joint;
 
-public class ObjectInfo {
-	private Editor editor;
-	private JPanel panel;
+public class ObjectInfo extends UIElement{
 	private JLabel infoLabel;
 	private JLabel nameLabel;
 	private JLabel orderLabel;
@@ -27,11 +25,9 @@ public class ObjectInfo {
 	private JButton addFilter;
 	private JButton changeName;
 
-	public ObjectInfo(Editor edit)
+	public ObjectInfo(Editor edit, Rectangle bounds)
 	{
-		editor = edit;
-		panel = new JPanel();
-		panel.setBounds(500, 10, 180, 195);
+		super(edit, bounds);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		infoLabel = new JLabel("Object Info");
 		infoLabel.setFont(infoLabel.getFont().deriveFont(Font.BOLD, 14f));
@@ -128,9 +124,5 @@ public class ObjectInfo {
 	public JLabel getNameLabel()
 	{
 		return nameLabel;
-	}
-	public JPanel getPanel()
-	{
-		return panel;
 	}
 }

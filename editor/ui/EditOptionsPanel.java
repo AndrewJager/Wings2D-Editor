@@ -2,6 +2,7 @@ package editor.ui;
 
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,9 +15,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class EditOptionsPanel {
-	private Editor editor;
-	private JPanel panel;
+public class EditOptionsPanel extends UIElement{
 	private JCheckBox cascade;
 	private SpinnerModel spinModel;
 	private JSpinner imgScale;
@@ -24,11 +23,9 @@ public class EditOptionsPanel {
 	private JCheckBox rotate;
 	private JCheckBox scale;
 
-	public EditOptionsPanel(Editor edit)
+	public EditOptionsPanel(Editor edit, Rectangle bounds)
 	{
-		editor = edit;
-		panel = new JPanel();
-		panel.setBounds(500, 240, 350, 180);
+		super(edit, bounds);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		cascade = new JCheckBox("Cascade transforms");
 		cascade.setSelected(editor.getOptions().getCascadeChanges());
@@ -107,9 +104,5 @@ public class EditOptionsPanel {
 	public JCheckBox getScale()
 	{
 		return scale;
-	}
-	public JPanel getPanel()
-	{
-		return panel;
 	}
 }

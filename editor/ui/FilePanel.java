@@ -2,6 +2,7 @@ package editor.ui;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
@@ -13,15 +14,12 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 import framework.animation.Frame;
 import framework.animation.SpriteSheet;
 import framework.animation.Animation;
 
-public class FilePanel {
-	private Editor editor;
-	private JPanel panel;
+public class FilePanel extends UIElement{
 	private JButton selectButton;
 	private JButton newButton;
 	private JButton renderBtn;
@@ -29,11 +27,9 @@ public class FilePanel {
 	private JLabel fileLabel;
 	private JLabel fileName;
 
-	public FilePanel(Editor edit)
+	public FilePanel(Editor edit, Rectangle bounds)
 	{
-		editor = edit;
-		panel = new JPanel();
-		panel.setBounds(10, 10, 400, 50);
+		super(edit, bounds);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		fileLabel = new JLabel("File:");
 		panel.add(fileLabel);
@@ -110,10 +106,5 @@ public class FilePanel {
 	    		editor.getActiveSprite().saveToFile();
 	    	}
 	    });
-	}
-	
-	public JPanel getPanel()
-	{
-		return panel;
 	}
 }

@@ -2,23 +2,18 @@ package editor.ui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.util.List;
-
-import javax.swing.JPanel;
 
 import framework.animation.Frame;
 import framework.animation.Joint;
 
-public class RenderArea {
-	private Editor editor;
-	private JPanel panel;
+public class RenderArea extends UIElement{
 	
-	public RenderArea(Editor edit)
+	public RenderArea(Editor edit, Rectangle bounds)
 	{
-		editor = edit;
-		panel = new JPanel();
-		panel.setBounds(700, 10, 150, 150);
+		super(edit, bounds);
 		panel.setBackground(Color.WHITE);
 	}
 	
@@ -28,7 +23,7 @@ public class RenderArea {
 		AnimationLists ani = editor.getAnimLists();
 		if (editor.getShouldReRender())
 		{
-			Graphics2D g2d = (Graphics2D)editor.getRender().getPanel().getGraphics();
+			Graphics2D g2d = (Graphics2D)panel.getGraphics();
 			g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 			g2d.setColor(Color.WHITE);
 			g2d.fillRect(0, 0, 150, 150);
@@ -62,9 +57,9 @@ public class RenderArea {
 			}
 		}
 	}
-
-	public JPanel getPanel()
+	
+	public void createEvents()
 	{
-		return panel;
+		
 	}
 }

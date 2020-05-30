@@ -1,9 +1,10 @@
 package editor.ui;
 
 import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Path2D;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -20,8 +21,7 @@ import framework.animation.Animation;
 import framework.animation.Frame;
 import framework.animation.Joint;
 
-public class AnimationLists {
-	private Editor editor;
+public class AnimationLists extends UIElement{
 	private JPanel animsPanel;
 	private JPanel framesPanel;
 	private JPanel objectsPanel;
@@ -38,11 +38,12 @@ public class AnimationLists {
 	private JScrollPane frameScroll;
 	private JScrollPane objectScroll;
 	
-	public AnimationLists(Editor edit)
+	public AnimationLists(Editor edit, Rectangle bounds)
 	{
-		editor = edit;
+		super(edit, bounds);
+		panel.setLayout(new GridLayout(1, 3));
+		
 		animsPanel = new JPanel();
-		animsPanel.setBounds(10, 70, 150, 600);
 		animsPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		animsLabel = new JLabel("Animations:");
 		animsPanel.add(animsLabel);
@@ -52,9 +53,9 @@ public class AnimationLists {
 		newAnim = new JButton("New Animation");
 		animsPanel.add(newAnim);
 		animsPanel.setLayout(new BoxLayout(animsPanel, BoxLayout.PAGE_AXIS));
+		panel.add(animsPanel);
 		
 		framesPanel = new JPanel();
-		framesPanel.setBounds(170, 70, 150, 600);
 		framesPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		framesLabel = new JLabel("Frames:");
 		framesPanel.add(framesLabel);
@@ -64,9 +65,9 @@ public class AnimationLists {
 		newFrame = new JButton("New Frame");
 		framesPanel.add(newFrame);
 		framesPanel.setLayout(new BoxLayout(framesPanel, BoxLayout.PAGE_AXIS));
+		panel.add(framesPanel);
 		
 		objectsPanel = new JPanel();
-		objectsPanel.setBounds(330, 70, 150, 600);
 		objectsPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		objectsLabel = new JLabel("Objects:");
 		objectsPanel.add(objectsLabel);
@@ -76,6 +77,7 @@ public class AnimationLists {
 		newObject = new JButton("New Object");
 		objectsPanel.add(newObject);
 		objectsPanel.setLayout(new BoxLayout(objectsPanel, BoxLayout.PAGE_AXIS));
+		panel.add(objectsPanel);
 	}
 	
 	public void createEvents()

@@ -2,26 +2,22 @@ package editor.ui;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
-public class RenderControls {
-	private Editor editor;
-	private JPanel panel;
+public class RenderControls extends UIElement{
 	private JButton play;
 	private JButton pause;
 	private JLabel currentFrame;
 
-	public RenderControls(Editor edit)
+	public RenderControls(Editor edit, Rectangle bounds)
 	{
-		editor = edit;
-		panel = new JPanel();
-		panel.setBounds(700, 170, 150, 35);
+		super(edit, bounds);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		play = new JButton("Play");
 		panel.add(play);
@@ -44,10 +40,5 @@ public class RenderControls {
 	    		editor.setPlaying(false);
 	    	}
 	    });
-	}
-	
-	public JPanel getPanel()
-	{
-		return panel;
 	}
 }

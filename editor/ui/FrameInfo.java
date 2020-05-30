@@ -1,8 +1,8 @@
 package editor.ui;
 
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,21 +10,16 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
-public class FrameInfo {
-	private Editor editor;
-	private JPanel panel;
+public class FrameInfo extends UIElement{
 	private JLabel frameName;
 	private JButton changeName;
 	private JLabel frameCount;
 	private JButton changeFrames;
 	
-	public FrameInfo(Editor edit)
+	public FrameInfo(Editor edit, Rectangle bounds)
 	{
-		editor = edit;
-		panel = new JPanel();
-		panel.setBounds(180, 680, 300, 50);
+		super(edit, bounds);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		frameName = new JLabel("Frame name");
 		panel.add(frameName);
@@ -62,10 +57,5 @@ public class FrameInfo {
 	    		}
 	    	}
 	    });
-	}
-
-	public JPanel getPanel()
-	{
-		return panel;
 	}
 }

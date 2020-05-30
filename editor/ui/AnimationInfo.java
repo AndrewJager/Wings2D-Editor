@@ -2,6 +2,7 @@ package editor.ui;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -9,19 +10,14 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
-public class AnimationInfo {
-	private Editor editor;
-	private JPanel panel;
+public class AnimationInfo extends UIElement{
 	private JLabel nameLabel;
 	private JButton changeName;
 	
-	public AnimationInfo(Editor edit)
+	public AnimationInfo(Editor edit, Rectangle bounds)
 	{
-		editor = edit;
-		panel = new JPanel();
-		panel.setBounds(10, 680, 150, 50);
+		super(edit, bounds);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		nameLabel = new JLabel("Anim name");
 		panel.add(nameLabel);
@@ -55,10 +51,5 @@ public class AnimationInfo {
 	    		}
 	    	}
 	    });
-	}
-
-	public JPanel getPanel()
-	{
-		return panel;
 	}
 }

@@ -2,6 +2,7 @@ package editor.ui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
@@ -13,15 +14,11 @@ import javax.swing.JPanel;
 import framework.animation.Frame;
 import framework.animation.Joint;
 
-public class DrawingArea {
-	private Editor editor;
-	private JPanel panel;
+public class DrawingArea extends UIElement{
 	
-	public DrawingArea(Editor edit)
+	public DrawingArea(Editor edit, Rectangle bounds)
 	{
-		editor = edit;
-		panel = new JPanel();
-		panel.setBounds(875, 10, 600, 600);
+		super(edit, bounds);
 		panel.setBackground(Color.WHITE);
 	}
 	
@@ -104,10 +101,5 @@ public class DrawingArea {
 	{
 		Ellipse2D circle = new Ellipse2D.Double(x - 6, y - 6, 12, 12);
 		g2d.draw(circle);
-	}
-	
-	public JPanel getPanel()
-	{
-		return panel;
 	}
 }

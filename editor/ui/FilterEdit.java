@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -13,11 +14,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
 import editor.ui.filterEdits.ShadeFromEdit;
@@ -28,17 +27,13 @@ import framework.imageFilters.LightenFrom;
 import framework.imageFilters.Outline;
 import framework.animation.Joint;
 
-public class FilterEdit {
-	private Editor editor;
-	private JPanel panel;
+public class FilterEdit extends UIElement{
 	private JPanel internal;
 	private JScrollPane pane;
 
-	public FilterEdit(Editor edit)
+	public FilterEdit(Editor edit, Rectangle bounds)
 	{
-		editor = edit;
-		panel = new JPanel();
-		panel.setBounds(500, 540, 350, 210);
+		super(edit, bounds);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
 		internal = new JPanel();
@@ -161,9 +156,9 @@ public class FilterEdit {
 		internal.repaint();
 		editor.getFrame().validate();
 	}
-
-	public JPanel getPanel()
+	
+	public void createEvents()
 	{
-		return panel;
+		
 	}
 }

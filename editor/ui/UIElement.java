@@ -19,8 +19,8 @@ public abstract class UIElement {
 	
 	public void resizePanel()
 	{
-		double xScale = Double.valueOf(editor.getFrame().getWidth()) / editor.frameStartWidth;
-		double yScale = Double.valueOf(editor.getFrame().getHeight()) / editor.frameStartHeight;
+		double xScale = Double.valueOf(editor.getMainPanel().getWidth()) / editor.frameStartWidth;
+		double yScale = Double.valueOf(editor.getMainPanel().getHeight()) / editor.frameStartHeight;
 		Rectangle newBounds = new Rectangle((int)(ogBounds.getX() * xScale), (int)(ogBounds.getY() * yScale),
 				(int)(ogBounds.getWidth() * xScale), (int)(ogBounds.getHeight() * yScale));
 		panel.setBounds(newBounds);

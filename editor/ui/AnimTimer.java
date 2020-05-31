@@ -16,6 +16,7 @@ public class AnimTimer {
 	    		if (ani.getIsFrameSelected())
 	    		{
 	    			editor.getRender().updateRender(editor.getPlaying());
+	    			editor.getDrawing().updateDrawing();
 	    		}
 			}
 		};

@@ -10,18 +10,21 @@ import framework.animation.Frame;
 import framework.animation.Joint;
 
 public class RenderArea extends UIElement{
+	private boolean shouldReRender;
 	
 	public RenderArea(Editor edit, Rectangle bounds)
 	{
 		super(edit, bounds);
 		panel.setBackground(Color.WHITE);
+		
+		setShouldReRender(false);
 	}
 	
 	public void updateRender(boolean advanceFrame)
 	{
 		Frame curFrame = editor.getAnimLists().getSelectedFrame();
 		AnimationLists ani = editor.getAnimLists();
-		if (editor.getShouldReRender())
+		if (getShouldReRender())
 		{
 			Graphics2D g2d = (Graphics2D)panel.getGraphics();
 			g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
@@ -35,7 +38,7 @@ public class RenderArea extends UIElement{
 				objects.get(i).getImage().render(g2d, false);
 				g2d.translate(-objects.get(i).getX() * 0.25, -objects.get(i).getY() * 0.25);
 			}
-			editor.setShouldReRender(false);
+			setShouldReRender(false);
 		}
 		
 		if (advanceFrame)
@@ -53,7 +56,7 @@ public class RenderArea extends UIElement{
 				{
 					ani.getFrameList().setSelectedIndex(ani.getFrameList().getSelectedIndex() + 1);
 				}
-				editor.setShouldReRender(true);
+				setShouldReRender(true);
 			}
 		}
 	}
@@ -61,5 +64,19 @@ public class RenderArea extends UIElement{
 	public void createEvents()
 	{
 		
+	}
+
+	/**
+	 * @return If the render will be updated the next time the timer calls RenderArea.updateRender
+	 */
+	public boolean getShouldReRender() {
+		return shouldReRender;
+	}
+
+	/**
+	 * @param Set if the render will be updated the next time the timer calls RenderArea.updateRender
+	 */
+	public void setShouldReRender(boolean shouldReRender) {
+		this.shouldReRender = shouldReRender;
 	}
 }

@@ -56,8 +56,8 @@ public class ObjectInfo extends UIElement{
 	    		{
 	    			Frame curFrame = ani.getSelectedFrame();
 	    			curFrame.addVertex(ani.getObjectList().getSelectedIndex());
-	    			editor.getDrawing().updateDrawing();
-	    			editor.setShouldReRender(true);
+	    			editor.getDrawing().setShouldRedraw(true);
+	    			editor.getRender().setShouldReRender(true);
 	    		}
 	    	}
 	    });
@@ -68,8 +68,8 @@ public class ObjectInfo extends UIElement{
 	    		    Joint joint = ani.getSelectedObject();
 	    			Color color = JColorChooser.showDialog(editor.getFrame(), "Select a color", joint.getColor());    
 	    			joint.setColor(color);
-	    			editor.getDrawing().updateDrawing();
-	    			editor.setShouldReRender(true);
+	    			editor.getDrawing().setShouldRedraw(true);
+	    			editor.getRender().setShouldReRender(true);
 	    		}
 	    	}
 	    });
@@ -85,7 +85,7 @@ public class ObjectInfo extends UIElement{
 		    		curObject.addNewFilter(filterName);
 		    		
 		    		editor.getFilters().setFilterButtons(curObject);
-		    		editor.setShouldReRender(true);
+		    		editor.getRender().setShouldReRender(true);
 	    		}
 	    	}
 	    });

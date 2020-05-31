@@ -1,6 +1,5 @@
 package editor.ui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
@@ -17,7 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import framework.DrawPanel;
 import framework.Level;
 import framework.LevelManager;
 import framework.animation.Frame;
@@ -28,7 +26,6 @@ public class Editor {
 	private LevelManager manager;
 	private int timeStep = 10;
 	private boolean playing = false;
-	private boolean shouldReRender = false;
 	private Level demoLevel;
 	private Frame.EditOptions options;
 	private List<UIElement> elements;
@@ -132,16 +129,19 @@ public class Editor {
 		    	mainPanel.setLocation((int)(xPos * 0.5), yPos);
 		    	mainPanel.setLocation(0, 0);
 		    	mainPanel.revalidate();
-		        
-		        System.out.println(frame.getWidth());
-		        System.out.println(mainPanel.getWidth());
-		        System.out.println(mainPanel.getX());
-		        System.out.println(xPos);
-				
+
 				for (int i = 0; i < elements.size(); i++)
 				{
 					elements.get(i).resizePanel();
 				}
+				
+				if (animLists.getAnimList().getSelectedIndex() != -1)
+				{
+					drawing.setShouldRedraw(true);
+				}
+				render.setShouldReRender(true);
+				manager.setScale((Double.valueOf(getMainPanel().getWidth()) / frameStartWidth) * 0.25);
+				demoLevel.rescale();
 			}
 		});
 
@@ -162,9 +162,6 @@ public class Editor {
 	}
 	public boolean getPlaying() {
 		return playing;
-	}
-	public boolean getShouldReRender() {
-		return shouldReRender;
 	}
 	public Level getDemoLevel() {
 		return demoLevel;
@@ -201,11 +198,6 @@ public class Editor {
 	}
 	public FilterEdit getFilters() {
 		return filters;
-	}
-
-	public void setShouldReRender(Boolean render)
-	{
-		shouldReRender = render;
 	}
 	public void setActiveSprite(SpriteSheet sprite)
 	{

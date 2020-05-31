@@ -96,7 +96,7 @@ public class FilePanel extends UIElement{
 	    	public void actionPerformed(ActionEvent e) {
 	    		if (ani.getIsFrameSelected())
 	    		{
-	    			editor.setShouldReRender(true);
+	    			editor.getRender().setShouldReRender(true);
 	    			editor.getRender().updateRender(false);
 	    		}
 	    	}

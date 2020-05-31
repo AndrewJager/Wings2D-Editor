@@ -127,7 +127,7 @@ public class AnimationLists extends UIElement{
 		    		ani.getSelectedObject().addPoint(25, 0);
 		    		ani.getSelectedObject().addPoint(50, 50);
 		    		ani.getSelectedObject().addPoint(0, 50);
-		    		editor.setShouldReRender(true);
+		    		editor.getRender().setShouldReRender(true);
 	    		}
 	    		else
 	    		{
@@ -144,7 +144,7 @@ public class AnimationLists extends UIElement{
                 	{
 	                	editor.getObjectInfo().updateInfo(editor.getAnimLists().getSelectedObject());
 	                	editor.getEditOptions().getEditing().setSelected(false);
-	        			editor.getDrawing().updateDrawing();
+	        			editor.getDrawing().setShouldRedraw(true);
 	        			editor.getFilters().setFilterButtons(ani.getSelectedObject());
                 	}
                 }
@@ -160,7 +160,7 @@ public class AnimationLists extends UIElement{
 	                	Frame curFrame = ani.getSelectedFrame();
 	                	objectList.setListData(curFrame.getJointNames());
 	                	objectList.setSelectedIndex(0);
-	                	editor.getDrawing().updateDrawing();
+	                	editor.getDrawing().setShouldRedraw(true);
                 	}
                 }
             }

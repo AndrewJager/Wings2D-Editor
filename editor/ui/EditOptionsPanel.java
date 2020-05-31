@@ -54,7 +54,7 @@ public class EditOptionsPanel extends UIElement{
 	    		if (ani.getIsObjectSelected())
 	    		{
 	    			editor.getOptions().setEditing(editing.isSelected());
-	    			editor.getDrawing().updateDrawing();
+	    			editor.getDrawing().setShouldRedraw(true);
 	    		}
 	    	}
 	    });
@@ -74,7 +74,7 @@ public class EditOptionsPanel extends UIElement{
 	    		if (ani.getIsObjectSelected())
 	    		{
 	    			editor.getOptions().setRotating(rotate.isSelected());
-	    			editor.getDrawing().updateDrawing();
+	    			editor.getDrawing().setShouldRedraw(true);
 	    		}
 	    	}
 	    });
@@ -83,7 +83,7 @@ public class EditOptionsPanel extends UIElement{
 	    		if (ani.getIsObjectSelected())
 	    		{
 	    			editor.getOptions().setScaling(scale.isSelected());
-	    			editor.getDrawing().updateDrawing();
+	    			editor.getDrawing().setShouldRedraw(true);
 	    		}
 	    	}
 	    });

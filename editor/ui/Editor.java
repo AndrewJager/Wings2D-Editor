@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import editor.objects.EditOptions;
 import editor.objects.EditorFrame;
 import editor.objects.EditorSpriteSheet;
 import framework.Level;
@@ -27,7 +28,7 @@ public class Editor {
 	private int timeStep = 10;
 	private boolean playing = false;
 	private Level demoLevel;
-	private EditorFrame.EditOptions options;
+	private EditOptions options;
 	private List<UIElement> elements;
 	
 	private JFrame frame;
@@ -52,7 +53,7 @@ public class Editor {
 		manager = new LevelManager();
 		demoLevel = new Level(manager, 0);
 		activeSprite = new EditorSpriteSheet("Test", demoLevel);
-		options = new EditorFrame.EditOptions();
+		options = new EditOptions();
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -168,7 +169,7 @@ public class Editor {
 	public Level getDemoLevel() {
 		return demoLevel;
 	}
-	public EditorFrame.EditOptions getOptions() {
+	public EditOptions getOptions() {
 		return options;
 	}
 	public JFrame getFrame() {

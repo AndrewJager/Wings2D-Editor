@@ -8,8 +8,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -24,6 +26,7 @@ public class ObjectInfo extends UIElement{
 	private JButton setColor;
 	private JButton addFilter;
 	private JButton changeName;
+	private JComboBox<String> selectParent;
 
 	public ObjectInfo(Editor edit, Rectangle bounds)
 	{
@@ -44,6 +47,8 @@ public class ObjectInfo extends UIElement{
 		panel.add(addFilter);
 		changeName = new JButton("Change name");
 		panel.add(changeName);
+		selectParent = new JComboBox<String>();
+		panel.add(selectParent);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 	}
 	
@@ -113,16 +118,55 @@ public class ObjectInfo extends UIElement{
 	    		}
 	    	}
 	    });
+	    
+	    selectParent.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		if (selectParent.getSelectedIndex() == 0)
+	    		{
+	    			ani.getSelectedObject().setParent(null);
+	    		}
+	    		else
+	    		{
+	    			ani.getSelectedObject().setParent(ani.getSelectedFrame().getJointByName(selectParent.getSelectedItem().toString()));
+	    		}
+	    	}
+	    });
 	}
 	
 	public void updateInfo(EditorJoint joint)
 	{
 		nameLabel.setText("Name: " + joint.getName());
 		orderLabel.setText("Order: " + joint.getRenderOrder());
+		
+		String[] allJointNames = joint.getFrame().getJointNames(); 
+		String[] otherJointNames = new String[allJointNames.length - 1];
+		int jointsAdded = 0;
+		for (int i = 0; i < allJointNames.length; i++)
+		{
+			if (!allJointNames[i].equals(joint.getName()))
+			{
+				otherJointNames[jointsAdded] = allJointNames[i];
+				jointsAdded++;
+			}
+		}
+		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(otherJointNames);
+		selectParent.setModel(model);
+		selectParent.insertItemAt("<None>", 0);
+		if (joint.getParent() == null)
+		{
+			selectParent.setSelectedIndex(0);
+		}
+		else
+		{
+			selectParent.setSelectedItem(joint.getParent());
+		}
 	}
 	
 	public JLabel getNameLabel()
 	{
 		return nameLabel;
+	}
+	public JComboBox<String> getSelectParent() {
+		return selectParent;
 	}
 }

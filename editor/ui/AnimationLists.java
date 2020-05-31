@@ -144,8 +144,8 @@ public class AnimationLists extends UIElement{
                 	{
 	                	editor.getObjectInfo().updateInfo(editor.getAnimLists().getSelectedObject());
 	                	editor.getEditOptions().getEditing().setSelected(false);
-	        			editor.getDrawing().setShouldRedraw(true);
 	        			editor.getFilters().setFilterButtons(ani.getSelectedObject());
+	        			editor.getDrawing().setShouldRedraw(true);
                 	}
                 }
             }

@@ -27,7 +27,7 @@ public class EditorJoint {
 	/** Name of this joint */
 	private String name;
 	/** Frame that this belongs to */
-	private EditorFrame parent;
+	private EditorFrame frame;
 	/** Level that this Joint belongs to */
 	private Level level;
 	/** X offset from SpriteSheet position */
@@ -47,22 +47,25 @@ public class EditorJoint {
 	private Color fadedColor;
 	/** Order in which joints are rendered, highest first */
 	private int renderOrder; 
+	private EditorJoint parent;
+	private List<EditorJoint> children;
 	
-	public EditorJoint(EditorFrame parent, String name)
+	public EditorJoint(EditorFrame frame, String name)
 	{
-		this.parent = parent;
-		this.level = parent.getLevel();
+		this.frame = frame;
+		this.level = frame.getLevel();
 		this.name = name;
 		this.points = new ArrayList<Point2D>();
 		this.filters = new ArrayList<ImageFilter>();
 		this.xOffset = 0;
 		this.yOffset = 0;
 		this.setColor(Color.BLACK);
+		this.children = new ArrayList<EditorJoint>();
 	}
 	
 	public EditorJoint copy()
 	{
-		EditorJoint newJoint = new EditorJoint(this.parent, this.name);
+		EditorJoint newJoint = new EditorJoint(this.frame, this.name);
 		newJoint.setColor(new Color(this.color.getRGB()));
 		newJoint.setPath(new Path2D.Double());
 		for (int i = 0; i < this.points.size(); i++)
@@ -151,7 +154,7 @@ public class EditorJoint {
 	}
 	public EditorFrame getFrame()
 	{
-		return parent;
+		return frame;
 	}
 	public List<ImageFilter> getFilters()
 	{
@@ -271,6 +274,31 @@ public class EditorJoint {
 		this.renderOrder = renderOrder;
 	}
 
+	public EditorJoint getParent() {
+		return parent;
+	}
+	public void setParent(EditorJoint parent) {
+		if (this.parent != null)
+		{
+			if (this.parent.children.contains(this))
+			{
+				this.parent.children.remove(this);
+			}
+		}
+		this.parent = parent;
+		if (this.parent != null)
+		{
+			this.parent.addChild(this);
+		}
+	}
+
+	public List<EditorJoint> getChildren() {
+		return children;
+	}
+	public void addChild(EditorJoint child){
+		children.add(child);
+	}
+
 	public void makeImage()
 	{
 		double xPos = path.getBounds2D().getX();
@@ -295,8 +323,8 @@ public class EditorJoint {
 	
 	public void render(Graphics2D g2d, boolean debug)
 	{
-		double xPos = parent.getAnimation().getSpriteSheet().getX() + xOffset;
-		double yPos = parent.getAnimation().getSpriteSheet().getY() + yOffset;
+		double xPos = frame.getAnimation().getSpriteSheet().getX() + xOffset;
+		double yPos = frame.getAnimation().getSpriteSheet().getY() + yOffset;
 		img.setCenterX(xPos);
 		img.setCenterY(yPos);
 		img.render(g2d, debug);

@@ -16,18 +16,18 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import editor.objects.EditorFrame;
+import editor.objects.EditorSpriteSheet;
 import framework.Level;
 import framework.LevelManager;
-import framework.animation.Frame;
-import framework.animation.SpriteSheet;
 
 public class Editor {
-	private SpriteSheet activeSprite;
+	private EditorSpriteSheet activeSprite;
 	private LevelManager manager;
 	private int timeStep = 10;
 	private boolean playing = false;
 	private Level demoLevel;
-	private Frame.EditOptions options;
+	private EditorFrame.EditOptions options;
 	private List<UIElement> elements;
 	
 	private JFrame frame;
@@ -51,8 +51,8 @@ public class Editor {
 	public void run() {
 		manager = new LevelManager();
 		demoLevel = new Level(manager, 0);
-		activeSprite = new SpriteSheet("Test", demoLevel);
-		options = new Frame.EditOptions();
+		activeSprite = new EditorSpriteSheet("Test", demoLevel);
+		options = new EditorFrame.EditOptions();
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -153,7 +153,7 @@ public class Editor {
 		frame.setVisible(true);
 	}
 
-	public SpriteSheet getActiveSprite() {
+	public EditorSpriteSheet getActiveSprite() {
 		return activeSprite;
 	}
 	public LevelManager getManager() {
@@ -168,7 +168,7 @@ public class Editor {
 	public Level getDemoLevel() {
 		return demoLevel;
 	}
-	public Frame.EditOptions getOptions() {
+	public EditorFrame.EditOptions getOptions() {
 		return options;
 	}
 	public JFrame getFrame() {
@@ -207,7 +207,7 @@ public class Editor {
 	public AnimationInfo getAnimationInfo() {
 		return animInfo;
 	}
-	public void setActiveSprite(SpriteSheet sprite)
+	public void setActiveSprite(EditorSpriteSheet sprite)
 	{
 		activeSprite = sprite;
 	}

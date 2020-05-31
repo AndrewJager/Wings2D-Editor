@@ -6,8 +6,8 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.util.List;
 
-import framework.animation.Frame;
-import framework.animation.Joint;
+import editor.objects.EditorFrame;
+import editor.objects.EditorJoint;
 
 public class RenderArea extends UIElement{
 	private boolean shouldReRender;
@@ -22,7 +22,7 @@ public class RenderArea extends UIElement{
 	
 	public void updateRender(boolean advanceFrame)
 	{
-		Frame curFrame = editor.getAnimLists().getSelectedFrame();
+		EditorFrame curFrame = editor.getAnimLists().getSelectedFrame();
 		AnimationLists ani = editor.getAnimLists();
 		if (getShouldReRender())
 		{
@@ -30,7 +30,7 @@ public class RenderArea extends UIElement{
 			g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 			g2d.setColor(Color.WHITE);
 			g2d.fillRect(0, 0, 150, 150);
-			List<Joint> objects = curFrame.getJoints();
+			List<EditorJoint> objects = curFrame.getJoints();
 			for (int i = 0; i < objects.size(); i++)
 			{
 				objects.get(i).makeImage();

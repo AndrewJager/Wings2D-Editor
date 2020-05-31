@@ -13,8 +13,8 @@ import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import framework.animation.Frame;
-import framework.animation.Joint;
+import editor.objects.EditorFrame;
+import editor.objects.EditorJoint;
 
 public class ObjectInfo extends UIElement{
 	private JLabel infoLabel;
@@ -54,7 +54,7 @@ public class ObjectInfo extends UIElement{
 	    	public void actionPerformed(ActionEvent e) {
 	    		if (ani.getIsObjectSelected())
 	    		{
-	    			Frame curFrame = ani.getSelectedFrame();
+	    			EditorFrame curFrame = ani.getSelectedFrame();
 	    			curFrame.addVertex(ani.getObjectList().getSelectedIndex());
 	    			editor.getDrawing().setShouldRedraw(true);
 	    			editor.getRender().setShouldReRender(true);
@@ -65,7 +65,7 @@ public class ObjectInfo extends UIElement{
 	    	public void actionPerformed(ActionEvent e) {
 	    		if (ani.getIsObjectSelected())
 	    		{
-	    		    Joint joint = ani.getSelectedObject();
+	    		    EditorJoint joint = ani.getSelectedObject();
 	    			Color color = JColorChooser.showDialog(editor.getFrame(), "Select a color", joint.getColor());    
 	    			joint.setColor(color);
 	    			editor.getDrawing().setShouldRedraw(true);
@@ -78,7 +78,7 @@ public class ObjectInfo extends UIElement{
 	    	public void actionPerformed(ActionEvent e) {
 	    		if (ani.getIsObjectSelected())
 	    		{
-	    			Joint curObject = ani.getSelectedObject();
+	    			EditorJoint curObject = ani.getSelectedObject();
 		    		Object[] filters = {"Basic Variance", "Blur Edges", "Darken From", "Lighten From", "Outline"};
 		    		String filterName = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Choose Filter",
 		    				JOptionPane.PLAIN_MESSAGE, null, filters, "Basic Variance");
@@ -94,7 +94,7 @@ public class ObjectInfo extends UIElement{
 	    	public void actionPerformed(ActionEvent e) {
 	    		String objectName = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Rename Object",
 	    				JOptionPane.PLAIN_MESSAGE, null, null, "Object");
-	    		Frame curFrame = ani.getSelectedFrame();
+	    		EditorFrame curFrame = ani.getSelectedFrame();
 	    		if (ani.getObjectList().getSelectedIndex() != -1)
 	    		{
 	    			int index = ani.getObjectList().getSelectedIndex();
@@ -115,7 +115,7 @@ public class ObjectInfo extends UIElement{
 	    });
 	}
 	
-	public void updateInfo(Joint joint)
+	public void updateInfo(EditorJoint joint)
 	{
 		nameLabel.setText("Name: " + joint.getName());
 		orderLabel.setText("Order: " + joint.getRenderOrder());

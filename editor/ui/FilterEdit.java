@@ -19,13 +19,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
+import editor.objects.EditorJoint;
 import editor.ui.filterEdits.ShadeFromEdit;
 import framework.imageFilters.BasicVariance;
 import framework.imageFilters.DarkenFrom;
 import framework.imageFilters.ImageFilter;
 import framework.imageFilters.LightenFrom;
 import framework.imageFilters.Outline;
-import framework.animation.Joint;
 
 public class FilterEdit extends UIElement{
 	private JPanel internal;
@@ -43,7 +43,7 @@ public class FilterEdit extends UIElement{
 		panel.setLayout(new GridLayout());
 	}
 
-	public void setFilterButtons(Joint curObject)
+	public void setFilterButtons(EditorJoint curObject)
 	{				
 		List<ImageFilter> filters = curObject.getFilters();
 		internal.removeAll();

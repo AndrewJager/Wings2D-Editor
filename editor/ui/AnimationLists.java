@@ -17,9 +17,9 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import framework.animation.Animation;
-import framework.animation.Frame;
-import framework.animation.Joint;
+import editor.objects.EditorAnimation;
+import editor.objects.EditorFrame;
+import editor.objects.EditorJoint;
 
 public class AnimationLists extends UIElement{
 	private JPanel animsPanel;
@@ -96,7 +96,7 @@ public class AnimationLists extends UIElement{
 	    	public void actionPerformed(ActionEvent e) {
 	    		if (animList.getSelectedIndex() != -1)
 	    		{
-		    		Animation curAnim = ani.getSelectedAnimation();
+		    		EditorAnimation curAnim = ani.getSelectedAnimation();
 		    		String frameName = curAnim.getName()
 		    				+ "_" + frameList.getModel().getSize();
 		    		if (frameList.getModel().getSize() <= 0)
@@ -117,7 +117,7 @@ public class AnimationLists extends UIElement{
 	    	public void actionPerformed(ActionEvent e) {
 	    		String objectName = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Add object",
 	    				JOptionPane.PLAIN_MESSAGE, null, null, "Object");
-	    		Frame curFrame = ani.getSelectedFrame();
+	    		EditorFrame curFrame = ani.getSelectedFrame();
 	    		if (curFrame.getJointByName(objectName) == null)
 	    		{ // Object with this name does not exist
 		    		curFrame.addNewJoint(objectName);
@@ -157,7 +157,7 @@ public class AnimationLists extends UIElement{
                 	editor.getEditOptions().getEditing().setSelected(false);
                 	if (ani.getIsFrameSelected())
                 	{
-	                	Frame curFrame = ani.getSelectedFrame();
+	                	EditorFrame curFrame = ani.getSelectedFrame();
 	                	objectList.setListData(curFrame.getJointNames());
 	                	objectList.setSelectedIndex(0);
 	                	editor.getFrameInfo().getFrameNameLabel().setText(curFrame.getName());
@@ -168,15 +168,15 @@ public class AnimationLists extends UIElement{
             }
         });
 	}
-	public Animation getSelectedAnimation()
+	public EditorAnimation getSelectedAnimation()
 	{
 		return editor.getActiveSprite().getAnimation(animList.getSelectedIndex());
 	}
-	public Frame getSelectedFrame()
+	public EditorFrame getSelectedFrame()
 	{
 		return editor.getActiveSprite().getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex());
 	}
-	public Joint getSelectedObject()
+	public EditorJoint getSelectedObject()
 	{
 		return editor.getActiveSprite().getAnimation(animList.getSelectedIndex()).getFrame(frameList.getSelectedIndex())
 				.getJoint(objectList.getSelectedIndex());

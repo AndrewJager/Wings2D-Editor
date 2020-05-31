@@ -8,8 +8,8 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.util.List;
 
-import framework.animation.Frame;
-import framework.animation.Joint;
+import editor.objects.EditorFrame;
+import editor.objects.EditorJoint;
 
 public class DrawingArea extends UIElement{
 	private boolean shouldRedraw;
@@ -29,7 +29,7 @@ public class DrawingArea extends UIElement{
             public void mousePressed(java.awt.event.MouseEvent evt) {
             	if (ani.getIsObjectSelected())
             	{
-            		Frame curFrame = ani.getSelectedFrame();
+            		EditorFrame curFrame = ani.getSelectedFrame();
                 	curFrame.processMousePress(ani.getObjectList().getSelectedIndex(), evt.getPoint());
             	}
                 
@@ -37,7 +37,7 @@ public class DrawingArea extends UIElement{
             public void mouseReleased(java.awt.event.MouseEvent evt) {
             	if (ani.getIsObjectSelected())
             	{
-            		Frame curFrame = ani.getSelectedFrame();
+            		EditorFrame curFrame = ani.getSelectedFrame();
                 	curFrame.processMouseRelease(curFrame.getJoint(ani.getObjectList().getSelectedIndex()).getName(), evt.getPoint());
     				shouldRedraw = true;
     				editor.getRender().setShouldReRender(true);
@@ -62,12 +62,12 @@ public class DrawingArea extends UIElement{
 			g2d.setColor(Color.WHITE);
 			g2d.fillRect(0, 0, panel.getWidth(), panel.getHeight());
 			g2d.scale(scale, scale);
-			Frame curFrame = ani.getSelectedFrame();
+			EditorFrame curFrame = ani.getSelectedFrame();
 			int objIndex = ani.getObjectList().getSelectedIndex();
-			List<Joint> objects = curFrame.getJoints();
+			List<EditorJoint> objects = curFrame.getJoints();
 			for (int i = 0; i < objects.size(); i++)
 			{
-				Joint joint = objects.get(i);
+				EditorJoint joint = objects.get(i);
 				if (joint.getPath() != null)
 				{
 					Path2D path = joint.getPath();

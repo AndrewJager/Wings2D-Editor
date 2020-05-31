@@ -17,12 +17,10 @@ public abstract class UIElement {
 		panel.setBounds(bounds);
 	}
 	
-	public void resizePanel()
+	public void resizePanel(double scale)
 	{
-		double xScale = Double.valueOf(editor.getMainPanel().getWidth()) / editor.frameStartWidth;
-		double yScale = Double.valueOf(editor.getMainPanel().getHeight()) / editor.frameStartHeight;
-		Rectangle newBounds = new Rectangle((int)(ogBounds.getX() * xScale), (int)(ogBounds.getY() * yScale),
-				(int)(ogBounds.getWidth() * xScale), (int)(ogBounds.getHeight() * yScale));
+		Rectangle newBounds = new Rectangle((int)(ogBounds.getX() * scale), (int)(ogBounds.getY() * scale),
+				(int)(ogBounds.getWidth() * scale), (int)(ogBounds.getHeight() * scale));
 		panel.setBounds(newBounds);
 		panel.revalidate();
 	}

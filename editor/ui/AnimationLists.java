@@ -160,6 +160,8 @@ public class AnimationLists extends UIElement{
 	                	Frame curFrame = ani.getSelectedFrame();
 	                	objectList.setListData(curFrame.getJointNames());
 	                	objectList.setSelectedIndex(0);
+	                	editor.getFrameInfo().getFrameNameLabel().setText(curFrame.getName());
+	                	editor.getFrameInfo().getFrameTimeLabel().setText(Double.toString(curFrame.getFrameTime()));
 	                	editor.getDrawing().setShouldRedraw(true);
                 	}
                 }

@@ -109,7 +109,7 @@ public class Editor {
 	    });	
 		frame.addComponentListener(new ComponentAdapter() 
 		{
-			public void componentResized(ComponentEvent evt) {				
+			public void componentResized(ComponentEvent evt) {		
 				int width = frame.getWidth();
 		        int height = frame.getHeight();
 		        double NINE_TO_SIXTEEN = 1.77777778;
@@ -129,10 +129,11 @@ public class Editor {
 		    	mainPanel.setLocation((int)(xPos * 0.5), yPos);
 		    	mainPanel.setLocation(0, 0);
 		    	mainPanel.revalidate();
-
+		    	
+		    	double scale = Double.valueOf(getMainPanel().getWidth()) / frameStartWidth;
 				for (int i = 0; i < elements.size(); i++)
 				{
-					elements.get(i).resizePanel();
+					elements.get(i).resizePanel(scale);
 				}
 				
 				if (animLists.getAnimList().getSelectedIndex() != -1)
@@ -140,12 +141,13 @@ public class Editor {
 					drawing.setShouldRedraw(true);
 				}
 				render.setShouldReRender(true);
-				manager.setScale((Double.valueOf(getMainPanel().getWidth()) / frameStartWidth) * 0.25);
+				manager.setScale(scale * 0.25);
 				demoLevel.rescale();
 			}
 		});
 
 		frame.setSize(frameStartWidth, frameStartHeight);
+		frame.setMinimumSize(new Dimension(1250, 720));
 		frame.setLocationRelativeTo(null);
 		frame.setLayout(null); 
 		frame.setVisible(true);
@@ -198,6 +200,12 @@ public class Editor {
 	}
 	public FilterEdit getFilters() {
 		return filters;
+	}
+	public FrameInfo getFrameInfo() {
+		return frameInfo;
+	}
+	public AnimationInfo getAnimationInfo() {
+		return animInfo;
 	}
 	public void setActiveSprite(SpriteSheet sprite)
 	{

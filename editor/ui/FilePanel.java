@@ -1,7 +1,8 @@
 package editor.ui;
 
 import java.awt.Color;
-import java.awt.FlowLayout;
+import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +11,8 @@ import java.io.FileReader;
 import java.util.Scanner;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -31,19 +34,26 @@ public class FilePanel extends UIElement{
 	{
 		super(edit, bounds);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+		panel.add(Box.createRigidArea(new Dimension(2,2)));
 		fileLabel = new JLabel("File:");
 		panel.add(fileLabel);
 		fileName = new JLabel("None");
 		panel.add(fileName);
+		panel.add(Box.createHorizontalGlue());
 		selectButton = new JButton("Select"); 
+		selectButton.setMinimumSize(new Dimension(1, 1));
 		panel.add(selectButton);
 		newButton = new JButton("New");
+		newButton.setMinimumSize(new Dimension(1, 1));
 	    panel.add(newButton);
 	    renderBtn = new JButton("Render");
+	    renderBtn.setMinimumSize(new Dimension(1, 1));
 	    panel.add(renderBtn);
 	    saveBtn = new JButton("Save");
+	    saveBtn.setMinimumSize(new Dimension(1, 1));
 	    panel.add(saveBtn);
-		panel.setLayout(new FlowLayout());
+	    panel.add(Box.createRigidArea(new Dimension(2,2)));
 	}
 	
 	public void createEvents()

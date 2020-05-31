@@ -1,12 +1,14 @@
 package editor.ui;
 
 import java.awt.Color;
-import java.awt.FlowLayout;
+import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
@@ -19,13 +21,15 @@ public class RenderControls extends UIElement{
 	{
 		super(edit, bounds);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		play = new JButton("Play");
+		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+		play = new JButton("\u25B6");
 		panel.add(play);
-		pause = new JButton("Pause");
+		pause = new JButton("\u23F8");
 		panel.add(pause);
+		panel.add(Box.createHorizontalGlue());
 		currentFrame = new JLabel("0");
 		panel.add(currentFrame);
-		panel.setLayout(new FlowLayout());
+		panel.add(Box.createRigidArea(new Dimension(2, 2)));
 	}
 	
 	public void createEvents()

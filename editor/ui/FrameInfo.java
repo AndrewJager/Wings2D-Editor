@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 public class FrameInfo extends UIElement{
 	private JLabel frameName;
 	private JButton changeName;
-	private JLabel frameCount;
+	private JLabel frameTime;
 	private JButton changeFrames;
 	
 	public FrameInfo(Editor edit, Rectangle bounds)
@@ -25,8 +25,8 @@ public class FrameInfo extends UIElement{
 		panel.add(frameName);
 		changeName = new JButton("Change name");
 		panel.add(changeName);
-		frameCount = new JLabel("Frame time");
-		panel.add(frameCount);
+		frameTime = new JLabel("Frame time");
+		panel.add(frameTime);
 		changeFrames = new JButton("Change time");
 		panel.add(changeFrames);
 		
@@ -39,7 +39,7 @@ public class FrameInfo extends UIElement{
 		changeName.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		String frameName = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Rename Frame",
-	    				JOptionPane.PLAIN_MESSAGE, null, null, "Object");
+	    				JOptionPane.PLAIN_MESSAGE, null, null, ani.getSelectedFrame().getName());
 	    		if (ani.getFrameList().getSelectedIndex() != -1)
 	    		{
 	    			int index = ani.getFrameList().getSelectedIndex();
@@ -48,6 +48,7 @@ public class FrameInfo extends UIElement{
 	    				ani.getSelectedFrame().setName(frameName);
 	    				ani.getFrameList().setListData(ani.getSelectedAnimation().getFrameNames());
 	    				ani.getFrameList().setSelectedIndex(index);
+	    				getFrameNameLabel().setText(ani.getSelectedFrame().getName());
 	    			}
 	    			else
 	    			{
@@ -57,5 +58,12 @@ public class FrameInfo extends UIElement{
 	    		}
 	    	}
 	    });
+	}
+	
+	public JLabel getFrameNameLabel() {
+		return frameName;
+	}
+	public JLabel getFrameTimeLabel() {
+		return frameTime;
 	}
 }

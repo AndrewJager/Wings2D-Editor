@@ -33,10 +33,11 @@ public class RenderArea extends UIElement{
 			List<EditorJoint> objects = curFrame.getJoints();
 			for (int i = 0; i < objects.size(); i++)
 			{
+				double scale = editor.getDemoLevel().getManager().getScale() * 4;
 				objects.get(i).makeImage();
-				g2d.translate(objects.get(i).getX() * 0.25, objects.get(i).getY() * 0.25);
+				g2d.translate(objects.get(i).getX() * scale * 0.25, objects.get(i).getY() * scale * 0.25);
 				objects.get(i).getImage().render(g2d, false);
-				g2d.translate(-objects.get(i).getX() * 0.25, -objects.get(i).getY() * 0.25);
+				g2d.translate(-objects.get(i).getX() * scale * 0.25, -objects.get(i).getY() * scale * 0.25);
 			}
 			setShouldReRender(false);
 		}

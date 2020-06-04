@@ -244,9 +244,6 @@ public class EditorFrame {
 			double yTranslate = mouseLoc.y - editorObjLoc.getY();
 			xTranslate *= unScale;
 			yTranslate *= unScale;
-			System.out.println(mouseLoc);
-			System.out.println(editorObjLoc);
-			System.out.println(xTranslate + " " + yTranslate);
 			if (options.getEditing())
 			{
 				EditorJoint joint = getJointByName(selected);
@@ -297,7 +294,6 @@ public class EditorFrame {
 		{
 			AffineTransform transform = new AffineTransform();
 			transform.translate(xTranslate, yTranslate);
-			System.out.println(joint.getX());
 			joint.setX(joint.getX() + xTranslate);
 			joint.setY(joint.getY() + yTranslate);
 			if (editorChild != null && options.getCascadeChanges())

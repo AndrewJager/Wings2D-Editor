@@ -238,8 +238,12 @@ public class EditorFrame {
 		if (editorIsMoving)
 		{
 			editorIsMoving = false;
+			double scale = parent.getLevel().getManager().getScale();
+			double unScale = 1 / (scale * 4);
 			double xTranslate = mouseLoc.x - editorObjLoc.getX();
 			double yTranslate = mouseLoc.y - editorObjLoc.getY();
+			xTranslate *= unScale;
+			yTranslate *= unScale;
 			System.out.println(mouseLoc);
 			System.out.println(editorObjLoc);
 			System.out.println(xTranslate + " " + yTranslate);

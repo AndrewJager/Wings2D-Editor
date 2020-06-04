@@ -2,6 +2,7 @@ package editor.objects;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
@@ -192,6 +193,9 @@ public class EditorFrame {
 	{
 		editorIsMoving = false;
 		EditorJoint joint = getJoint(selected);
+		double scale = parent.getLevel().getManager().getScale();
+		AffineTransform transform = new AffineTransform();
+		transform.scale(scale * 4, scale * 4);
 		if (options.getEditing())
 		{   
 		    List<Ellipse2D> circles = new ArrayList<Ellipse2D>();
@@ -214,26 +218,31 @@ public class EditorFrame {
 		}
 		else
 		{
-			Ellipse2D circle = new Ellipse2D.Double(joint.getPath().getBounds2D().getCenterX() - (options.getEditHandleSize() / 2) + joint.getX(),
-					joint.getPath().getBounds2D().getCenterY() - (options.getEditHandleSize() / 2) + joint.getY(), options.getEditHandleSize(), 
+			Path2D.Double scaledPath = (Path2D.Double)joint.getPath().clone();
+			scaledPath.transform(transform);
+			Point2D.Double scaledPoint = new Point2D.Double(joint.getX(), joint.getY());
+			transform.transform(scaledPoint, scaledPoint);
+			Ellipse2D circle = new Ellipse2D.Double(scaledPath.getBounds2D().getCenterX() - (options.getEditHandleSize() / 2) + scaledPoint.getX(),
+					scaledPath.getBounds2D().getCenterY() - (options.getEditHandleSize() / 2) + scaledPoint.getY(), options.getEditHandleSize(), 
 					options.getEditHandleSize());
-			
 			if (circle.contains(mouseLoc))
 			{
 				editorIsMoving = true;
-				editorObjLoc = new Point2D.Double(joint.getPath().getBounds2D().getCenterX() + joint.getX(),
-						joint.getPath().getBounds2D().getCenterY() + joint.getY());
+				editorObjLoc = new Point2D.Double(scaledPath.getBounds2D().getCenterX() + scaledPoint.getX(),
+						scaledPath.getBounds2D().getCenterY() + scaledPoint.getY());
 			}
 		}
 	}
 	public void processMouseRelease(String selected, Point mouseLoc)
-	{
-		
+	{	
 		if (editorIsMoving)
 		{
 			editorIsMoving = false;
 			double xTranslate = mouseLoc.x - editorObjLoc.getX();
 			double yTranslate = mouseLoc.y - editorObjLoc.getY();
+			System.out.println(mouseLoc);
+			System.out.println(editorObjLoc);
+			System.out.println(xTranslate + " " + yTranslate);
 			if (options.getEditing())
 			{
 				EditorJoint joint = getJointByName(selected);
@@ -284,6 +293,7 @@ public class EditorFrame {
 		{
 			AffineTransform transform = new AffineTransform();
 			transform.translate(xTranslate, yTranslate);
+			System.out.println(joint.getX());
 			joint.setX(joint.getX() + xTranslate);
 			joint.setY(joint.getY() + yTranslate);
 			if (editorChild != null && options.getCascadeChanges())

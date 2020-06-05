@@ -290,6 +290,8 @@ public class EditorJoint {
 		{
 			this.parent.addChild(this);
 		}
+		
+		frame.setParentToChildren(this, parent);
 	}
 
 	public List<EditorJoint> getChildren() {

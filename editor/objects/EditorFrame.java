@@ -357,4 +357,25 @@ public class EditorFrame {
 			}
 		}
 	}
+	
+	public void setParentToChildren(EditorJoint child, EditorJoint parent)
+	{
+		if (editorChild != null)
+		{
+			EditorJoint childChild = editorChild.getJointByName(child.getName());
+			if (parent == null)
+			{
+				childChild.setParent(null);
+			}
+			else
+			{
+				EditorJoint childParent = editorChild.getJointByName(parent.getName());
+				if (childChild != null && childParent != null)
+				{
+					childChild.setParent(childParent);
+				}
+			}
+			editorChild.setParentToChildren(child, parent);
+		}
+	}
 }

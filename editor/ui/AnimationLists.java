@@ -123,10 +123,6 @@ public class AnimationLists extends UIElement{
 		    		curFrame.addNewJoint(objectName);
 		    		objectList.setListData(curFrame.getJointNames());
 		    		objectList.setSelectedIndex(curFrame.getJoints().size() - 1);
-		    		ani.getSelectedObject().setRenderOrder(objectList.getSelectedIndex());
-		    		ani.getSelectedObject().addPoint(25, 0);
-		    		ani.getSelectedObject().addPoint(50, 50);
-		    		ani.getSelectedObject().addPoint(0, 50);
 		    		editor.getRender().setShouldReRender(true);
 	    		}
 	    		else

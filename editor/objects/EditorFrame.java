@@ -293,10 +293,8 @@ public class EditorFrame {
 		EditorJoint joint = getJointByName(jointName);
 		if (joint != null)
 		{
-			AffineTransform transform = new AffineTransform();
-			transform.translate(xTranslate, yTranslate);
-			joint.setX(joint.getX() + xTranslate);
-			joint.setY(joint.getY() + yTranslate);
+			joint.moveJoint(xTranslate, yTranslate);
+			
 			if (editorChild != null && options.getCascadeChanges())
 			{
 				editorChild.moveObject(jointName, xTranslate, yTranslate);

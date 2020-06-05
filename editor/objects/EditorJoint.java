@@ -329,4 +329,19 @@ public class EditorJoint {
 		img.setCenterY(yPos);
 		img.render(g2d, debug);
 	}
+	
+	public void moveJoint(double xTranslate, double yTranslate)
+	{
+		AffineTransform transform = new AffineTransform();
+		transform.translate(xTranslate, yTranslate);
+		setX(getX() + xTranslate);
+		setY(getY() + yTranslate);
+		if (getChildren().size() > 0)
+		{
+			for (int i = 0; i < getChildren().size(); i++)
+			{
+				getChildren().get(i).moveJoint(xTranslate, yTranslate);
+			}
+		}
+	}
 }

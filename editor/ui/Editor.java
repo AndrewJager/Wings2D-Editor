@@ -17,7 +17,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import editor.objects.EditOptions;
-import editor.objects.EditorFrame;
 import editor.objects.EditorSpriteSheet;
 import framework.Level;
 import framework.LevelManager;
@@ -48,12 +47,14 @@ public class Editor {
 	
 	public int frameStartWidth = 1500;
 	public int frameStartHeight = 800;
+	public double RENDER_SCALE = 0.25;
+	public double RENDER_SCALE_TO_ACTUAL = 1 / RENDER_SCALE;
 
 	public void run() {
 		manager = new LevelManager();
 		demoLevel = new Level(manager, 0);
 		activeSprite = new EditorSpriteSheet("Test", demoLevel);
-		options = new EditOptions();
+		options = new EditOptions(this);
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -142,7 +143,7 @@ public class Editor {
 					drawing.setShouldRedraw(true);
 				}
 				render.setShouldReRender(true);
-				manager.setScale(scale * 0.25);
+				manager.setScale(RENDER_SCALE * scale);
 				demoLevel.rescale();
 			}
 		});

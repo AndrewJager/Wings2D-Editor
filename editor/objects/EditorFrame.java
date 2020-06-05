@@ -2,7 +2,6 @@ package editor.objects;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
@@ -194,8 +193,9 @@ public class EditorFrame {
 		editorIsMoving = false;
 		EditorJoint joint = getJoint(selected);
 		double scale = parent.getLevel().getManager().getScale();
+		scale *= options.getEditor().RENDER_SCALE_TO_ACTUAL;
 		AffineTransform transform = new AffineTransform();
-		transform.scale(scale * 4, scale * 4);
+		transform.scale(scale, scale);
 		if (options.getEditing())
 		{   
 		    List<Ellipse2D> circles = new ArrayList<Ellipse2D>();
@@ -239,7 +239,8 @@ public class EditorFrame {
 		{
 			editorIsMoving = false;
 			double scale = parent.getLevel().getManager().getScale();
-			double unScale = 1 / (scale * 4);
+			scale *= options.getEditor().RENDER_SCALE_TO_ACTUAL;
+			double unScale = 1 / (scale);
 			double xTranslate = mouseLoc.x - editorObjLoc.getX();
 			double yTranslate = mouseLoc.y - editorObjLoc.getY();
 			xTranslate *= unScale;

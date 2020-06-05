@@ -1,5 +1,7 @@
 package editor.objects;
 
+import editor.ui.Editor;
+
 /** Options used by editor. */
 public class EditOptions {
 	/** Should the changes cascade to child frames */
@@ -12,18 +14,20 @@ public class EditOptions {
 	private Boolean scaling;
 	/** Size of the circles for the edit handles */
 	private int editHandleSize;
+	private Editor editor;
 	
 	/**
 	 * Sets cascade changes to true, editing to false, rotating to false, scaling to false
 	 * and edit circle size to 12
 	 */
-	public EditOptions()
+	public EditOptions(Editor editor)
 	{
-		cascadeChanges = true;
-		editing = false;
-		rotating = false;
-		scaling = false;
-		editHandleSize = 12;
+		this.cascadeChanges = true;
+		this.editing = false;
+		this.rotating = false;
+		this.scaling = false;
+		this.editHandleSize = 12;
+		this.editor = editor;
 	}
 	/** Should the changes cascade to child frames */
 	public Boolean getCascadeChanges() {
@@ -69,5 +73,9 @@ public class EditOptions {
 	public void setEditHandleSize(int size)
 	{
 		this.editHandleSize = size;
+	}
+	public Editor getEditor()
+	{
+		return editor;
 	}
 }

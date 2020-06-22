@@ -79,7 +79,7 @@ public class EditorSpriteSheet extends GameObject{
 						frames.add(newFrame);
 						if (frames.size() > 1)
 						{
-							frames.get(frames.size() - 2).setEditorChild(newFrame);
+							frames.get(frames.size() - 2).setChildFrame(newFrame);
 						}
 						break;
 					case "TIME":

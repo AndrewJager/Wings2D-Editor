@@ -32,7 +32,8 @@ public class EditorFrame {
 	private boolean editorIsMoving;
 	private Point2D editorObjLoc;
 	private int editorSelectedPoint;
-	private EditorFrame editorChild = null;
+	private EditorFrame parentFrame = null;
+	private EditorFrame childFrame = null;
 	private int editorFrameTime;
 	private int editorTimePassed;
 	
@@ -50,7 +51,7 @@ public class EditorFrame {
 	public EditorFrame (EditorAnimation parent, String name, EditorFrame editParent)
 	{
 		this(parent, name);
-		editParent.setEditorChild(this);
+		editParent.setChildFrame(this);
 		
 		for (int i = 0; i < editParent.getJoints().size(); i++)
 		{
@@ -96,9 +97,9 @@ public class EditorFrame {
 		joints.get(joints.size() - 1).addPoint(25, 0);
 		joints.get(joints.size() - 1).addPoint(50, 50);
 		joints.get(joints.size() - 1).addPoint(0, 50);
-		if (editorChild != null && options.getCascadeChanges())
+		if (childFrame != null && options.getCascadeChanges())
 		{
-			editorChild.addNewJoint(jointName);
+			childFrame.addNewJoint(jointName);
 		}
 	}
 	public List<EditorJoint> getJoints()
@@ -155,19 +156,24 @@ public class EditorFrame {
 	}
 	
 	
-
-	// Editor logic processing
-	public EditOptions getEditOptions()
-	{
+	public EditOptions getEditOptions(){
 		return options;
 	}
-	public void setEditOptions(EditOptions options)
-	{
+	public void setEditOptions(EditOptions options){
 		this.options = options;
 	}
-	public void setEditorChild(EditorFrame child)
-	{
-		this.editorChild = child;
+	public void setParentFrame(EditorFrame parent) {
+		this.parentFrame = parent;
+	}
+	public EditorFrame getParentFrame() {
+		return this.parentFrame;
+	}
+	public void setChildFrame(EditorFrame child) {
+		this.childFrame = child;
+		child.setParentFrame(this);
+	}
+	public EditorFrame getChildFrame() {
+		return this.childFrame;
 	}
 	public int getTimePassed() {
 		return editorTimePassed;
@@ -191,9 +197,9 @@ public class EditorFrame {
 		curJoint.addPoint(100, 100);
 		curJoint.addPoint(0, 100);
 		
-		if (editorChild != null)
+		if (childFrame != null)
 		{
-			editorChild.addDefaultJoint(jointName);
+			childFrame.addDefaultJoint(jointName);
 		}
 	}
 	public void processMousePress(int selected, Point mouseLoc)
@@ -260,9 +266,9 @@ public class EditorFrame {
 				if (joint != null)
 				{
 					joint.setPoint(editorSelectedPoint, newPointLoc);
-					if (editorChild != null)
+					if (childFrame != null)
 					{
-						editorChild.childCopyPoints(joint, selected, joint.getPoints());
+						childFrame.childCopyPoints(joint, selected, joint.getPoints());
 					}
 				}
 			}
@@ -289,9 +295,9 @@ public class EditorFrame {
 			transform.translate(xOffset, yOffset);
 			joint.getPath().transform(transform);
 			
-			if (editorChild != null) // Copy to child frame
+			if (childFrame != null) // Copy to child frame
 			{
-				editorChild.childCopyPoints(parentJoint, jointName, points);
+				childFrame.childCopyPoints(parentJoint, jointName, points);
 			}
 		}
 	}
@@ -303,9 +309,9 @@ public class EditorFrame {
 		{
 			joint.moveJoint(xTranslate, yTranslate);
 			
-			if (editorChild != null && options.getCascadeChanges())
+			if (childFrame != null && options.getCascadeChanges())
 			{
-				editorChild.moveObject(jointName, xTranslate, yTranslate);
+				childFrame.moveObject(jointName, xTranslate, yTranslate);
 			}
 		}
 	}
@@ -316,28 +322,28 @@ public class EditorFrame {
 		{
 			EditorJoint joint = joints.get(selected);
 			joint.addPoint(joint.getPath().getBounds2D().getX(), joint.getPath().getBounds2D().getX());
-			if (editorChild != null)
+			if (childFrame != null)
 			{
-				editorChild.addVertex(selected);
+				childFrame.addVertex(selected);
 			}
 		}
 	}
 	
 	public void addNewJointFilter(String filterName, String jointName)
 	{
-		if (editorChild != null && options.getCascadeChanges())
+		if (childFrame != null && options.getCascadeChanges())
 		{
-			EditorJoint joint = editorChild.getJointByName(jointName);
+			EditorJoint joint = childFrame.getJointByName(jointName);
 			joint.addNewFilter(filterName); // Will call the child frames addNewJointFillter in a roundabout way
 		}
 	}
 	
 	public void swapJointFilters(String jointName, int a, int b)
 	{
-		if (editorChild != null && options.getCascadeChanges())
+		if (childFrame != null && options.getCascadeChanges())
 		{
 			EditorJoint thisJoint = getJointByName(jointName); 
-			EditorJoint joint = editorChild.getJointByName(jointName);
+			EditorJoint joint = childFrame.getJointByName(jointName);
 			if (joint.getFilters().size() == thisJoint.getFilters().size()) // Don't swap if filter lists are clearly different. Should probably rework this to actually compare the filter lists.
 			{
 				joint.swapFilters(a, b); // Will call the child frame's swapJointFilters in a roundabout way
@@ -347,10 +353,10 @@ public class EditorFrame {
 	
 	public void deleteJointFilter(String jointName, int filter)
 	{
-		if (editorChild != null && options.getCascadeChanges())
+		if (childFrame != null && options.getCascadeChanges())
 		{
 			EditorJoint thisJoint = getJointByName(jointName); 
-			EditorJoint joint = editorChild.getJointByName(jointName);
+			EditorJoint joint = childFrame.getJointByName(jointName);
 			if (joint.getFilters().size() == thisJoint.getFilters().size()) // Don't swap if filter lists are clearly different. Should probably rework this to actually compare the filter lists.
 			{
 				joint.deleteFilter(filter); // Will call the child frame's deleteJointFilter in a roundabout way
@@ -360,22 +366,22 @@ public class EditorFrame {
 	
 	public void setParentToChildren(EditorJoint child, EditorJoint parent)
 	{
-		if (editorChild != null)
+		if (childFrame != null)
 		{
-			EditorJoint childChild = editorChild.getJointByName(child.getName());
+			EditorJoint childChild = childFrame.getJointByName(child.getName());
 			if (parent == null)
 			{
 				childChild.setParent(null);
 			}
 			else
 			{
-				EditorJoint childParent = editorChild.getJointByName(parent.getName());
+				EditorJoint childParent = childFrame.getJointByName(parent.getName());
 				if (childChild != null && childParent != null)
 				{
 					childChild.setParent(childParent);
 				}
 			}
-			editorChild.setParentToChildren(child, parent);
+			childFrame.setParentToChildren(child, parent);
 		}
 	}
 }

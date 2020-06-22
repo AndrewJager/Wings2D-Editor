@@ -49,6 +49,8 @@ public class EditorJoint {
 	private int renderOrder; 
 	private EditorJoint parent;
 	private List<EditorJoint> children;
+	private double offsetXFromParent;
+	private double offsetYFromParent;
 	
 	public EditorJoint(EditorFrame frame, String name)
 	{
@@ -291,6 +293,18 @@ public class EditorJoint {
 			this.parent.addChild(this);
 		}
 		
+		// If frame is the first frame
+		if (frame.getParentFrame() == null)
+		{
+			offsetXFromParent = getX() - parent.getX();
+			offsetYFromParent = getY() - parent.getY();
+		}
+		else
+		{
+			setX(parent.getX() + offsetXFromParent);
+			setY(parent.getY() + offsetYFromParent);
+		}
+		
 		frame.setParentToChildren(this, parent);
 	}
 
@@ -338,12 +352,17 @@ public class EditorJoint {
 		transform.translate(xTranslate, yTranslate);
 		setX(getX() + xTranslate);
 		setY(getY() + yTranslate);
-		if (getChildren().size() > 0)
-		{
-			for (int i = 0; i < getChildren().size(); i++)
-			{
-				getChildren().get(i).moveJoint(xTranslate, yTranslate);
-			}
-		}
+		moveChildren(xTranslate, yTranslate);
+//		if (getChildren().size() > 0)
+//		{
+//			for (int i = 0; i < getChildren().size(); i++)
+//			{
+//				getChildren().get(i).moveJoint(xTranslate, yTranslate);
+//			}
+//		}
+	}
+	private void moveChildren(double xTranslate, double yTranslate)
+	{
+		
 	}
 }

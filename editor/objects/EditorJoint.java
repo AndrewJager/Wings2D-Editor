@@ -277,7 +277,7 @@ public class EditorJoint {
 	}
 
 	public EditorJoint getParent() {
-		return parent;
+		return parent; //test
 	}
 	public void setParent(EditorJoint parent) {
 		if (this.parent != null)

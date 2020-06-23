@@ -93,7 +93,7 @@ public class EditorFrame {
 	public void addNewJoint(String jointName)
 	{
 		joints.add(new EditorJoint(this, jointName));
-		joints.get(joints.size() - 1).setRenderOrder(options.getEditor().getAnimLists().getObjectList().getSelectedIndex());
+		joints.get(joints.size() - 1).setRenderOrder(options.getEditor().getSpriteEdit().getAnimLists().getObjectList().getSelectedIndex());
 		joints.get(joints.size() - 1).addPoint(25, 0);
 		joints.get(joints.size() - 1).addPoint(50, 50);
 		joints.get(joints.size() - 1).addPoint(0, 50);

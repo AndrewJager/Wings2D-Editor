@@ -17,7 +17,7 @@ public abstract class UIElement {
 		panel.setBounds(bounds);
 	}
 	
-	public void resizePanel(double scale)
+	public void resize(double scale)
 	{
 		Rectangle newBounds = new Rectangle((int)(ogBounds.getX() * scale), (int)(ogBounds.getY() * scale),
 				(int)(ogBounds.getWidth() * scale), (int)(ogBounds.getHeight() * scale));

@@ -1,4 +1,4 @@
-package editor.ui;
+package editor.ui.sprite;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,6 +11,9 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+
+import editor.ui.Editor;
+import editor.ui.UIElement;
 
 public class RenderControls extends UIElement{
 	private JButton play;

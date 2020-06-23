@@ -1,4 +1,4 @@
-package editor.ui;
+package editor.ui.sprite;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -10,6 +10,9 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+
+import editor.ui.Editor;
+import editor.ui.UIElement;
 
 public class FrameInfo extends UIElement{
 	private JLabel frameName;
@@ -35,7 +38,7 @@ public class FrameInfo extends UIElement{
 	
 	public void createEvents()
 	{
-		AnimationLists ani = editor.getAnimLists();
+		AnimationLists ani = editor.getSpriteEdit().getAnimLists();
 		changeName.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		String frameName = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Rename Frame",

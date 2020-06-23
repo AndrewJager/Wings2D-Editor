@@ -1,4 +1,4 @@
-package editor.ui;
+package editor.ui.sprite;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,6 +20,8 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import editor.objects.EditorJoint;
+import editor.ui.Editor;
+import editor.ui.UIElement;
 import editor.ui.filterEdits.ShadeFromEdit;
 import framework.imageFilters.BasicVariance;
 import framework.imageFilters.DarkenFrom;

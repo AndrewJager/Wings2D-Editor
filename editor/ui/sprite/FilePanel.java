@@ -1,4 +1,4 @@
-package editor.ui;
+package editor.ui.sprite;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,6 +20,8 @@ import javax.swing.JOptionPane;
 import editor.objects.EditorAnimation;
 import editor.objects.EditorFrame;
 import editor.objects.EditorSpriteSheet;
+import editor.ui.Editor;
+import editor.ui.UIElement;
 
 public class FilePanel extends UIElement{
 	private JButton selectButton;
@@ -57,7 +59,7 @@ public class FilePanel extends UIElement{
 	
 	public void createEvents()
 	{
-		AnimationLists ani = editor.getAnimLists();
+		AnimationLists ani = editor.getSpriteEdit().getAnimLists();
 		selectButton.addActionListener(new ActionListener(){  
 	    	public void actionPerformed(ActionEvent e){  
 	    		JFileChooser file = new JFileChooser("test");
@@ -74,7 +76,7 @@ public class FilePanel extends UIElement{
 	    						editor.getActiveSprite().getAnimations().get(i).getFrames().get(j).setEditOptions(editor.getOptions());
 	    					}
 	    				}
-	    				AnimationLists ani = editor.getAnimLists();
+	    				AnimationLists ani = editor.getSpriteEdit().getAnimLists();
 	    				ani.getAnimList().setListData(editor.getActiveSprite().getAnimNames());
 	    				ani.getAnimList().setSelectedIndex(0);
 	    				EditorAnimation curAnim = editor.getActiveSprite().getAnimation(ani.getAnimList().getSelectedIndex());
@@ -83,7 +85,7 @@ public class FilePanel extends UIElement{
 	    				EditorFrame curFrame = curAnim.getFrame(ani.getFrameList().getSelectedIndex());
 	    				ani.getObjectList().setListData(curFrame.getJointNames());
 	    				ani.getObjectList().setSelectedIndex(0);
-	    				editor.getFilters().setFilterButtons(curFrame.getJoint(ani.getObjectList().getSelectedIndex()));
+	    				editor.getSpriteEdit().getFilters().setFilterButtons(curFrame.getJoint(ani.getObjectList().getSelectedIndex()));
 	    				in.close();
 					} catch (FileNotFoundException e1) {
 						e1.printStackTrace();
@@ -105,8 +107,8 @@ public class FilePanel extends UIElement{
 	    	public void actionPerformed(ActionEvent e) {
 	    		if (ani.getIsFrameSelected())
 	    		{
-	    			editor.getRender().setShouldReRender(true);
-	    			editor.getRender().updateRender(false);
+	    			editor.getSpriteEdit().getRender().setShouldReRender(true);
+	    			editor.getSpriteEdit().getRender().updateRender(false);
 	    		}
 	    	}
 	    });

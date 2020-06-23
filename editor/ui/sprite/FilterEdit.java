@@ -21,7 +21,6 @@ import javax.swing.SwingConstants;
 
 import editor.objects.EditorJoint;
 import editor.ui.Editor;
-import editor.ui.UIElement;
 import editor.ui.filterEdits.ShadeFromEdit;
 import framework.imageFilters.BasicVariance;
 import framework.imageFilters.DarkenFrom;
@@ -29,7 +28,7 @@ import framework.imageFilters.ImageFilter;
 import framework.imageFilters.LightenFrom;
 import framework.imageFilters.Outline;
 
-public class FilterEdit extends UIElement{
+public class FilterEdit extends SpriteUIElement{
 	private JPanel internal;
 	private JScrollPane pane;
 

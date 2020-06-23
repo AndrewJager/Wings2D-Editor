@@ -18,9 +18,8 @@ import javax.swing.JOptionPane;
 import editor.objects.EditorFrame;
 import editor.objects.EditorJoint;
 import editor.ui.Editor;
-import editor.ui.UIElement;
 
-public class ObjectInfo extends UIElement{
+public class ObjectInfo extends SpriteUIElement{
 	private JLabel infoLabel;
 	private JLabel nameLabel;
 	private JLabel orderLabel;

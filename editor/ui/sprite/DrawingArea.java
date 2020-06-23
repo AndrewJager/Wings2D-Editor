@@ -11,9 +11,8 @@ import java.util.List;
 import editor.objects.EditorFrame;
 import editor.objects.EditorJoint;
 import editor.ui.Editor;
-import editor.ui.UIElement;
 
-public class DrawingArea extends UIElement{
+public class DrawingArea extends SpriteUIElement{
 	private boolean shouldRedraw;
 	
 	public DrawingArea(Editor edit, Rectangle bounds)

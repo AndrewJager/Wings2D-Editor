@@ -21,9 +21,8 @@ import editor.objects.EditorAnimation;
 import editor.objects.EditorFrame;
 import editor.objects.EditorSpriteSheet;
 import editor.ui.Editor;
-import editor.ui.UIElement;
 
-public class FilePanel extends UIElement{
+public class FilePanel extends SpriteUIElement{
 	private JButton selectButton;
 	private JButton newButton;
 	private JButton renderBtn;

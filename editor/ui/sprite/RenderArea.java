@@ -9,9 +9,8 @@ import java.util.List;
 import editor.objects.EditorFrame;
 import editor.objects.EditorJoint;
 import editor.ui.Editor;
-import editor.ui.UIElement;
 
-public class RenderArea extends UIElement{
+public class RenderArea extends SpriteUIElement{
 	private boolean shouldReRender;
 	
 	public RenderArea(Editor edit, Rectangle bounds)

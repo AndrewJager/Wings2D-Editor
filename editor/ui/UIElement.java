@@ -7,11 +7,9 @@ import javax.swing.JPanel;
 public abstract class UIElement {
 	protected JPanel panel;
 	protected Rectangle ogBounds;
-	protected Editor editor;
 	
-	public UIElement(Editor edit, Rectangle bounds)
+	public UIElement(Rectangle bounds)
 	{
-		this.editor = edit;
 		this.ogBounds = bounds;
 		panel = new JPanel();
 		panel.setBounds(bounds);

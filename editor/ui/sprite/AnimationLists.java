@@ -21,9 +21,8 @@ import editor.objects.EditorAnimation;
 import editor.objects.EditorFrame;
 import editor.objects.EditorJoint;
 import editor.ui.Editor;
-import editor.ui.UIElement;
 
-public class AnimationLists extends UIElement{
+public class AnimationLists extends SpriteUIElement{
 	private JPanel animsPanel;
 	private JPanel framesPanel;
 	private JPanel objectsPanel;

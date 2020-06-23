@@ -12,9 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import editor.ui.Editor;
-import editor.ui.UIElement;
 
-public class FrameInfo extends UIElement{
+public class FrameInfo extends SpriteUIElement{
 	private JLabel frameName;
 	private JButton changeName;
 	private JLabel frameTime;

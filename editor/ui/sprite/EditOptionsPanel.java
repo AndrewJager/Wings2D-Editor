@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
-import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
@@ -16,9 +15,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import editor.ui.Editor;
-import editor.ui.UIElement;
 
-public class EditOptionsPanel extends UIElement{
+public class EditOptionsPanel extends SpriteUIElement{
 	private JCheckBox cascade;
 	private SpinnerModel spinModel;
 	private JSpinner imgScale;

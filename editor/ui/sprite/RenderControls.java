@@ -13,9 +13,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import editor.ui.Editor;
-import editor.ui.UIElement;
 
-public class RenderControls extends UIElement{
+public class RenderControls extends SpriteUIElement{
 	private JButton play;
 	private JButton pause;
 	private JLabel currentFrame;

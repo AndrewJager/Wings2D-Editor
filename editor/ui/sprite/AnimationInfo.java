@@ -12,9 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import editor.ui.Editor;
-import editor.ui.UIElement;
 
-public class AnimationInfo extends UIElement{
+public class AnimationInfo extends SpriteUIElement{
 	private JLabel nameLabel;
 	private JButton changeName;
 	

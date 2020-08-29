@@ -21,7 +21,7 @@ import editor.objects.skeleton.SkeletonPiece;
 public class SkeletonTreeControls extends SkeletonUIElement{
 	private JButton addAnim, deleteAnim, renameAnim, addFrame;
 	private JTree tree;
-	
+
 	public SkeletonTreeControls(SkeletonEdit edit, Rectangle bounds, JTree skeletonTree) {
 		super(edit, bounds);
 		this.tree = skeletonTree;
@@ -67,8 +67,11 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 	    				JOptionPane.PLAIN_MESSAGE, null, null, "Animation");
 				DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 				Skeleton root = (Skeleton) model.getRoot();
-				root.insert((MutableTreeNode)new SkeletonAnimation(animName, root), root.getChildCount());
+				SkeletonAnimation newAnim = new SkeletonAnimation(animName, root);
+				root.insert((MutableTreeNode)newAnim, root.getChildCount());
 				model.reload();
+				TreePath path = new TreePath(root).pathByAddingChild(newAnim);
+				tree.setSelectionPath(path);
 			}
 		});
 		renameAnim.addActionListener(new ActionListener() {
@@ -97,7 +100,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 					model.reload();
 									
 					tree.expandPath(path);
-					tree.setSelectionPath(path);
+					tree.setSelectionPath(path.pathByAddingChild(selectedNode.getChildAt(selectedNode.getChildCount() - 1)));
 				}			
 			}
 		});

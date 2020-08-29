@@ -1,4 +1,4 @@
-package editor.objects;
+package editor.objects.skeleton;
 
 import java.util.ArrayList;
 import java.util.Collections;

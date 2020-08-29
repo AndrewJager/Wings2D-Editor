@@ -9,9 +9,9 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
-import editor.objects.ISkeleton;
-import editor.objects.Skeleton;
-import editor.objects.SkeletonPiece;
+import editor.objects.skeleton.ISkeleton;
+import editor.objects.skeleton.Skeleton;
+import editor.objects.skeleton.SkeletonPiece;
 
 public class SkeletonTree extends SkeletonUIElement{
 	private JTree tree;

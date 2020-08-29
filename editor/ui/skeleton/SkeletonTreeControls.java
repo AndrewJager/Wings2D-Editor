@@ -12,11 +12,11 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import editor.objects.ISkeleton;
-import editor.objects.Skeleton;
-import editor.objects.SkeletonAnimation;
-import editor.objects.SkeletonFrame;
-import editor.objects.SkeletonPiece;
+import editor.objects.skeleton.ISkeleton;
+import editor.objects.skeleton.Skeleton;
+import editor.objects.skeleton.SkeletonAnimation;
+import editor.objects.skeleton.SkeletonFrame;
+import editor.objects.skeleton.SkeletonPiece;
 
 public class SkeletonTreeControls extends SkeletonUIElement{
 	private JButton addAnim, deleteAnim, renameAnim, addFrame;

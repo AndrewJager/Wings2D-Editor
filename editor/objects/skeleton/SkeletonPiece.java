@@ -1,4 +1,4 @@
-package editor.objects;
+package editor.objects.skeleton;
 
 public enum SkeletonPiece {
 	PARENT,

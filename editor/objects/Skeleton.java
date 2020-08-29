@@ -8,7 +8,7 @@ import java.util.List;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-public class Skeleton implements MutableTreeNode, ISkeleton{
+public class Skeleton implements ISkeleton{
 	private List<SkeletonAnimation> animations;
 	private SkeletonFrame masterFrame;
 	private String name;
@@ -16,7 +16,7 @@ public class Skeleton implements MutableTreeNode, ISkeleton{
 	public Skeleton(String skeletonName)
 	{
 		animations = new ArrayList<SkeletonAnimation>();
-		masterFrame = new SkeletonFrame();
+//		masterFrame = new SkeletonFrame();
 		this.name = skeletonName;
 	}
 	
@@ -50,7 +50,7 @@ public class Skeleton implements MutableTreeNode, ISkeleton{
 	}
 	@Override
 	public int getIndex(TreeNode node) {
-		return 0;
+		return animations.indexOf(node);
 	}
 	@Override
 	public boolean getAllowsChildren() {

@@ -8,17 +8,18 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreePath;
 
 import editor.objects.ISkeleton;
 import editor.objects.Skeleton;
 import editor.objects.SkeletonAnimation;
+import editor.objects.SkeletonFrame;
 import editor.objects.SkeletonPiece;
 
 public class SkeletonTreeControls extends SkeletonUIElement{
-	private JButton addAnim, deleteAnim, renameAnim;
+	private JButton addAnim, deleteAnim, renameAnim, addFrame;
 	private JTree tree;
 	
 	public SkeletonTreeControls(SkeletonEdit edit, Rectangle bounds, JTree skeletonTree) {
@@ -31,6 +32,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		addAnim = new JButton("New Animation");
 		deleteAnim = new JButton("Delete Animation");
 		renameAnim = new JButton("Rename Animation");
+		addFrame = new JButton("New Frame");
 		
 		// Frame controls 
 		
@@ -46,6 +48,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 			panel.add(addAnim);
 			panel.add(deleteAnim);
 			panel.add(renameAnim);
+			panel.add(addFrame);
 			break;
 		case FRAME:
 			break;
@@ -79,6 +82,23 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 					DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 					model.reload();
 				}
+			}
+		});
+		addFrame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ISkeleton selectedNode = (ISkeleton)tree.getLastSelectedPathComponent();
+				if (selectedNode != null)
+				{
+					TreePath path = tree.getSelectionPath();
+					String frameName = (String)JOptionPane.showInputDialog(panel, "","Frame Name",
+		    				JOptionPane.PLAIN_MESSAGE, null, null, "Frame");
+					selectedNode.insert((MutableTreeNode)new SkeletonFrame(frameName, (SkeletonAnimation)selectedNode), selectedNode.getChildCount());
+					DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+					model.reload();
+									
+					tree.expandPath(path);
+					tree.setSelectionPath(path);
+				}			
 			}
 		});
 	}

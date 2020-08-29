@@ -19,15 +19,15 @@ public class SkeletonTree extends SkeletonUIElement{
 
 	public SkeletonTree(SkeletonEdit edit, Rectangle bounds) {
 		super(edit, bounds);
-		
-		panel.setBackground(Color.LIGHT_GRAY);
+
 		panel.setLayout(new BorderLayout());
 		
 		Skeleton mainNode = new Skeleton("Skeleton");
-
 		tree = new JTree(mainNode);
 		tree.setEditable(true);
 		tree.setRootVisible(false);
+		tree.setBackground(Color.LIGHT_GRAY);
+		
 		
 		scrollPane = new JScrollPane(tree);
 		panel.add(scrollPane, BorderLayout.CENTER);

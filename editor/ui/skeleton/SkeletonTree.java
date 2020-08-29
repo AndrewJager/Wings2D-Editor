@@ -3,22 +3,18 @@ package editor.ui.skeleton;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 
-import editor.ui.skeleton.SkeletonTreeControls.controlType;
+import editor.objects.ISkeleton;
+import editor.objects.Skeleton;
+import editor.objects.SkeletonPiece;
 
 public class SkeletonTree extends SkeletonUIElement{
 	private JTree tree;
-	private DefaultMutableTreeNode mainNode;
 	private JScrollPane scrollPane;
 
 	public SkeletonTree(SkeletonEdit edit, Rectangle bounds) {
@@ -27,9 +23,11 @@ public class SkeletonTree extends SkeletonUIElement{
 		panel.setBackground(Color.LIGHT_GRAY);
 		panel.setLayout(new BorderLayout());
 		
-		DefaultMutableTreeNode mainNode = new DefaultMutableTreeNode("Hello");
+		Skeleton mainNode = new Skeleton("Skeleton");
+
 		tree = new JTree(mainNode);
 		tree.setEditable(true);
+		tree.setRootVisible(false);
 		
 		scrollPane = new JScrollPane(tree);
 		panel.add(scrollPane, BorderLayout.CENTER);
@@ -40,22 +38,19 @@ public class SkeletonTree extends SkeletonUIElement{
 			public void valueChanged(TreeSelectionEvent e)
 			{
 				SkeletonTreeControls treeControls = skeleton.getTreeControls();
-				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+				ISkeleton selectedNode = (ISkeleton)tree.getLastSelectedPathComponent();
 				if (selectedNode != null)
 				{
-					switch(selectedNode.getLevel())
+					switch(selectedNode.getTreeLevel())
 					{
-					case 0:
-						treeControls.setupControls(controlType.PARENT);
-						break;
 					case 1:
-						treeControls.setupControls(controlType.ANIMATION);
+						treeControls.setupControls(SkeletonPiece.ANIMATION);
 						break;
 					case 2: 
-						treeControls.setupControls(controlType.FRAME);
+						treeControls.setupControls(SkeletonPiece.FRAME);
 						break;
 					default:
-						treeControls.setupControls(controlType.PARENT);
+						treeControls.setupControls(SkeletonPiece.ANIMATION);
 					}
 				}
 			}

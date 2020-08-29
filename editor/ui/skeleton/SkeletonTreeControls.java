@@ -6,16 +6,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
+
+import editor.objects.ISkeleton;
+import editor.objects.Skeleton;
+import editor.objects.SkeletonAnimation;
+import editor.objects.SkeletonPiece;
 
 public class SkeletonTreeControls extends SkeletonUIElement{
-	public enum controlType {
-		PARENT,
-		ANIMATION,
-		FRAME,
-	}
 	private JButton addAnim, deleteAnim, renameAnim;
 	private JTree tree;
 	
@@ -23,33 +25,31 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		super(edit, bounds);
 		this.tree = skeletonTree;
 		
-		panel.setBackground(Color.DARK_GRAY);
-		
-		// Top-level controls
-		addAnim = new JButton("New Animation");
+		panel.setBackground(Color.DARK_GRAY);	
 	
 		// Animation controls
+		addAnim = new JButton("New Animation");
 		deleteAnim = new JButton("Delete Animation");
 		renameAnim = new JButton("Rename Animation");
 		
 		// Frame controls 
 		
-		setupControls(controlType.PARENT);
+		setupControls(SkeletonPiece.ANIMATION);
 	}
 	
-	public void setupControls(controlType type)
+	public void setupControls(SkeletonPiece type)
 	{
 		panel.removeAll();
 		switch (type)
 		{
-		case PARENT:
-			panel.add(addAnim);
-			break;
 		case ANIMATION:
+			panel.add(addAnim);
 			panel.add(deleteAnim);
 			panel.add(renameAnim);
 			break;
 		case FRAME:
+			break;
+		default:
 			break;
 		}
 		panel.revalidate();
@@ -60,10 +60,25 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 	{
 		addAnim.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String animName = (String)JOptionPane.showInputDialog(panel, "","Animation Name",
+	    				JOptionPane.PLAIN_MESSAGE, null, null, "Animation");
 				DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-				DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
-				root.add(new DefaultMutableTreeNode("child"));
+				Skeleton root = (Skeleton) model.getRoot();
+				root.insert((MutableTreeNode)new SkeletonAnimation(animName, root), root.getChildCount());
 				model.reload();
+			}
+		});
+		renameAnim.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ISkeleton selectedNode = (ISkeleton)tree.getLastSelectedPathComponent();
+				if (selectedNode != null)
+				{
+					String animName = (String)JOptionPane.showInputDialog(panel, "","Animation Name",
+		    				JOptionPane.PLAIN_MESSAGE, null, null, selectedNode.toString());
+					selectedNode.setName(animName);
+					DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+					model.reload();
+				}
 			}
 		});
 	}

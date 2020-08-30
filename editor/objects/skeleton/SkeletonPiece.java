@@ -4,4 +4,5 @@ public enum SkeletonPiece {
 	PARENT,
 	ANIMATION,
 	FRAME,
+	BONE,
 }

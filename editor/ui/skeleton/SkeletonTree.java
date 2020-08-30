@@ -9,7 +9,7 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
-import editor.objects.skeleton.ISkeleton;
+import editor.objects.skeleton.SkeletonItem;
 import editor.objects.skeleton.Skeleton;
 import editor.objects.skeleton.SkeletonPiece;
 
@@ -38,7 +38,7 @@ public class SkeletonTree extends SkeletonUIElement{
 			public void valueChanged(TreeSelectionEvent e)
 			{
 				SkeletonTreeControls treeControls = skeleton.getTreeControls();
-				ISkeleton selectedNode = (ISkeleton)tree.getLastSelectedPathComponent();
+				SkeletonItem selectedNode = (SkeletonItem)tree.getLastSelectedPathComponent();
 				if (selectedNode != null)
 				{
 					switch(selectedNode.getTreeLevel())
@@ -48,6 +48,9 @@ public class SkeletonTree extends SkeletonUIElement{
 						break;
 					case 2: 
 						treeControls.setupControls(SkeletonPiece.FRAME);
+						break;
+					case 3:
+						treeControls.setupControls(SkeletonPiece.BONE);
 						break;
 					default:
 						treeControls.setupControls(SkeletonPiece.ANIMATION);

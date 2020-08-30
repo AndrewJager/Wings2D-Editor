@@ -8,7 +8,7 @@ import java.util.List;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-public class SkeletonFrame implements ISkeleton{
+public class SkeletonFrame implements SkeletonItem{
 	private SkeletonAnimation parent;
 	private List<SkeletonBone> bones;
 	private String name;

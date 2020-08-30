@@ -17,15 +17,17 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import editor.objects.skeleton.ISkeleton;
+import editor.objects.skeleton.SkeletonItem;
 import editor.objects.skeleton.Skeleton;
 import editor.objects.skeleton.SkeletonAnimation;
+import editor.objects.skeleton.SkeletonBone;
 import editor.objects.skeleton.SkeletonFrame;
 import editor.objects.skeleton.SkeletonPiece;
 
 public class SkeletonTreeControls extends SkeletonUIElement{
-	private JButton addAnim, delete, addFrame, rename;
+	private JButton addAnim, delete, addFrame, rename, addBone;
 	private JTree tree;
+	private int SEPARATOR_WIDTH = 5;
 
 	public SkeletonTreeControls(SkeletonEdit edit, Rectangle bounds, JTree skeletonTree) {
 		super(edit, bounds);
@@ -41,36 +43,35 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		addFrame = new JButton("New Frame");
 		
 		// Frame controls 
+		addBone = new JButton("New Bone");
 		
 		setupControls(SkeletonPiece.ANIMATION);
 	}
 	
 	public void setupControls(SkeletonPiece type)
 	{
-		ISkeleton selectedNode = (ISkeleton)tree.getLastSelectedPathComponent();
+		SkeletonItem selectedNode = (SkeletonItem)tree.getLastSelectedPathComponent();
 		panel.removeAll();
 		switch (type)
 		{
 		case ANIMATION:
 			panel.add(addAnim);
 			JSeparator line = new JSeparator();
-			line.setPreferredSize(new Dimension(panel.getWidth(), 5));
+			line.setPreferredSize(new Dimension(panel.getWidth(), SEPARATOR_WIDTH));
 			panel.add(line);
 			if (selectedNode != null)
 			{
 				JLabel nameLabel = new JLabel(selectedNode.toString(), JLabel.CENTER);
 				nameLabel.setPreferredSize(new Dimension(panel.getWidth(), (int)nameLabel.getPreferredSize().getHeight()));
 				panel.add(nameLabel);
-				line = new JSeparator();
-				line.setPreferredSize(new Dimension((int)(panel.getWidth() * 0.6), 1));
-				panel.add(line);
+				addNameLine();
 			}
 			panel.add(rename);
 			rename.setText("Rename Animation");
 			panel.add(delete);
 			delete.setText("Delete Animation");
 			line = new JSeparator();
-			line.setPreferredSize(new Dimension(panel.getWidth(), 5));
+			line.setPreferredSize(new Dimension(panel.getWidth(), SEPARATOR_WIDTH));
 			panel.add(line);
 			panel.add(addFrame);
 			break;
@@ -80,20 +81,37 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 				JLabel nameLabel = new JLabel(selectedNode.toString(), JLabel.CENTER);
 				nameLabel.setPreferredSize(new Dimension(panel.getWidth(), (int)nameLabel.getPreferredSize().getHeight()));
 				panel.add(nameLabel);
-				line = new JSeparator();
-				line.setPreferredSize(new Dimension((int)(panel.getWidth() * 0.6), 1));
-				panel.add(line);
+				addNameLine();
 			}
 			panel.add(rename);
 			rename.setText("Rename Frame");
 			panel.add(delete);
 			delete.setText("Delete Frame");
+			line = new JSeparator();
+			line.setPreferredSize(new Dimension(panel.getWidth(), SEPARATOR_WIDTH));
+			panel.add(line);
+			panel.add(addBone);
+			break;
+		case BONE:
+			if (selectedNode != null)
+			{
+				JLabel nameLabel = new JLabel(selectedNode.toString(), JLabel.CENTER);
+				nameLabel.setPreferredSize(new Dimension(panel.getWidth(), (int)nameLabel.getPreferredSize().getHeight()));
+				panel.add(nameLabel);
+				addNameLine();
+			}
 			break;
 		default:
 			break;
 		}
 		panel.revalidate();
 		panel.repaint();
+	}
+	private void addNameLine()
+	{
+		JSeparator line = new JSeparator();
+		line.setPreferredSize(new Dimension((int)(panel.getWidth() * 0.6), 1));
+		panel.add(line);
 	}
 	
 	public void createEvents()
@@ -113,7 +131,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		});
 		addFrame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ISkeleton selectedNode = (ISkeleton)tree.getLastSelectedPathComponent();
+				SkeletonItem selectedNode = (SkeletonItem)tree.getLastSelectedPathComponent();
 				if (selectedNode != null)
 				{
 					TreePath path = tree.getSelectionPath();
@@ -131,7 +149,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		});
 		rename.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ISkeleton selectedNode = (ISkeleton)tree.getLastSelectedPathComponent();
+				SkeletonItem selectedNode = (SkeletonItem)tree.getLastSelectedPathComponent();
 				if (selectedNode != null)
 				{
 					TreePath path = tree.getSelectionPath();
@@ -148,12 +166,30 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		});
 		delete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ISkeleton selectedNode = (ISkeleton)tree.getLastSelectedPathComponent();
+				SkeletonItem selectedNode = (SkeletonItem)tree.getLastSelectedPathComponent();
 				if (selectedNode != null)
 				{
 					DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 					model.removeNodeFromParent(selectedNode);
 				}
+			}
+		});
+		addBone.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SkeletonItem selectedNode = (SkeletonItem)tree.getLastSelectedPathComponent();
+				if (selectedNode != null)
+				{
+					TreePath path = tree.getSelectionPath();
+					String frameName = (String)JOptionPane.showInputDialog(panel, "","Bone Name",
+		    				JOptionPane.PLAIN_MESSAGE, null, null, "Bone");
+					DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+					model.insertNodeInto((MutableTreeNode)new SkeletonBone(frameName, (SkeletonFrame)selectedNode),
+							selectedNode, selectedNode.getChildCount());
+					model.reload();
+									
+					tree.expandPath(path);
+					tree.setSelectionPath(path.pathByAddingChild(selectedNode.getChildAt(selectedNode.getChildCount() - 1)));
+				}			
 			}
 		});
 	}

@@ -5,96 +5,85 @@ import java.util.Enumeration;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-public class SkeletonBone implements ISkeleton{
+public class SkeletonBone implements SkeletonItem{
 	private SkeletonFrame parent;
-
-	@Override
-	public void insert(MutableTreeNode child, int index) {
-		// TODO Auto-generated method stub
-		
+	private String name;
+	
+	public SkeletonBone(String boneName, SkeletonFrame parentFrame)
+	{
+		name = boneName;
+		parent = parentFrame;
+	}
+	
+	public String toString()
+	{
+		return name;
 	}
 
 	@Override
-	public void remove(int index) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void insert(MutableTreeNode child, int index) {}
 
 	@Override
-	public void remove(MutableTreeNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void remove(int index) {}
 
 	@Override
-	public void setUserObject(Object object) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void remove(MutableTreeNode node) {}
+
+	@Override
+	public void setUserObject(Object object) {}
 
 	@Override
 	public void removeFromParent() {
-		// TODO Auto-generated method stub
-		
+		parent.remove(this);
 	}
 
 	@Override
 	public void setParent(MutableTreeNode newParent) {
-		// TODO Auto-generated method stub
-		
+		parent = (SkeletonFrame)newParent;
 	}
 
 	@Override
 	public TreeNode getChildAt(int childIndex) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public int getChildCount() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public TreeNode getParent() {
-		// TODO Auto-generated method stub
-		return null;
+		return parent;
 	}
 
 	@Override
 	public int getIndex(TreeNode node) {
-		// TODO Auto-generated method stub
-		return 0;
+		return -1;
 	}
 
 	@Override
 	public boolean getAllowsChildren() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean isLeaf() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public Enumeration<? extends TreeNode> children() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public int getTreeLevel() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 3;
 	}
 
 	@Override
 	public void setName(String newName) {
-		// TODO Auto-generated method stub
-		
+		name = newName;	
 	}
 }

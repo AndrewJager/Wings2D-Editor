@@ -1,11 +1,15 @@
 package editor.ui.skeleton;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.JTree;
@@ -25,6 +29,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 
 	public SkeletonTreeControls(SkeletonEdit edit, Rectangle bounds, JTree skeletonTree) {
 		super(edit, bounds);
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		this.tree = skeletonTree;
 		
 //		panel.setBackground(Color.DARK_GRAY);	
@@ -42,19 +47,43 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 	
 	public void setupControls(SkeletonPiece type)
 	{
+		ISkeleton selectedNode = (ISkeleton)tree.getLastSelectedPathComponent();
 		panel.removeAll();
 		switch (type)
 		{
 		case ANIMATION:
 			panel.add(addAnim);
-			panel.add(delete);
-			delete.setText("Delete Animation");
+			JSeparator line = new JSeparator();
+			line.setPreferredSize(new Dimension(panel.getWidth(), 5));
+			panel.add(line);
+			if (selectedNode != null)
+			{
+				JLabel nameLabel = new JLabel(selectedNode.toString(), JLabel.CENTER);
+				nameLabel.setPreferredSize(new Dimension(panel.getWidth(), (int)nameLabel.getPreferredSize().getHeight()));
+				panel.add(nameLabel);
+				line = new JSeparator();
+				line.setPreferredSize(new Dimension((int)(panel.getWidth() * 0.6), 1));
+				panel.add(line);
+			}
 			panel.add(rename);
 			rename.setText("Rename Animation");
-			panel.add(new JSeparator());
+			panel.add(delete);
+			delete.setText("Delete Animation");
+			line = new JSeparator();
+			line.setPreferredSize(new Dimension(panel.getWidth(), 5));
+			panel.add(line);
 			panel.add(addFrame);
 			break;
 		case FRAME:
+			if (selectedNode != null)
+			{
+				JLabel nameLabel = new JLabel(selectedNode.toString(), JLabel.CENTER);
+				nameLabel.setPreferredSize(new Dimension(panel.getWidth(), (int)nameLabel.getPreferredSize().getHeight()));
+				panel.add(nameLabel);
+				line = new JSeparator();
+				line.setPreferredSize(new Dimension((int)(panel.getWidth() * 0.6), 1));
+				panel.add(line);
+			}
 			panel.add(rename);
 			rename.setText("Rename Frame");
 			panel.add(delete);

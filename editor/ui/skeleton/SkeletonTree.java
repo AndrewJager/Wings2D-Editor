@@ -1,0 +1,67 @@
+package editor.ui.skeleton;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Rectangle;
+
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+
+import editor.objects.skeleton.SkeletonItem;
+import editor.objects.skeleton.Skeleton;
+import editor.objects.skeleton.SkeletonPiece;
+
+public class SkeletonTree extends SkeletonUIElement{
+	private JTree tree;
+	private JScrollPane scrollPane;
+
+	public SkeletonTree(SkeletonEdit edit, Rectangle bounds) {
+		super(edit, bounds);
+
+		panel.setLayout(new BorderLayout());
+		
+		Skeleton mainNode = new Skeleton("Skeleton");
+		tree = new JTree(mainNode);
+		tree.setEditable(true);
+		tree.setRootVisible(false);
+		tree.setBackground(Color.LIGHT_GRAY);
+		
+		
+		scrollPane = new JScrollPane(tree);
+		panel.add(scrollPane, BorderLayout.CENTER);
+	}
+
+	public void createEvents() {
+		tree.addTreeSelectionListener(new TreeSelectionListener() {
+			public void valueChanged(TreeSelectionEvent e)
+			{
+				SkeletonTreeControls treeControls = skeleton.getTreeControls();
+				SkeletonItem selectedNode = (SkeletonItem)tree.getLastSelectedPathComponent();
+				if (selectedNode != null)
+				{
+					switch(selectedNode.getTreeLevel())
+					{
+					case 1:
+						treeControls.setupControls(SkeletonPiece.ANIMATION);
+						break;
+					case 2: 
+						treeControls.setupControls(SkeletonPiece.FRAME);
+						break;
+					case 3:
+						treeControls.setupControls(SkeletonPiece.BONE);
+						break;
+					default:
+						treeControls.setupControls(SkeletonPiece.ANIMATION);
+					}
+				}
+			}
+		});
+	}
+
+	public JTree getTree()
+	{
+		return tree;
+	}
+}

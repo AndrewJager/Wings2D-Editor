@@ -1,4 +1,4 @@
-package editor.ui;
+package editor.ui.sprite;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -20,8 +20,9 @@ import javax.swing.event.ListSelectionListener;
 import editor.objects.EditorAnimation;
 import editor.objects.EditorFrame;
 import editor.objects.EditorJoint;
+import editor.ui.Editor;
 
-public class AnimationLists extends UIElement{
+public class AnimationLists extends SpriteUIElement{
 	private JPanel animsPanel;
 	private JPanel framesPanel;
 	private JPanel objectsPanel;
@@ -82,7 +83,7 @@ public class AnimationLists extends UIElement{
 	
 	public void createEvents()
 	{
-		AnimationLists ani = editor.getAnimLists();
+		AnimationLists ani = editor.getSpriteEdit().getAnimLists();
 		newAnim.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		String animName = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Add animation",
@@ -123,7 +124,7 @@ public class AnimationLists extends UIElement{
 		    		curFrame.addNewJoint(objectName);
 		    		objectList.setListData(curFrame.getJointNames());
 		    		objectList.setSelectedIndex(curFrame.getJoints().size() - 1);
-		    		editor.getRender().setShouldReRender(true);
+		    		editor.getSpriteEdit().getRender().setShouldReRender(true);
 	    		}
 	    		else
 	    		{
@@ -136,12 +137,12 @@ public class AnimationLists extends UIElement{
             @Override
             public void valueChanged(ListSelectionEvent evt) {
                 if (!evt.getValueIsAdjusting()) {
-                	if (editor.getAnimLists().getIsObjectSelected())
+                	if (editor.getSpriteEdit().getAnimLists().getIsObjectSelected())
                 	{
-	                	editor.getObjectInfo().updateInfo(editor.getAnimLists().getSelectedObject());
-	                	editor.getEditOptions().getEditing().setSelected(false);
-	        			editor.getFilters().setFilterButtons(ani.getSelectedObject());
-	        			editor.getDrawing().setShouldRedraw(true);
+	                	editor.getSpriteEdit().getObjectInfo().updateInfo(editor.getSpriteEdit().getAnimLists().getSelectedObject());
+	                	editor.getSpriteEdit().getEditOptions().getEditing().setSelected(false);
+	        			editor.getSpriteEdit().getFilters().setFilterButtons(ani.getSelectedObject());
+	        			editor.getSpriteEdit().getDrawing().setShouldRedraw(true);
                 	}
                 }
             }
@@ -150,15 +151,15 @@ public class AnimationLists extends UIElement{
             @Override
             public void valueChanged(ListSelectionEvent evt) {
                 if (!evt.getValueIsAdjusting()) {
-                	editor.getEditOptions().getEditing().setSelected(false);
+                	editor.getSpriteEdit().getEditOptions().getEditing().setSelected(false);
                 	if (ani.getIsFrameSelected())
                 	{
 	                	EditorFrame curFrame = ani.getSelectedFrame();
 	                	objectList.setListData(curFrame.getJointNames());
 	                	objectList.setSelectedIndex(0);
-	                	editor.getFrameInfo().getFrameNameLabel().setText(curFrame.getName());
-	                	editor.getFrameInfo().getFrameTimeLabel().setText(Double.toString(curFrame.getFrameTime()));
-	                	editor.getDrawing().setShouldRedraw(true);
+	                	editor.getSpriteEdit().getFrameInfo().getFrameNameLabel().setText(curFrame.getName());
+	                	editor.getSpriteEdit().getFrameInfo().getFrameTimeLabel().setText(Double.toString(curFrame.getFrameTime()));
+	                	editor.getSpriteEdit().getDrawing().setShouldRedraw(true);
                 	}
                 }
             }

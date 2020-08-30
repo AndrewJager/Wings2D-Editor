@@ -1,4 +1,4 @@
-package editor.ui;
+package editor.ui.sprite;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -8,14 +8,15 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
-import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class EditOptionsPanel extends UIElement{
+import editor.ui.Editor;
+
+public class EditOptionsPanel extends SpriteUIElement{
 	private JCheckBox cascade;
 	private SpinnerModel spinModel;
 	private JSpinner imgScale;
@@ -48,13 +49,13 @@ public class EditOptionsPanel extends UIElement{
 	
 	public void createEvents()
 	{
-		AnimationLists ani = editor.getAnimLists();
+		AnimationLists ani = editor.getSpriteEdit().getAnimLists();
 		editing.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if (ani.getIsObjectSelected())
 	    		{
 	    			editor.getOptions().setEditing(editing.isSelected());
-	    			editor.getDrawing().setShouldRedraw(true);
+	    			editor.getSpriteEdit().getDrawing().setShouldRedraw(true);
 	    		}
 	    	}
 	    });
@@ -74,7 +75,7 @@ public class EditOptionsPanel extends UIElement{
 	    		if (ani.getIsObjectSelected())
 	    		{
 	    			editor.getOptions().setRotating(rotate.isSelected());
-	    			editor.getDrawing().setShouldRedraw(true);
+	    			editor.getSpriteEdit().getDrawing().setShouldRedraw(true);
 	    		}
 	    	}
 	    });
@@ -83,7 +84,7 @@ public class EditOptionsPanel extends UIElement{
 	    		if (ani.getIsObjectSelected())
 	    		{
 	    			editor.getOptions().setScaling(scale.isSelected());
-	    			editor.getDrawing().setShouldRedraw(true);
+	    			editor.getSpriteEdit().getDrawing().setShouldRedraw(true);
 	    		}
 	    	}
 	    });

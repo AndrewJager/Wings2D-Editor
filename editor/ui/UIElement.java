@@ -7,17 +7,15 @@ import javax.swing.JPanel;
 public abstract class UIElement {
 	protected JPanel panel;
 	protected Rectangle ogBounds;
-	protected Editor editor;
 	
-	public UIElement(Editor edit, Rectangle bounds)
+	public UIElement(Rectangle bounds)
 	{
-		this.editor = edit;
 		this.ogBounds = bounds;
 		panel = new JPanel();
 		panel.setBounds(bounds);
 	}
 	
-	public void resizePanel(double scale)
+	public void resize(double scale)
 	{
 		Rectangle newBounds = new Rectangle((int)(ogBounds.getX() * scale), (int)(ogBounds.getY() * scale),
 				(int)(ogBounds.getWidth() * scale), (int)(ogBounds.getHeight() * scale));

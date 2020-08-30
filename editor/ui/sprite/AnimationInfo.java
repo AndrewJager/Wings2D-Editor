@@ -1,4 +1,4 @@
-package editor.ui;
+package editor.ui.sprite;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -11,7 +11,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-public class AnimationInfo extends UIElement{
+import editor.ui.Editor;
+
+public class AnimationInfo extends SpriteUIElement{
 	private JLabel nameLabel;
 	private JButton changeName;
 	
@@ -29,7 +31,7 @@ public class AnimationInfo extends UIElement{
 	
 	public void createEvents()
 	{
-		AnimationLists ani = editor.getAnimLists();
+		AnimationLists ani = editor.getSpriteEdit().getAnimLists();
 		changeName.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		String animName = (String)JOptionPane.showInputDialog(editor.getFrame(), "","Rename Animation",

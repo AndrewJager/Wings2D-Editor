@@ -5,18 +5,20 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
+import editor.ui.sprite.AnimationLists;
+
 public class AnimTimer {
 	private Timer timer;
 	
 	public AnimTimer(Editor editor)
 	{
-		AnimationLists ani = editor.getAnimLists();
+		AnimationLists ani = editor.getSpriteEdit().getAnimLists();
 		ActionListener renderUpdater = new ActionListener() { // Timer event to update the render
 			public void actionPerformed(ActionEvent evt) {
 	    		if (ani.getIsFrameSelected())
 	    		{
-	    			editor.getRender().updateRender(editor.getPlaying());
-	    			editor.getDrawing().updateDrawing();
+	    			editor.getSpriteEdit().getRender().updateRender(editor.getPlaying());
+	    			editor.getSpriteEdit().getDrawing().updateDrawing();
 	    		}
 			}
 		};

@@ -1,4 +1,4 @@
-package editor.ui;
+package editor.ui.sprite;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -10,8 +10,9 @@ import java.util.List;
 
 import editor.objects.EditorFrame;
 import editor.objects.EditorJoint;
+import editor.ui.Editor;
 
-public class DrawingArea extends UIElement{
+public class DrawingArea extends SpriteUIElement{
 	private boolean shouldRedraw;
 	
 	public DrawingArea(Editor edit, Rectangle bounds)
@@ -24,7 +25,7 @@ public class DrawingArea extends UIElement{
 	
 	public void createEvents()
 	{
-		AnimationLists ani = editor.getAnimLists();
+		AnimationLists ani = editor.getSpriteEdit().getAnimLists();
 		panel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
             	if (ani.getIsObjectSelected())
@@ -40,7 +41,7 @@ public class DrawingArea extends UIElement{
             		EditorFrame curFrame = ani.getSelectedFrame();
                 	curFrame.processMouseRelease(curFrame.getJoint(ani.getObjectList().getSelectedIndex()).getName(), evt.getPoint());
     				shouldRedraw = true;
-    				editor.getRender().setShouldReRender(true);
+    				editor.getSpriteEdit().getRender().setShouldReRender(true);
             	}
             }
         });
@@ -55,7 +56,7 @@ public class DrawingArea extends UIElement{
 		if (shouldRedraw)
 		{
 			shouldRedraw = false;
-			AnimationLists ani = editor.getAnimLists();
+			AnimationLists ani = editor.getSpriteEdit().getAnimLists();
 			Graphics2D g2d = (Graphics2D)panel.getGraphics();
 			double scale = Double.valueOf(panel.getWidth()) / ogBounds.getWidth();
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

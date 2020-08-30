@@ -1,4 +1,4 @@
-package editor.ui;
+package editor.ui.sprite;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -17,8 +17,9 @@ import javax.swing.JOptionPane;
 
 import editor.objects.EditorFrame;
 import editor.objects.EditorJoint;
+import editor.ui.Editor;
 
-public class ObjectInfo extends UIElement{
+public class ObjectInfo extends SpriteUIElement{
 	private JLabel infoLabel;
 	private JLabel nameLabel;
 	private JLabel orderLabel;
@@ -54,15 +55,15 @@ public class ObjectInfo extends UIElement{
 	
 	public void createEvents()
 	{
-		AnimationLists ani = editor.getAnimLists();
+		AnimationLists ani = editor.getSpriteEdit().getAnimLists();
 		addVertex.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if (ani.getIsObjectSelected())
 	    		{
 	    			EditorFrame curFrame = ani.getSelectedFrame();
 	    			curFrame.addVertex(ani.getObjectList().getSelectedIndex());
-	    			editor.getDrawing().setShouldRedraw(true);
-	    			editor.getRender().setShouldReRender(true);
+	    			editor.getSpriteEdit().getDrawing().setShouldRedraw(true);
+	    			editor.getSpriteEdit().getRender().setShouldReRender(true);
 	    		}
 	    	}
 	    });
@@ -73,8 +74,8 @@ public class ObjectInfo extends UIElement{
 	    		    EditorJoint joint = ani.getSelectedObject();
 	    			Color color = JColorChooser.showDialog(editor.getFrame(), "Select a color", joint.getColor());    
 	    			joint.setColor(color);
-	    			editor.getDrawing().setShouldRedraw(true);
-	    			editor.getRender().setShouldReRender(true);
+	    			editor.getSpriteEdit().getDrawing().setShouldRedraw(true);
+	    			editor.getSpriteEdit().getRender().setShouldReRender(true);
 	    		}
 	    	}
 	    });
@@ -89,8 +90,8 @@ public class ObjectInfo extends UIElement{
 		    				JOptionPane.PLAIN_MESSAGE, null, filters, "Basic Variance");
 		    		curObject.addNewFilter(filterName);
 		    		
-		    		editor.getFilters().setFilterButtons(curObject);
-		    		editor.getRender().setShouldReRender(true);
+		    		editor.getSpriteEdit().getFilters().setFilterButtons(curObject);
+		    		editor.getSpriteEdit().getRender().setShouldReRender(true);
 	    		}
 	    	}
 	    });

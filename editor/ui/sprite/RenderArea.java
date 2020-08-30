@@ -1,4 +1,4 @@
-package editor.ui;
+package editor.ui.sprite;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -8,8 +8,9 @@ import java.util.List;
 
 import editor.objects.EditorFrame;
 import editor.objects.EditorJoint;
+import editor.ui.Editor;
 
-public class RenderArea extends UIElement{
+public class RenderArea extends SpriteUIElement{
 	private boolean shouldReRender;
 	
 	public RenderArea(Editor edit, Rectangle bounds)
@@ -22,8 +23,8 @@ public class RenderArea extends UIElement{
 	
 	public void updateRender(boolean advanceFrame)
 	{
-		EditorFrame curFrame = editor.getAnimLists().getSelectedFrame();
-		AnimationLists ani = editor.getAnimLists();
+		EditorFrame curFrame = editor.getSpriteEdit().getAnimLists().getSelectedFrame();
+		AnimationLists ani = editor.getSpriteEdit().getAnimLists();
 		if (getShouldReRender())
 		{
 			Graphics2D g2d = (Graphics2D)panel.getGraphics();

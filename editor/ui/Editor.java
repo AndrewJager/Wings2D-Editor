@@ -13,11 +13,14 @@ import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import editor.objects.EditOptions;
 import editor.objects.EditorSpriteSheet;
+import editor.ui.skeleton.SkeletonEdit;
+import editor.ui.sprite.SpriteEdit;
 import framework.Level;
 import framework.LevelManager;
 
@@ -28,22 +31,15 @@ public class Editor {
 	private boolean playing = false;
 	private Level demoLevel;
 	private EditOptions options;
-	private List<UIElement> elements;
+	private List<UIPanel> panels;
 	
 	private JFrame frame;
 	private JPanel mainPanel;
-	
-	private DrawingArea drawing;
-	private RenderArea render;
-	private FilePanel file;
-	private AnimationLists animLists;
-	private EditOptionsPanel editOptionsPanel;
-	private RenderControls renderControls;
-	private ObjectInfo objectInfo;
-	private FilterEdit filters;
+	private JTabbedPane pane;
 	private AnimTimer animTimer;
-	private AnimationInfo animInfo;
-	private FrameInfo frameInfo;
+	
+	private SkeletonEdit skeletonEdit;
+	private SpriteEdit spriteEdit;
 	
 	public int frameStartWidth = 1500;
 	public int frameStartHeight = 800;
@@ -71,38 +67,29 @@ public class Editor {
 		mainPanel.setBackground(Color.DARK_GRAY);
 		frame.add(mainPanel);
 		
-		drawing = new DrawingArea(this, new Rectangle(875, 10, 600, 600));
-		render = new RenderArea(this, new Rectangle(700, 10, 150, 150));
-		file = new FilePanel(this, new Rectangle(10, 10, 400, 50));
-		animLists = new AnimationLists(this, new Rectangle(10, 70, 470, 600));
-		editOptionsPanel = new EditOptionsPanel(this, new Rectangle(500, 240, 350, 180));
-		renderControls = new RenderControls(this, new Rectangle(700, 170, 150, 35));
-		objectInfo = new ObjectInfo(this, new Rectangle(500, 10, 180, 195));
-		filters = new FilterEdit(this, new Rectangle(500, 540, 350, 210));
-		animInfo = new AnimationInfo(this, new Rectangle(10, 680, 150, 50));
-		frameInfo = new FrameInfo(this, new Rectangle(180, 680, 300, 50));
+		skeletonEdit = new SkeletonEdit(this);
+		spriteEdit = new SpriteEdit(this);
+		panels = new ArrayList<UIPanel>();
+		panels.add(skeletonEdit);
+		panels.add(spriteEdit);
 		
-		animTimer = new AnimTimer(this);
+		pane = new JTabbedPane();
+		pane.addTab("Project", new JPanel());
+		pane.addTab("Skeleton", skeletonEdit.getPanel());
+		pane.addTab("Sprite", spriteEdit.getPanel());
+		pane.setSelectedIndex(1);
+		mainPanel.add(pane);
+		pane.setLocation(0, 0);
+		pane.setSize(100, 100);
+		mainPanel.revalidate();
 		
-		elements = new ArrayList<UIElement>();
-		elements.add(drawing);
-		elements.add(render);
-		elements.add(file);
-		elements.add(animLists);
-		elements.add(editOptionsPanel);
-		elements.add(renderControls);
-		elements.add(objectInfo);
-		elements.add(filters);
-		elements.add(animInfo);
-		elements.add(frameInfo);
-		
-		// Create events and add panels to frame
-		for (int i = 0; i < elements.size(); i++)
+		for (int i = 0; i < panels.size(); i++)
 		{
-			elements.get(i).createEvents();
-			mainPanel.add(elements.get(i).getPanel());
+			panels.get(i).initElements();
 		}
 		
+		animTimer = new AnimTimer(this);
+
 	    frame.addWindowListener(new WindowAdapter(){
 	    	public void windowClosing(WindowEvent e){
 	    		animTimer.getTimer().stop();
@@ -131,18 +118,19 @@ public class Editor {
 		    	mainPanel.setLocation((int)(xPos * 0.5), yPos);
 		    	mainPanel.setLocation(0, 0);
 		    	mainPanel.revalidate();
+		    	pane.setSize(mainPanel.getWidth(), mainPanel.getHeight());
 		    	
 		    	double scale = Double.valueOf(getMainPanel().getWidth()) / frameStartWidth;
-				for (int i = 0; i < elements.size(); i++)
+				for (int i = 0; i < panels.size(); i++)
 				{
-					elements.get(i).resizePanel(scale);
+					panels.get(i).resize(mainPanel, scale);
 				}
 				
-				if (animLists.getAnimList().getSelectedIndex() != -1)
-				{
-					drawing.setShouldRedraw(true);
-				}
-				render.setShouldReRender(true);
+//				if (animLists.getAnimList().getSelectedIndex() != -1)
+//				{
+//					drawing.setShouldRedraw(true);
+//				}
+//				render.setShouldReRender(true);
 				manager.setScale(RENDER_SCALE * scale);
 				demoLevel.rescale();
 			}
@@ -179,35 +167,11 @@ public class Editor {
 	public JPanel getMainPanel() {
 		return mainPanel;
 	}
-	public DrawingArea getDrawing() {
-		return drawing;
+	public SkeletonEdit getSkeletonEdit() {
+		return skeletonEdit;
 	}
-	public RenderArea getRender() {
-		return render;
-	}
-	public FilePanel getFile() {
-		return file;
-	}
-	public AnimationLists getAnimLists() {
-		return animLists;
-	}
-	public EditOptionsPanel getEditOptions() {
-		return editOptionsPanel;
-	}
-	public RenderControls getRenderControls() {
-		return renderControls;
-	}
-	public ObjectInfo getObjectInfo() {
-		return objectInfo;
-	}
-	public FilterEdit getFilters() {
-		return filters;
-	}
-	public FrameInfo getFrameInfo() {
-		return frameInfo;
-	}
-	public AnimationInfo getAnimationInfo() {
-		return animInfo;
+	public SpriteEdit getSpriteEdit() {
+		return spriteEdit;
 	}
 	public void setActiveSprite(EditorSpriteSheet sprite)
 	{

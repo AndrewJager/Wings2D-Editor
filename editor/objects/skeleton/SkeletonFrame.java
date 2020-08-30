@@ -10,8 +10,8 @@ import javax.swing.tree.TreeNode;
 
 public class SkeletonFrame implements SkeletonItem{
 	private SkeletonAnimation parent;
-	private List<SkeletonBone> bones;
-	private String name;
+	protected List<SkeletonBone> bones;
+	protected String name;
 	
 	public SkeletonFrame(String frameName, SkeletonAnimation frameParent)
 	{

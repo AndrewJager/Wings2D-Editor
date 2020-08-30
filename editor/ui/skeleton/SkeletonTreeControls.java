@@ -18,6 +18,7 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import editor.objects.skeleton.SkeletonItem;
+import editor.objects.skeleton.SkeletonMasterFrame;
 import editor.objects.skeleton.Skeleton;
 import editor.objects.skeleton.SkeletonAnimation;
 import editor.objects.skeleton.SkeletonBone;
@@ -25,8 +26,9 @@ import editor.objects.skeleton.SkeletonFrame;
 import editor.objects.skeleton.SkeletonPiece;
 
 public class SkeletonTreeControls extends SkeletonUIElement{
-	private JButton addAnim, delete, addFrame, rename, addBone;
+	private JButton addAnim, delete, addFrame, rename, addBone, addBoneMaster;
 	private JTree tree;
+	private JSeparator line;
 	private int SEPARATOR_WIDTH = 5;
 
 	public SkeletonTreeControls(SkeletonEdit edit, Rectangle bounds, JTree skeletonTree) {
@@ -35,17 +37,15 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		this.tree = skeletonTree;
 		
 //		panel.setBackground(Color.DARK_GRAY);	
-	
-		// Animation controls
+
 		addAnim = new JButton("New Animation");
 		delete = new JButton("Delete Animation");
 		rename = new JButton("Rename Animation");
 		addFrame = new JButton("New Frame");
-		
-		// Frame controls 
 		addBone = new JButton("New Bone");
+		addBoneMaster = new JButton("New Bone");
 		
-		setupControls(SkeletonPiece.ANIMATION);
+		setupControls(SkeletonPiece.PARENT);
 	}
 	
 	public void setupControls(SkeletonPiece type)
@@ -54,9 +54,27 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		panel.removeAll();
 		switch (type)
 		{
+		case PARENT:
+			if (selectedNode != null)
+			{
+				JLabel nameLabel = new JLabel(selectedNode.toString(), JLabel.CENTER);
+				nameLabel.setPreferredSize(new Dimension(panel.getWidth(), (int)nameLabel.getPreferredSize().getHeight()));
+				panel.add(nameLabel);
+				addNameLine();
+			}
+			panel.add(addAnim);
+			line = new JSeparator();
+			line.setPreferredSize(new Dimension(panel.getWidth(), SEPARATOR_WIDTH));
+			panel.add(line);
+			JLabel masterLabel = new JLabel("Master Frame", JLabel.CENTER);
+			masterLabel.setPreferredSize(new Dimension(panel.getWidth(), (int)masterLabel.getPreferredSize().getHeight()));
+			panel.add(masterLabel);
+			addNameLine();
+			panel.add(addBoneMaster);
+			break;
 		case ANIMATION:
 			panel.add(addAnim);
-			JSeparator line = new JSeparator();
+			line = new JSeparator();
 			line.setPreferredSize(new Dimension(panel.getWidth(), SEPARATOR_WIDTH));
 			panel.add(line);
 			if (selectedNode != null)
@@ -180,11 +198,20 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 				if (selectedNode != null)
 				{
 					TreePath path = tree.getSelectionPath();
-					String frameName = (String)JOptionPane.showInputDialog(panel, "","Bone Name",
+					String boneName = (String)JOptionPane.showInputDialog(panel, "","Bone Name",
 		    				JOptionPane.PLAIN_MESSAGE, null, null, "Bone");
 					DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-					model.insertNodeInto((MutableTreeNode)new SkeletonBone(frameName, (SkeletonFrame)selectedNode),
-							selectedNode, selectedNode.getChildCount());
+					if (selectedNode.getTreeLevel() == 1)
+					{
+						model.insertNodeInto((MutableTreeNode)new SkeletonBone(boneName, null),
+								selectedNode, selectedNode.getChildCount());
+					}
+					else
+					{
+						System.out.println(selectedNode.toString());
+						model.insertNodeInto((MutableTreeNode)new SkeletonBone(boneName, (SkeletonFrame)selectedNode),
+								selectedNode, selectedNode.getChildCount());
+					}
 					model.reload();
 									
 					tree.expandPath(path);

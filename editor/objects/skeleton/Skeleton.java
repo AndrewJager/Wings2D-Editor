@@ -9,14 +9,15 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 public class Skeleton implements SkeletonItem{
-	private List<SkeletonAnimation> animations;
-	private SkeletonFrame masterFrame;
+	private List<SkeletonItem> animations;
+	private SkeletonMasterFrame masterFrame;
 	private String name;
 	
 	public Skeleton(String skeletonName)
 	{
-		animations = new ArrayList<SkeletonAnimation>();
-//		masterFrame = new SkeletonFrame();
+		animations = new ArrayList<SkeletonItem>();
+		masterFrame = new SkeletonMasterFrame("Master");
+		animations.add(masterFrame);
 		this.name = skeletonName;
 	}
 	

@@ -3,14 +3,21 @@ package editor.ui.skeleton;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
 import editor.objects.skeleton.SkeletonItem;
 import editor.objects.skeleton.Skeleton;
+import editor.objects.skeleton.SkeletonAnimation;
+import editor.objects.skeleton.SkeletonBone;
+import editor.objects.skeleton.SkeletonFrame;
 import editor.objects.skeleton.SkeletonPiece;
 
 public class SkeletonTree extends SkeletonUIElement{
@@ -25,7 +32,6 @@ public class SkeletonTree extends SkeletonUIElement{
 		Skeleton mainNode = new Skeleton("Skeleton");
 		tree = new JTree(mainNode);
 		tree.setEditable(true);
-		tree.setRootVisible(false);
 		tree.setBackground(Color.LIGHT_GRAY);
 		
 		
@@ -41,19 +47,21 @@ public class SkeletonTree extends SkeletonUIElement{
 				SkeletonItem selectedNode = (SkeletonItem)tree.getLastSelectedPathComponent();
 				if (selectedNode != null)
 				{
-					switch(selectedNode.getTreeLevel())
+					if (selectedNode instanceof Skeleton)
 					{
-					case 1:
-						treeControls.setupControls(SkeletonPiece.ANIMATION);
-						break;
-					case 2: 
+						treeControls.setupControls(SkeletonPiece.PARENT);	
+					}
+					if (selectedNode instanceof SkeletonAnimation)
+					{
+						treeControls.setupControls(SkeletonPiece.ANIMATION);	
+					}
+					else if (selectedNode instanceof SkeletonFrame)
+					{
 						treeControls.setupControls(SkeletonPiece.FRAME);
-						break;
-					case 3:
+					}
+					else if (selectedNode instanceof SkeletonBone)
+					{
 						treeControls.setupControls(SkeletonPiece.BONE);
-						break;
-					default:
-						treeControls.setupControls(SkeletonPiece.ANIMATION);
 					}
 				}
 			}

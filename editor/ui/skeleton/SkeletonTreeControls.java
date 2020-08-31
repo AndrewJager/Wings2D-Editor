@@ -43,7 +43,6 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		rename = new JButton("Rename Animation");
 		addFrame = new JButton("New Frame");
 		addBone = new JButton("New Bone");
-		addBoneMaster = new JButton("New Bone");
 		
 		setupControls(SkeletonPiece.PARENT);
 	}
@@ -57,20 +56,13 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		case PARENT:
 			if (selectedNode != null)
 			{
-				JLabel nameLabel = new JLabel(selectedNode.toString(), JLabel.CENTER);
-				nameLabel.setPreferredSize(new Dimension(panel.getWidth(), (int)nameLabel.getPreferredSize().getHeight()));
-				panel.add(nameLabel);
+				addLabel(selectedNode.toString());
 				addNameLine();
 			}
 			panel.add(addAnim);
 			line = new JSeparator();
 			line.setPreferredSize(new Dimension(panel.getWidth(), SEPARATOR_WIDTH));
 			panel.add(line);
-			JLabel masterLabel = new JLabel("Master Frame", JLabel.CENTER);
-			masterLabel.setPreferredSize(new Dimension(panel.getWidth(), (int)masterLabel.getPreferredSize().getHeight()));
-			panel.add(masterLabel);
-			addNameLine();
-			panel.add(addBoneMaster);
 			break;
 		case ANIMATION:
 			panel.add(addAnim);
@@ -79,9 +71,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 			panel.add(line);
 			if (selectedNode != null)
 			{
-				JLabel nameLabel = new JLabel(selectedNode.toString(), JLabel.CENTER);
-				nameLabel.setPreferredSize(new Dimension(panel.getWidth(), (int)nameLabel.getPreferredSize().getHeight()));
-				panel.add(nameLabel);
+				addLabel(selectedNode.toString());
 				addNameLine();
 			}
 			panel.add(rename);
@@ -96,15 +86,22 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		case FRAME:
 			if (selectedNode != null)
 			{
-				JLabel nameLabel = new JLabel(selectedNode.toString(), JLabel.CENTER);
-				nameLabel.setPreferredSize(new Dimension(panel.getWidth(), (int)nameLabel.getPreferredSize().getHeight()));
-				panel.add(nameLabel);
+				addLabel(selectedNode.toString());
 				addNameLine();
 			}
 			panel.add(rename);
 			rename.setText("Rename Frame");
 			panel.add(delete);
 			delete.setText("Delete Frame");
+			SkeletonFrame frame = (SkeletonFrame)selectedNode;
+			if (frame.getParentSyncedFrame() != null)
+			{
+				addLabel(frame.getParentSyncedFrame().toString());
+			}
+			else
+			{
+				addLabel("No parent sync frame");
+			}
 			line = new JSeparator();
 			line.setPreferredSize(new Dimension(panel.getWidth(), SEPARATOR_WIDTH));
 			panel.add(line);
@@ -113,9 +110,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		case BONE:
 			if (selectedNode != null)
 			{
-				JLabel nameLabel = new JLabel(selectedNode.toString(), JLabel.CENTER);
-				nameLabel.setPreferredSize(new Dimension(panel.getWidth(), (int)nameLabel.getPreferredSize().getHeight()));
-				panel.add(nameLabel);
+				addLabel(selectedNode.toString());
 				addNameLine();
 			}
 			break;
@@ -130,6 +125,12 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		JSeparator line = new JSeparator();
 		line.setPreferredSize(new Dimension((int)(panel.getWidth() * 0.6), 1));
 		panel.add(line);
+	}
+	private void addLabel(String text)
+	{
+		JLabel label = new JLabel(text, JLabel.CENTER);
+		label.setPreferredSize(new Dimension(panel.getWidth(), (int)label.getPreferredSize().getHeight()));
+		panel.add(label);
 	}
 	
 	public void createEvents()
@@ -156,7 +157,18 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 					String frameName = (String)JOptionPane.showInputDialog(panel, "","Frame Name",
 		    				JOptionPane.PLAIN_MESSAGE, null, null, "Frame");
 					DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-					model.insertNodeInto((MutableTreeNode)new SkeletonFrame(frameName, (SkeletonAnimation)selectedNode),
+					SkeletonAnimation anim = (SkeletonAnimation)selectedNode;
+					SkeletonFrame newFrame = new SkeletonFrame(frameName, anim);
+					if (anim.getChildCount() == 0)
+					{
+						Skeleton skeleton = (Skeleton)model.getRoot();
+						newFrame.setParentSyncedFrame(skeleton.getMasterFrame());
+					}
+					else
+					{
+						newFrame.setParentSyncedFrame((SkeletonFrame)anim.getChildAt(anim.getChildCount() - 1));
+					}
+					model.insertNodeInto((MutableTreeNode)newFrame,
 							selectedNode, selectedNode.getChildCount());
 					model.reload();
 									
@@ -208,7 +220,6 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 					}
 					else
 					{
-						System.out.println(selectedNode.toString());
 						model.insertNodeInto((MutableTreeNode)new SkeletonBone(boneName, (SkeletonFrame)selectedNode),
 								selectedNode, selectedNode.getChildCount());
 					}

@@ -12,12 +12,15 @@ public class SkeletonFrame implements SkeletonItem{
 	private SkeletonAnimation parent;
 	protected List<SkeletonBone> bones;
 	protected String name;
+	private SkeletonFrame parentSyncedFrame;
+	protected List<SkeletonFrame> syncedFrames;
 	
 	public SkeletonFrame(String frameName, SkeletonAnimation frameParent)
 	{
 		name = frameName;
 		parent = frameParent;
 		bones = new ArrayList<SkeletonBone>();
+		syncedFrames = new ArrayList<SkeletonFrame>();
 	}
 	
 	public void setName(String newName)
@@ -82,6 +85,15 @@ public class SkeletonFrame implements SkeletonItem{
 	public void setParent(MutableTreeNode newParent) {
 		parent = (SkeletonAnimation)newParent;
 	}
-	
 
+	public SkeletonFrame getParentSyncedFrame() {
+		return parentSyncedFrame;
+	}
+	public void setParentSyncedFrame(SkeletonFrame syncedFrame) {
+		this.parentSyncedFrame = syncedFrame;
+		this.parentSyncedFrame.getSyncedFrames().add(this);
+	}
+	public List<SkeletonFrame> getSyncedFrames() {
+		return syncedFrames;
+	}
 }

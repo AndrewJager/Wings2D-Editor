@@ -32,6 +32,19 @@ public class SkeletonAnimation implements SkeletonNode{
 	{
 		return name;
 	}
+	public boolean containsFrameWithName(String animName)
+	{
+		boolean hasName = false;
+		for(int i = 0; i < frames.size(); i++)
+		{
+			if (frames.get(i).toString().equals(animName))
+			{
+				hasName = true;
+				break;
+			}
+		}
+		return hasName;
+	}
 	
 	public int getTreeLevel()
 	{

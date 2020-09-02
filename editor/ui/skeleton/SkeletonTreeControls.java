@@ -177,6 +177,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		    				JOptionPane.PLAIN_MESSAGE, null, null, "Frame");
 					DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 					SkeletonAnimation anim = (SkeletonAnimation)selectedNode;
+					try {
 					SkeletonFrame newFrame = new SkeletonFrame(frameName, anim);
 					if (anim.getChildCount() == 0)
 					{
@@ -193,6 +194,10 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 									
 					tree.expandPath(path);
 					tree.setSelectionPath(path.pathByAddingChild(selectedNode.getChildAt(selectedNode.getChildCount() - 1)));
+					}
+					catch (IllegalArgumentException exception) {
+						JOptionPane.showMessageDialog(panel, exception.getMessage(), "Insert Failed!", JOptionPane.ERROR_MESSAGE);
+					}
 				}			
 			}
 		});

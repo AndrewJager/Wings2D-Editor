@@ -17,6 +17,10 @@ public class SkeletonFrame implements SkeletonNode{
 	
 	public SkeletonFrame(String frameName, SkeletonAnimation frameParent)
 	{
+		if (frameParent != null && frameParent.containsFrameWithName(frameName))
+		{
+			throw new IllegalArgumentException("A Frame with this name already exists in this Animation!");
+		}
 		name = frameName;
 		parent = frameParent;
 		bones = new ArrayList<SkeletonBone>();

@@ -56,7 +56,7 @@ public class SkeletonTree extends SkeletonUIElement{
 				{
 					if (selectedNode instanceof Skeleton)
 					{
-						treeControls.setupControls(SkeletonPiece.PARENT);	
+						treeControls.setupControls(SkeletonPiece.SKELETON);	
 					}
 					if (selectedNode instanceof SkeletonAnimation)
 					{

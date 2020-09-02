@@ -1,9 +1,7 @@
 package editor.ui.skeleton;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +18,6 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import editor.objects.skeleton.SkeletonNode;
-import editor.objects.skeleton.SkeletonMasterFrame;
 import editor.objects.skeleton.Skeleton;
 import editor.objects.skeleton.SkeletonAnimation;
 import editor.objects.skeleton.SkeletonBone;
@@ -31,7 +28,6 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 	private JButton addAnim, delete, addFrame, rename, addBone;
 	private JTree tree;
 	private JSeparator line;
-	private JList<String> list;
 	private int SEPARATOR_WIDTH = 5;
 
 	public SkeletonTreeControls(SkeletonEdit edit, Rectangle bounds, JTree skeletonTree) {
@@ -46,9 +42,8 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		rename = new JButton("Rename Animation");
 		addFrame = new JButton("New Frame");
 		addBone = new JButton("New Bone");
-		list = new JList<String>();
 		
-		setupControls(SkeletonPiece.PARENT);
+		setupControls(SkeletonPiece.SKELETON);
 	}
 	
 	public void setupControls(SkeletonPiece type)
@@ -57,7 +52,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		panel.removeAll();
 		switch (type)
 		{
-		case PARENT:
+		case SKELETON:
 			if (selectedNode != null)
 			{
 				addLabel(selectedNode.toString());
@@ -118,6 +113,8 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 				addLabel(selectedNode.toString());
 				addNameLine();
 			}
+			panel.add(rename);
+			rename.setText("Rename Bone");
 			break;
 		default:
 			break;
@@ -213,14 +210,17 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 				if (selectedNode != null)
 				{
 					TreePath path = tree.getSelectionPath();
-					String frameName = (String)JOptionPane.showInputDialog(panel, "","Frame Name",
+					String newName = (String)JOptionPane.showInputDialog(panel, "","Rename",
 		    				JOptionPane.PLAIN_MESSAGE, null, null, selectedNode.toString());
-					selectedNode.setName(frameName);
-					DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-					model.reload();
-					
-					tree.expandPath(path);
-					tree.setSelectionPath(path);
+					if (newName != null)
+					{
+						selectedNode.setName(newName);
+						DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+						model.reload();
+						
+						tree.expandPath(path);
+						tree.setSelectionPath(path);
+					}
 				}
 			}
 		});

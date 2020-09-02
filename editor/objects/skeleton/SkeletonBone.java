@@ -23,17 +23,25 @@ public class SkeletonBone implements SkeletonNode{
 		parent = boneParent;
 		syncedBones = new ArrayList<SkeletonBone>();
 	}
-	
-	public SkeletonBone copy(SkeletonFrame parentFrame)
+	public SkeletonBone(SkeletonBone syncBone, SkeletonFrame boneParent)
 	{
-		SkeletonBone copy = new SkeletonBone(this.name, parentFrame);
-		
-		return copy;
+		if (boneParent.containsBoneWithName(syncBone.toString()))
+		{
+			throw new IllegalArgumentException("A Bone with this name already exists in the Frame!");
+		}
+		name = syncBone.toString();
+		parent = boneParent;
+		setParentSyncedBone(syncBone);
+		syncedBones = new ArrayList<SkeletonBone>();
 	}
 	
 	public String toString()
 	{
 		return name;
+	}
+	public SkeletonFrame getFrame()
+	{
+		return parent;
 	}
 
 	@Override

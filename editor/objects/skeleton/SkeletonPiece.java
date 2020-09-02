@@ -1,7 +1,7 @@
 package editor.objects.skeleton;
 
 public enum SkeletonPiece {
-	PARENT,
+	SKELETON,
 	ANIMATION,
 	FRAME,
 	BONE,

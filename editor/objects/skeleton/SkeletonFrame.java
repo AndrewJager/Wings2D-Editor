@@ -87,7 +87,7 @@ public class SkeletonFrame implements SkeletonNode{
 		bones.add(index, newBone);
 		for(int i = 0; i < syncedFrames.size(); i++)
 		{
-			syncedFrames.get(i).insert(newBone.copy(syncedFrames.get(i)), index);
+			syncedFrames.get(i).insert(new SkeletonBone(newBone, syncedFrames.get(i)), index);
 		}
 	}
 	@Override

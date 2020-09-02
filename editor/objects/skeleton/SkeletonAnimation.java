@@ -86,7 +86,7 @@ public class SkeletonAnimation implements SkeletonNode{
 		for(int i = 0; i < syncFrame.getChildCount(); i++)
 		{
 			SkeletonBone bone = syncFrame.getBones().get(i);
-			newFrame.getBones().add(bone.copy(newFrame));
+			newFrame.getBones().add(new SkeletonBone(bone, newFrame));
 		}
 	}
 	@Override

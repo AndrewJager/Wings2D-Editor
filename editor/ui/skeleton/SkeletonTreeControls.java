@@ -155,11 +155,16 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 	    				JOptionPane.PLAIN_MESSAGE, null, null, "Animation");
 				DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 				Skeleton root = (Skeleton) model.getRoot();
-				SkeletonAnimation newAnim = new SkeletonAnimation(animName, root);
-				model.insertNodeInto((MutableTreeNode)newAnim, root, root.getChildCount());
-				model.reload();
-				TreePath path = new TreePath(root).pathByAddingChild(newAnim);
-				tree.setSelectionPath(path);
+				try {
+					SkeletonAnimation newAnim = new SkeletonAnimation(animName, root);	
+					model.insertNodeInto((MutableTreeNode)newAnim, root, root.getChildCount());
+					model.reload();
+					TreePath path = new TreePath(root).pathByAddingChild(newAnim);
+					tree.setSelectionPath(path);
+				}
+				catch (IllegalArgumentException exception){
+					JOptionPane.showMessageDialog(panel, exception.getMessage(), "Insert Failed!", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		addFrame.addActionListener(new ActionListener() {

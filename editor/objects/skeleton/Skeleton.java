@@ -33,6 +33,20 @@ public class Skeleton implements SkeletonNode{
 		return name;
 	}
 	
+	public boolean containsAnimWithName(String animName)
+	{
+		boolean hasName = false;
+		for(int i = 1; i < animations.size(); i++) // Start at one to avoid checking the Master Frame
+		{
+			if (animations.get(i).toString().equals(animName))
+			{
+				hasName = true;
+				break;
+			}
+		}
+		return hasName;
+	}
+	
 	public int getTreeLevel()
 	{
 		return 0;

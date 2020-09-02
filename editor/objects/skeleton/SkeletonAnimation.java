@@ -15,6 +15,11 @@ public class SkeletonAnimation implements SkeletonNode{
 	
 	public SkeletonAnimation(String animName, Skeleton animParent)
 	{
+		if (animParent.containsAnimWithName(animName))
+		{
+			throw new IllegalArgumentException("An Animation with this name already exists!");
+		}
+		
 		this.parent = animParent;
 		frames = new ArrayList<SkeletonFrame>();
 		this.name = animName;

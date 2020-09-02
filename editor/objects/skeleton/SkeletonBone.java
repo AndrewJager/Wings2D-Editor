@@ -1,18 +1,30 @@
 package editor.objects.skeleton;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-public class SkeletonBone implements SkeletonItem{
+public class SkeletonBone implements SkeletonNode{
 	private SkeletonFrame parent;
 	private String name;
+	private SkeletonBone parentSyncedBone;
+	private List<SkeletonBone> syncedBones;
 	
 	public SkeletonBone(String boneName, SkeletonFrame parentFrame)
 	{
 		name = boneName;
 		parent = parentFrame;
+		syncedBones = new ArrayList<SkeletonBone>();
+	}
+	
+	public SkeletonBone copy(SkeletonFrame parentFrame)
+	{
+		SkeletonBone copy = new SkeletonBone(this.name, parentFrame);
+		
+		return copy;
 	}
 	
 	public String toString()
@@ -84,6 +96,31 @@ public class SkeletonBone implements SkeletonItem{
 
 	@Override
 	public void setName(String newName) {
-		name = newName;	
+		name = newName;
+		for(int i = 0; i < syncedBones.size(); i++)
+		{
+			syncedBones.get(i).setName(newName);
+		}
+	}
+
+	public SkeletonBone getParentSyncedBone() {
+		return parentSyncedBone;
+	}
+	public void setParentSyncedBone(SkeletonBone parentSyncedBone) {
+		this.parentSyncedBone = parentSyncedBone;
+		this.parentSyncedBone.getSyncedBones().add(this);
+	}
+	public List<SkeletonBone> getSyncedBones()
+	{
+		return syncedBones;
+	}
+	public String[] getSyncedBoneNames()
+	{
+		String[] names = new String[syncedBones.size()];
+		for (int i = 0; i < syncedBones.size(); i++)
+		{
+			names[i] = syncedBones.get(i).toString();
+		}
+		return names;
 	}
 }

@@ -10,14 +10,16 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import editor.objects.skeleton.SkeletonItem;
+import editor.objects.skeleton.SkeletonNode;
 import editor.objects.skeleton.SkeletonMasterFrame;
 import editor.objects.skeleton.Skeleton;
 import editor.objects.skeleton.SkeletonAnimation;
@@ -26,9 +28,10 @@ import editor.objects.skeleton.SkeletonFrame;
 import editor.objects.skeleton.SkeletonPiece;
 
 public class SkeletonTreeControls extends SkeletonUIElement{
-	private JButton addAnim, delete, addFrame, rename, addBone, addBoneMaster;
+	private JButton addAnim, delete, addFrame, rename, addBone;
 	private JTree tree;
 	private JSeparator line;
+	private JList<String> list;
 	private int SEPARATOR_WIDTH = 5;
 
 	public SkeletonTreeControls(SkeletonEdit edit, Rectangle bounds, JTree skeletonTree) {
@@ -43,13 +46,14 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		rename = new JButton("Rename Animation");
 		addFrame = new JButton("New Frame");
 		addBone = new JButton("New Bone");
+		list = new JList<String>();
 		
 		setupControls(SkeletonPiece.PARENT);
 	}
 	
 	public void setupControls(SkeletonPiece type)
 	{
-		SkeletonItem selectedNode = (SkeletonItem)tree.getLastSelectedPathComponent();
+		SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
 		panel.removeAll();
 		switch (type)
 		{
@@ -102,6 +106,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 			{
 				addLabel("No parent sync frame");
 			}
+			createList(frame.getSyncedFrameNames());
 			line = new JSeparator();
 			line.setPreferredSize(new Dimension(panel.getWidth(), SEPARATOR_WIDTH));
 			panel.add(line);
@@ -132,6 +137,15 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		label.setPreferredSize(new Dimension(panel.getWidth(), (int)label.getPreferredSize().getHeight()));
 		panel.add(label);
 	}
+	private void createList(String[] data)
+	{
+		JList<String> list = new JList<String>(data);
+		list.setLayoutOrientation(JList.VERTICAL);
+		list.setVisibleRowCount(5);
+		list.setFixedCellWidth(80);
+		JScrollPane pane = new JScrollPane(list);
+		panel.add(pane);
+	}
 	
 	public void createEvents()
 	{
@@ -150,7 +164,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		});
 		addFrame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SkeletonItem selectedNode = (SkeletonItem)tree.getLastSelectedPathComponent();
+				SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
 				if (selectedNode != null)
 				{
 					TreePath path = tree.getSelectionPath();
@@ -179,7 +193,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		});
 		rename.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SkeletonItem selectedNode = (SkeletonItem)tree.getLastSelectedPathComponent();
+				SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
 				if (selectedNode != null)
 				{
 					TreePath path = tree.getSelectionPath();
@@ -196,7 +210,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		});
 		delete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SkeletonItem selectedNode = (SkeletonItem)tree.getLastSelectedPathComponent();
+				SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
 				if (selectedNode != null)
 				{
 					DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
@@ -206,7 +220,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		});
 		addBone.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SkeletonItem selectedNode = (SkeletonItem)tree.getLastSelectedPathComponent();
+				SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
 				if (selectedNode != null)
 				{
 					TreePath path = tree.getSelectionPath();

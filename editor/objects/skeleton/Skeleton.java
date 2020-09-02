@@ -8,14 +8,14 @@ import java.util.List;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-public class Skeleton implements SkeletonItem{
-	private List<SkeletonItem> animations;
+public class Skeleton implements SkeletonNode{
+	private List<SkeletonNode> animations;
 	private SkeletonMasterFrame masterFrame;
 	private String name;
 	
 	public Skeleton(String skeletonName)
 	{
-		animations = new ArrayList<SkeletonItem>();
+		animations = new ArrayList<SkeletonNode>();
 		masterFrame = new SkeletonMasterFrame("Master");
 		animations.add(masterFrame);
 		this.name = skeletonName;

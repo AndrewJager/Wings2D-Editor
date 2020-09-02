@@ -18,7 +18,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreePath;
 
-import editor.objects.skeleton.SkeletonItem;
+import editor.objects.skeleton.SkeletonNode;
 import editor.objects.skeleton.Skeleton;
 import editor.objects.skeleton.SkeletonAnimation;
 import editor.objects.skeleton.SkeletonBone;
@@ -51,7 +51,7 @@ public class SkeletonTree extends SkeletonUIElement{
 			public void valueChanged(TreeSelectionEvent e)
 			{
 				SkeletonTreeControls treeControls = skeleton.getTreeControls();
-				SkeletonItem selectedNode = (SkeletonItem)tree.getLastSelectedPathComponent();
+				SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
 				if (selectedNode != null)
 				{
 					if (selectedNode instanceof Skeleton)

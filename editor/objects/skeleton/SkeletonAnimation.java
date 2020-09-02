@@ -8,7 +8,7 @@ import java.util.List;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-public class SkeletonAnimation implements SkeletonItem{
+public class SkeletonAnimation implements SkeletonNode{
 	private Skeleton parent;
 	private List<SkeletonFrame> frames;
 	private String name;
@@ -62,7 +62,14 @@ public class SkeletonAnimation implements SkeletonItem{
 	}
 	@Override
 	public void insert(MutableTreeNode child, int index) {
-		frames.add(index, (SkeletonFrame)child);
+		SkeletonFrame newFrame = (SkeletonFrame)child;
+		SkeletonFrame syncFrame = newFrame.getParentSyncedFrame();
+		frames.add(index, newFrame);
+		for(int i = 0; i < syncFrame.getChildCount(); i++)
+		{
+			SkeletonBone bone = syncFrame.getBones().get(i);
+			newFrame.getBones().add(bone.copy(newFrame));
+		}
 	}
 	@Override
 	public void remove(int index) {

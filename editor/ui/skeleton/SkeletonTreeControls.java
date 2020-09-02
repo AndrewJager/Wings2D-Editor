@@ -178,22 +178,22 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 					DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 					SkeletonAnimation anim = (SkeletonAnimation)selectedNode;
 					try {
-					SkeletonFrame newFrame = new SkeletonFrame(frameName, anim);
-					if (anim.getChildCount() == 0)
-					{
-						Skeleton skeleton = (Skeleton)model.getRoot();
-						newFrame.setParentSyncedFrame(skeleton.getMasterFrame());
-					}
-					else
-					{
-						newFrame.setParentSyncedFrame((SkeletonFrame)anim.getChildAt(anim.getChildCount() - 1));
-					}
-					model.insertNodeInto((MutableTreeNode)newFrame,
-							selectedNode, selectedNode.getChildCount());
-					model.reload();
-									
-					tree.expandPath(path);
-					tree.setSelectionPath(path.pathByAddingChild(selectedNode.getChildAt(selectedNode.getChildCount() - 1)));
+						SkeletonFrame newFrame = new SkeletonFrame(frameName, anim);
+						if (anim.getChildCount() == 0)
+						{
+							Skeleton skeleton = (Skeleton)model.getRoot();
+							newFrame.setParentSyncedFrame(skeleton.getMasterFrame());
+						}
+						else
+						{
+							newFrame.setParentSyncedFrame((SkeletonFrame)anim.getChildAt(anim.getChildCount() - 1));
+						}
+						model.insertNodeInto((MutableTreeNode)newFrame,
+								selectedNode, selectedNode.getChildCount());
+						model.reload();
+										
+						tree.expandPath(path);
+						tree.setSelectionPath(path.pathByAddingChild(selectedNode.getChildAt(selectedNode.getChildCount() - 1)));
 					}
 					catch (IllegalArgumentException exception) {
 						JOptionPane.showMessageDialog(panel, exception.getMessage(), "Insert Failed!", JOptionPane.ERROR_MESSAGE);
@@ -236,21 +236,21 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 					TreePath path = tree.getSelectionPath();
 					String boneName = (String)JOptionPane.showInputDialog(panel, "","Bone Name",
 		    				JOptionPane.PLAIN_MESSAGE, null, null, "Bone");
-					DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-					if (selectedNode.getTreeLevel() == 1)
+					if (boneName != null)
 					{
-						model.insertNodeInto((MutableTreeNode)new SkeletonBone(boneName, null),
-								selectedNode, selectedNode.getChildCount());
+						DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+						try {
+							model.insertNodeInto((MutableTreeNode)new SkeletonBone(boneName, (SkeletonFrame)selectedNode),
+									selectedNode, selectedNode.getChildCount());
+							model.reload();
+											
+							tree.expandPath(path);
+							tree.setSelectionPath(path.pathByAddingChild(selectedNode.getChildAt(selectedNode.getChildCount() - 1)));
+						}
+						catch (IllegalArgumentException exception) {
+							JOptionPane.showMessageDialog(panel, exception.getMessage(), "Insert Failed!", JOptionPane.ERROR_MESSAGE);
+						}
 					}
-					else
-					{
-						model.insertNodeInto((MutableTreeNode)new SkeletonBone(boneName, (SkeletonFrame)selectedNode),
-								selectedNode, selectedNode.getChildCount());
-					}
-					model.reload();
-									
-					tree.expandPath(path);
-					tree.setSelectionPath(path.pathByAddingChild(selectedNode.getChildAt(selectedNode.getChildCount() - 1)));
 				}			
 			}
 		});

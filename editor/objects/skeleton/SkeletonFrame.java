@@ -17,6 +17,7 @@ public class SkeletonFrame implements SkeletonNode{
 	
 	public SkeletonFrame(String frameName, SkeletonAnimation frameParent)
 	{
+		// frameParent will be null for Master Frame
 		if (frameParent != null && frameParent.containsFrameWithName(frameName))
 		{
 			throw new IllegalArgumentException("A Frame with this name already exists in this Animation!");
@@ -34,6 +35,19 @@ public class SkeletonFrame implements SkeletonNode{
 	public String toString()
 	{
 		return name;
+	}
+	public boolean containsBoneWithName(String boneName)
+	{
+		boolean hasName = false;
+		for(int i = 0; i < bones.size(); i++)
+		{
+			if (bones.get(i).toString().equals(boneName))
+			{
+				hasName = true;
+				break;
+			}
+		}
+		return hasName;
 	}
 	public int getTreeLevel()
 	{

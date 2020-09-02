@@ -13,10 +13,14 @@ public class SkeletonBone implements SkeletonNode{
 	private SkeletonBone parentSyncedBone;
 	private List<SkeletonBone> syncedBones;
 	
-	public SkeletonBone(String boneName, SkeletonFrame parentFrame)
+	public SkeletonBone(String boneName, SkeletonFrame boneParent)
 	{
+		if (boneParent.containsBoneWithName(boneName))
+		{
+			throw new IllegalArgumentException("A Bone with this name already exists in the Frame!");
+		}
 		name = boneName;
-		parent = parentFrame;
+		parent = boneParent;
 		syncedBones = new ArrayList<SkeletonBone>();
 	}
 	

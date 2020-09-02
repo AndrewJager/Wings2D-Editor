@@ -32,12 +32,12 @@ public class SkeletonAnimation implements SkeletonNode{
 	{
 		return name;
 	}
-	public boolean containsFrameWithName(String animName)
+	public boolean containsFrameWithName(String frameName)
 	{
 		boolean hasName = false;
 		for(int i = 0; i < frames.size(); i++)
 		{
-			if (frames.get(i).toString().equals(animName))
+			if (frames.get(i).toString().equals(frameName))
 			{
 				hasName = true;
 				break;

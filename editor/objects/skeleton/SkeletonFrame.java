@@ -132,4 +132,19 @@ public class SkeletonFrame implements SkeletonNode{
 	{
 		return bones;
 	}
+	/**
+	 * Returns null if no bone is found.
+	 */
+	public SkeletonBone getBoneWithName(String boneName)
+	{
+		SkeletonBone bone = null;
+		for(int i = 0; i < bones.size(); i++)
+		{
+			if (bones.get(i).toString().equals(boneName))
+			{
+				bone = bones.get(i);
+			}
+		}
+		return bone;
+	}
 }

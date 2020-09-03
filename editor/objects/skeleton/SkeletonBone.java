@@ -12,6 +12,7 @@ public class SkeletonBone implements SkeletonNode{
 	private String name;
 	private SkeletonBone parentSyncedBone;
 	private List<SkeletonBone> syncedBones;
+	private SkeletonBone parentBone;
 	
 	public SkeletonBone(String boneName, SkeletonFrame boneParent)
 	{
@@ -134,5 +135,17 @@ public class SkeletonBone implements SkeletonNode{
 			names[i] = syncedBones.get(i).toString();
 		}
 		return names;
+	}
+	public void setParentBone(SkeletonBone bone)
+	{
+		parentBone = bone;
+		for (int i = 0; i < syncedBones.size(); i++)
+		{
+			syncedBones.get(i).setParentBone(bone.toString());
+		}
+	}
+	public void setParentBone(String boneName)
+	{
+		setParentBone(parent.getBoneWithName(boneName));
 	}
 }

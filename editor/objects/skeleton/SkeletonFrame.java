@@ -147,4 +147,29 @@ public class SkeletonFrame implements SkeletonNode{
 		}
 		return bone;
 	}
+	/**
+	 * Returns an ArrayList of all bones in the frame except the argument Bone
+	 */
+	public SkeletonBone[] getArrayOfBonesExcept(SkeletonBone notThis)
+	{
+		SkeletonBone[] allButOne = new SkeletonBone[bones.size()];
+		int lastAdded = 1;
+		for (int i = 0; i < bones.size(); i++)
+		{
+			if (bones.get(i) != notThis)
+			{
+				allButOne[lastAdded] = bones.get(i);
+				lastAdded++;
+			}
+		}
+		return allButOne;
+	}
+	/** Set bone parent bones to the bone stored in there parentBoneName variable **/
+	public void syncBonesToParents()
+	{
+		for (int i = 0; i < bones.size(); i++)
+		{
+			bones.get(i).setParentBone(this.getBoneWithName(bones.get(i).getParentBoneName()));
+		}
+	}
 }

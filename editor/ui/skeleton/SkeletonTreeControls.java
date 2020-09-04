@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -113,8 +114,20 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 				addLabel(selectedNode.toString());
 				addNameLine();
 			}
+			SkeletonBone bone = (SkeletonBone)selectedNode;
 			panel.add(rename);
 			rename.setText("Rename Bone");
+			JLabel parentBoneLabel = new JLabel("Parent bone:");
+			panel.add(parentBoneLabel);
+			JComboBox<SkeletonBone> otherBones = new JComboBox<SkeletonBone>(bone.getFrame().getArrayOfBonesExcept(bone));
+			otherBones.setSelectedItem(bone.getParentBone());
+			otherBones.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					bone.setParentBone((SkeletonBone)otherBones.getSelectedItem());
+				}
+			});
+			panel.add(otherBones);
 			break;
 		default:
 			break;

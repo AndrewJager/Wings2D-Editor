@@ -13,6 +13,8 @@ public class SkeletonBone implements SkeletonNode{
 	private SkeletonBone parentSyncedBone;
 	private List<SkeletonBone> syncedBones;
 	private SkeletonBone parentBone;
+	/** Used to determine the parent bone when copying bones between frames **/
+	private String parentBoneName;
 	
 	public SkeletonBone(String boneName, SkeletonFrame boneParent)
 	{
@@ -33,6 +35,7 @@ public class SkeletonBone implements SkeletonNode{
 		name = syncBone.toString();
 		parent = boneParent;
 		setParentSyncedBone(syncBone);
+		parentBoneName = syncBone.getParentBoneName();
 		syncedBones = new ArrayList<SkeletonBone>();
 	}
 	
@@ -139,6 +142,14 @@ public class SkeletonBone implements SkeletonNode{
 	public void setParentBone(SkeletonBone bone)
 	{
 		parentBone = bone;
+		if (bone != null)
+		{
+			parentBoneName = bone.toString();
+		}
+		else
+		{
+			parentBoneName = null;
+		}
 		for (int i = 0; i < syncedBones.size(); i++)
 		{
 			syncedBones.get(i).setParentBone(bone.toString());
@@ -147,5 +158,13 @@ public class SkeletonBone implements SkeletonNode{
 	public void setParentBone(String boneName)
 	{
 		setParentBone(parent.getBoneWithName(boneName));
+	}
+	public SkeletonBone getParentBone()
+	{
+		return parentBone;
+	}
+	public String getParentBoneName()
+	{
+		return parentBoneName;
 	}
 }

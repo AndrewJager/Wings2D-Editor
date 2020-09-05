@@ -263,7 +263,23 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	}
 	public void rotateByHandle(Point loc)
 	{
+		double oldRotation = rotation;
 		rotation = Math.toDegrees(Math.atan2(location.getY() - loc.getY(), location.getX() - loc.getX()));
+		double delta = rotation - oldRotation;
+		for(int i = 0; i < childBones.size(); i++)
+		{
+			childBones.get(i).rotateAround(location, delta);
+		}
+	}
+	public void rotateAround(Point2D point, double amt)
+	{
+		AffineTransform transform = new AffineTransform();
+		transform.setToRotation(Math.toRadians(amt), point.getX(), point.getY());
+		transform.transform(location, location);
+		for (int i = 0; i < childBones.size(); i++)
+		{
+			childBones.get(i).rotateAround(point, amt);
+		}
 	}
 	@Override
 	public void draw(Graphics2D g2d) {

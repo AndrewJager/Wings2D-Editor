@@ -21,6 +21,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	private SkeletonBone parentBone;
 	/** Used to determine the parent bone when copying bones between frames **/
 	private String parentBoneName;
+	private List<SkeletonBone> childBones;
 	private Point2D location;
 	private Color handleColor;
 	
@@ -36,6 +37,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		name = boneName;
 		frame = boneParent;
 		syncedBones = new ArrayList<SkeletonBone>();
+		childBones = new ArrayList<SkeletonBone>();
 		location = new Point2D.Double(10, 10);
 		handleColor = HANDLE_COLOR_UNSELECTED;
 	}
@@ -160,6 +162,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		if (bone != null)
 		{
 			parentBoneName = bone.toString();
+			parentBone.getChildBones().add(this);
 		}
 		else
 		{
@@ -182,13 +185,23 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	{
 		return parentBoneName;
 	}
+	public List<SkeletonBone> getChildBones()
+	{
+		return childBones;
+	}
 	public void setLocation(double x, double y)
 	{
+		double deltaX = x - location.getX();
+		double deltaY = y - location.getY();
 		location.setLocation(x, y);
+		for (int i = 0; i < childBones.size(); i++)
+		{
+			childBones.get(i).translateBy(deltaX, deltaY);
+		}
 	}
 	public void setLocation(Point loc)
 	{
-		location = loc;
+		this.setLocation(loc.getX(), loc.getY());
 	}
 	public double getX()
 	{
@@ -197,6 +210,14 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	public double getY()
 	{
 		return location.getY();
+	}
+	public void translateBy(double x, double y)
+	{
+		location.setLocation(getX() + x, getY() +y);
+		for (int i = 0; i < childBones.size(); i++)
+		{
+			childBones.get(i).translateBy(x, y);
+		}
 	}
 	public void setIsSelected(boolean selected)
 	{

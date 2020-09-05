@@ -1,12 +1,9 @@
 package editor.ui.skeleton;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.Point2D;
 
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
@@ -88,8 +85,11 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 				{
 					if (frame != null)
 					{
-						dragBone.setRotating(false);
-						dragBone = null;
+						if (dragBone != null)
+						{
+							dragBone.setRotating(false);
+							dragBone = null;
+						}
 					}
 				}
 			}

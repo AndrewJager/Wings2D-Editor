@@ -59,6 +59,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		setParentSyncedBone(syncBone);
 		parentBoneName = syncBone.getParentBoneName();
 		syncedBones = new ArrayList<SkeletonBone>();
+		childBones = new ArrayList<SkeletonBone>();
 		location = new Point2D.Double(syncBone.getX(), syncBone.getY());
 		handleColor = HANDLE_COLOR_UNSELECTED;
 	}

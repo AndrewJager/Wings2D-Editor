@@ -8,7 +8,7 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 public class SkeletonBone implements SkeletonNode{
-	private SkeletonFrame parent;
+	private SkeletonFrame frame;
 	private String name;
 	private SkeletonBone parentSyncedBone;
 	private List<SkeletonBone> syncedBones;
@@ -23,7 +23,7 @@ public class SkeletonBone implements SkeletonNode{
 			throw new IllegalArgumentException("A Bone with this name already exists in the Frame!");
 		}
 		name = boneName;
-		parent = boneParent;
+		frame = boneParent;
 		syncedBones = new ArrayList<SkeletonBone>();
 	}
 	public SkeletonBone(SkeletonBone syncBone, SkeletonFrame boneParent)
@@ -33,7 +33,7 @@ public class SkeletonBone implements SkeletonNode{
 			throw new IllegalArgumentException("A Bone with this name already exists in the Frame!");
 		}
 		name = syncBone.toString();
-		parent = boneParent;
+		frame = boneParent;
 		setParentSyncedBone(syncBone);
 		parentBoneName = syncBone.getParentBoneName();
 		syncedBones = new ArrayList<SkeletonBone>();
@@ -45,7 +45,7 @@ public class SkeletonBone implements SkeletonNode{
 	}
 	public SkeletonFrame getFrame()
 	{
-		return parent;
+		return frame;
 	}
 
 	@Override
@@ -62,12 +62,12 @@ public class SkeletonBone implements SkeletonNode{
 
 	@Override
 	public void removeFromParent() {
-		parent.remove(this);
+		frame.remove(this);
 	}
 
 	@Override
 	public void setParent(MutableTreeNode newParent) {
-		parent = (SkeletonFrame)newParent;
+		frame = (SkeletonFrame)newParent;
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class SkeletonBone implements SkeletonNode{
 
 	@Override
 	public TreeNode getParent() {
-		return parent;
+		return frame;
 	}
 
 	@Override
@@ -157,7 +157,7 @@ public class SkeletonBone implements SkeletonNode{
 	}
 	public void setParentBone(String boneName)
 	{
-		setParentBone(parent.getBoneWithName(boneName));
+		setParentBone(frame.getBoneWithName(boneName));
 	}
 	public SkeletonBone getParentBone()
 	{

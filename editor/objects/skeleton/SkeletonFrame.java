@@ -9,7 +9,7 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 public class SkeletonFrame implements SkeletonNode{
-	private SkeletonAnimation parent;
+	private SkeletonAnimation animation;
 	protected List<SkeletonBone> bones;
 	protected String name;
 	private SkeletonFrame parentSyncedFrame;
@@ -23,7 +23,7 @@ public class SkeletonFrame implements SkeletonNode{
 			throw new IllegalArgumentException("A Frame with this name already exists in this Animation!");
 		}
 		name = frameName;
-		parent = frameParent;
+		animation = frameParent;
 		bones = new ArrayList<SkeletonBone>();
 		syncedFrames = new ArrayList<SkeletonFrame>();
 	}
@@ -63,7 +63,7 @@ public class SkeletonFrame implements SkeletonNode{
 	}
 	@Override
 	public TreeNode getParent() {
-		return parent;
+		return animation;
 	}
 	@Override
 	public int getIndex(TreeNode node) {
@@ -102,11 +102,11 @@ public class SkeletonFrame implements SkeletonNode{
 	public void setUserObject(Object object) {}
 	@Override
 	public void removeFromParent() {
-		parent.remove(this);
+		animation.remove(this);
 	}
 	@Override
 	public void setParent(MutableTreeNode newParent) {
-		parent = (SkeletonAnimation)newParent;
+		animation = (SkeletonAnimation)newParent;
 	}
 
 	public SkeletonFrame getParentSyncedFrame() {

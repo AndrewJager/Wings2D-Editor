@@ -32,10 +32,10 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 	private JSeparator line;
 	private int SEPARATOR_WIDTH = 5;
 
-	public SkeletonTreeControls(SkeletonEdit edit, Rectangle bounds, JTree skeletonTree) {
+	public SkeletonTreeControls(SkeletonEdit edit, Rectangle bounds) {
 		super(edit, bounds);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		this.tree = skeletonTree;
+		this.tree = edit.getSkeletonTree().getTree();
 		this.drawingArea = edit.getDrawingArea();
 		
 //		panel.setBackground(Color.DARK_GRAY);	

@@ -7,19 +7,24 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import javax.swing.JTree;
+import javax.swing.tree.TreePath;
+
 import editor.objects.skeleton.SkeletonBone;
 import editor.objects.skeleton.SkeletonFrame;
 import editor.ui.DrawingArea;
 
 public class SkeletonDrawingArea extends SkeletonUIElement{
+	private JTree tree;
 	private SkeletonFrame frame;
-	private SkeletonBone selectedBone;
+	private SkeletonBone selectedBone, dragBone;
 
 	public SkeletonDrawingArea(SkeletonEdit edit, Rectangle bounds) {
 		super(edit, bounds);
 
 		// Replace panel with drawing area
 		panel = new DrawingArea();
+		tree = edit.getSkeletonTree().getTree();
 	}
 	public void setSelectedFrame(SkeletonFrame f)
 	{
@@ -39,12 +44,18 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 			public void mousePressed(MouseEvent e) {
 				if (frame != null)
 				{
-					selectedBone = frame.getBoneAtPosition(e.getPoint());
+					dragBone = frame.getBoneAtPosition(e.getPoint());
+					if (dragBone != null)
+					{
+						TreePath path = new TreePath(frame);
+						path = path.pathByAddingChild(dragBone);
+						tree.setSelectionPath(path);
+					}
 				}
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				selectedBone = null;
+				dragBone = null;
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {}
@@ -55,9 +66,9 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				if (selectedBone != null)
+				if (dragBone != null)
 				{
-					selectedBone.setLocation(e.getPoint());
+					dragBone.setLocation(e.getPoint());
 					panel.repaint();
 				}
 			}

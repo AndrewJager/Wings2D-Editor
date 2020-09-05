@@ -195,7 +195,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	public void draw(Graphics2D g2d) {
 		final int handleSize = 10;
 		g2d.setColor(Color.GREEN);
-		g2d.drawRect((int)(location.getX() - (handleSize / 2)), (int)(location.getY() - (handleSize / 2)),
-				handleSize, handleSize);
+		g2d.drawArc((int)(location.getX() - (handleSize / 2)), (int)(location.getY() - (handleSize / 2)),
+				handleSize, handleSize, 0, 360);
 	}
 }

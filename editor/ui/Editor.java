@@ -3,7 +3,6 @@ package editor.ui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
-import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
@@ -16,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import com.formdev.flatlaf.FlatLightLaf;
 
 import editor.objects.EditOptions;
 import editor.objects.EditorSpriteSheet;
@@ -52,12 +53,13 @@ public class Editor {
 		activeSprite = new EditorSpriteSheet("Test", demoLevel);
 		options = new EditOptions(this);
 		
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e1) {
-			e1.printStackTrace();
-		}
+//		try {
+//			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+//				| UnsupportedLookAndFeelException e1) {
+//			e1.printStackTrace();
+//		}
+		FlatLightLaf.install();
 		
 		frame = new JFrame("Editor");
 		frame.setBackground(Color.BLACK);

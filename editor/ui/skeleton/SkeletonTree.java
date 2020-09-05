@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Rectangle;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -33,7 +34,7 @@ public class SkeletonTree extends SkeletonUIElement{
 		JTextField textField = new JTextField();
 		TreeCellEditor editor = new DefaultCellEditor(textField);
 		tree.setCellEditor(editor);
-		tree.setBackground(Color.LIGHT_GRAY);
+		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
 		
 		scrollPane = new JScrollPane(tree);

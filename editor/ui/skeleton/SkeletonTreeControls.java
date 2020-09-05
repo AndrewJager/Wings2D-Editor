@@ -1,11 +1,13 @@
 package editor.ui.skeleton;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -38,7 +40,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		this.tree = edit.getSkeletonTree().getTree();
 		this.drawingArea = edit.getDrawingArea();
 		
-//		panel.setBackground(Color.DARK_GRAY);	
+		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
 		addAnim = new JButton("New Animation");
 		delete = new JButton("Delete Animation");

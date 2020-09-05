@@ -7,5 +7,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/Game-Framework"/>
+	<classpathentry kind="lib" path="C:/Users/DELL/Desktop/workspace/Indeterminate-SpriteEditor/flatlaf-0.41.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

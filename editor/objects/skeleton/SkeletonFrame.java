@@ -1,6 +1,7 @@
 package editor.objects.skeleton;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -182,5 +183,27 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		{
 			bones.get(i).draw(g2d);
 		}
+	}
+	
+	/**
+	 * Gets the Bone at the location (with a margin of error). Returns null if no Bone is close enough
+	 */
+	public SkeletonBone getBoneAtPosition(Point loc)
+	{
+		final double minDistance = 10;
+		SkeletonBone selectedBone = null;
+		double distance = 0;
+		for (int i = 0; i < bones.size(); i++)
+		{
+			SkeletonBone bone = bones.get(i);
+			double dist = Math.sqrt(Math.pow((loc.getX()-bone.getX()), 2) + Math.pow((loc.getY()-bone.getY()), 2));
+			if ((dist < minDistance) && (dist > distance))
+			{
+				distance = dist;
+				selectedBone = bone;
+			}
+		}
+		
+		return selectedBone;
 	}
 }

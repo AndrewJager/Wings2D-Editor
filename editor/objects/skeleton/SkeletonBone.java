@@ -2,8 +2,8 @@ package editor.objects.skeleton;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -175,9 +175,21 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	{
 		return parentBoneName;
 	}
-	public Point2D getLocation()
+	public void setLocation(double x, double y)
 	{
-		return location;
+		location.setLocation(x, y);
+	}
+	public void setLocation(Point loc)
+	{
+		location = loc;
+	}
+	public double getX()
+	{
+		return location.getX();
+	}
+	public double getY()
+	{
+		return location.getY();
 	}
 	@Override
 	public void draw(Graphics2D g2d) {

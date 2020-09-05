@@ -206,4 +206,19 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		
 		return selectedBone;
 	}
+	
+	public void setSelectedBone(SkeletonBone bone)
+	{
+		for (int i = 0; i < bones.size(); i++)
+		{
+			if (bones.get(i) == bone)
+			{
+				bones.get(i).setIsSelected(true);
+			}
+			else
+			{
+				bones.get(i).setIsSelected(false);
+			}
+		}
+	}
 }

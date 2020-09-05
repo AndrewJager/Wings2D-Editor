@@ -134,6 +134,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 			});
 			panel.add(otherBones);
 			
+			bone.getFrame().setSelectedBone(bone);
 			drawingArea.setSelectedFrame(bone.getFrame());
 			drawingArea.getDrawArea().setDrawItem(bone.getFrame());
 			break;

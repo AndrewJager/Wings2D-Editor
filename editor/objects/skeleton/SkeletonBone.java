@@ -22,6 +22,10 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	/** Used to determine the parent bone when copying bones between frames **/
 	private String parentBoneName;
 	private Point2D location;
+	private Color handleColor;
+	
+	private final Color HANDLE_COLOR_UNSELECTED = Color.GREEN;
+	private final Color HANDLE_COLOR_SELECTED = Color.RED;
 	
 	public SkeletonBone(String boneName, SkeletonFrame boneParent)
 	{
@@ -33,6 +37,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		frame = boneParent;
 		syncedBones = new ArrayList<SkeletonBone>();
 		location = new Point2D.Double(10, 10);
+		handleColor = HANDLE_COLOR_UNSELECTED;
 	}
 	public SkeletonBone(SkeletonBone syncBone, SkeletonFrame boneParent)
 	{
@@ -45,6 +50,8 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		setParentSyncedBone(syncBone);
 		parentBoneName = syncBone.getParentBoneName();
 		syncedBones = new ArrayList<SkeletonBone>();
+		location = new Point2D.Double(syncBone.getX(), syncBone.getY());
+		handleColor = HANDLE_COLOR_UNSELECTED;
 	}
 	
 	public String toString()
@@ -191,10 +198,21 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	{
 		return location.getY();
 	}
+	public void setIsSelected(boolean selected)
+	{
+		if (selected)
+		{
+			handleColor = HANDLE_COLOR_SELECTED;
+		}
+		else
+		{
+			handleColor = HANDLE_COLOR_UNSELECTED;
+		}
+	}
 	@Override
 	public void draw(Graphics2D g2d) {
 		final int handleSize = 10;
-		g2d.setColor(Color.GREEN);
+		g2d.setColor(handleColor);
 		g2d.drawArc((int)(location.getX() - (handleSize / 2)), (int)(location.getY() - (handleSize / 2)),
 				handleSize, handleSize, 0, 360);
 	}

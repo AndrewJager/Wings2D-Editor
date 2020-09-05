@@ -28,6 +28,7 @@ import editor.objects.skeleton.SkeletonPiece;
 public class SkeletonTreeControls extends SkeletonUIElement{
 	private JButton addAnim, delete, addFrame, rename, addBone;
 	private JTree tree;
+	private SkeletonDrawingArea drawingArea;
 	private JSeparator line;
 	private int SEPARATOR_WIDTH = 5;
 
@@ -35,6 +36,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		super(edit, bounds);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		this.tree = skeletonTree;
+		this.drawingArea = edit.getDrawingArea();
 		
 //		panel.setBackground(Color.DARK_GRAY);	
 
@@ -107,6 +109,9 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 			line.setPreferredSize(new Dimension(panel.getWidth(), SEPARATOR_WIDTH));
 			panel.add(line);
 			panel.add(addBone);
+			
+			drawingArea.getDrawArea().setDrawFrame(frame);
+			drawingArea.getDrawArea().repaint();
 			break;
 		case BONE:
 			if (selectedNode != null)

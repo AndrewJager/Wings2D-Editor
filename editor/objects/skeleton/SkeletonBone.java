@@ -1,5 +1,7 @@
 package editor.objects.skeleton;
 
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -15,6 +17,7 @@ public class SkeletonBone implements SkeletonNode{
 	private SkeletonBone parentBone;
 	/** Used to determine the parent bone when copying bones between frames **/
 	private String parentBoneName;
+	private Point2D location;
 	
 	public SkeletonBone(String boneName, SkeletonFrame boneParent)
 	{
@@ -25,6 +28,7 @@ public class SkeletonBone implements SkeletonNode{
 		name = boneName;
 		frame = boneParent;
 		syncedBones = new ArrayList<SkeletonBone>();
+		location = new Point2D.Double(10, 10);
 	}
 	public SkeletonBone(SkeletonBone syncBone, SkeletonFrame boneParent)
 	{
@@ -166,5 +170,9 @@ public class SkeletonBone implements SkeletonNode{
 	public String getParentBoneName()
 	{
 		return parentBoneName;
+	}
+	public Point2D getLocation()
+	{
+		return location;
 	}
 }

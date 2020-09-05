@@ -7,12 +7,13 @@ import java.awt.Graphics2D;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+import editor.objects.Drawable;
 import editor.objects.skeleton.SkeletonBone;
 import editor.objects.skeleton.SkeletonFrame;
 
 public class DrawingArea extends JPanel{
 	private static final long serialVersionUID = 1L;
-	private SkeletonFrame drawFrame;
+	private Drawable drawItem;
 	private Graphics2D g2d;
 	
 	public DrawingArea()
@@ -24,25 +25,15 @@ public class DrawingArea extends JPanel{
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		g2d = (Graphics2D)g;
-		if (drawFrame != null)
+		if (drawItem != null)
 		{
-			for(int i = 0; i < drawFrame.getBones().size(); i++)
-			{
-				drawBone(drawFrame.getBones().get(i));
-			}
+			drawItem.draw((Graphics2D)g);
 		}
 	}
 	
-	private void drawBone(SkeletonBone bone)
+	public void setDrawItem(Drawable draw)
 	{
-		g2d.setColor(Color.GREEN);
-		g2d.drawRect((int)bone.getLocation().getX(), (int)bone.getLocation().getY(), 10, 10);
-		System.out.println(bone.toString());
-	}
-	
-	public void setDrawFrame(SkeletonFrame frame)
-	{
-		drawFrame = frame;
+		drawItem = draw;
+		repaint();
 	}
 }

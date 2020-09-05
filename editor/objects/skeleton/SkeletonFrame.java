@@ -1,5 +1,6 @@
 package editor.objects.skeleton;
 
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -8,7 +9,9 @@ import java.util.List;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-public class SkeletonFrame implements SkeletonNode{
+import editor.objects.Drawable;
+
+public class SkeletonFrame implements SkeletonNode, Drawable{
 	private SkeletonAnimation animation;
 	protected List<SkeletonBone> bones;
 	protected String name;
@@ -170,6 +173,14 @@ public class SkeletonFrame implements SkeletonNode{
 		for (int i = 0; i < bones.size(); i++)
 		{
 			bones.get(i).setParentBone(this.getBoneWithName(bones.get(i).getParentBoneName()));
+		}
+	}
+
+	@Override
+	public void draw(Graphics2D g2d) {
+		for (int i = 0; i < bones.size(); i++)
+		{
+			bones.get(i).draw(g2d);
 		}
 	}
 }

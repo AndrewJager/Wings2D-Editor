@@ -1,5 +1,7 @@
 package editor.objects.skeleton;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
@@ -9,7 +11,9 @@ import java.util.List;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-public class SkeletonBone implements SkeletonNode{
+import editor.objects.Drawable;
+
+public class SkeletonBone implements SkeletonNode, Drawable{
 	private SkeletonFrame frame;
 	private String name;
 	private SkeletonBone parentSyncedBone;
@@ -174,5 +178,12 @@ public class SkeletonBone implements SkeletonNode{
 	public Point2D getLocation()
 	{
 		return location;
+	}
+	@Override
+	public void draw(Graphics2D g2d) {
+		final int handleSize = 10;
+		g2d.setColor(Color.GREEN);
+		g2d.drawRect((int)(location.getX() - (handleSize / 2)), (int)(location.getY() - (handleSize / 2)),
+				handleSize, handleSize);
 	}
 }

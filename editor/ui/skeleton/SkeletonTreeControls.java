@@ -110,8 +110,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 			panel.add(line);
 			panel.add(addBone);
 			
-			drawingArea.getDrawArea().setDrawFrame(frame);
-			drawingArea.getDrawArea().repaint();
+			drawingArea.getDrawArea().setDrawItem(frame);
 			break;
 		case BONE:
 			if (selectedNode != null)
@@ -133,6 +132,8 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 				}
 			});
 			panel.add(otherBones);
+			
+			drawingArea.getDrawArea().setDrawItem(bone.getFrame());
 			break;
 		default:
 			break;

@@ -3,7 +3,9 @@ package editor.objects.skeleton;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -24,9 +26,13 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	private List<SkeletonBone> childBones;
 	private Point2D location;
 	private Color handleColor;
+	private double rotation;
+	private boolean rotating = false;
+	private boolean showRotHandle = false;
 	
 	private final Color HANDLE_COLOR_UNSELECTED = Color.GREEN;
 	private final Color HANDLE_COLOR_SELECTED = Color.RED;
+	private final int ROT_HANDLE_OFFSET = 15;
 	
 	public SkeletonBone(String boneName, SkeletonFrame boneParent)
 	{
@@ -38,8 +44,9 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		frame = boneParent;
 		syncedBones = new ArrayList<SkeletonBone>();
 		childBones = new ArrayList<SkeletonBone>();
-		location = new Point2D.Double(10, 10);
+		location = new Point2D.Double(10, 25);
 		handleColor = HANDLE_COLOR_UNSELECTED;
+		rotation = 0;
 	}
 	public SkeletonBone(SkeletonBone syncBone, SkeletonFrame boneParent)
 	{
@@ -230,11 +237,48 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 			handleColor = HANDLE_COLOR_UNSELECTED;
 		}
 	}
+	public void setRotating(boolean draw)
+	{
+		rotating = draw;
+	}
+	public boolean getRotating()
+	{
+		return rotating;
+	}
+	public void setShowRotHandle(boolean show)
+	{
+		showRotHandle = show;
+	}
+	public boolean getShowRotHandle()
+	{
+		return showRotHandle;
+	}
+	public Point2D getRotHandle()
+	{
+		Point2D rotHandleLoc = new Point2D.Double(location.getX(), location.getY() - ROT_HANDLE_OFFSET);
+		AffineTransform transform = new AffineTransform();
+		transform.setToRotation(Math.toRadians(this.rotation - 90), location.getX(), location.getY());
+		transform.transform(rotHandleLoc, rotHandleLoc);
+		return rotHandleLoc;
+	}
+	public void rotateByHandle(Point loc)
+	{
+		rotation = Math.toDegrees(Math.atan2(location.getY() - loc.getY(), location.getX() - loc.getX()));
+	}
 	@Override
 	public void draw(Graphics2D g2d) {
 		final int handleSize = 10;
 		g2d.setColor(handleColor);
 		g2d.drawArc((int)(location.getX() - (handleSize / 2)), (int)(location.getY() - (handleSize / 2)),
 				handleSize, handleSize, 0, 360);
+		if (rotating || showRotHandle)
+		{	
+			Point2D rotHandleLoc = getRotHandle();
+			g2d.setColor(Color.BLACK);
+			g2d.drawLine((int)location.getX(), (int)location.getY(), (int)rotHandleLoc.getX(), (int)rotHandleLoc.getY());
+			g2d.setColor(Color.YELLOW);
+			g2d.drawArc((int)(rotHandleLoc.getX() - (handleSize / 2)), (int)(rotHandleLoc.getY() - (handleSize / 2)),
+					handleSize, handleSize, 0, 360);
+		}
 	}
 }

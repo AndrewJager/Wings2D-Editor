@@ -2,6 +2,7 @@ package editor.objects.skeleton;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -206,6 +207,24 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		
 		return selectedBone;
 	}
+	public SkeletonBone getHandleBone(Point loc)
+	{
+		final double minDistance = 10;
+		SkeletonBone selectedBone = null;
+		for (int i = 0; i < bones.size(); i++)
+		{
+			if (bones.get(i).getShowRotHandle() || bones.get(i).getRotating())
+			{
+				Point2D rotPoint = bones.get(i).getRotHandle();
+				double dist = Math.sqrt(Math.pow((loc.getX()-rotPoint.getX()), 2) + Math.pow((loc.getY()-rotPoint.getY()), 2));
+				if (dist < minDistance)
+				{
+					selectedBone = bones.get(i);
+				}
+			}
+		}
+		return selectedBone;
+	}
 	
 	public void setSelectedBone(SkeletonBone bone)
 	{
@@ -218,6 +237,7 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 			else
 			{
 				bones.get(i).setIsSelected(false);
+				bones.get(i).setShowRotHandle(false);
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-# Indeterminate-SpriteEditor
+# Wings2D-Editor
 
 Sprite editor for https://github.com/CatsAreEvil/Wings2D. 
 

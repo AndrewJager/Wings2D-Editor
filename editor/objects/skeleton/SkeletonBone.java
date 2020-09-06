@@ -253,6 +253,10 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	{
 		return showRotHandle;
 	}
+	public double getRotation()
+	{
+		return rotation;
+	}
 	public Point2D getRotHandle()
 	{
 		Point2D rotHandleLoc = new Point2D.Double(location.getX(), location.getY() - ROT_HANDLE_OFFSET);

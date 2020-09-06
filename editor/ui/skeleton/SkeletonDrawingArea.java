@@ -17,6 +17,7 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 	private JTree tree;
 	private SkeletonFrame frame;
 	private SkeletonBone rotateBone, dragBone;
+	private SkeletonTreeControls controls;
 
 	public SkeletonDrawingArea(SkeletonEdit edit, Rectangle bounds) {
 		super(edit, bounds);
@@ -32,6 +33,10 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 	public DrawingArea getDrawArea()
 	{
 		return (DrawingArea)panel;
+	}
+	public void setControls(SkeletonTreeControls c)
+	{
+		controls = c;
 	}
 
 	@Override
@@ -114,6 +119,7 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 						{
 							dragBone.setLocation(e.getPoint());
 						}
+						controls.updateBoneInfo();
 						panel.repaint();
 					}
 				}

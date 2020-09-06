@@ -20,6 +20,8 @@ public class SkeletonEdit extends UIPanel{
 		
 		treeControls = new SkeletonTreeControls(this, new Rectangle(200, 0, 200, 400));
 		elements.add(treeControls);
+		
+		drawingArea.setControls(treeControls);
 	}
 	public SkeletonTree getSkeletonTree()
 	{

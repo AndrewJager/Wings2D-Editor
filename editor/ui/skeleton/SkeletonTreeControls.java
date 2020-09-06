@@ -29,6 +29,7 @@ import editor.objects.skeleton.SkeletonPiece;
 
 public class SkeletonTreeControls extends SkeletonUIElement{
 	private JButton addAnim, delete, addFrame, rename, addBone;
+	private JLabel xPos, yPos, rotation;
 	private JTree tree;
 	private SkeletonDrawingArea drawingArea;
 	private JSeparator line;
@@ -47,6 +48,10 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		rename = new JButton("Rename Animation");
 		addFrame = new JButton("New Frame");
 		addBone = new JButton("New Bone");
+		
+		xPos = new JLabel("X: ", JLabel.CENTER);
+		yPos = new JLabel("Y: ", JLabel.CENTER);
+		rotation = new JLabel("Rotation: ", JLabel.CENTER);
 		
 		setupControls(SkeletonPiece.SKELETON);
 	}
@@ -124,6 +129,9 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 			SkeletonBone bone = (SkeletonBone)selectedNode;
 			panel.add(rename);
 			rename.setText("Rename Bone");
+			addLabel(xPos, "X: " + bone.getX());
+			addLabel(yPos, "Y: " + bone.getY());
+			addLabel(rotation, "Rotation: " + Math.round(bone.getRotation()));
 			JLabel parentBoneLabel = new JLabel("Parent bone:");
 			panel.add(parentBoneLabel);
 			JComboBox<SkeletonBone> otherBones = new JComboBox<SkeletonBone>(bone.getFrame().getArrayOfBonesExcept(bone));
@@ -158,6 +166,12 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		label.setPreferredSize(new Dimension(panel.getWidth(), (int)label.getPreferredSize().getHeight()));
 		panel.add(label);
 	}
+	private void addLabel(JLabel label, String text)
+	{
+		label.setText(text);
+		label.setPreferredSize(new Dimension(panel.getWidth(), (int)label.getPreferredSize().getHeight()));
+		panel.add(label);
+	}
 	private void createList(String[] data)
 	{
 		JList<String> list = new JList<String>(data);
@@ -166,6 +180,17 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		list.setFixedCellWidth(80);
 		JScrollPane pane = new JScrollPane(list);
 		panel.add(pane);
+	}
+	public void updateBoneInfo()
+	{
+		SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
+		SkeletonBone bone = (SkeletonBone)selectedNode;
+		if (bone != null)
+		{
+			xPos.setText("X: " + bone.getX());
+			yPos.setText("Y: " + bone.getY());
+			rotation.setText("Rotation: " + Math.round(bone.getRotation()));
+		}
 	}
 	
 	public void createEvents()

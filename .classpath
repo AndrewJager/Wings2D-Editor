@@ -6,7 +6,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Game-Framework"/>
-	<classpathentry kind="lib" path="C:/Users/DELL/Desktop/workspace/Indeterminate-SpriteEditor/flatlaf-0.41.jar"/>
+	<classpathentry kind="lib" path="C:/Users/DELL/Desktop/workspace/Wings2D/bulid/framework.jar"/>
+	<classpathentry kind="lib" path="C:/Users/DELL/Desktop/workspace/Wings2D-Editor/flatlaf-0.41.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

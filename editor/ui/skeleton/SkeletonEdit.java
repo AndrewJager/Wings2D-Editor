@@ -35,4 +35,8 @@ public class SkeletonEdit extends UIPanel{
 	{
 		return drawingArea;
 	}
+	public Editor getEditor()
+	{
+		return editor;
+	}
 }

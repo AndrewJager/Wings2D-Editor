@@ -1,8 +1,10 @@
 package editor.objects.skeleton;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -179,17 +181,17 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	}
 
 	@Override
-	public void draw(Graphics2D g2d) {
+	public void draw(Graphics2D g2d, double scale) {
 		for (int i = 0; i < bones.size(); i++)
 		{
-			bones.get(i).draw(g2d);
+			bones.get(i).draw(g2d, scale);
 		}
 	}
 	
 	/**
 	 * Gets the Bone at the location (with a margin of error). Returns null if no Bone is close enough
 	 */
-	public SkeletonBone getBoneAtPosition(Point loc)
+	public SkeletonBone getBoneAtPosition(Point loc, double scale)
 	{
 		final double minDistance = 10;
 		SkeletonBone selectedBone = null;
@@ -197,7 +199,7 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		for (int i = 0; i < bones.size(); i++)
 		{
 			SkeletonBone bone = bones.get(i);
-			double dist = Math.sqrt(Math.pow((loc.getX()-bone.getX()), 2) + Math.pow((loc.getY()-bone.getY()), 2));
+			double dist = Math.sqrt(Math.pow((loc.getX()-(bone.getX() * scale)), 2) + Math.pow((loc.getY()-(bone.getY() * scale)), 2));
 			if ((dist < minDistance) && (dist > distance))
 			{
 				distance = dist;
@@ -207,7 +209,7 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		
 		return selectedBone;
 	}
-	public SkeletonBone getHandleBone(Point loc)
+	public SkeletonBone getHandleBone(Point loc, double scale)
 	{
 		final double minDistance = 10;
 		SkeletonBone selectedBone = null;
@@ -216,7 +218,8 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 			if (bones.get(i).getShowRotHandle() || bones.get(i).getRotating())
 			{
 				Point2D rotPoint = bones.get(i).getRotHandle();
-				double dist = Math.sqrt(Math.pow((loc.getX()-rotPoint.getX()), 2) + Math.pow((loc.getY()-rotPoint.getY()), 2));
+				double dist = Math.sqrt(Math.pow((loc.getX()-(rotPoint.getX() * scale)), 2) 
+						+ Math.pow((loc.getY()-(rotPoint.getY() * scale)), 2));
 				if (dist < minDistance)
 				{
 					selectedBone = bones.get(i);
@@ -240,5 +243,28 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 				bones.get(i).setShowRotHandle(false);
 			}
 		}
+	}
+
+	@Override
+	public Dimension getDrawSize() {
+		Rectangle2D bounds = new Rectangle2D.Double(0, 0, 0, 0);
+		for(int i = 0; i < bones.size(); i++)
+		{
+			SkeletonBone bone = bones.get(i);
+			if (!bounds.contains(bone.getLocation()))
+			{
+				if(bone.getX() > bounds.getMaxX())
+				{
+					bounds.setRect(0, 0, bone.getX(), bounds.getHeight());
+				}
+				if(bone.getY() > bounds.getMaxY())
+				{
+					bounds.setRect(0, 0, bounds.getWidth(), bone.getY());
+				}
+			}
+		}
+		bounds.setRect(0, 0, bounds.getWidth() + Drawable.DRAW_PADDING, bounds.getHeight() + Drawable.DRAW_PADDING);
+		
+		return new Dimension((int)bounds.getWidth(), (int)bounds.getHeight());
 	}
 }

@@ -1,6 +1,7 @@
 package editor.ui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -12,10 +13,11 @@ import editor.objects.Drawable;
 public class DrawingArea extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private Drawable drawItem;
+	private Editor edit;
 	
-	public DrawingArea()
+	public DrawingArea(Editor editor)
 	{
-		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		edit = editor;
 	}
 
 	@Override
@@ -24,7 +26,7 @@ public class DrawingArea extends JPanel{
 		super.paintComponent(g);
 		if (drawItem != null)
 		{
-			drawItem.draw((Graphics2D)g);
+			drawItem.draw((Graphics2D)g, edit.getUIScale());
 		}
 	}
 	
@@ -32,5 +34,24 @@ public class DrawingArea extends JPanel{
 	{
 		drawItem = draw;
 		repaint();
+	}
+	
+	public void resizeToDrawItem()
+	{
+		if(drawItem != null)
+		{
+			Dimension drawDim = drawItem.getDrawSize();
+//			System.out.println(drawDim);
+			Dimension newSize = new Dimension(this.getPreferredSize());
+			if (drawDim.getWidth() > newSize.getWidth())
+			{
+				newSize.setSize(drawDim.getWidth(), newSize.getHeight());
+			}
+			if (drawDim.getHeight() > newSize.getHeight())
+			{
+				newSize.setSize(newSize.getWidth(), drawDim.getHeight());
+			}
+			this.setPreferredSize(newSize);
+		}
 	}
 }

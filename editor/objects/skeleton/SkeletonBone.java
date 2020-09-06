@@ -1,6 +1,7 @@
 package editor.objects.skeleton;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
@@ -196,19 +197,27 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	{
 		return childBones;
 	}
-	public void setLocation(double x, double y)
+	public void setLocation(double x, double y, double scale)
 	{
-		double deltaX = x - location.getX();
-		double deltaY = y - location.getY();
-		location.setLocation(x, y);
+		double unscale = 1.0 / scale;
+		double unscaledX = x * unscale;
+		double unscaledY = y * unscale;
+		
+		double deltaX = unscaledX - location.getX();
+		double deltaY = unscaledY - location.getY();
+		location.setLocation(unscaledX, unscaledY);
 		for (int i = 0; i < childBones.size(); i++)
 		{
 			childBones.get(i).translateBy(deltaX, deltaY);
 		}
 	}
-	public void setLocation(Point loc)
+	public void setLocation(Point loc, double scale)
 	{
-		this.setLocation(loc.getX(), loc.getY());
+		this.setLocation(loc.getX(), loc.getY(), scale);
+	}
+	public Point2D getLocation()
+	{
+		return location;
 	}
 	public double getX()
 	{
@@ -286,19 +295,24 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		}
 	}
 	@Override
-	public void draw(Graphics2D g2d) {
+	public void draw(Graphics2D g2d, double scale) {
 		final int handleSize = 10;
 		g2d.setColor(handleColor);
-		g2d.drawArc((int)(location.getX() - (handleSize / 2)), (int)(location.getY() - (handleSize / 2)),
+		g2d.drawArc((int)((location.getX() * scale) - (handleSize / 2)), (int)((location.getY() * scale) - (handleSize / 2)),
 				handleSize, handleSize, 0, 360);
 		if (rotating || showRotHandle)
 		{	
 			Point2D rotHandleLoc = getRotHandle();
 			g2d.setColor(Color.BLACK);
-			g2d.drawLine((int)location.getX(), (int)location.getY(), (int)rotHandleLoc.getX(), (int)rotHandleLoc.getY());
+			g2d.drawLine((int)(location.getX() * scale), (int)(location.getY() * scale),
+					(int)(rotHandleLoc.getX() * scale), (int)(rotHandleLoc.getY() * scale));
 			g2d.setColor(Color.YELLOW);
-			g2d.drawArc((int)(rotHandleLoc.getX() - (handleSize / 2)), (int)(rotHandleLoc.getY() - (handleSize / 2)),
+			g2d.drawArc((int)((rotHandleLoc.getX() * scale) - (handleSize / 2)), (int)((rotHandleLoc.getY() * scale) - (handleSize / 2)),
 					handleSize, handleSize, 0, 360);
 		}
+	}
+	@Override
+	public Dimension getDrawSize() {
+		return new Dimension(Drawable.DRAW_PADDING, Drawable.DRAW_PADDING);
 	}
 }

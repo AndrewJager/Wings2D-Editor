@@ -41,6 +41,7 @@ public class Editor {
 	private SkeletonEdit skeletonEdit;
 	private SpriteEdit spriteEdit;
 	
+	private double UIScale;
 	public int frameStartWidth = 1500;
 	public int frameStartHeight = 800;
 	public double RENDER_SCALE = 0.25;
@@ -116,10 +117,10 @@ public class Editor {
 		    	mainPanel.revalidate();
 		    	pane.setSize(mainPanel.getWidth(), mainPanel.getHeight());
 		    	
-		    	double scale = Double.valueOf(getMainPanel().getWidth()) / frameStartWidth;
+		    	UIScale = Double.valueOf(getMainPanel().getWidth()) / frameStartWidth;
 				for (int i = 0; i < panels.size(); i++)
 				{
-					panels.get(i).resize(mainPanel, scale);
+					panels.get(i).resize(mainPanel, UIScale);
 				}
 				
 //				if (animLists.getAnimList().getSelectedIndex() != -1)
@@ -127,7 +128,7 @@ public class Editor {
 //					drawing.setShouldRedraw(true);
 //				}
 //				render.setShouldReRender(true);
-				manager.setScale(RENDER_SCALE * scale);
+				manager.setScale(RENDER_SCALE * UIScale);
 				demoLevel.rescale();
 			}
 		});
@@ -176,5 +177,9 @@ public class Editor {
 	public void setPlaying(Boolean play)
 	{
 		playing = play;
+	}
+	public double getUIScale()
+	{
+		return UIScale;
 	}
 }

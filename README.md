@@ -1,3 +1,7 @@
 # Indeterminate-SpriteEditor
 
-Sprite editor for https://github.com/CatsAreEvil/Game-Framework. Compiling this project requires that the Indeterminate-Java project be added to the referenced libraries for this project.
+Sprite editor for https://github.com/CatsAreEvil/Wings2D. 
+
+Dependancies:
+* Wings2D
+* FlatLaf - https://github.com/JFormDesigner/FlatLaf

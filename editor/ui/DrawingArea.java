@@ -7,6 +7,8 @@ import java.awt.Graphics2D;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 
 import editor.objects.Drawable;
 
@@ -41,7 +43,6 @@ public class DrawingArea extends JPanel{
 		if(drawItem != null)
 		{
 			Dimension drawDim = drawItem.getDrawSize();
-//			System.out.println(drawDim);
 			Dimension newSize = new Dimension(this.getPreferredSize());
 			if (drawDim.getWidth() > newSize.getWidth())
 			{
@@ -52,6 +53,7 @@ public class DrawingArea extends JPanel{
 				newSize.setSize(newSize.getWidth(), drawDim.getHeight());
 			}
 			this.setPreferredSize(newSize);
+			this.revalidate();
 		}
 	}
 }

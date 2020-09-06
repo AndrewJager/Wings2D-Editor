@@ -8,6 +8,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
@@ -16,9 +17,11 @@ import javax.swing.tree.TreePath;
 import editor.objects.skeleton.SkeletonBone;
 import editor.objects.skeleton.SkeletonFrame;
 import editor.ui.DrawingArea;
+import framework.Utils;
 
 public class SkeletonDrawingArea extends SkeletonUIElement{
 	private DrawingArea drawArea;
+	private JScrollPane pane;
 	private JTree tree;
 	private SkeletonFrame frame;
 	private SkeletonBone rotateBone, dragBone;
@@ -30,7 +33,7 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 
 		// Replace panel with drawing area
 		drawArea = new DrawingArea(edit.getEditor());
-		JScrollPane pane = new JScrollPane(drawArea);
+		pane = new JScrollPane(drawArea);
 		panel.setLayout(new GridLayout(0,1));
 		panel.add(pane);
 		tree = edit.getSkeletonTree().getTree();
@@ -102,9 +105,9 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 						if (dragBone != null)
 						{
 							dragBone.setRotating(false);
+							
 							dragBone = null;
 						}
-						drawArea.resizeToDrawItem();
 					}
 				}
 			}
@@ -130,6 +133,7 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 							dragBone.setLocation(e.getPoint(), skeleton.getEditor().getUIScale());
 						}
 						controls.updateBoneInfo();
+						drawArea.resizeToDrawItem();
 						panel.repaint();
 					}
 				}

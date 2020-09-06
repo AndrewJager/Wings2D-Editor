@@ -14,6 +14,7 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import editor.objects.Drawable;
+import framework.Utils;
 
 public class SkeletonBone implements SkeletonNode, Drawable{
 	private SkeletonFrame frame;
@@ -205,7 +206,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		
 		double deltaX = unscaledX - location.getX();
 		double deltaY = unscaledY - location.getY();
-		location.setLocation(unscaledX, unscaledY);
+		location.setLocation(Utils.makeInRange(unscaledX, 0, (int)Double.MAX_VALUE), Utils.makeInRange(unscaledY, 0, (int)Double.MAX_VALUE));
 		for (int i = 0; i < childBones.size(); i++)
 		{
 			childBones.get(i).translateBy(deltaX, deltaY);
@@ -229,7 +230,11 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	}
 	public void translateBy(double x, double y)
 	{
-		location.setLocation(getX() + x, getY() +y);
+		double newX = getX() + x;
+		double newY = getY() + y;
+		newX = Utils.makeInRange(newX, 0, (int)Double.MAX_VALUE);
+		newY = Utils.makeInRange(newY, 0, (int)Double.MAX_VALUE);
+		location.setLocation(newX, newY);
 		for (int i = 0; i < childBones.size(); i++)
 		{
 			childBones.get(i).translateBy(x, y);

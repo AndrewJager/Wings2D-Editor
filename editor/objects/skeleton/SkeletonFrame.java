@@ -217,7 +217,7 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		{
 			if (bones.get(i).getShowRotHandle() || bones.get(i).getRotating())
 			{
-				Point2D rotPoint = bones.get(i).getRotHandle();
+				Point2D rotPoint = bones.get(i).getRotHandle(scale);
 				double dist = Math.sqrt(Math.pow((loc.getX()-(rotPoint.getX() * scale)), 2) 
 						+ Math.pow((loc.getY()-(rotPoint.getY() * scale)), 2));
 				if (dist < minDistance)

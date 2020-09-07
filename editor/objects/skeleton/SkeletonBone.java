@@ -305,18 +305,20 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	{
 		return rotation;
 	}
-	public Point2D getRotHandle()
+	public Point2D getRotHandle(double scale)
 	{
-		Point2D rotHandleLoc = new Point2D.Double(location.getX(), location.getY() - ROT_HANDLE_OFFSET);
+		double scaleBack = 1.0 / scale;
+		System.out.println(scaleBack);
+		Point2D rotHandleLoc = new Point2D.Double(location.getX(), location.getY() - (ROT_HANDLE_OFFSET * scaleBack));
 		AffineTransform transform = new AffineTransform();
 		transform.setToRotation(Math.toRadians(this.rotation - 90), location.getX(), location.getY());
 		transform.transform(rotHandleLoc, rotHandleLoc);
 		return rotHandleLoc;
 	}
-	public void rotateByHandle(Point loc)
+	public void rotateByHandle(Point loc, double scale)
 	{
 		double oldRotation = rotation;
-		rotation = Math.toDegrees(Math.atan2(location.getY() - loc.getY(), location.getX() - loc.getX()));
+		rotation = Math.toDegrees(Math.atan2((location.getY() * scale) - loc.getY(), (location.getX() * scale) - loc.getX()));
 		double delta = rotation - oldRotation;
 		for(int i = 0; i < childBones.size(); i++)
 		{
@@ -341,7 +343,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 				handleSize, handleSize, 0, 360);
 		if (rotating || showRotHandle)
 		{	
-			Point2D rotHandleLoc = getRotHandle();
+			Point2D rotHandleLoc = getRotHandle(scale);
 			g2d.setColor(Color.BLACK);
 			g2d.drawLine((int)(location.getX() * scale), (int)(location.getY() * scale),
 					(int)(rotHandleLoc.getX() * scale), (int)(rotHandleLoc.getY() * scale));

@@ -124,7 +124,7 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 					{
 						if (dragBone.getRotating())
 						{
-							dragBone.rotateByHandle(e.getPoint());
+							dragBone.rotateByHandle(e.getPoint(), skeleton.getEditor().getUIScale() * drawArea.getZoomScale());
 						}
 						else
 						{

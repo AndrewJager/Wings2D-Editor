@@ -105,7 +105,6 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 						if (dragBone != null)
 						{
 							dragBone.setRotating(false);
-							
 							dragBone = null;
 						}
 					}

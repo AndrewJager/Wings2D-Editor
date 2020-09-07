@@ -143,6 +143,10 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		{
 			syncedBones.get(i).setName(newName);
 		}
+		for (int i = 0; i < childBones.size(); i++)
+		{
+			childBones.get(i).setParentBoneName(newName);
+		}
 	}
 
 	public SkeletonBone getParentSyncedBone() {
@@ -167,19 +171,30 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	}
 	public void setParentBone(SkeletonBone bone)
 	{
-		parentBone = bone;
 		if (bone != null)
 		{
+			parentBone = bone;
 			parentBoneName = bone.toString();
 			parentBone.getChildBones().add(this);
 		}
 		else
 		{
 			parentBoneName = null;
+			parentBone.getChildBones().remove(this);
+			parentBone = null;
 		}
 		for (int i = 0; i < syncedBones.size(); i++)
 		{
-			syncedBones.get(i).setParentBone(bone.toString());
+			if (bone != null)
+			{
+				syncedBones.get(i).setParentBone(bone.toString());
+			}
+			else
+			{
+				SkeletonBone nullBone = null;
+				System.out.println("cat");
+				syncedBones.get(i).setParentBone(nullBone);
+			}
 		}
 	}
 	public void setParentBone(String boneName)
@@ -193,6 +208,10 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	public String getParentBoneName()
 	{
 		return parentBoneName;
+	}
+	public void setParentBoneName(String newName) 
+	{
+		parentBoneName = newName;
 	}
 	public List<SkeletonBone> getChildBones()
 	{

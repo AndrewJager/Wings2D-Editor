@@ -60,6 +60,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 	{
 		SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
 		panel.removeAll();
+		rename.setEnabled(true);
 		switch (type)
 		{
 		case SKELETON:
@@ -121,17 +122,15 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 			drawingArea.getDrawArea().setDrawItem(frame);
 			break;
 		case BONE:
-			if (selectedNode != null)
-			{
-				addLabel(selectedNode.toString());
-				addNameLine();
-			}
 			SkeletonBone bone = (SkeletonBone)selectedNode;
-			panel.add(rename);
+			addLabel(selectedNode.toString());
+			if (bone.getParentSyncedBone() == null)
+			{
+				addLabel("Unsynced");
+			}
+			addNameLine();
 			rename.setText("Rename Bone");
-			addLabel(xPos, "X: " + bone.getX());
-			addLabel(yPos, "Y: " + bone.getY());
-			addLabel(rotation, "Rotation: " + Math.round(bone.getRotation()));
+			panel.add(rename);
 			JLabel parentBoneLabel = new JLabel("Parent bone:");
 			panel.add(parentBoneLabel);
 			JComboBox<SkeletonBone> otherBones = new JComboBox<SkeletonBone>(bone.getFrame().getArrayOfBonesExcept(bone));
@@ -143,6 +142,15 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 				}
 			});
 			panel.add(otherBones);
+			if(bone.getParentSyncedBone() != null)
+			{
+				rename.setEnabled(false);
+				otherBones.setEnabled(false);
+			}
+			addNameLine();
+			addLabel(xPos, "X: " + bone.getX());
+			addLabel(yPos, "Y: " + bone.getY());
+			addLabel(rotation, "Rotation: " + Math.round(bone.getRotation()));
 			
 			bone.getFrame().setSelectedBone(bone);
 			drawingArea.setSelectedFrame(bone.getFrame());

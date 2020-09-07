@@ -31,9 +31,11 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	private boolean rotating = false;
 	private boolean showRotHandle = false;
 	
-	private final Color HANDLE_COLOR_UNSELECTED = Color.GREEN;
-	private final Color HANDLE_COLOR_SELECTED = Color.RED;
-	private final int ROT_HANDLE_OFFSET = 15;
+	private static final Color HANDLE_COLOR_UNSELECTED = Color.GREEN;
+	private static final Color HANDLE_COLOR_SELECTED = Color.RED;
+	private static final int ROT_HANDLE_OFFSET = 15;
+	
+	public static final Point2D START_POS = new Point2D.Double(10, 15);
 	
 	public SkeletonBone(String boneName, SkeletonFrame boneParent)
 	{
@@ -45,7 +47,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		frame = boneParent;
 		syncedBones = new ArrayList<SkeletonBone>();
 		childBones = new ArrayList<SkeletonBone>();
-		location = new Point2D.Double(10, 25);
+		location = new Point2D.Double(START_POS.getX(), START_POS.getY());
 		handleColor = HANDLE_COLOR_UNSELECTED;
 		rotation = 0;
 	}
@@ -231,9 +233,19 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 			childBones.get(i).translateBy(deltaX, deltaY);
 		}
 	}
+	/** Calls setLocation with scale = 1 **/
+	public void setLocation(double x, double y)
+	{
+		setLocation(x, y, 1);
+	}
 	public void setLocation(Point loc, double scale)
 	{
 		this.setLocation(loc.getX(), loc.getY(), scale);
+	}
+	/** Calls setLocation with scale = 1 **/
+	public void setLocation(Point loc)
+	{
+		setLocation(loc, 1);
 	}
 	public Point2D getLocation()
 	{

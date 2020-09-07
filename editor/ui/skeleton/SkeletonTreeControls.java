@@ -112,6 +112,15 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 			{
 				addLabel("No parent sync frame");
 			}
+			JButton syncBones = new JButton("Sync Bone Locations");
+			syncBones.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					frame.cautiousSyncBonePositions();
+					drawingArea.getDrawArea().repaint();
+				}
+			});
+			panel.add(syncBones);
 			createList(frame.getSyncedFrameNames());
 			line = new JSeparator();
 			line.setPreferredSize(new Dimension(panel.getWidth(), SEPARATOR_WIDTH));

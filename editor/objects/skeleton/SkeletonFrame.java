@@ -267,4 +267,30 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		
 		return new Dimension((int)bounds.getWidth(), (int)bounds.getHeight());
 	}
+	
+	public void syncBonePositions()
+	{
+		for (int i = 0;  i < bones.size(); i++)
+		{
+			SkeletonBone bone = bones.get(i);
+			if (bone.getParentSyncedBone() != null)
+			{
+				bone.setLocation(bone.getParentSyncedBone().getX(), bone.getParentSyncedBone().getY());
+			}
+		}
+	}
+	public void cautiousSyncBonePositions()
+	{
+		for (int i = 0;  i < bones.size(); i++)
+		{
+			SkeletonBone bone = bones.get(i);
+			if (bone.getParentSyncedBone() != null)
+			{
+				if((bone.getX() == SkeletonBone.START_POS.getX()) && (bone.getY() == SkeletonBone.START_POS.getY()))
+				{
+					bone.setLocation(bone.getParentSyncedBone().getX(), bone.getParentSyncedBone().getY());
+				}
+			}
+		}
+	}
 }

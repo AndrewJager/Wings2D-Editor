@@ -16,10 +16,12 @@ public class DrawingArea extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private Drawable drawItem;
 	private Editor edit;
+	private double zoomScale;
 	
 	public DrawingArea(Editor editor)
 	{
 		edit = editor;
+		zoomScale = 1;
 	}
 
 	@Override
@@ -28,7 +30,7 @@ public class DrawingArea extends JPanel{
 		super.paintComponent(g);
 		if (drawItem != null)
 		{
-			drawItem.draw((Graphics2D)g, edit.getUIScale());
+			drawItem.draw((Graphics2D)g, edit.getUIScale() * zoomScale);
 		}
 	}
 	
@@ -55,5 +57,22 @@ public class DrawingArea extends JPanel{
 			this.setPreferredSize(newSize);
 			this.revalidate();
 		}
+	}
+	
+	public void zoom(int amt)
+	{
+		double zoomAmt = -amt * 0.1;
+		zoomScale = zoomScale + zoomAmt;
+		
+		if (zoomScale < 0.1)
+		{
+			zoomScale = 0.1;
+		}
+		this.repaint();
+	}
+	
+	public double getZoomScale()
+	{
+		return zoomScale;
 	}
 }

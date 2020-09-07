@@ -182,7 +182,10 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		else
 		{
 			parentBoneName = null;
-			parentBone.getChildBones().remove(this);
+			if (parentBone != null)
+			{
+				parentBone.getChildBones().remove(this);
+			}
 			parentBone = null;
 		}
 		for (int i = 0; i < syncedBones.size(); i++)

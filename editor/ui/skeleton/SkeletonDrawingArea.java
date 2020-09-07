@@ -6,9 +6,10 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
@@ -17,7 +18,6 @@ import javax.swing.tree.TreePath;
 import editor.objects.skeleton.SkeletonBone;
 import editor.objects.skeleton.SkeletonFrame;
 import editor.ui.DrawingArea;
-import framework.Utils;
 
 public class SkeletonDrawingArea extends SkeletonUIElement{
 	private DrawingArea drawArea;
@@ -60,7 +60,7 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 				{
 					if (frame != null)
 					{
-						rotateBone = frame.getBoneAtPosition(e.getPoint(), skeleton.getEditor().getUIScale());
+						rotateBone = frame.getBoneAtPosition(e.getPoint(), skeleton.getEditor().getUIScale() * drawArea.getZoomScale());
 						if (rotateBone != null)
 						{
 							TreePath path = new TreePath(frame);
@@ -78,8 +78,8 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 				{
 					if (frame != null)
 					{
-						dragBone = frame.getBoneAtPosition(e.getPoint(), skeleton.getEditor().getUIScale());
-						SkeletonBone selectedHandle = frame.getHandleBone(e.getPoint(), skeleton.getEditor().getUIScale());
+						dragBone = frame.getBoneAtPosition(e.getPoint(), skeleton.getEditor().getUIScale() * drawArea.getZoomScale());
+						SkeletonBone selectedHandle = frame.getHandleBone(e.getPoint(), skeleton.getEditor().getUIScale() * drawArea.getZoomScale());
 						if (dragBone != null)
 						{
 							TreePath path = new TreePath(frame);
@@ -116,7 +116,6 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 			public void mouseExited(MouseEvent e) {}	
 		});
 		drawArea.addMouseMotionListener(new MouseMotionListener() {
-
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				if (SwingUtilities.isLeftMouseButton(e))
@@ -129,7 +128,7 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 						}
 						else
 						{
-							dragBone.setLocation(e.getPoint(), skeleton.getEditor().getUIScale());
+							dragBone.setLocation(e.getPoint(), skeleton.getEditor().getUIScale() * drawArea.getZoomScale());
 						}
 						controls.updateBoneInfo();
 						drawArea.resizeToDrawItem();
@@ -139,6 +138,12 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 			}
 			@Override
 			public void mouseMoved(MouseEvent e) {}
+		});
+		drawArea.addMouseWheelListener(new MouseWheelListener() {
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				drawArea.zoom(e.getWheelRotation());
+			}
 		});
 	}
 }

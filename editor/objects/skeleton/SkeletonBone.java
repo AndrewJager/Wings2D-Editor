@@ -351,7 +351,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		}
 	}
 	@Override
-	public Dimension getDrawSize() {
-		return new Dimension(Drawable.DRAW_PADDING, Drawable.DRAW_PADDING);
+	public Dimension getDrawSize(double scale) {
+		return new Dimension((int)(Drawable.DRAW_PADDING * scale), (int)(Drawable.DRAW_PADDING * scale));
 	}
 }

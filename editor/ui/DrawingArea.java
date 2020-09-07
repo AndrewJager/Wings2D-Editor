@@ -40,11 +40,11 @@ public class DrawingArea extends JPanel{
 		repaint();
 	}
 	
-	public void resizeToDrawItem()
+	public void resizeToDrawItem(double uiScale)
 	{
 		if(drawItem != null)
 		{
-			Dimension drawDim = drawItem.getDrawSize();
+			Dimension drawDim = drawItem.getDrawSize(uiScale * zoomScale);
 			Dimension newSize = new Dimension(this.getPreferredSize());
 			if (drawDim.getWidth() > newSize.getWidth())
 			{

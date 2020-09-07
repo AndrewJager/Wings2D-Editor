@@ -246,7 +246,7 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	}
 
 	@Override
-	public Dimension getDrawSize() {
+	public Dimension getDrawSize(double scale) {
 		Rectangle2D bounds = new Rectangle2D.Double(0, 0, 0, 0);
 		for(int i = 0; i < bones.size(); i++)
 		{
@@ -263,7 +263,8 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 				}
 			}
 		}
-		bounds.setRect(0, 0, bounds.getWidth() + Drawable.DRAW_PADDING, bounds.getHeight() + Drawable.DRAW_PADDING);
+		bounds.setRect(0, 0, (bounds.getWidth() + (Drawable.DRAW_PADDING * scale)) * scale, 
+				(bounds.getHeight() + (Drawable.DRAW_PADDING * scale)) * scale);
 		
 		return new Dimension((int)bounds.getWidth(), (int)bounds.getHeight());
 	}

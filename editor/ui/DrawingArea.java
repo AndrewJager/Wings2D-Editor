@@ -1,14 +1,10 @@
 package editor.ui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
 
 import editor.objects.Drawable;
 
@@ -45,15 +41,7 @@ public class DrawingArea extends JPanel{
 		if(drawItem != null)
 		{
 			Dimension drawDim = drawItem.getDrawSize(uiScale * zoomScale);
-			Dimension newSize = new Dimension(this.getPreferredSize());
-			if (drawDim.getWidth() > newSize.getWidth())
-			{
-				newSize.setSize(drawDim.getWidth(), newSize.getHeight());
-			}
-			if (drawDim.getHeight() > newSize.getHeight())
-			{
-				newSize.setSize(newSize.getWidth(), drawDim.getHeight());
-			}
+			Dimension newSize = new Dimension((int)drawDim.getWidth(), (int)drawDim.getHeight());
 			this.setPreferredSize(newSize);
 			this.revalidate();
 		}

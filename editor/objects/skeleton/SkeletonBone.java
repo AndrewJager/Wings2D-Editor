@@ -308,7 +308,6 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	public Point2D getRotHandle(double scale)
 	{
 		double scaleBack = 1.0 / scale;
-		System.out.println(scaleBack);
 		Point2D rotHandleLoc = new Point2D.Double(location.getX(), location.getY() - (ROT_HANDLE_OFFSET * scaleBack));
 		AffineTransform transform = new AffineTransform();
 		transform.setToRotation(Math.toRadians(this.rotation - 90), location.getX(), location.getY());

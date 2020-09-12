@@ -19,6 +19,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 
 import editor.objects.EditOptions;
 import editor.objects.EditorSpriteSheet;
+import editor.ui.project.ProjectEdit;
 import editor.ui.skeleton.SkeletonEdit;
 import editor.ui.sprite.SpriteEdit;
 import framework.Level;
@@ -38,6 +39,7 @@ public class Editor {
 	private JTabbedPane pane;
 	private AnimTimer animTimer;
 	
+	private ProjectEdit projectEdit;
 	private SkeletonEdit skeletonEdit;
 	private SpriteEdit spriteEdit;
 	
@@ -64,14 +66,16 @@ public class Editor {
 		mainPanel.setBackground(Color.DARK_GRAY);
 		frame.add(mainPanel);
 		
+		projectEdit = new ProjectEdit(this);
 		skeletonEdit = new SkeletonEdit(this);
 		spriteEdit = new SpriteEdit(this);
 		panels = new ArrayList<UIPanel>();
+		panels.add(projectEdit);
 		panels.add(skeletonEdit);
 		panels.add(spriteEdit);
 		
 		pane = new JTabbedPane();
-		pane.addTab("Project", new JPanel());
+		pane.addTab("Project", projectEdit.getPanel());
 		pane.addTab("Skeleton", skeletonEdit.getPanel());
 		pane.addTab("Sprite", spriteEdit.getPanel());
 		pane.setSelectedIndex(1);

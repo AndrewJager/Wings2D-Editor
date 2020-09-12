@@ -35,10 +35,7 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		syncedFrames = new ArrayList<SkeletonFrame>();
 	}
 	
-	public void setName(String newName)
-	{
-		name = newName;
-	}
+
 	public String toString()
 	{
 		return name;
@@ -55,65 +52,6 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 			}
 		}
 		return hasName;
-	}
-	public int getTreeLevel()
-	{
-		return 2;
-	}
-	@Override
-	public TreeNode getChildAt(int childIndex) {
-		return bones.get(childIndex);
-	}
-	@Override
-	public int getChildCount() {
-		return bones.size();
-	}
-	@Override
-	public TreeNode getParent() {
-		return animation;
-	}
-	@Override
-	public int getIndex(TreeNode node) {
-		return bones.indexOf(node);
-	}
-	@Override
-	public boolean getAllowsChildren() {
-		return true;
-	}
-	@Override
-	public boolean isLeaf() {
-		return (bones.size() == 0);
-	}
-	@Override
-	public Enumeration<? extends TreeNode> children() {
-		return Collections.enumeration(bones);
-	}
-	@Override
-	public void insert(MutableTreeNode child, int index) {
-		SkeletonBone newBone = (SkeletonBone)child;
-		bones.add(index, newBone);
-		for(int i = 0; i < syncedFrames.size(); i++)
-		{
-			syncedFrames.get(i).insert(new SkeletonBone(newBone, syncedFrames.get(i)), index);
-		}
-	}
-	@Override
-	public void remove(int index) {
-		bones.remove(index);
-	}
-	@Override
-	public void remove(MutableTreeNode node) {
-		bones.remove(node);
-	}
-	@Override
-	public void setUserObject(Object object) {}
-	@Override
-	public void removeFromParent() {
-		animation.remove(this);
-	}
-	@Override
-	public void setParent(MutableTreeNode newParent) {
-		animation = (SkeletonAnimation)newParent;
 	}
 
 	public SkeletonFrame getParentSyncedFrame() {
@@ -179,14 +117,6 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 			bones.get(i).setParentBone(this.getBoneWithName(bones.get(i).getParentBoneName()));
 		}
 	}
-
-	@Override
-	public void draw(Graphics2D g2d, double scale) {
-		for (int i = 0; i < bones.size(); i++)
-		{
-			bones.get(i).draw(g2d, scale);
-		}
-	}
 	
 	/**
 	 * Gets the Bone at the location (with a margin of error). Returns null if no Bone is close enough
@@ -244,30 +174,6 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 			}
 		}
 	}
-
-	@Override
-	public Dimension getDrawSize(double scale) {
-		Rectangle2D bounds = new Rectangle2D.Double(0, 0, 0, 0);
-		for(int i = 0; i < bones.size(); i++)
-		{
-			SkeletonBone bone = bones.get(i);
-			if (!bounds.contains(bone.getLocation()))
-			{
-				if(bone.getX() > bounds.getMaxX())
-				{
-					bounds.setRect(0, 0, bone.getX(), bounds.getHeight());
-				}
-				if(bone.getY() > bounds.getMaxY())
-				{
-					bounds.setRect(0, 0, bounds.getWidth(), bone.getY());
-				}
-			}
-		}
-		bounds.setRect(0, 0, (bounds.getWidth() + (Drawable.DRAW_PADDING * scale)) * scale, 
-				(bounds.getHeight() + (Drawable.DRAW_PADDING * scale)) * scale);
-		
-		return new Dimension((int)bounds.getWidth(), (int)bounds.getHeight());
-	}
 	
 	public void syncBonePositions()
 	{
@@ -293,5 +199,104 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 				}
 			}
 		}
+	}
+	
+	// MutableTreeNode methods
+	@Override
+	public void insert(MutableTreeNode child, int index) {
+		SkeletonBone newBone = (SkeletonBone)child;
+		bones.add(index, newBone);
+		for(int i = 0; i < syncedFrames.size(); i++)
+		{
+			syncedFrames.get(i).insert(new SkeletonBone(newBone, syncedFrames.get(i)), index);
+		}
+	}
+	@Override
+	public void remove(int index) {
+		bones.remove(index);
+	}
+	@Override
+	public void remove(MutableTreeNode node) {
+		bones.remove(node);
+	}
+	@Override
+	public void setUserObject(Object object) {}
+	@Override
+	public void removeFromParent() {
+		animation.remove(this);
+	}
+	@Override
+	public void setParent(MutableTreeNode newParent) {
+		animation = (SkeletonAnimation)newParent;
+	}
+	@Override
+	public TreeNode getChildAt(int childIndex) {
+		return bones.get(childIndex);
+	}
+	@Override
+	public int getChildCount() {
+		return bones.size();
+	}
+	@Override
+	public TreeNode getParent() {
+		return animation;
+	}
+	@Override
+	public int getIndex(TreeNode node) {
+		return bones.indexOf(node);
+	}
+	@Override
+	public boolean getAllowsChildren() {
+		return true;
+	}
+	@Override
+	public boolean isLeaf() {
+		return (bones.size() == 0);
+	}
+	@Override
+	public Enumeration<? extends TreeNode> children() {
+		return Collections.enumeration(bones);
+	}
+	
+	// SkeletonNode methods
+	public int getTreeLevel()
+	{
+		return 2;
+	}
+	public void setName(String newName)
+	{
+		name = newName;
+	}
+	
+	// Drawable methods
+	@Override
+	public void draw(Graphics2D g2d, double scale) {
+		for (int i = 0; i < bones.size(); i++)
+		{
+			bones.get(i).draw(g2d, scale);
+		}
+	}
+	@Override
+	public Dimension getDrawSize(double scale) {
+		Rectangle2D bounds = new Rectangle2D.Double(0, 0, 0, 0);
+		for(int i = 0; i < bones.size(); i++)
+		{
+			SkeletonBone bone = bones.get(i);
+			if (!bounds.contains(bone.getLocation()))
+			{
+				if(bone.getX() > bounds.getMaxX())
+				{
+					bounds.setRect(0, 0, bone.getX(), bounds.getHeight());
+				}
+				if(bone.getY() > bounds.getMaxY())
+				{
+					bounds.setRect(0, 0, bounds.getWidth(), bone.getY());
+				}
+			}
+		}
+		bounds.setRect(0, 0, (bounds.getWidth() + (Drawable.DRAW_PADDING * scale)) * scale, 
+				(bounds.getHeight() + (Drawable.DRAW_PADDING * scale)) * scale);
+		
+		return new Dimension((int)bounds.getWidth(), (int)bounds.getHeight());
 	}
 }

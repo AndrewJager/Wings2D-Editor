@@ -45,39 +45,8 @@ public class SkeletonAnimation implements SkeletonNode{
 		}
 		return hasName;
 	}
-	
-	public int getTreeLevel()
-	{
-		return 1;
-	}
-	@Override
-	public TreeNode getChildAt(int childIndex) {
-		return frames.get(childIndex);
-	}
-	@Override
-	public int getChildCount() {
-		return frames.size();
-	}
-	@Override
-	public TreeNode getParent() {
-		return skeleton;
-	}
-	@Override
-	public int getIndex(TreeNode node) {
-		return frames.indexOf(node);
-	}
-	@Override
-	public boolean getAllowsChildren() {
-		return true;
-	}
-	@Override
-	public boolean isLeaf() {
-		return (frames.size() == 0);
-	}
-	@Override
-	public Enumeration<? extends TreeNode> children() {
-		return Collections.enumeration(frames);
-	}
+
+	// MutableTreeNode methods
 	@Override
 	public void insert(MutableTreeNode child, int index) {
 		SkeletonFrame newFrame = (SkeletonFrame)child;
@@ -107,5 +76,39 @@ public class SkeletonAnimation implements SkeletonNode{
 	@Override
 	public void setParent(MutableTreeNode newParent) {
 		skeleton = (Skeleton)newParent;
+	}
+	@Override
+	public TreeNode getChildAt(int childIndex) {
+		return frames.get(childIndex);
+	}
+	@Override
+	public int getChildCount() {
+		return frames.size();
+	}
+	@Override
+	public TreeNode getParent() {
+		return skeleton;
+	}
+	@Override
+	public int getIndex(TreeNode node) {
+		return frames.indexOf(node);
+	}
+	@Override
+	public boolean getAllowsChildren() {
+		return true;
+	}
+	@Override
+	public boolean isLeaf() {
+		return (frames.size() == 0);
+	}
+	@Override
+	public Enumeration<? extends TreeNode> children() {
+		return Collections.enumeration(frames);
+	}
+	
+	// SkeletonNode methods
+	public int getTreeLevel()
+	{
+		return 1;
 	}
 }

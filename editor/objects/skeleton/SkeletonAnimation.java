@@ -8,7 +8,9 @@ import java.util.List;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-public class SkeletonAnimation implements SkeletonNode{
+import editor.objects.project.ProjectEntity;
+
+public class SkeletonAnimation implements SkeletonNode, ProjectEntity{
 	private Skeleton skeleton;
 	private List<SkeletonFrame> frames;
 	private String name;

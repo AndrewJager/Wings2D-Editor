@@ -78,7 +78,7 @@ public class Editor {
 		pane.addTab("Project", projectEdit.getPanel());
 		pane.addTab("Skeleton", skeletonEdit.getPanel());
 		pane.addTab("Sprite", spriteEdit.getPanel());
-		pane.setSelectedIndex(1);
+		pane.setSelectedIndex(0);
 		mainPanel.add(pane);
 		pane.setLocation(0, 0);
 		pane.setSize(100, 100);

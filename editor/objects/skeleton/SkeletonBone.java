@@ -51,6 +51,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		handleColor = HANDLE_COLOR_UNSELECTED;
 		rotation = 0;
 	}
+	/** Create a copy of the bone passed in to this constructor **/
 	public SkeletonBone(SkeletonBone syncBone, SkeletonFrame boneParent)
 	{
 		if (boneParent.containsBoneWithName(syncBone.toString()))
@@ -74,81 +75,6 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	public SkeletonFrame getFrame()
 	{
 		return frame;
-	}
-
-	@Override
-	public void insert(MutableTreeNode child, int index) {}
-
-	@Override
-	public void remove(int index) {}
-
-	@Override
-	public void remove(MutableTreeNode node) {}
-
-	@Override
-	public void setUserObject(Object object) {}
-
-	@Override
-	public void removeFromParent() {
-		frame.remove(this);
-	}
-
-	@Override
-	public void setParent(MutableTreeNode newParent) {
-		frame = (SkeletonFrame)newParent;
-	}
-
-	@Override
-	public TreeNode getChildAt(int childIndex) {
-		return null;
-	}
-
-	@Override
-	public int getChildCount() {
-		return 0;
-	}
-
-	@Override
-	public TreeNode getParent() {
-		return frame;
-	}
-
-	@Override
-	public int getIndex(TreeNode node) {
-		return -1;
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return false;
-	}
-
-	@Override
-	public boolean isLeaf() {
-		return true;
-	}
-
-	@Override
-	public Enumeration<? extends TreeNode> children() {
-		return null;
-	}
-
-	@Override
-	public int getTreeLevel() {
-		return 3;
-	}
-
-	@Override
-	public void setName(String newName) {
-		name = newName;
-		for(int i = 0; i < syncedBones.size(); i++)
-		{
-			syncedBones.get(i).setName(newName);
-		}
-		for (int i = 0; i < childBones.size(); i++)
-		{
-			childBones.get(i).setParentBoneName(newName);
-		}
 	}
 
 	public SkeletonBone getParentSyncedBone() {
@@ -334,6 +260,73 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 			childBones.get(i).rotateAround(point, amt);
 		}
 	}
+
+	
+	// MutableTreeNode methods
+	@Override
+	public void insert(MutableTreeNode child, int index) {}
+	@Override
+	public void remove(int index) {}
+	@Override
+	public void remove(MutableTreeNode node) {}
+	@Override
+	public void setUserObject(Object object) {}
+	@Override
+	public void removeFromParent() {
+		frame.remove(this);
+	}
+	@Override
+	public void setParent(MutableTreeNode newParent) {
+		frame = (SkeletonFrame)newParent;
+	}
+	@Override
+	public TreeNode getChildAt(int childIndex) {
+		return null;
+	}
+	@Override
+	public int getChildCount() {
+		return 0;
+	}
+	@Override
+	public TreeNode getParent() {
+		return frame;
+	}
+	@Override
+	public int getIndex(TreeNode node) {
+		return -1;
+	}
+	@Override
+	public boolean getAllowsChildren() {
+		return false;
+	}
+	@Override
+	public boolean isLeaf() {
+		return true;
+	}
+	@Override
+	public Enumeration<? extends TreeNode> children() {
+		return null;
+	}
+	
+	// SkeletonNode methods
+	@Override
+	public int getTreeLevel() {
+		return 3;
+	}
+	@Override
+	public void setName(String newName) {
+		name = newName;
+		for(int i = 0; i < syncedBones.size(); i++)
+		{
+			syncedBones.get(i).setName(newName);
+		}
+		for (int i = 0; i < childBones.size(); i++)
+		{
+			childBones.get(i).setParentBoneName(newName);
+		}
+	}
+	
+	// Drawable methods
 	@Override
 	public void draw(Graphics2D g2d, double scale) {
 		final int handleSize = 10;

@@ -85,7 +85,7 @@ public class FilePanel extends SpriteUIElement{
 	    				ani.getObjectList().setListData(curFrame.getJointNames());
 	    				ani.getObjectList().setSelectedIndex(0);
 	    				editor.getSpriteEdit().getFilters().setFilterButtons(curFrame.getJoint(ani.getObjectList().getSelectedIndex()));
-	    				in.close();
+//	    				in.close();
 					} catch (FileNotFoundException e1) {
 						e1.printStackTrace();
 					}

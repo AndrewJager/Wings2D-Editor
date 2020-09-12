@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -40,7 +41,7 @@ public class ProjectSelect extends ProjectUIElement{
 						Project proj = new Project(file.getSelectedFile());
 						project.setProject(proj);
 					}
-					catch (Exception ex)
+					catch (FileNotFoundException ex)
 					{
 						JOptionPane.showMessageDialog(panel, ex.getMessage());
 					}

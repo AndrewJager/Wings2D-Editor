@@ -1,9 +1,11 @@
 package editor.objects.skeleton;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -11,6 +13,7 @@ import javax.swing.tree.TreeNode;
 import editor.objects.project.ProjectEntity;
 
 public class SkeletonAnimation implements SkeletonNode, ProjectEntity{
+	public static final String FILE_MARKER = "ANIMATION";
 	private Skeleton skeleton;
 	private List<SkeletonFrame> frames;
 	private String name;
@@ -26,10 +29,18 @@ public class SkeletonAnimation implements SkeletonNode, ProjectEntity{
 		frames = new ArrayList<SkeletonFrame>();
 		this.name = animName;
 	}
-	public void setName(String newName)
+	/**
+	 * Creates a new animation from the file. The file should have been checked first to ensure that it is valid.
+	 * @param file File to create from
+	 */
+	public SkeletonAnimation(Scanner in)
 	{
-		name = newName;
+		while(in.hasNext())
+		{
+			System.out.println(in.next());
+		}
 	}
+
 	public String toString()
 	{
 		return name;
@@ -112,5 +123,9 @@ public class SkeletonAnimation implements SkeletonNode, ProjectEntity{
 	public int getTreeLevel()
 	{
 		return 1;
+	}
+	public void setName(String newName)
+	{
+		name = newName;
 	}
 }

@@ -9,6 +9,7 @@ public abstract class ProjectUIElement extends UIElement{
 
 	public ProjectUIElement(ProjectEdit edit, Rectangle bounds) {
 		super(bounds);
+		edit.getElements().add(this);
 		this.project = edit;
 	}
 }

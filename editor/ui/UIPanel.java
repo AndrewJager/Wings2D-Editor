@@ -41,4 +41,9 @@ public abstract class UIPanel {
 	{
 		return panel;
 	}
+	
+	public List<UIElement> getElements()
+	{
+		return elements;
+	}
 }

@@ -10,6 +10,7 @@ public abstract class SkeletonUIElement extends UIElement{
 	public SkeletonUIElement(SkeletonEdit edit, Rectangle bounds)
 	{
 		super(bounds);
+		edit.getElements().add(this);
 		this.skeleton = edit;
 	}
 }

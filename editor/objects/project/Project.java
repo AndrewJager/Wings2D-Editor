@@ -14,7 +14,7 @@ public class Project {
 	
 	public Project()
 	{
-		
+		entities = new ArrayList<ProjectEntity>();
 	}
 	public Project(final File directory) throws FileNotFoundException
 	{
@@ -57,5 +57,10 @@ public class Project {
 				throw new FileNotFoundException(directory.toString() + " contains files, but does not appear to be a project! (no DIRECTORY.txt found)");
 			}
 		}
+	}
+	
+	public List<ProjectEntity> getEntities()
+	{
+		return entities;
 	}
 }

@@ -1,6 +1,8 @@
 package editor.objects.skeleton;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -12,8 +14,9 @@ import javax.swing.tree.TreeNode;
 
 import editor.objects.project.ProjectEntity;
 
-public class SkeletonAnimation implements SkeletonNode, ProjectEntity{
+public class SkeletonAnimation implements SkeletonNode{
 	public static final String FILE_MARKER = "ANIMATION";
+	
 	private Skeleton skeleton;
 	private List<SkeletonFrame> frames;
 	private String name;
@@ -29,15 +32,17 @@ public class SkeletonAnimation implements SkeletonNode, ProjectEntity{
 		frames = new ArrayList<SkeletonFrame>();
 		this.name = animName;
 	}
-	/**
-	 * Creates a new animation from the file. The file should have been checked first to ensure that it is valid.
-	 * @param file File to create from
-	 */
-	public SkeletonAnimation(Scanner in)
+	
+	public void saveToFile(File file)
 	{
-		while(in.hasNext())
-		{
-			System.out.println(in.next());
+		try {
+			PrintWriter out = new PrintWriter(file);
+			out.write(FILE_MARKER);
+			out.write("\n");
+			out.write("NAME:" + name);
+			out.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
 	}
 

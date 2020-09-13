@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import editor.objects.skeleton.Skeleton;
 import editor.objects.skeleton.SkeletonAnimation;
 
 /** Factory class to create Project Entities from files **/
@@ -17,9 +18,9 @@ public class ProjectEntityFactory {
 			if (in.hasNext())
 			{
 				String line = in.next();
-				if (line.equals(SkeletonAnimation.FILE_MARKER))
+				if (line.equals(Skeleton.FILE_MARKER))
 				{
-					newItem = new SkeletonAnimation(in);
+					newItem = new Skeleton(in);
 				}
 				else
 				{

@@ -4,11 +4,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-public class Skeleton implements SkeletonNode{
+import editor.objects.project.ProjectEntity;
+
+public class Skeleton implements SkeletonNode, ProjectEntity {
+	public static final String FILE_MARKER = "SKELETON";
+	
 	private List<SkeletonNode> animations;
 	private SkeletonMasterFrame masterFrame;
 	private String name;
@@ -19,6 +24,18 @@ public class Skeleton implements SkeletonNode{
 		masterFrame = new SkeletonMasterFrame("Master");
 		animations.add(masterFrame);
 		this.name = skeletonName;
+	}
+	
+	/**
+	 * Creates a new skeleton from the file. The file should have been checked first to ensure that it is valid.
+	 * @param file File to create from
+	 */
+	public Skeleton(Scanner in)
+	{
+		while(in.hasNext())
+		{
+			System.out.println(in.next());
+		}
 	}
 	
 	public SkeletonFrame getMasterFrame() {

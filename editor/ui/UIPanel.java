@@ -41,10 +41,13 @@ public abstract class UIPanel {
 	public JPanel getPanel()
 	{
 		return panel;
-	}
-	
+	}	
 	public List<UIElement> getElements()
 	{
 		return elements;
+	}
+	public Editor getEditor()
+	{
+		return editor;
 	}
 }

@@ -19,6 +19,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 
 import editor.objects.EditOptions;
 import editor.objects.EditorSpriteSheet;
+import editor.objects.skeleton.Skeleton;
 import editor.ui.project.ProjectEdit;
 import editor.ui.skeleton.SkeletonEdit;
 import editor.ui.sprite.SpriteEdit;
@@ -140,6 +141,11 @@ public class Editor {
 	{
 		cards.show(mainPanel, ProjectEdit.CARD_ID);
 	}
+	public void showSkeleton(final Skeleton skeleton)
+	{
+		skeletonEdit.setCurrentSkeleton(skeleton);
+		cards.show(mainPanel, SkeletonEdit.CARD_ID);
+	}
 
 	public EditorSpriteSheet getActiveSprite() {
 		return activeSprite;
@@ -149,9 +155,6 @@ public class Editor {
 	}
 	public int getTimeStep() {
 		return timeStep;
-	}
-	public boolean getPlaying() {
-		return playing;
 	}
 	public Level getDemoLevel() {
 		return demoLevel;
@@ -174,6 +177,9 @@ public class Editor {
 	public void setActiveSprite(final EditorSpriteSheet sprite)
 	{
 		activeSprite = sprite;
+	}
+	public boolean getPlaying() {
+		return playing;
 	}
 	public void setPlaying(final Boolean play)
 	{

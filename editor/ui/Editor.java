@@ -1,5 +1,6 @@
 package editor.ui;
 
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
@@ -36,7 +37,7 @@ public class Editor {
 	
 	private JFrame frame;
 	private JPanel mainPanel;
-	private JTabbedPane pane;
+	private CardLayout cards;
 	private AnimTimer animTimer;
 	
 	private ProjectEdit projectEdit;
@@ -62,7 +63,8 @@ public class Editor {
 		frame.setBackground(Color.BLACK);
 		frame.setLayout(new GridBagLayout());
 		mainPanel = new JPanel();
-		mainPanel.setLayout(null);
+		cards = new CardLayout();
+		mainPanel.setLayout(cards);
 		mainPanel.setBackground(Color.DARK_GRAY);
 		frame.add(mainPanel);
 		
@@ -74,15 +76,10 @@ public class Editor {
 		panels.add(skeletonEdit);
 		panels.add(spriteEdit);
 		
-		pane = new JTabbedPane();
-		pane.addTab("Project", projectEdit.getPanel());
-		pane.addTab("Skeleton", skeletonEdit.getPanel());
-		pane.addTab("Sprite", spriteEdit.getPanel());
-		pane.setSelectedIndex(0);
-		mainPanel.add(pane);
-		pane.setLocation(0, 0);
-		pane.setSize(100, 100);
-		mainPanel.revalidate();
+		mainPanel.add(projectEdit.getPanel(), "Project");		
+		mainPanel.add(skeletonEdit.getPanel(), "Skeleton");
+		mainPanel.add(spriteEdit.getPanel(), "Sprite");
+		cards.show(mainPanel, "Skeleton");
 		
 		for (int i = 0; i < panels.size(); i++)
 		{
@@ -119,7 +116,6 @@ public class Editor {
 		    	mainPanel.setLocation((int)(xPos * 0.5), yPos);
 		    	mainPanel.setLocation(0, 0);
 		    	mainPanel.revalidate();
-		    	pane.setSize(mainPanel.getWidth(), mainPanel.getHeight());
 		    	
 		    	UIScale = Double.valueOf(getMainPanel().getWidth()) / frameStartWidth;
 				for (int i = 0; i < panels.size(); i++)

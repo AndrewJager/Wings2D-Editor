@@ -8,14 +8,14 @@ public abstract class UIElement {
 	protected JPanel panel;
 	protected Rectangle ogBounds;
 	
-	public UIElement(Rectangle bounds)
+	public UIElement(final Rectangle bounds)
 	{
 		this.ogBounds = bounds;
 		panel = new JPanel();
 		panel.setBounds(bounds);
 	}
 	
-	public void resize(double scale)
+	public void resize(final double scale)
 	{
 		Rectangle newBounds = new Rectangle((int)(ogBounds.getX() * scale), (int)(ogBounds.getY() * scale),
 				(int)(ogBounds.getWidth() * scale), (int)(ogBounds.getHeight() * scale));

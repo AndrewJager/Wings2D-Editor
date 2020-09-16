@@ -27,7 +27,7 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 	private SkeletonBone rotateBone, dragBone;
 	private SkeletonTreeControls controls;
 
-	public SkeletonDrawingArea(SkeletonEdit edit, Rectangle bounds) {
+	public SkeletonDrawingArea(final SkeletonEdit edit, final Rectangle bounds) {
 		super(edit, bounds);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
@@ -38,7 +38,7 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 		panel.add(pane);
 		tree = edit.getSkeletonTree().getTree();
 	}
-	public void setSelectedFrame(SkeletonFrame f)
+	public void setSelectedFrame(final SkeletonFrame f)
 	{
 		frame = f;
 	}
@@ -46,7 +46,7 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 	{
 		return drawArea;
 	}
-	public void setControls(SkeletonTreeControls c)
+	public void setControls(final SkeletonTreeControls c)
 	{
 		controls = c;
 	}

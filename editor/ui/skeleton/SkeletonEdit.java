@@ -10,7 +10,7 @@ public class SkeletonEdit extends UIPanel{
 	private SkeletonTreeControls treeControls;
 	private SkeletonDrawingArea drawingArea;
 
-	public SkeletonEdit(Editor edit) {
+	public SkeletonEdit(final Editor edit) {
 		super(edit);
 		
 		tree = new SkeletonTree(this, new Rectangle(0, 0, 200, 400));

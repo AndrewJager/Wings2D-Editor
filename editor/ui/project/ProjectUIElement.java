@@ -7,7 +7,7 @@ import editor.ui.UIElement;
 public abstract class ProjectUIElement extends UIElement{
 	protected ProjectEdit project;
 
-	public ProjectUIElement(ProjectEdit edit, Rectangle bounds) {
+	public ProjectUIElement(final ProjectEdit edit, final Rectangle bounds) {
 		super(bounds);
 		edit.getElements().add(this);
 		this.project = edit;

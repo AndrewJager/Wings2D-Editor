@@ -35,7 +35,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 	private JSeparator line;
 	private int SEPARATOR_WIDTH = 5;
 
-	public SkeletonTreeControls(SkeletonEdit edit, Rectangle bounds) {
+	public SkeletonTreeControls(final SkeletonEdit edit, final Rectangle bounds) {
 		super(edit, bounds);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		this.tree = edit.getSkeletonTree().getTree();
@@ -56,7 +56,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		setupControls(SkeletonPiece.SKELETON);
 	}
 	
-	public void setupControls(SkeletonPiece type)
+	public void setupControls(final SkeletonPiece type)
 	{
 		SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
 		panel.removeAll();
@@ -177,19 +177,19 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		line.setPreferredSize(new Dimension((int)(panel.getWidth() * 0.6), 1));
 		panel.add(line);
 	}
-	private void addLabel(String text)
+	private void addLabel(final String text)
 	{
 		JLabel label = new JLabel(text, JLabel.CENTER);
 		label.setPreferredSize(new Dimension(panel.getWidth(), (int)label.getPreferredSize().getHeight()));
 		panel.add(label);
 	}
-	private void addLabel(JLabel label, String text)
+	private void addLabel(final JLabel label, final String text)
 	{
 		label.setText(text);
 		label.setPreferredSize(new Dimension(panel.getWidth(), (int)label.getPreferredSize().getHeight()));
 		panel.add(label);
 	}
-	private void createList(String[] data)
+	private void createList(final String[] data)
 	{
 		JList<String> list = new JList<String>(data);
 		list.setLayoutOrientation(JList.VERTICAL);

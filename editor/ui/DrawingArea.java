@@ -14,14 +14,14 @@ public class DrawingArea extends JPanel{
 	private Editor edit;
 	private double zoomScale;
 	
-	public DrawingArea(Editor editor)
+	public DrawingArea(final Editor editor)
 	{
 		edit = editor;
 		zoomScale = 1;
 	}
 
 	@Override
-	public void paintComponent(Graphics g)
+	public void paintComponent(final Graphics g)
 	{
 		super.paintComponent(g);
 		if (drawItem != null)
@@ -30,13 +30,13 @@ public class DrawingArea extends JPanel{
 		}
 	}
 	
-	public void setDrawItem(Drawable draw)
+	public void setDrawItem(final Drawable draw)
 	{
 		drawItem = draw;
 		repaint();
 	}
 	
-	public void resizeToDrawItem(double uiScale)
+	public void resizeToDrawItem(final double uiScale)
 	{
 		if(drawItem != null)
 		{
@@ -47,7 +47,7 @@ public class DrawingArea extends JPanel{
 		}
 	}
 	
-	public void zoom(int amt)
+	public void zoom(final int amt)
 	{
 		double zoomAmt = -amt * 0.1;
 		zoomScale = zoomScale + zoomAmt;

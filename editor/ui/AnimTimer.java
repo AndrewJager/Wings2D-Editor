@@ -10,7 +10,7 @@ import editor.ui.sprite.AnimationLists;
 public class AnimTimer {
 	private Timer timer;
 	
-	public AnimTimer(Editor editor)
+	public AnimTimer(final Editor editor)
 	{
 		AnimationLists ani = editor.getSpriteEdit().getAnimLists();
 		ActionListener renderUpdater = new ActionListener() { // Timer event to update the render

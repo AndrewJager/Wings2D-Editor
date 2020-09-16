@@ -166,11 +166,11 @@ public class Editor {
 	public SpriteEdit getSpriteEdit() {
 		return spriteEdit;
 	}
-	public void setActiveSprite(EditorSpriteSheet sprite)
+	public void setActiveSprite(final EditorSpriteSheet sprite)
 	{
 		activeSprite = sprite;
 	}
-	public void setPlaying(Boolean play)
+	public void setPlaying(final Boolean play)
 	{
 		playing = play;
 	}

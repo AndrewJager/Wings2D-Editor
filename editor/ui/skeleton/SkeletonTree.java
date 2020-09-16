@@ -24,7 +24,7 @@ public class SkeletonTree extends SkeletonUIElement{
 	private JTree tree;
 	private JScrollPane scrollPane;
 
-	public SkeletonTree(SkeletonEdit edit, Rectangle bounds) {
+	public SkeletonTree(final SkeletonEdit edit, final Rectangle bounds) {
 		super(edit, bounds);
 
 		panel.setLayout(new BorderLayout());
@@ -34,8 +34,7 @@ public class SkeletonTree extends SkeletonUIElement{
 		JTextField textField = new JTextField();
 		TreeCellEditor editor = new DefaultCellEditor(textField);
 		tree.setCellEditor(editor);
-		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		
+		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));		
 		
 		scrollPane = new JScrollPane(tree);
 		panel.add(scrollPane, BorderLayout.CENTER);

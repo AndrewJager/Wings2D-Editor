@@ -19,7 +19,7 @@ import editor.objects.skeleton.Skeleton;
 public class ProjectSelect extends ProjectUIElement{
 	private JButton chooseProject, newAnim;
 
-	public ProjectSelect(ProjectEdit edit, Rectangle bounds) {
+	public ProjectSelect(final ProjectEdit edit, final Rectangle bounds) {
 		super(edit, bounds);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		

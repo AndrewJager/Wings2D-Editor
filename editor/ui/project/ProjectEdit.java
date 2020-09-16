@@ -10,7 +10,7 @@ public class ProjectEdit extends UIPanel{
 	private Project project;
 	private ProjectSelect projectSelect;
 
-	public ProjectEdit(Editor edit) {
+	public ProjectEdit(final Editor edit) {
 		super(edit);
 		project = new Project();
 		projectSelect = new ProjectSelect(this, new Rectangle(0, 0, 400, 100));
@@ -20,7 +20,7 @@ public class ProjectEdit extends UIPanel{
 	{
 		return project;
 	}
-	public void setProject(Project project)
+	public void setProject(final Project project)
 	{
 		this.project = project;
 	}

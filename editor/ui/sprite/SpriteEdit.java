@@ -2,11 +2,12 @@ package editor.ui.sprite;
 
 import java.awt.Rectangle;
 
-import editor.ui.AnimTimer;
 import editor.ui.Editor;
 import editor.ui.UIPanel;
 
 public class SpriteEdit extends UIPanel{
+	public static String CARD_ID = "Sprite";
+	
 	private DrawingArea drawing;
 	private RenderArea render;
 	private FilePanel file;

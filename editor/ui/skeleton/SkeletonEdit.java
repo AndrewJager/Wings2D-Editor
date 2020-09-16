@@ -6,6 +6,8 @@ import editor.ui.Editor;
 import editor.ui.UIPanel;
 
 public class SkeletonEdit extends UIPanel{
+	public static String CARD_ID = "Skeleton";
+	
 	private SkeletonTree tree;
 	private SkeletonTreeControls treeControls;
 	private SkeletonDrawingArea drawingArea;

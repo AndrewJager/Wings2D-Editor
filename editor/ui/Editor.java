@@ -72,10 +72,10 @@ public class Editor {
 		skeletonEdit = new SkeletonEdit(this);
 		spriteEdit = new SpriteEdit(this);
 		
-		mainPanel.add(projectEdit.getPanel(), "Project");		
-		mainPanel.add(skeletonEdit.getPanel(), "Skeleton");
-		mainPanel.add(spriteEdit.getPanel(), "Sprite");
-		cards.show(mainPanel, "Project");
+		mainPanel.add(projectEdit.getPanel(), ProjectEdit.CARD_ID);		
+		mainPanel.add(skeletonEdit.getPanel(), SkeletonEdit.CARD_ID);
+		mainPanel.add(spriteEdit.getPanel(), SpriteEdit.CARD_ID);
+		showProject();
 		
 		for (int i = 0; i < panels.size(); i++)
 		{
@@ -134,6 +134,11 @@ public class Editor {
 		frame.setLocationRelativeTo(null);
 		frame.setLayout(null); 
 		frame.setVisible(true);
+	}
+	
+	public void showProject()
+	{
+		cards.show(mainPanel, ProjectEdit.CARD_ID);
 	}
 
 	public EditorSpriteSheet getActiveSprite() {

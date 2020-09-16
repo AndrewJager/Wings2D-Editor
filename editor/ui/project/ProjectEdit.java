@@ -7,6 +7,8 @@ import editor.ui.Editor;
 import editor.ui.UIPanel;
 
 public class ProjectEdit extends UIPanel{
+	public static String CARD_ID = "Project";
+	
 	private Project project;
 	private ProjectSelect projectSelect;
 

@@ -13,7 +13,6 @@ import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 
 import com.formdev.flatlaf.FlatLightLaf;
@@ -68,18 +67,15 @@ public class Editor {
 		mainPanel.setBackground(Color.DARK_GRAY);
 		frame.add(mainPanel);
 		
+		panels = new ArrayList<UIPanel>();
 		projectEdit = new ProjectEdit(this);
 		skeletonEdit = new SkeletonEdit(this);
 		spriteEdit = new SpriteEdit(this);
-		panels = new ArrayList<UIPanel>();
-		panels.add(projectEdit);
-		panels.add(skeletonEdit);
-		panels.add(spriteEdit);
 		
 		mainPanel.add(projectEdit.getPanel(), "Project");		
 		mainPanel.add(skeletonEdit.getPanel(), "Skeleton");
 		mainPanel.add(spriteEdit.getPanel(), "Sprite");
-		cards.show(mainPanel, "Skeleton");
+		cards.show(mainPanel, "Project");
 		
 		for (int i = 0; i < panels.size(); i++)
 		{
@@ -181,5 +177,9 @@ public class Editor {
 	public double getUIScale()
 	{
 		return UIScale;
+	}
+	public List<UIPanel> getPanels()
+	{
+		return panels;
 	}
 }

@@ -10,15 +10,16 @@ public abstract class UIPanel {
 	protected Editor editor;
 	protected List<UIElement> elements;
 	
-	public UIPanel(Editor edit)
+	public UIPanel(final Editor edit)
 	{
 		this.editor = edit;
 		panel = new JPanel();
 		panel.setLayout(null);
+		edit.getPanels().add(this);
 		elements = new ArrayList<UIElement>();
 	}
 	
-	public void resize(JPanel parent, double scale)
+	public void resize(final JPanel parent, final double scale)
 	{
 		panel.setLocation(0, 0);
 		panel.setSize(parent.getWidth(), parent.getHeight());

@@ -44,6 +44,7 @@ public class ProjectSelect extends ProjectUIElement{
 					{
 						Project proj = new Project(file.getSelectedFile());
 						project.setProject(proj);
+						project.refreshInfo();
 					}
 					catch (FileNotFoundException ex)
 					{

@@ -11,6 +11,8 @@ public class SkeletonEdit extends UIPanel{
 	public static String CARD_ID = "Skeleton";
 	
 	private Skeleton skeleton;
+	
+	private SkeletonTopBar bar;
 	private SkeletonTree tree;
 	private SkeletonTreeControls treeControls;
 	private SkeletonDrawingArea drawingArea;
@@ -18,9 +20,10 @@ public class SkeletonEdit extends UIPanel{
 	public SkeletonEdit(final Editor edit) {
 		super(edit);
 		
-		tree = new SkeletonTree(this, new Rectangle(0, 0, 200, 400));
-		drawingArea = new SkeletonDrawingArea(this, new Rectangle(420, 0, 400, 400));		
-		treeControls = new SkeletonTreeControls(this, new Rectangle(200, 0, 200, 400));
+		bar = new SkeletonTopBar(this, new Rectangle(0, 0, edit.frameStartWidth, 50));
+		tree = new SkeletonTree(this, new Rectangle(0, 50, 200, 400));
+		drawingArea = new SkeletonDrawingArea(this, new Rectangle(420, 50, 400, 400));		
+		treeControls = new SkeletonTreeControls(this, new Rectangle(200, 50, 200, 400));
 		
 		drawingArea.setControls(treeControls);
 	}
@@ -35,6 +38,10 @@ public class SkeletonEdit extends UIPanel{
 	public Skeleton getSkeleton()
 	{
 		return skeleton;
+	}
+	public SkeletonTopBar getTopBar()
+	{
+		return bar;
 	}
 	public SkeletonTree getSkeletonTree()
 	{

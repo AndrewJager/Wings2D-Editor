@@ -11,6 +11,7 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellEditor;
 
 import editor.objects.skeleton.SkeletonNode;
@@ -29,8 +30,7 @@ public class SkeletonTree extends SkeletonUIElement{
 
 		panel.setLayout(new BorderLayout());
 		
-		Skeleton mainNode = new Skeleton("Skeleton");
-		tree = new JTree(mainNode);
+		tree = new JTree();
 		JTextField textField = new JTextField();
 		TreeCellEditor editor = new DefaultCellEditor(textField);
 		tree.setCellEditor(editor);
@@ -38,6 +38,12 @@ public class SkeletonTree extends SkeletonUIElement{
 		
 		scrollPane = new JScrollPane(tree);
 		panel.add(scrollPane, BorderLayout.CENTER);
+	}
+	
+	public void setSkeleton(final Skeleton skeleton)
+	{
+		DefaultTreeModel newModel = new DefaultTreeModel(skeleton);
+		tree.setModel(newModel);
 	}
 
 	public void createEvents() {

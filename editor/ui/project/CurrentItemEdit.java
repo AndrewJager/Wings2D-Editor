@@ -27,7 +27,7 @@ public class CurrentItemEdit extends ProjectUIElement{
 		panel.add(editItem);
 	}
 	
-	public void setInfo(final ProjectEntity item)
+	public void setItem(final ProjectEntity item)
 	{
 		if (item instanceof Skeleton)
 		{
@@ -41,7 +41,6 @@ public class CurrentItemEdit extends ProjectUIElement{
 		editItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(selectedItem);
 				if (selectedItem != null)
 				{
 					if (selectedItem instanceof Skeleton)

@@ -28,6 +28,7 @@ public class SkeletonEdit extends UIPanel{
 	public void setCurrentSkeleton(final Skeleton s)
 	{
 		this.skeleton = s;
+		tree.setSkeleton(s);
 		treeControls.setupControls(SkeletonPiece.SKELETON);
 	}
 	

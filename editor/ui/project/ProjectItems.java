@@ -6,6 +6,8 @@ import java.awt.Rectangle;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import editor.objects.project.Project;
 import editor.objects.project.ProjectEntity;
@@ -35,6 +37,11 @@ public class ProjectItems extends ProjectUIElement{
 
 	@Override
 	public void createEvents() {
-		
+		list.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				project.setSelectedEntity(list.getSelectedValue());
+			}
+		});
 	}
 }

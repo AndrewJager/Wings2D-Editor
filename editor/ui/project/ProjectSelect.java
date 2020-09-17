@@ -55,16 +55,17 @@ public class ProjectSelect extends ProjectUIElement{
 		newAnim.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String animName = JOptionPane.showInputDialog(panel, "Animation Name");
+				String skeletonName = JOptionPane.showInputDialog(panel, "Skeleton Name");
 				JFileChooser file = new JFileChooser();
 				file.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				file.setCurrentDirectory(new File(System.getProperty("user.dir")));
 				int result = file.showOpenDialog(panel);
 				if (result == JFileChooser.APPROVE_OPTION)
 				{
-					Skeleton newSkeleton = new Skeleton(animName);
+					Skeleton newSkeleton = new Skeleton(skeletonName);
 					project.getProject().getEntities().add(newSkeleton);
-					File newFile = new File(file.getSelectedFile() + "/" + animName +".txt");
+					project.refreshInfo();
+					File newFile = new File(file.getSelectedFile() + "/" + skeletonName +".txt");
 					try {
 						newFile.createNewFile();
 					} catch (IOException e1) {

@@ -12,12 +12,14 @@ public class ProjectEdit extends UIPanel{
 	private Project project;
 	private ProjectSelect projectSelect;
 	private CurrentItemEdit currentItemEdit;
+	private ProjectItems projectItems;
 
 	public ProjectEdit(final Editor edit) {
 		super(edit);
 		project = new Project();
 		projectSelect = new ProjectSelect(this, new Rectangle(0, 0, 400, 100));
 		currentItemEdit = new CurrentItemEdit(this, new Rectangle(0, 100, 400, 100));
+		projectItems = new ProjectItems(this, new Rectangle(400, 0, 200, 200));
 	}
 
 	public Project getProject()
@@ -35,5 +37,9 @@ public class ProjectEdit extends UIPanel{
 	public CurrentItemEdit getCurrentItemEdit()
 	{
 		return currentItemEdit;
+	}
+	public ProjectItems getProjectItems()
+	{
+		return projectItems;
 	}
 }

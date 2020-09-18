@@ -26,6 +26,7 @@ public class ProjectSelect extends ProjectUIElement{
 		chooseProject = new JButton("Select Project Folder");
 		panel.add(chooseProject);
 		newAnim = new JButton("New Animation");
+		newAnim.setEnabled(false);
 		panel.add(newAnim);
 	}
 
@@ -45,6 +46,7 @@ public class ProjectSelect extends ProjectUIElement{
 						Project proj = new Project(file.getSelectedFile());
 						project.setProject(proj);
 						project.refreshInfo();
+						newAnim.setEnabled(true);
 					}
 					catch (FileNotFoundException ex)
 					{

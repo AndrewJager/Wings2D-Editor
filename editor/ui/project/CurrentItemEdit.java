@@ -24,11 +24,13 @@ public class CurrentItemEdit extends ProjectUIElement{
 		nameLabel = new JLabel("Name");
 		panel.add(nameLabel);
 		editItem = new JButton("Edit");
+		editItem.setEnabled(false);
 		panel.add(editItem);
 	}
 	
 	public void setItem(final ProjectEntity item)
 	{
+		editItem.setEnabled(true);
 		if (item instanceof Skeleton)
 		{
 			nameLabel.setText(item.toString());

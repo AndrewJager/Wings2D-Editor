@@ -2,8 +2,6 @@ package editor.objects.project;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -13,10 +11,9 @@ import java.util.Scanner;
 import javax.swing.JOptionPane;
 
 public class Project {
-	private File projectMap;
 	private List<ProjectEntity> entities;
 	private String name;
-	private String directory;
+	private File directory;
 	
 	public Project()
 	{
@@ -26,6 +23,7 @@ public class Project {
 	{
 		this();
 		validateDirectory(directory);
+		this.directory = directory;
 		
 		boolean loadProject = true;
 		File projectFile = new File(directory + "/PROJECTINFO.txt");
@@ -63,7 +61,30 @@ public class Project {
 		
 		if (loadProject)
 		{
-
+			createAllInDirectory(directory);
+		}
+	}
+	
+	private void createAllInDirectory(File directory)
+	{
+		for (int i = 0; i < directory.listFiles().length; i++)
+		{
+			if (directory.listFiles()[i].isDirectory())
+			{
+				createAllInDirectory(directory.listFiles()[i]);
+			}
+			else
+			{
+				try {
+					ProjectEntity newEntity = ProjectEntityFactory.createFromFile(directory.listFiles()[i]);
+					if (newEntity != null)
+					{
+						entities.add(newEntity);
+					}
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	
@@ -82,5 +103,9 @@ public class Project {
 	public String getName()
 	{
 		return name;
+	}
+	public File getDirectory()
+	{
+		return directory;
 	}
 }

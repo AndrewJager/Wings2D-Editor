@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import editor.objects.skeleton.Skeleton;
-import editor.objects.skeleton.SkeletonAnimation;
 
 /** Factory class to create Project Entities from files **/
 public class ProjectEntityFactory {
@@ -15,6 +14,7 @@ public class ProjectEntityFactory {
 		ProjectEntity newItem = null;
 		Scanner in = new Scanner(directory);
 		try {
+			newItem = null; // Return a null object if file is not valid
 			if (in.hasNext())
 			{
 				String line = in.next();
@@ -22,14 +22,6 @@ public class ProjectEntityFactory {
 				{
 					newItem = new Skeleton(in);
 				}
-				else
-				{
-					throw new FileNotFoundException(directory.getName() + " - File not recognised!");
-				}
-			}
-			else
-			{
-				throw new FileNotFoundException(directory.getName() + " - Empty file!");
 			}
 		}
 		finally

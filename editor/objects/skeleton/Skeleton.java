@@ -34,7 +34,11 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 	{
 		while(in.hasNext())
 		{
-			System.out.println(in.next());
+			String[] tokens = in.next().split(":");
+			if (tokens[0].equals("NAME"))
+			{
+				name = tokens[1];
+			}
 		}
 	}
 	

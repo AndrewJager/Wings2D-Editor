@@ -47,9 +47,14 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 			{
 				name = tokens[1];
 			}
-			else if (tokens[0].equals("ANIMATION"))
+			else if (tokens[0].equals(SkeletonMasterFrame.FILE_MARKER))
 			{
-				
+				masterFrame = new SkeletonMasterFrame(in);
+				animations.add(0, masterFrame);
+			}
+			else if (tokens[0].equals(SkeletonAnimation.FILE_MARKER))
+			{
+				animations.add(new SkeletonAnimation(in, this));
 			}
 		}
 	}
@@ -69,15 +74,15 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 	{	
 		out.print(""); // Clear the file
 		out.print(FILE_MARKER + "\n");
-		out.print("NAME:" + name);
+		out.print("NAME:" + name + "\n");
 		if (masterFrame != null)
 		{
-			masterFrame.saveToFile(out);
 			for (int i = 0; i < animations.size(); i++)
 			{
 				animations.get(i).saveToFile(out);
 			}
 		}
+		out.write("END:" + FILE_MARKER + "\n");
 	}
 	
 	public SkeletonFrame getMasterFrame() {

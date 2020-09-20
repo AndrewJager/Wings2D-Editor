@@ -1,7 +1,5 @@
 package editor.objects.skeleton;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,8 +9,6 @@ import java.util.Scanner;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
-
-import editor.objects.project.ProjectEntity;
 
 public class SkeletonAnimation implements SkeletonNode{
 	public static final String FILE_MARKER = "ANIMATION";
@@ -31,6 +27,30 @@ public class SkeletonAnimation implements SkeletonNode{
 		this.skeleton = animParent;
 		frames = new ArrayList<SkeletonFrame>();
 		this.name = animName;
+	}
+	
+	public SkeletonAnimation(final Scanner in, final Skeleton animParent)
+	{
+		this.skeleton = animParent;
+		frames = new ArrayList<SkeletonFrame>();
+		
+		boolean keepReading = true;
+		while(in.hasNext() && keepReading)
+		{
+			String[] tokens = in.next().split(":");
+			if (tokens[0].equals("NAME"))
+			{
+				name = tokens[1];
+			}
+			else if (tokens[0].equals(SkeletonFrame.FILE_MARKER))
+			{
+				frames.add(new SkeletonFrame(in, this));
+			}
+			else if (tokens[0].equals("END"))
+			{
+				keepReading = false;
+			}
+		}
 	}
 
 	public String toString()
@@ -122,12 +142,12 @@ public class SkeletonAnimation implements SkeletonNode{
 	}
 	public void saveToFile(final PrintWriter out)
 	{
-		out.write(FILE_MARKER);
-		out.write("\n");
-		out.write("NAME:" + name);
+		out.write(FILE_MARKER + "\n");
+		out.write("NAME:" + name + "\n");
 		for (int i = 0; i < frames.size(); i++)
 		{
 			frames.get(i).saveToFile(out);
 		}
+		out.write("END:" + FILE_MARKER + "\n");
 	}
 }

@@ -68,7 +68,7 @@ public class ProjectSelect extends ProjectUIElement{
 				String skeletonName = JOptionPane.showInputDialog(panel, "Skeleton Name");
 				JFileChooser file = new JFileChooser();
 				file.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				file.setCurrentDirectory(new File(System.getProperty("user.dir")));
+				file.setCurrentDirectory(projectEdit.getProject().getDirectory());
 				int result = file.showOpenDialog(panel);
 				if (result == JFileChooser.APPROVE_OPTION)
 				{

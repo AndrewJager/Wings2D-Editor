@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -18,6 +19,8 @@ import editor.objects.Drawable;
 import framework.Utils;
 
 public class SkeletonBone implements SkeletonNode, Drawable{
+	public static final String FILE_MARKER = "BONE";
+	
 	private SkeletonFrame frame;
 	private String name;
 	private SkeletonBone parentSyncedBone;
@@ -44,13 +47,9 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		{
 			throw new IllegalArgumentException("A Bone with this name already exists in the Frame!");
 		}
+		setup(boneParent);
 		name = boneName;
-		frame = boneParent;
-		syncedBones = new ArrayList<SkeletonBone>();
-		childBones = new ArrayList<SkeletonBone>();
 		location = new Point2D.Double(START_POS.getX(), START_POS.getY());
-		handleColor = HANDLE_COLOR_UNSELECTED;
-		rotation = 0;
 	}
 	/** Create a copy of the bone passed in to this constructor **/
 	public SkeletonBone(SkeletonBone syncBone, SkeletonFrame boneParent)
@@ -59,14 +58,45 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		{
 			throw new IllegalArgumentException("A Bone with this name already exists in the Frame!");
 		}
+		setup(boneParent);
 		name = syncBone.toString();
-		frame = boneParent;
 		setParentSyncedBone(syncBone);
 		parentBoneName = syncBone.getParentBoneName();
+		location = new Point2D.Double(syncBone.getX(), syncBone.getY());
+		
+	}
+	
+	public SkeletonBone(final Scanner in, final SkeletonFrame boneParent)
+	{
+		setup(boneParent);
+		location = new Point2D.Double();
+		
+		boolean keepReading = true;
+		while(in.hasNext() && keepReading)
+		{
+			String[] tokens = in.next().split(":");
+			if (tokens[0].equals("NAME"))
+			{
+				name = tokens[1];
+			}
+			if (tokens[0].equals("POSITION"))
+			{
+				location.setLocation(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
+			}
+			else if (tokens[0].equals("END"))
+			{
+				keepReading = false;
+			}
+		}
+	}
+	
+	private void setup(final SkeletonFrame boneParent)
+	{
+		frame = boneParent;
 		syncedBones = new ArrayList<SkeletonBone>();
 		childBones = new ArrayList<SkeletonBone>();
-		location = new Point2D.Double(syncBone.getX(), syncBone.getY());
 		handleColor = HANDLE_COLOR_UNSELECTED;
+		rotation = 0;
 	}
 	
 	public String toString()
@@ -328,7 +358,11 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	}
 	public void saveToFile(final PrintWriter out)
 	{
+		out.write(FILE_MARKER + "\n");
+		out.print("NAME:" + name + "\n");
+		out.print("POSITION:" + location.getX() +":" + location.getY() + "\n");
 		
+		out.write("END:" + FILE_MARKER + "\n");
 	}
 	
 	// Drawable methods

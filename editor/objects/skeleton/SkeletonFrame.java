@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -33,6 +34,34 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 			throw new IllegalArgumentException("A Frame with this name already exists in this Animation!");
 		}
 		name = frameName;
+		setup(frameParent);
+	}
+	
+	public SkeletonFrame(final Scanner in, final SkeletonAnimation frameParent)
+	{
+		setup(frameParent);
+		
+		boolean keepReading = true;
+		while(in.hasNext() && keepReading)
+		{
+			String[] tokens = in.next().split(":");
+			if (tokens[0].equals("NAME"))
+			{
+				name = tokens[1];
+			}
+			else if (tokens[0].equals("BONE"))
+			{
+				bones.add(new SkeletonBone(in, this));
+			}
+			else if(tokens[0].equals("END"))
+			{
+				keepReading = false;
+			}
+		}
+	}
+
+	private void setup(final SkeletonAnimation frameParent)
+	{
 		animation = frameParent;
 		bones = new ArrayList<SkeletonBone>();
 		syncedFrames = new ArrayList<SkeletonFrame>();
@@ -273,7 +302,13 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	{
 		out.write(FILE_MARKER);
 		out.write("\n");
-		out.write("NAME:" + name);
+		writeFrameInfo(out);
+		out.write("END:" + FILE_MARKER + "\n");
+	}
+	
+	protected void writeFrameInfo(final PrintWriter out)
+	{
+		out.print("NAME:" + name + "\n");
 		for (int i = 0; i < bones.size(); i++)
 		{
 			bones.get(i).saveToFile(out);

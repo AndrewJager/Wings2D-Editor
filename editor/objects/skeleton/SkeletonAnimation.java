@@ -21,7 +21,7 @@ public class SkeletonAnimation implements SkeletonNode{
 	private List<SkeletonFrame> frames;
 	private String name;
 	
-	public SkeletonAnimation(String animName, Skeleton animParent)
+	public SkeletonAnimation(final String animName, final Skeleton animParent)
 	{
 		if (animParent.containsAnimWithName(animName))
 		{
@@ -31,19 +31,6 @@ public class SkeletonAnimation implements SkeletonNode{
 		this.skeleton = animParent;
 		frames = new ArrayList<SkeletonFrame>();
 		this.name = animName;
-	}
-	
-	public void saveToFile(File file)
-	{
-		try {
-			PrintWriter out = new PrintWriter(file);
-			out.write(FILE_MARKER);
-			out.write("\n");
-			out.write("NAME:" + name);
-			out.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public String toString()
@@ -129,8 +116,18 @@ public class SkeletonAnimation implements SkeletonNode{
 	{
 		return 1;
 	}
-	public void setName(String newName)
+	public void setName(final String newName)
 	{
 		name = newName;
+	}
+	public void saveToFile(final PrintWriter out)
+	{
+		out.write(FILE_MARKER);
+		out.write("\n");
+		out.write("NAME:" + name);
+		for (int i = 0; i < frames.size(); i++)
+		{
+			frames.get(i).saveToFile(out);
+		}
 	}
 }

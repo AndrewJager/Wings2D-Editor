@@ -9,7 +9,7 @@ import editor.objects.skeleton.Skeleton;
 /** Factory class to create Project Entities from files **/
 public class ProjectEntityFactory {
 	
-	public static ProjectEntity createFromFile(File directory) throws FileNotFoundException
+	public static ProjectEntity createFromFile(final File directory, final Project project) throws FileNotFoundException
 	{
 		ProjectEntity newItem = null;
 		Scanner in = new Scanner(directory);
@@ -20,7 +20,7 @@ public class ProjectEntityFactory {
 				String line = in.next();
 				if (line.equals(Skeleton.FILE_MARKER))
 				{
-					newItem = new Skeleton(in);
+					newItem = new Skeleton(in, project);
 				}
 			}
 		}

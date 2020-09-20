@@ -18,7 +18,7 @@ import editor.objects.project.Project;
 import editor.objects.skeleton.Skeleton;
 
 public class ProjectSelect extends ProjectUIElement{
-	private JButton chooseProject, newAnim;
+	private JButton chooseProject, newAnim, saveProject;
 	private JLabel projectName;
 
 	public ProjectSelect(final ProjectEdit edit, final Rectangle bounds) {
@@ -32,6 +32,8 @@ public class ProjectSelect extends ProjectUIElement{
 		panel.add(newAnim);
 		projectName = new JLabel("No project open");
 		panel.add(projectName);
+		saveProject = new JButton("Save");
+		panel.add(saveProject);
 	}
 
 	@Override
@@ -48,9 +50,9 @@ public class ProjectSelect extends ProjectUIElement{
 					try
 					{
 						Project proj = new Project(file.getSelectedFile());
-						project.setProject(proj);
-						project.refreshInfo();
-						projectName.setText("Name: " + project.getProject().getName());
+						projectEdit.setProject(proj);
+						projectEdit.refreshInfo();
+						projectName.setText("Name: " + projectEdit.getProject().getName());
 						newAnim.setEnabled(true);
 					}
 					catch (FileNotFoundException ex)
@@ -70,9 +72,9 @@ public class ProjectSelect extends ProjectUIElement{
 				int result = file.showOpenDialog(panel);
 				if (result == JFileChooser.APPROVE_OPTION)
 				{
-					Skeleton newSkeleton = new Skeleton(skeletonName);
-					project.getProject().getEntities().add(newSkeleton);
-					project.refreshInfo();
+					Skeleton newSkeleton = new Skeleton(skeletonName, projectEdit.getProject());
+					projectEdit.getProject().getEntities().add(newSkeleton);
+					projectEdit.refreshInfo();
 					File newFile = new File(file.getSelectedFile() + "/" + skeletonName +".txt");
 					try {
 						newFile.createNewFile();
@@ -80,6 +82,12 @@ public class ProjectSelect extends ProjectUIElement{
 	
 					}
 				}
+			}
+		});
+		saveProject.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				projectEdit.getProject().saveProject();
 			}
 		});
 	}

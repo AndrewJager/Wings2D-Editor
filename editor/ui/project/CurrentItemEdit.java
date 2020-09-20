@@ -47,7 +47,7 @@ public class CurrentItemEdit extends ProjectUIElement{
 				{
 					if (selectedItem instanceof Skeleton)
 					{
-						project.getEditor().showSkeleton((Skeleton)selectedItem);
+						projectEdit.getEditor().showSkeleton((Skeleton)selectedItem);
 					}
 				}
 			}

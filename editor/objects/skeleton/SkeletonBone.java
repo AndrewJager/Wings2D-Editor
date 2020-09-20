@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -314,7 +315,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		return 3;
 	}
 	@Override
-	public void setName(String newName) {
+	public void setName(final String newName) {
 		name = newName;
 		for(int i = 0; i < syncedBones.size(); i++)
 		{
@@ -325,10 +326,14 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 			childBones.get(i).setParentBoneName(newName);
 		}
 	}
+	public void saveToFile(final PrintWriter out)
+	{
+		
+	}
 	
 	// Drawable methods
 	@Override
-	public void draw(Graphics2D g2d, double scale) {
+	public void draw(final Graphics2D g2d, final double scale) {
 		final int handleSize = 10;
 		g2d.setColor(handleColor);
 		g2d.drawArc((int)((location.getX() * scale) - (handleSize / 2)), (int)((location.getY() * scale) - (handleSize / 2)),

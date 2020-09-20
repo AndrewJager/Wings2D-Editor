@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -16,13 +17,15 @@ import javax.swing.tree.TreeNode;
 import editor.objects.Drawable;
 
 public class SkeletonFrame implements SkeletonNode, Drawable{
+	public static final String FILE_MARKER = "FRAME";
+	
 	private SkeletonAnimation animation;
 	protected List<SkeletonBone> bones;
 	protected String name;
 	private SkeletonFrame parentSyncedFrame;
 	protected List<SkeletonFrame> syncedFrames;
 	
-	public SkeletonFrame(String frameName, SkeletonAnimation frameParent)
+	public SkeletonFrame(final String frameName, final SkeletonAnimation frameParent)
 	{
 		// frameParent will be null for Master Frame
 		if (frameParent != null && frameParent.containsFrameWithName(frameName))
@@ -34,13 +37,12 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		bones = new ArrayList<SkeletonBone>();
 		syncedFrames = new ArrayList<SkeletonFrame>();
 	}
-	
 
 	public String toString()
 	{
 		return name;
 	}
-	public boolean containsBoneWithName(String boneName)
+	public boolean containsBoneWithName(final String boneName)
 	{
 		boolean hasName = false;
 		for(int i = 0; i < bones.size(); i++)
@@ -263,9 +265,19 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	{
 		return 2;
 	}
-	public void setName(String newName)
+	public void setName(final String newName)
 	{
 		name = newName;
+	}
+	public void saveToFile(final PrintWriter out)
+	{
+		out.write(FILE_MARKER);
+		out.write("\n");
+		out.write("NAME:" + name);
+		for (int i = 0; i < bones.size(); i++)
+		{
+			bones.get(i).saveToFile(out);
+		}
 	}
 	
 	// Drawable methods

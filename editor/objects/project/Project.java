@@ -76,7 +76,7 @@ public class Project {
 			else
 			{
 				try {
-					ProjectEntity newEntity = ProjectEntityFactory.createFromFile(directory.listFiles()[i]);
+					ProjectEntity newEntity = ProjectEntityFactory.createFromFile(directory.listFiles()[i], this);
 					if (newEntity != null)
 					{
 						entities.add(newEntity);
@@ -93,6 +93,14 @@ public class Project {
 		if(!directory.isDirectory())
 		{
 			throw new FileNotFoundException(directory.toString() + " is not a directory!");
+		}
+	}
+	
+	public void saveProject()
+	{
+		for (int i = 0; i < entities.size(); i++)
+		{
+			entities.get(i).saveToFile();
 		}
 	}
 	

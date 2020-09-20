@@ -40,7 +40,7 @@ public class ProjectItems extends ProjectUIElement{
 		list.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				project.setSelectedEntity(list.getSelectedValue());
+				projectEdit.setSelectedEntity(list.getSelectedValue());
 			}
 		});
 	}

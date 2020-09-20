@@ -1,5 +1,7 @@
 package editor.objects.skeleton;
 
+import java.io.File;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -9,6 +11,7 @@ import java.util.Scanner;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
+import editor.objects.project.Project;
 import editor.objects.project.ProjectEntity;
 
 public class Skeleton implements SkeletonNode, ProjectEntity {
@@ -17,27 +20,62 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 	private List<SkeletonNode> animations;
 	private SkeletonMasterFrame masterFrame;
 	private String name;
+	private Project project;
 	
-	public Skeleton(String skeletonName)
+	public Skeleton(final String skeletonName, final Project p)
 	{
 		animations = new ArrayList<SkeletonNode>();
 		masterFrame = new SkeletonMasterFrame("Master");
 		animations.add(masterFrame);
 		this.name = skeletonName;
+		this.project = p;
 	}
 	
 	/**
 	 * Creates a new skeleton from the file. The file should have been checked first to ensure that it is valid.
 	 * @param file File to create from
 	 */
-	public Skeleton(Scanner in)
+	public Skeleton(final Scanner in, final Project p)
 	{
+		this.project = p;
+		animations = new ArrayList<SkeletonNode>();
+		
 		while(in.hasNext())
 		{
 			String[] tokens = in.next().split(":");
 			if (tokens[0].equals("NAME"))
 			{
 				name = tokens[1];
+			}
+			else if (tokens[0].equals("ANIMATION"))
+			{
+				
+			}
+		}
+	}
+	
+	public void saveToFile()
+	{	
+		try {
+			File saveFile = new File(project.getDirectory() + "/" + name + ".txt");
+			PrintWriter writer = new PrintWriter(saveFile);
+			saveToFile(writer);
+			writer.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void saveToFile(final PrintWriter out)
+	{	
+		out.print(""); // Clear the file
+		out.print(FILE_MARKER + "\n");
+		out.print("NAME:" + name);
+		if (masterFrame != null)
+		{
+			masterFrame.saveToFile(out);
+			for (int i = 0; i < animations.size(); i++)
+			{
+				animations.get(i).saveToFile(out);
 			}
 		}
 	}

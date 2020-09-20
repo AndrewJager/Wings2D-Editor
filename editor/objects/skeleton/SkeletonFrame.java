@@ -27,6 +27,8 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	
 	private SkeletonAnimation animation;
 	private SkeletonFrame parentSyncedFrame;
+	private UUID syncFrameID;
+	private UUID frameID; // Unique id to differentiate between frames with the same name
 	
 	public SkeletonFrame(final String frameName, final SkeletonAnimation frameParent)
 	{
@@ -59,6 +61,10 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 			else if (tokens[0].equals("ID"))
 			{
 				frameID = UUID.fromString(tokens[1]);
+			}
+			else if (tokens[0].equals("SYNCFRAME"))
+			{
+				syncFrameID = UUID.fromString(tokens[1]);
 			}
 			else if(tokens[0].equals("END"))
 			{
@@ -97,6 +103,7 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	}
 	public void setParentSyncedFrame(SkeletonFrame syncedFrame) {
 		this.parentSyncedFrame = syncedFrame;
+		this.syncFrameID = syncedFrame.getGUID();
 		this.parentSyncedFrame.getSyncedFrames().add(this);
 	}
 	public List<SkeletonFrame> getSyncedFrames() {
@@ -311,16 +318,30 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	}
 	public void saveToFile(final PrintWriter out)
 	{
-		out.write(FILE_MARKER);
-		out.write("\n");
+		out.write(FILE_MARKER + "\n");
 		writeFrameInfo(out);
 		out.write("END:" + FILE_MARKER + "\n");
+	}
+	public void resyncAll()
+	{
+		if (syncFrameID != null)
+		{
+			setParentSyncedFrame(animation.getSkeleton().getFrameByGUID(syncFrameID));
+		}
+		for (int i = 0; i < bones.size(); i++)
+		{
+			bones.get(i).resyncAll();
+		}
 	}
 	
 	protected void writeFrameInfo(final PrintWriter out)
 	{
 		out.print("NAME:" + name + "\n");
 		out.print("ID:" + frameID.toString() + "\n");
+		if (parentSyncedFrame != null)
+		{
+			out.print("SYNCFRAME:" + parentSyncedFrame.getGUID() + "\n");
+		}
 		for (int i = 0; i < bones.size(); i++)
 		{
 			bones.get(i).saveToFile(out);

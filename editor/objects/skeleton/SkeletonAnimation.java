@@ -70,6 +70,14 @@ public class SkeletonAnimation implements SkeletonNode{
 		}
 		return hasName;
 	}
+	public List<SkeletonFrame> getFrames()
+	{
+		return frames;
+	}
+	public Skeleton getSkeleton()
+	{
+		return skeleton;
+	}
 
 	// MutableTreeNode methods
 	@Override
@@ -149,5 +157,12 @@ public class SkeletonAnimation implements SkeletonNode{
 			frames.get(i).saveToFile(out);
 		}
 		out.write("END:" + FILE_MARKER + "\n");
+	}
+	public void resyncAll()
+	{
+		for (int i = 0; i < frames.size(); i++)
+		{
+			frames.get(i).resyncAll();
+		}
 	}
 }

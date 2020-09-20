@@ -364,6 +364,10 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		
 		out.write("END:" + FILE_MARKER + "\n");
 	}
+	public void resyncAll()
+	{
+		
+	}
 	
 	// Drawable methods
 	@Override

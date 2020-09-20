@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -57,6 +58,8 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 				animations.add(new SkeletonAnimation(in, this));
 			}
 		}
+		
+		resyncAll();
 	}
 	
 	public void saveToFile()
@@ -110,10 +113,39 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 		}
 		return hasName;
 	}
+	public SkeletonFrame getFrameByGUID(final UUID id)
+	{
+		if (masterFrame.getGUID().equals(id))
+		{
+			return masterFrame;
+		}
+		else
+		{
+			for (int i = 1; i < animations.size(); i++) // Start at one to skip master frame
+			{
+				SkeletonAnimation anim = (SkeletonAnimation)animations.get(i);
+				for (int j = 0; j < anim.getFrames().size(); j++)
+				{
+					if (anim.getFrames().get(j).getGUID().equals(id))
+					{
+						return anim.getFrames().get(j);
+					}
+				}
+			}
+		}
+		return null; // If no result found
+	}
 	
 	public int getTreeLevel()
 	{
 		return 0;
+	}
+	public void resyncAll()
+	{
+		for (int i = 0; i < animations.size(); i++)
+		{
+			animations.get(i).resyncAll();
+		}
 	}
 	@Override
 	public TreeNode getChildAt(int childIndex) {

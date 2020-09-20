@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -20,11 +21,12 @@ import editor.objects.Drawable;
 public class SkeletonFrame implements SkeletonNode, Drawable{
 	public static final String FILE_MARKER = "FRAME";
 	
-	private SkeletonAnimation animation;
 	protected List<SkeletonBone> bones;
 	protected String name;
-	private SkeletonFrame parentSyncedFrame;
 	protected List<SkeletonFrame> syncedFrames;
+	
+	private SkeletonAnimation animation;
+	private SkeletonFrame parentSyncedFrame;
 	
 	public SkeletonFrame(final String frameName, final SkeletonAnimation frameParent)
 	{
@@ -35,6 +37,7 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		}
 		name = frameName;
 		setup(frameParent);
+		frameID = UUID.randomUUID();
 	}
 	
 	public SkeletonFrame(final Scanner in, final SkeletonAnimation frameParent)
@@ -52,6 +55,10 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 			else if (tokens[0].equals("BONE"))
 			{
 				bones.add(new SkeletonBone(in, this));
+			}
+			else if (tokens[0].equals("ID"))
+			{
+				frameID = UUID.fromString(tokens[1]);
 			}
 			else if(tokens[0].equals("END"))
 			{
@@ -231,6 +238,10 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 			}
 		}
 	}
+	public UUID getGUID()
+	{
+		return frameID;
+	}
 	
 	// MutableTreeNode methods
 	@Override
@@ -309,6 +320,7 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	protected void writeFrameInfo(final PrintWriter out)
 	{
 		out.print("NAME:" + name + "\n");
+		out.print("ID:" + frameID.toString() + "\n");
 		for (int i = 0; i < bones.size(); i++)
 		{
 			bones.get(i).saveToFile(out);

@@ -3,14 +3,20 @@ package editor.objects.project;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 public class Project {
 	private File projectMap;
 	private List<ProjectEntity> entities;
+	private String name;
+	private String directory;
 	
 	public Project()
 	{
@@ -18,20 +24,47 @@ public class Project {
 	}
 	public Project(final File directory) throws FileNotFoundException
 	{
+		this();
 		validateDirectory(directory);
-		entities = new ArrayList<ProjectEntity>();
 		
-		File directoryFile = new File(directory + "/DIRECTORY.txt");
-		Scanner in = new Scanner(directoryFile);
-		try {
-			while (in.hasNext())
+		boolean loadProject = true;
+		File projectFile = new File(directory + "/PROJECTINFO.txt");
+		if (projectFile.exists())
+		{
+			Scanner projFile = new Scanner(projectFile);
+			if (projFile.hasNext())
 			{
-				entities.add(ProjectEntityFactory.createFromFile(new File(in.next())));
+				String[] tokens = projFile.next().split(":");
+				name = tokens[1];
+			}
+			projFile.close();
+		}
+		else
+		{
+			int result = JOptionPane.showConfirmDialog(null, "Folder does not have a PROJECTINFO.txt file. Would you like to create one?");
+			if (result == JOptionPane.OK_OPTION)
+			{
+				name = JOptionPane.showInputDialog("Enter the project name:", "Project");
+				File newProjFile = new File(directory + "/PROJECTINFO.txt");
+				try {
+					newProjFile.createNewFile();
+					PrintWriter writer = new PrintWriter(newProjFile);
+					writer.print("NAME:" + name + "\n"); 
+					writer.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+					loadProject = false;
+				}
+			}
+			else
+			{
+				loadProject = false;
 			}
 		}
-		finally
+		
+		if (loadProject)
 		{
-			in.close();
+
 		}
 	}
 	
@@ -40,22 +73,6 @@ public class Project {
 		if(!directory.isDirectory())
 		{
 			throw new FileNotFoundException(directory.toString() + " is not a directory!");
-		}
-		
-		if (directory.list().length == 0) // Setup new project in this directory
-		{
-			projectMap = new File("DIRECTORY.txt");
-			PrintWriter out = new PrintWriter(new FileOutputStream(directory + "/" + projectMap.getName()));
-			out.write("Test");
-			out.close();
-		}
-		else
-		{
-			File directoryFile = new File(directory + "/DIRECTORY.txt");
-			if(!directoryFile.exists())
-			{
-				throw new FileNotFoundException(directory.toString() + " contains files, but does not appear to be a project! (no DIRECTORY.txt found)");
-			}
 		}
 	}
 	

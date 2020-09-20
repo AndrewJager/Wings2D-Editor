@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import editor.objects.project.Project;
@@ -18,6 +19,7 @@ import editor.objects.skeleton.Skeleton;
 
 public class ProjectSelect extends ProjectUIElement{
 	private JButton chooseProject, newAnim;
+	private JLabel projectName;
 
 	public ProjectSelect(final ProjectEdit edit, final Rectangle bounds) {
 		super(edit, bounds);
@@ -28,6 +30,8 @@ public class ProjectSelect extends ProjectUIElement{
 		newAnim = new JButton("New Animation");
 		newAnim.setEnabled(false);
 		panel.add(newAnim);
+		projectName = new JLabel("No project open");
+		panel.add(projectName);
 	}
 
 	@Override
@@ -46,6 +50,7 @@ public class ProjectSelect extends ProjectUIElement{
 						Project proj = new Project(file.getSelectedFile());
 						project.setProject(proj);
 						project.refreshInfo();
+						projectName.setText("Name: " + project.getProject().getName());
 						newAnim.setEnabled(true);
 					}
 					catch (FileNotFoundException ex)

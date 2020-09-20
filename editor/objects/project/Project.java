@@ -52,8 +52,7 @@ public class Project {
 					writer.print("NAME:" + name + "\n"); 
 					writer.close();
 				} catch (IOException e) {
-					e.printStackTrace();
-					loadProject = false;
+					throw new FileNotFoundException("Project file creation failed \n" + e.getMessage());
 				}
 			}
 			else
@@ -79,5 +78,9 @@ public class Project {
 	public List<ProjectEntity> getEntities()
 	{
 		return entities;
+	}
+	public String getName()
+	{
+		return name;
 	}
 }

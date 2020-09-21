@@ -113,7 +113,7 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 		}
 		return hasName;
 	}
-	public SkeletonFrame getFrameByGUID(final UUID id)
+	public SkeletonFrame getFrameByID(final UUID id)
 	{
 		if (masterFrame.getGUID().equals(id))
 		{
@@ -129,6 +129,33 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 					if (anim.getFrames().get(j).getGUID().equals(id))
 					{
 						return anim.getFrames().get(j);
+					}
+				}
+			}
+		}
+		return null; // If no result found
+	}
+	
+	public SkeletonBone getBoneBYID(final UUID id)
+	{
+		for (int i = 0; i < masterFrame.getBones().size(); i++)
+		{
+			if (masterFrame.getBones().get(i).getID().equals(id))
+			{
+				return masterFrame.getBones().get(i);
+			}
+		}
+		for (int i = 1; i < animations.size(); i++) // Start at one to skip master frame
+		{
+			SkeletonAnimation anim = (SkeletonAnimation)animations.get(i);
+			for (int j = 0; j < anim.getFrames().size(); j++)
+			{
+				SkeletonFrame frame = anim.getFrames().get(j);
+				for (int k = 0; k < frame.getBones().size(); k++)
+				{
+					if (frame.getBones().get(k).getID().equals(id))
+					{
+						return frame.getBones().get(k);
 					}
 				}
 			}

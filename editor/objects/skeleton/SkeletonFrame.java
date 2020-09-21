@@ -249,6 +249,10 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	{
 		return frameID;
 	}
+	public SkeletonAnimation getAnimation()
+	{
+		return animation;
+	}
 	
 	// MutableTreeNode methods
 	@Override
@@ -326,7 +330,7 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	{
 		if (syncFrameID != null)
 		{
-			setParentSyncedFrame(animation.getSkeleton().getFrameByGUID(syncFrameID));
+			setParentSyncedFrame(animation.getSkeleton().getFrameByID(syncFrameID));
 		}
 		for (int i = 0; i < bones.size(); i++)
 		{

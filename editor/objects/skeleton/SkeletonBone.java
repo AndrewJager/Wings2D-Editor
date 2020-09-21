@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -25,6 +26,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	private String name;
 	private SkeletonBone parentSyncedBone;
 	private List<SkeletonBone> syncedBones;
+	private UUID syncBoneID;
 	private SkeletonBone parentBone;
 	/** Used to determine the parent bone when copying bones between frames **/
 	private String parentBoneName;
@@ -34,6 +36,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	private double rotation;
 	private boolean rotating = false;
 	private boolean showRotHandle = false;
+	private UUID boneID;
 	
 	private static final Color HANDLE_COLOR_UNSELECTED = Color.GREEN;
 	private static final Color HANDLE_COLOR_SELECTED = Color.RED;
@@ -49,7 +52,8 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		}
 		setup(boneParent);
 		name = boneName;
-		location = new Point2D.Double(START_POS.getX(), START_POS.getY());
+		boneID = UUID.randomUUID();
+		location = new Point2D.Double(START_POS.getX(), START_POS.getY());		
 	}
 	/** Create a copy of the bone passed in to this constructor **/
 	public SkeletonBone(SkeletonBone syncBone, SkeletonFrame boneParent)
@@ -60,6 +64,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		}
 		setup(boneParent);
 		name = syncBone.toString();
+		boneID = UUID.randomUUID();
 		setParentSyncedBone(syncBone);
 		parentBoneName = syncBone.getParentBoneName();
 		location = new Point2D.Double(syncBone.getX(), syncBone.getY());
@@ -79,7 +84,15 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 			{
 				name = tokens[1];
 			}
-			if (tokens[0].equals("POSITION"))
+			else if (tokens[0].equals("ID"))
+			{
+				boneID = UUID.fromString(tokens[1]);
+			}
+			else if (tokens[0].equals("SYNCBONEID"))
+			{
+				syncBoneID = UUID.fromString(tokens[1]);
+			}
+			else if (tokens[0].equals("POSITION"))
 			{
 				location.setLocation(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
 			}
@@ -111,8 +124,9 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	public SkeletonBone getParentSyncedBone() {
 		return parentSyncedBone;
 	}
-	public void setParentSyncedBone(SkeletonBone parentSyncedBone) {
-		this.parentSyncedBone = parentSyncedBone;
+	public void setParentSyncedBone(final SkeletonBone syncedBone) {
+		this.parentSyncedBone = syncedBone;
+		this.syncBoneID = syncedBone.getID();
 		this.parentSyncedBone.getSyncedBones().add(this);
 	}
 	public List<SkeletonBone> getSyncedBones()
@@ -128,7 +142,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		}
 		return names;
 	}
-	public void setParentBone(SkeletonBone bone)
+	public void setParentBone(final SkeletonBone bone)
 	{
 		if (bone != null)
 		{
@@ -291,6 +305,14 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 			childBones.get(i).rotateAround(point, amt);
 		}
 	}
+	public UUID getID()
+	{
+		return boneID;
+	}
+	public UUID getSyncBoneID()
+	{
+		return syncBoneID;
+	}
 
 	
 	// MutableTreeNode methods
@@ -360,13 +382,21 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	{
 		out.write(FILE_MARKER + "\n");
 		out.print("NAME:" + name + "\n");
+		out.print("ID:" + boneID.toString() + "\n");
+		if (parentSyncedBone != null)
+		{
+			out.print("SYNCBONEID:" + syncBoneID.toString() + "\n");
+		}
 		out.print("POSITION:" + location.getX() +":" + location.getY() + "\n");
 		
 		out.write("END:" + FILE_MARKER + "\n");
 	}
 	public void resyncAll()
 	{
-		
+		if (syncBoneID != null && (parentSyncedBone == null || (!parentSyncedBone.getID().equals(syncBoneID))))
+		{
+			parentSyncedBone = frame.getAnimation().getSkeleton().getBoneBYID(syncBoneID);
+		}
 	}
 	
 	// Drawable methods

@@ -88,6 +88,10 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 			{
 				boneID = UUID.fromString(tokens[1]);
 			}
+			else if (tokens[0].equals("PARENTBONE"))
+			{
+				parentBoneName = tokens[1];
+			}
 			else if (tokens[0].equals("SYNCBONEID"))
 			{
 				syncBoneID = UUID.fromString(tokens[1]);
@@ -383,6 +387,10 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		out.write(FILE_MARKER + "\n");
 		out.print("NAME:" + name + "\n");
 		out.print("ID:" + boneID.toString() + "\n");
+		if (parentBoneName != null)
+		{
+			out.print("PARENTBONE:" + parentBoneName + "\n");
+		}
 		if (parentSyncedBone != null)
 		{
 			out.print("SYNCBONEID:" + syncBoneID.toString() + "\n");
@@ -396,6 +404,10 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		if (syncBoneID != null && (parentSyncedBone == null || (!parentSyncedBone.getID().equals(syncBoneID))))
 		{
 			parentSyncedBone = frame.getAnimation().getSkeleton().getBoneBYID(syncBoneID);
+		}
+		if (parentBoneName != null)
+		{
+			setParentBone(parentBoneName);
 		}
 	}
 	

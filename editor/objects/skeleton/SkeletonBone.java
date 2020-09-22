@@ -197,7 +197,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	{
 		return childBones;
 	}
-	public void setLocation(double x, double y, double scale)
+	public void setLocation(double x, double y, double scale, boolean translateChildren)
 	{
 		double unscale = 1.0 / scale;
 		double unscaledX = x * unscale;
@@ -206,24 +206,27 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		double deltaX = unscaledX - location.getX();
 		double deltaY = unscaledY - location.getY();
 		location.setLocation(Utils.makeInRange(unscaledX, 0, (int)Double.MAX_VALUE), Utils.makeInRange(unscaledY, 0, (int)Double.MAX_VALUE));
-		for (int i = 0; i < childBones.size(); i++)
+		if (translateChildren)
 		{
-			childBones.get(i).translateBy(deltaX, deltaY);
+			for (int i = 0; i < childBones.size(); i++)
+			{
+				childBones.get(i).translateBy(deltaX, deltaY);
+			}
 		}
 	}
 	/** Calls setLocation with scale = 1 **/
-	public void setLocation(double x, double y)
+	public void setLocation(double x, double y, boolean translateChildren)
 	{
-		setLocation(x, y, 1);
+		setLocation(x, y, 1, translateChildren);
 	}
-	public void setLocation(Point loc, double scale)
+	public void setLocation(Point loc, double scale, boolean translateChildren)
 	{
-		this.setLocation(loc.getX(), loc.getY(), scale);
+		this.setLocation(loc.getX(), loc.getY(), scale, translateChildren);
 	}
 	/** Calls setLocation with scale = 1 **/
-	public void setLocation(Point loc)
+	public void setLocation(Point loc, boolean translateChildren)
 	{
-		setLocation(loc, 1);
+		setLocation(loc, 1, translateChildren);
 	}
 	public Point2D getLocation()
 	{

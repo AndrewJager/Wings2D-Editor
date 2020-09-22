@@ -128,7 +128,7 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 						}
 						else
 						{
-							dragBone.setLocation(e.getPoint(), skeleton.getEditor().getUIScale() * drawArea.getZoomScale());
+							dragBone.setLocation(e.getPoint(), skeleton.getEditor().getUIScale() * drawArea.getZoomScale(), true);
 						}
 						controls.updateBoneInfo();
 						drawArea.resizeToDrawItem(skeleton.getEditor().getUIScale());

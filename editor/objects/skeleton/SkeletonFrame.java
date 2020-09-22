@@ -227,7 +227,7 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 			SkeletonBone bone = bones.get(i);
 			if (bone.getParentSyncedBone() != null)
 			{
-				bone.setLocation(bone.getParentSyncedBone().getX(), bone.getParentSyncedBone().getY());
+				bone.setLocation(bone.getParentSyncedBone().getX(), bone.getParentSyncedBone().getY(), false);
 			}
 		}
 	}
@@ -240,7 +240,7 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 			{
 				if((bone.getX() == SkeletonBone.START_POS.getX()) && (bone.getY() == SkeletonBone.START_POS.getY()))
 				{
-					bone.setLocation(bone.getParentSyncedBone().getX(), bone.getParentSyncedBone().getY());
+					bone.setLocation(bone.getParentSyncedBone().getX(), bone.getParentSyncedBone().getY(), false);
 				}
 			}
 		}

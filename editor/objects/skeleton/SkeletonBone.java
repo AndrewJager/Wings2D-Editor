@@ -20,10 +20,11 @@ import editor.objects.Drawable;
 import framework.Utils;
 
 public class SkeletonBone implements SkeletonNode, Drawable{
-	public static final String FILE_MARKER = "BONE";
+	public static final String BONE_TOKEN = "BONE";
 	
 	private SkeletonFrame frame;
 	private String name;
+	private UUID boneID;
 	private SkeletonBone parentSyncedBone;
 	private List<SkeletonBone> syncedBones;
 	private UUID syncBoneID;
@@ -36,13 +37,15 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	private double rotation;
 	private boolean rotating = false;
 	private boolean showRotHandle = false;
-	private UUID boneID;
 	
 	private static final Color HANDLE_COLOR_UNSELECTED = Color.GREEN;
 	private static final Color HANDLE_COLOR_SELECTED = Color.RED;
 	private static final int ROT_HANDLE_OFFSET = 15;
 	
 	public static final Point2D START_POS = new Point2D.Double(10, 15);
+	public static final String PARENT_BONE_TOKEN = "PARENTBONE";
+	public static final String SYNC_BONE_ID_TOKEN = "SYNCBONEID";
+	public static final String POSITION_TOKEN = "POSITION";
 	
 	public SkeletonBone(String boneName, SkeletonFrame boneParent)
 	{
@@ -80,27 +83,27 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		while(in.hasNext() && keepReading)
 		{
 			String[] tokens = in.next().split(":");
-			if (tokens[0].equals("NAME"))
+			if (tokens[0].equals(NAME_TOKEN))
 			{
 				name = tokens[1];
 			}
-			else if (tokens[0].equals("ID"))
+			else if (tokens[0].equals(ID_TOKEN))
 			{
 				boneID = UUID.fromString(tokens[1]);
 			}
-			else if (tokens[0].equals("PARENTBONE"))
+			else if (tokens[0].equals(PARENT_BONE_TOKEN))
 			{
 				parentBoneName = tokens[1];
 			}
-			else if (tokens[0].equals("SYNCBONEID"))
+			else if (tokens[0].equals(SYNC_BONE_ID_TOKEN))
 			{
 				syncBoneID = UUID.fromString(tokens[1]);
 			}
-			else if (tokens[0].equals("POSITION"))
+			else if (tokens[0].equals(POSITION_TOKEN))
 			{
 				location.setLocation(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
 			}
-			else if (tokens[0].equals("END"))
+			else if (tokens[0].equals(END_TOKEN))
 			{
 				keepReading = false;
 			}
@@ -387,20 +390,20 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	}
 	public void saveToFile(final PrintWriter out)
 	{
-		out.write(FILE_MARKER + "\n");
-		out.print("NAME:" + name + "\n");
-		out.print("ID:" + boneID.toString() + "\n");
+		out.write(BONE_TOKEN + "\n");
+		out.print(NAME_TOKEN + ":" + name + "\n");
+		out.print(ID_TOKEN + ":" + boneID.toString() + "\n");
 		if (parentBoneName != null)
 		{
-			out.print("PARENTBONE:" + parentBoneName + "\n");
+			out.print(PARENT_BONE_TOKEN + ":" + parentBoneName + "\n");
 		}
 		if (parentSyncedBone != null)
 		{
-			out.print("SYNCBONEID:" + syncBoneID.toString() + "\n");
+			out.print(SYNC_BONE_ID_TOKEN + ":" + syncBoneID.toString() + "\n");
 		}
-		out.print("POSITION:" + location.getX() +":" + location.getY() + "\n");
+		out.print(POSITION_TOKEN + ":" + location.getX() +":" + location.getY() + "\n");
 		
-		out.write("END:" + FILE_MARKER + "\n");
+		out.write(END_TOKEN + ":" + BONE_TOKEN + "\n");
 	}
 	public void resyncAll()
 	{

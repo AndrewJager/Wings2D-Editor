@@ -11,7 +11,7 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 public class SkeletonAnimation implements SkeletonNode{
-	public static final String FILE_MARKER = "ANIMATION";
+	public static final String ANIM_TOKEN = "ANIMATION";
 	
 	private Skeleton skeleton;
 	private List<SkeletonFrame> frames;
@@ -38,15 +38,15 @@ public class SkeletonAnimation implements SkeletonNode{
 		while(in.hasNext() && keepReading)
 		{
 			String[] tokens = in.next().split(":");
-			if (tokens[0].equals("NAME"))
+			if (tokens[0].equals(NAME_TOKEN))
 			{
 				name = tokens[1];
 			}
-			else if (tokens[0].equals(SkeletonFrame.FILE_MARKER))
+			else if (tokens[0].equals(SkeletonFrame.FRAME_TOKEN))
 			{
 				frames.add(new SkeletonFrame(in, this));
 			}
-			else if (tokens[0].equals("END"))
+			else if (tokens[0].equals(END_TOKEN))
 			{
 				keepReading = false;
 			}
@@ -150,13 +150,13 @@ public class SkeletonAnimation implements SkeletonNode{
 	}
 	public void saveToFile(final PrintWriter out)
 	{
-		out.write(FILE_MARKER + "\n");
-		out.write("NAME:" + name + "\n");
+		out.write(ANIM_TOKEN + "\n");
+		out.write(NAME_TOKEN + ":" + name + "\n");
 		for (int i = 0; i < frames.size(); i++)
 		{
 			frames.get(i).saveToFile(out);
 		}
-		out.write("END:" + FILE_MARKER + "\n");
+		out.write(END_TOKEN + ":" + ANIM_TOKEN + "\n");
 	}
 	public void resyncAll()
 	{

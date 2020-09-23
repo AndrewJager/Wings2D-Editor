@@ -19,7 +19,7 @@ import javax.swing.tree.TreeNode;
 import editor.objects.Drawable;
 
 public class SkeletonFrame implements SkeletonNode, Drawable{
-	public static final String FILE_MARKER = "FRAME";
+	public static final String FRAME_TOKEN = "FRAME";
 	
 	protected List<SkeletonBone> bones;
 	protected String name;
@@ -29,6 +29,8 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	private SkeletonFrame parentSyncedFrame;
 	private UUID syncFrameID;
 	private UUID frameID; // Unique id to differentiate between frames with the same name
+	
+	public static final String SYNC_FRAME_TOKEN = "SYNCFRAME";
 	
 	public SkeletonFrame(final String frameName, final SkeletonAnimation frameParent)
 	{
@@ -50,23 +52,23 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		while(in.hasNext() && keepReading)
 		{
 			String[] tokens = in.next().split(":");
-			if (tokens[0].equals("NAME"))
+			if (tokens[0].equals(NAME_TOKEN))
 			{
 				name = tokens[1];
 			}
-			else if (tokens[0].equals("BONE"))
+			else if (tokens[0].equals(SkeletonBone.BONE_TOKEN))
 			{
 				bones.add(new SkeletonBone(in, this));
 			}
-			else if (tokens[0].equals("ID"))
+			else if (tokens[0].equals(ID_TOKEN))
 			{
 				frameID = UUID.fromString(tokens[1]);
 			}
-			else if (tokens[0].equals("SYNCFRAME"))
+			else if (tokens[0].equals(SYNC_FRAME_TOKEN))
 			{
 				syncFrameID = UUID.fromString(tokens[1]);
 			}
-			else if(tokens[0].equals("END"))
+			else if(tokens[0].equals(END_TOKEN))
 			{
 				keepReading = false;
 			}
@@ -322,9 +324,9 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	}
 	public void saveToFile(final PrintWriter out)
 	{
-		out.write(FILE_MARKER + "\n");
+		out.write(FRAME_TOKEN + "\n");
 		writeFrameInfo(out);
-		out.write("END:" + FILE_MARKER + "\n");
+		out.write(END_TOKEN + ":" + FRAME_TOKEN + "\n");
 	}
 	public void resyncAll()
 	{
@@ -340,11 +342,11 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	
 	protected void writeFrameInfo(final PrintWriter out)
 	{
-		out.print("NAME:" + name + "\n");
-		out.print("ID:" + frameID.toString() + "\n");
+		out.print(NAME_TOKEN  + ":" + name + "\n");
+		out.print(ID_TOKEN + ":" + frameID.toString() + "\n");
 		if (parentSyncedFrame != null)
 		{
-			out.print("SYNCFRAME:" + parentSyncedFrame.getGUID() + "\n");
+			out.print(SYNC_FRAME_TOKEN + ":" + parentSyncedFrame.getGUID() + "\n");
 		}
 		for (int i = 0; i < bones.size(); i++)
 		{

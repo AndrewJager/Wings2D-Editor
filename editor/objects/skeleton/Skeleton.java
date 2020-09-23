@@ -44,7 +44,7 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 		while(in.hasNext())
 		{
 			String[] tokens = in.next().split(":");
-			if (tokens[0].equals("NAME"))
+			if (tokens[0].equals(NAME_TOKEN))
 			{
 				name = tokens[1];
 			}
@@ -53,7 +53,7 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 				masterFrame = new SkeletonMasterFrame(in);
 				animations.add(0, masterFrame);
 			}
-			else if (tokens[0].equals(SkeletonAnimation.FILE_MARKER))
+			else if (tokens[0].equals(SkeletonAnimation.ANIM_TOKEN))
 			{
 				animations.add(new SkeletonAnimation(in, this));
 			}
@@ -61,40 +61,12 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 		
 		resyncAll();
 	}
-	
-	public void saveToFile()
-	{	
-		try {
-			File saveFile = new File(project.getDirectory() + "/" + name + ".txt");
-			PrintWriter writer = new PrintWriter(saveFile);
-			saveToFile(writer);
-			writer.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	public void saveToFile(final PrintWriter out)
-	{	
-		out.print(""); // Clear the file
-		out.print(FILE_MARKER + "\n");
-		out.print("NAME:" + name + "\n");
-		if (masterFrame != null)
-		{
-			for (int i = 0; i < animations.size(); i++)
-			{
-				animations.get(i).saveToFile(out);
-			}
-		}
-		out.write("END:" + FILE_MARKER + "\n");
-	}
+
 	
 	public SkeletonFrame getMasterFrame() {
 		return masterFrame;
 	}
-	public void setName(String newName)
-	{
-		name = newName;
-	}
+
 	public String toString()
 	{
 		return name;
@@ -163,45 +135,7 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 		return null; // If no result found
 	}
 	
-	public int getTreeLevel()
-	{
-		return 0;
-	}
-	public void resyncAll()
-	{
-		for (int i = 0; i < animations.size(); i++)
-		{
-			animations.get(i).resyncAll();
-		}
-	}
-	@Override
-	public TreeNode getChildAt(int childIndex) {
-		return animations.get(childIndex);
-	}
-	@Override
-	public int getChildCount() {
-		return animations.size();
-	}
-	@Override
-	public TreeNode getParent() {
-		return null;
-	}
-	@Override
-	public int getIndex(TreeNode node) {
-		return animations.indexOf(node);
-	}
-	@Override
-	public boolean getAllowsChildren() {
-		return true;
-	}
-	@Override
-	public boolean isLeaf() {
-		return (animations.size() == 0);
-	}
-	@Override
-	public Enumeration<? extends TreeNode> children() {
-		return Collections.enumeration(animations);
-	}
+	// MutableTreeNode methods
 	@Override
 	public void insert(MutableTreeNode child, int index) {
 		animations.add(index, (SkeletonAnimation)child);
@@ -220,4 +154,74 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 	public void removeFromParent() {}
 	@Override
 	public void setParent(MutableTreeNode newParent) {}
+	@Override
+	public TreeNode getChildAt(int childIndex) {
+		return animations.get(childIndex);
+	}
+	@Override
+	public int getChildCount() {
+		return animations.size();
+	}
+	@Override
+	public TreeNode getParent() {return null;}
+	@Override
+	public int getIndex(TreeNode node) {
+		return animations.indexOf(node);
+	}
+	@Override
+	public boolean getAllowsChildren() {
+		return true;
+	}
+	@Override
+	public boolean isLeaf() {
+		return (animations.size() == 0);
+	}
+	@Override
+	public Enumeration<? extends TreeNode> children() {
+		return Collections.enumeration(animations);
+	}
+
+	// SkeletonNode methods
+	public int getTreeLevel()
+	{
+		return 0;
+	}
+	public void setName(String newName)
+	{
+		name = newName;
+	}
+	public void saveToFile(final PrintWriter out)
+	{	
+		out.print(""); // Clear the file
+		out.print(FILE_MARKER + "\n");
+		out.print(NAME_TOKEN + ":" + name + "\n");
+		if (masterFrame != null)
+		{
+			for (int i = 0; i < animations.size(); i++)
+			{
+				animations.get(i).saveToFile(out);
+			}
+		}
+		out.write(END_TOKEN + ":" + FILE_MARKER + "\n");
+	}
+	public void resyncAll()
+	{
+		for (int i = 0; i < animations.size(); i++)
+		{
+			animations.get(i).resyncAll();
+		}
+	}
+	
+	// ProjectEntity methods
+	public void saveToFile()
+	{	
+		try {
+			File saveFile = new File(project.getDirectory() + "/" + name + ".txt");
+			PrintWriter writer = new PrintWriter(saveFile);
+			saveToFile(writer);
+			writer.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

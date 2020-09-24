@@ -8,6 +8,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Scanner;
@@ -37,6 +38,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	private double rotation;
 	private boolean rotating = false;
 	private boolean showRotHandle = false;
+	private List<Sprite> sprites;
 	
 	private static final Color HANDLE_COLOR_UNSELECTED = Color.GREEN;
 	private static final Color HANDLE_COLOR_SELECTED = Color.RED;
@@ -115,6 +117,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		frame = boneParent;
 		syncedBones = new ArrayList<SkeletonBone>();
 		childBones = new ArrayList<SkeletonBone>();
+		sprites = new ArrayList<Sprite>();
 		handleColor = HANDLE_COLOR_UNSELECTED;
 		rotation = 0;
 	}
@@ -344,11 +347,11 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	}
 	@Override
 	public TreeNode getChildAt(int childIndex) {
-		return null;
+		return sprites.get(childIndex);
 	}
 	@Override
 	public int getChildCount() {
-		return 0;
+		return sprites.size();
 	}
 	@Override
 	public TreeNode getParent() {
@@ -356,19 +359,19 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	}
 	@Override
 	public int getIndex(TreeNode node) {
-		return -1;
+		return sprites.indexOf(node);
 	}
 	@Override
 	public boolean getAllowsChildren() {
-		return false;
-	}
-	@Override
-	public boolean isLeaf() {
 		return true;
 	}
 	@Override
+	public boolean isLeaf() {
+		return (sprites.size() == 0);
+	}
+	@Override
 	public Enumeration<? extends TreeNode> children() {
-		return null;
+		return Collections.enumeration(sprites);
 	}
 	
 	// SkeletonNode methods

@@ -72,7 +72,7 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 		return name;
 	}
 	
-	public boolean containsAnimWithName(String animName)
+	public boolean containsAnimWithName(final String animName)
 	{
 		boolean hasName = false;
 		for(int i = 1; i < animations.size(); i++) // Start at one to avoid checking the Master Frame
@@ -137,25 +137,25 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 	
 	// MutableTreeNode methods
 	@Override
-	public void insert(MutableTreeNode child, int index) {
+	public void insert(final MutableTreeNode child, final int index) {
 		animations.add(index, (SkeletonAnimation)child);
 	}
 	@Override
-	public void remove(int index) {
+	public void remove(final int index) {
 		animations.remove(index);
 	}
 	@Override
-	public void remove(MutableTreeNode node) {
+	public void remove(final MutableTreeNode node) {
 		animations.remove((SkeletonAnimation)node);
 	}
 	@Override
-	public void setUserObject(Object object) {}
+	public void setUserObject(final Object object) {}
 	@Override
 	public void removeFromParent() {}
 	@Override
-	public void setParent(MutableTreeNode newParent) {}
+	public void setParent(final MutableTreeNode newParent) {}
 	@Override
-	public TreeNode getChildAt(int childIndex) {
+	public TreeNode getChildAt(final int childIndex) {
 		return animations.get(childIndex);
 	}
 	@Override
@@ -165,7 +165,7 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 	@Override
 	public TreeNode getParent() {return null;}
 	@Override
-	public int getIndex(TreeNode node) {
+	public int getIndex(final TreeNode node) {
 		return animations.indexOf(node);
 	}
 	@Override
@@ -182,7 +182,7 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 	}
 
 	// SkeletonNode methods
-	public void setName(String newName)
+	public void setName(final String newName)
 	{
 		name = newName;
 	}

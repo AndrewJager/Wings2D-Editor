@@ -49,7 +49,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	public static final String SYNC_BONE_ID_TOKEN = "SYNCBONEID";
 	public static final String POSITION_TOKEN = "POSITION";
 	
-	public SkeletonBone(String boneName, SkeletonFrame boneParent)
+	public SkeletonBone(final String boneName, final SkeletonFrame boneParent)
 	{
 		if (boneParent.containsBoneWithName(boneName))
 		{
@@ -61,7 +61,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		location = new Point2D.Double(START_POS.getX(), START_POS.getY());		
 	}
 	/** Create a copy of the bone passed in to this constructor **/
-	public SkeletonBone(SkeletonBone syncBone, SkeletonFrame boneParent)
+	public SkeletonBone(final SkeletonBone syncBone, final SkeletonFrame boneParent)
 	{
 		if (boneParent.containsBoneWithName(syncBone.toString()))
 		{
@@ -183,7 +183,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 			}
 		}
 	}
-	public void setParentBone(String boneName)
+	public void setParentBone(final String boneName)
 	{
 		setParentBone(frame.getBoneWithName(boneName));
 	}
@@ -195,7 +195,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	{
 		return parentBoneName;
 	}
-	public void setParentBoneName(String newName) 
+	public void setParentBoneName(final String newName) 
 	{
 		parentBoneName = newName;
 	}
@@ -203,7 +203,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	{
 		return childBones;
 	}
-	public void setLocation(double x, double y, double scale, boolean translateChildren)
+	public void setLocation(final double x, final double y, final double scale, final boolean translateChildren)
 	{
 		double unscale = 1.0 / scale;
 		double unscaledX = x * unscale;
@@ -221,16 +221,16 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		}
 	}
 	/** Calls setLocation with scale = 1 **/
-	public void setLocation(double x, double y, boolean translateChildren)
+	public void setLocation(final double x, final double y, final boolean translateChildren)
 	{
 		setLocation(x, y, 1, translateChildren);
 	}
-	public void setLocation(Point loc, double scale, boolean translateChildren)
+	public void setLocation(final Point loc, final double scale, final boolean translateChildren)
 	{
 		this.setLocation(loc.getX(), loc.getY(), scale, translateChildren);
 	}
 	/** Calls setLocation with scale = 1 **/
-	public void setLocation(Point loc, boolean translateChildren)
+	public void setLocation(final Point loc, final boolean translateChildren)
 	{
 		setLocation(loc, 1, translateChildren);
 	}
@@ -246,7 +246,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	{
 		return location.getY();
 	}
-	public void translateBy(double x, double y)
+	public void translateBy(final double x, final double y)
 	{
 		double newX = getX() + x;
 		double newY = getY() + y;
@@ -258,7 +258,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 			childBones.get(i).translateBy(x, y);
 		}
 	}
-	public void setIsSelected(boolean selected)
+	public void setIsSelected(final boolean selected)
 	{
 		if (selected)
 		{
@@ -269,7 +269,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 			handleColor = HANDLE_COLOR_UNSELECTED;
 		}
 	}
-	public void setRotating(boolean draw)
+	public void setRotating(final boolean draw)
 	{
 		rotating = draw;
 	}
@@ -277,7 +277,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	{
 		return rotating;
 	}
-	public void setShowRotHandle(boolean show)
+	public void setShowRotHandle(final boolean show)
 	{
 		showRotHandle = show;
 	}
@@ -289,7 +289,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	{
 		return rotation;
 	}
-	public Point2D getRotHandle(double scale)
+	public Point2D getRotHandle(final double scale)
 	{
 		double scaleBack = 1.0 / scale;
 		Point2D rotHandleLoc = new Point2D.Double(location.getX(), location.getY() - (ROT_HANDLE_OFFSET * scaleBack));
@@ -298,7 +298,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		transform.transform(rotHandleLoc, rotHandleLoc);
 		return rotHandleLoc;
 	}
-	public void rotateByHandle(Point loc, double scale)
+	public void rotateByHandle(final Point loc, final double scale)
 	{
 		double oldRotation = rotation;
 		rotation = Math.toDegrees(Math.atan2((location.getY() * scale) - loc.getY(), (location.getX() * scale) - loc.getX()));
@@ -308,7 +308,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 			childBones.get(i).rotateAround(location, delta);
 		}
 	}
-	public void rotateAround(Point2D point, double amt)
+	public void rotateAround(final Point2D point, final double amt)
 	{
 		AffineTransform transform = new AffineTransform();
 		transform.setToRotation(Math.toRadians(amt), point.getX(), point.getY());
@@ -330,23 +330,23 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	
 	// MutableTreeNode methods
 	@Override
-	public void insert(MutableTreeNode child, int index) {}
+	public void insert(final MutableTreeNode child, final int index) {}
 	@Override
-	public void remove(int index) {}
+	public void remove(final int index) {}
 	@Override
-	public void remove(MutableTreeNode node) {}
+	public void remove(final MutableTreeNode node) {}
 	@Override
-	public void setUserObject(Object object) {}
+	public void setUserObject(final Object object) {}
 	@Override
 	public void removeFromParent() {
 		frame.remove(this);
 	}
 	@Override
-	public void setParent(MutableTreeNode newParent) {
+	public void setParent(final MutableTreeNode newParent) {
 		frame = (SkeletonFrame)newParent;
 	}
 	@Override
-	public TreeNode getChildAt(int childIndex) {
+	public TreeNode getChildAt(final int childIndex) {
 		return sprites.get(childIndex);
 	}
 	@Override
@@ -358,7 +358,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		return frame;
 	}
 	@Override
-	public int getIndex(TreeNode node) {
+	public int getIndex(final TreeNode node) {
 		return sprites.indexOf(node);
 	}
 	@Override

@@ -57,7 +57,7 @@ public class SkeletonAnimation implements SkeletonNode{
 	{
 		return name;
 	}
-	public boolean containsFrameWithName(String frameName)
+	public boolean containsFrameWithName(final String frameName)
 	{
 		boolean hasName = false;
 		for(int i = 0; i < frames.size(); i++)
@@ -81,7 +81,7 @@ public class SkeletonAnimation implements SkeletonNode{
 
 	// MutableTreeNode methods
 	@Override
-	public void insert(MutableTreeNode child, int index) {
+	public void insert(final MutableTreeNode child, final int index) {
 		SkeletonFrame newFrame = (SkeletonFrame)child;
 		SkeletonFrame syncFrame = newFrame.getParentSyncedFrame();
 		frames.add(index, newFrame);
@@ -93,25 +93,25 @@ public class SkeletonAnimation implements SkeletonNode{
 		newFrame.syncBonesToParents();
 	}
 	@Override
-	public void remove(int index) {
+	public void remove(final int index) {
 		frames.remove(index);
 	}
 	@Override
-	public void remove(MutableTreeNode node) {
+	public void remove(final MutableTreeNode node) {
 		frames.remove((SkeletonFrame)node);
 	}
 	@Override
-	public void setUserObject(Object object) {}
+	public void setUserObject(final Object object) {}
 	@Override
 	public void removeFromParent() {
 		skeleton.remove(this);
 	}
 	@Override
-	public void setParent(MutableTreeNode newParent) {
+	public void setParent(final MutableTreeNode newParent) {
 		skeleton = (Skeleton)newParent;
 	}
 	@Override
-	public TreeNode getChildAt(int childIndex) {
+	public TreeNode getChildAt(final int childIndex) {
 		return frames.get(childIndex);
 	}
 	@Override
@@ -123,7 +123,7 @@ public class SkeletonAnimation implements SkeletonNode{
 		return skeleton;
 	}
 	@Override
-	public int getIndex(TreeNode node) {
+	public int getIndex(final TreeNode node) {
 		return frames.indexOf(node);
 	}
 	@Override

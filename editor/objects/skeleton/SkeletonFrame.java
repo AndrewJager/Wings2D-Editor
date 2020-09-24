@@ -127,7 +127,7 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	/**
 	 * Returns null if no bone is found.
 	 */
-	public SkeletonBone getBoneWithName(String boneName)
+	public SkeletonBone getBoneWithName(final String boneName)
 	{
 		SkeletonBone bone = null;
 		for(int i = 0; i < bones.size(); i++)
@@ -142,7 +142,7 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	/**
 	 * Returns an ArrayList of all bones in the frame except the argument Bone
 	 */
-	public SkeletonBone[] getArrayOfBonesExcept(SkeletonBone notThis)
+	public SkeletonBone[] getArrayOfBonesExcept(final SkeletonBone notThis)
 	{
 		SkeletonBone[] allButOne = new SkeletonBone[bones.size()];
 		int lastAdded = 1;
@@ -168,7 +168,7 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	/**
 	 * Gets the Bone at the location (with a margin of error). Returns null if no Bone is close enough
 	 */
-	public SkeletonBone getBoneAtPosition(Point loc, double scale)
+	public SkeletonBone getBoneAtPosition(final Point loc, final double scale)
 	{
 		final double minDistance = 10;
 		SkeletonBone selectedBone = null;
@@ -186,7 +186,7 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		
 		return selectedBone;
 	}
-	public SkeletonBone getHandleBone(Point loc, double scale)
+	public SkeletonBone getHandleBone(final Point loc, final double scale)
 	{
 		final double minDistance = 10;
 		SkeletonBone selectedBone = null;
@@ -206,7 +206,7 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		return selectedBone;
 	}
 	
-	public void setSelectedBone(SkeletonBone bone)
+	public void setSelectedBone(final SkeletonBone bone)
 	{
 		for (int i = 0; i < bones.size(); i++)
 		{
@@ -258,7 +258,7 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	
 	// MutableTreeNode methods
 	@Override
-	public void insert(MutableTreeNode child, int index) {
+	public void insert(final MutableTreeNode child, final int index) {
 		SkeletonBone newBone = (SkeletonBone)child;
 		bones.add(index, newBone);
 		for(int i = 0; i < syncedFrames.size(); i++)
@@ -267,25 +267,25 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		}
 	}
 	@Override
-	public void remove(int index) {
+	public void remove(final int index) {
 		bones.remove(index);
 	}
 	@Override
-	public void remove(MutableTreeNode node) {
+	public void remove(final MutableTreeNode node) {
 		bones.remove(node);
 	}
 	@Override
-	public void setUserObject(Object object) {}
+	public void setUserObject(final Object object) {}
 	@Override
 	public void removeFromParent() {
 		animation.remove(this);
 	}
 	@Override
-	public void setParent(MutableTreeNode newParent) {
+	public void setParent(final MutableTreeNode newParent) {
 		animation = (SkeletonAnimation)newParent;
 	}
 	@Override
-	public TreeNode getChildAt(int childIndex) {
+	public TreeNode getChildAt(final int childIndex) {
 		return bones.get(childIndex);
 	}
 	@Override
@@ -297,7 +297,7 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		return animation;
 	}
 	@Override
-	public int getIndex(TreeNode node) {
+	public int getIndex(final TreeNode node) {
 		return bones.indexOf(node);
 	}
 	@Override
@@ -352,14 +352,14 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	
 	// Drawable methods
 	@Override
-	public void draw(Graphics2D g2d, double scale) {
+	public void draw(final Graphics2D g2d, final double scale) {
 		for (int i = 0; i < bones.size(); i++)
 		{
 			bones.get(i).draw(g2d, scale);
 		}
 	}
 	@Override
-	public Dimension getDrawSize(double scale) {
+	public Dimension getDrawSize(final double scale) {
 		Rectangle2D bounds = new Rectangle2D.Double(0, 0, 0, 0);
 		for(int i = 0; i < bones.size(); i++)
 		{

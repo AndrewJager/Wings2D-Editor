@@ -314,10 +314,6 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	}
 	
 	// SkeletonNode methods
-	public int getTreeLevel()
-	{
-		return 2;
-	}
 	public void setName(final String newName)
 	{
 		name = newName;

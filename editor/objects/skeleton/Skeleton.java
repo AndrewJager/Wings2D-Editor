@@ -182,10 +182,6 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 	}
 
 	// SkeletonNode methods
-	public int getTreeLevel()
-	{
-		return 0;
-	}
 	public void setName(String newName)
 	{
 		name = newName;

@@ -140,10 +140,6 @@ public class SkeletonAnimation implements SkeletonNode{
 	}
 	
 	// SkeletonNode methods
-	public int getTreeLevel()
-	{
-		return 1;
-	}
 	public void setName(final String newName)
 	{
 		name = newName;

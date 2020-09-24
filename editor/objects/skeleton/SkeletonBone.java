@@ -373,10 +373,6 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	
 	// SkeletonNode methods
 	@Override
-	public int getTreeLevel() {
-		return 3;
-	}
-	@Override
 	public void setName(final String newName) {
 		name = newName;
 		for(int i = 0; i < syncedBones.size(); i++)

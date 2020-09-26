@@ -35,6 +35,23 @@ public class ProjectSelect extends ProjectUIElement{
 		saveProject = new JButton("Save");
 		panel.add(saveProject);
 	}
+	
+	public void setProject(final File projectPath)
+	{
+		try
+		{
+			Project proj = new Project(projectPath);
+			projectEdit.getEditor().getSettings().setProjectDirectory(projectPath);
+			projectEdit.setProject(proj);
+			projectEdit.refreshInfo();
+			projectName.setText("Name: " + projectEdit.getProject().getName());
+			newAnim.setEnabled(true);
+		}
+		catch (FileNotFoundException ex)
+		{
+			JOptionPane.showMessageDialog(panel, ex.getMessage());
+		}
+	}
 
 	@Override
 	public void createEvents() {
@@ -47,18 +64,7 @@ public class ProjectSelect extends ProjectUIElement{
 				int result = file.showOpenDialog(panel);
 				if (result == JFileChooser.APPROVE_OPTION)
 				{
-					try
-					{
-						Project proj = new Project(file.getSelectedFile());
-						projectEdit.setProject(proj);
-						projectEdit.refreshInfo();
-						projectName.setText("Name: " + projectEdit.getProject().getName());
-						newAnim.setEnabled(true);
-					}
-					catch (FileNotFoundException ex)
-					{
-						JOptionPane.showMessageDialog(panel, ex.getMessage());
-					}
+					setProject(file.getSelectedFile());
 				}
 			}
 		});

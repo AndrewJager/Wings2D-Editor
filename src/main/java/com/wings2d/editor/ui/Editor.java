@@ -17,6 +17,7 @@ import javax.swing.UIManager;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import com.wings2d.editor.objects.EditOptions;
+import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.EditorSpriteSheet;
 import com.wings2d.editor.objects.skeleton.Skeleton;
 import com.wings2d.editor.ui.project.ProjectEdit;
@@ -33,6 +34,7 @@ public class Editor {
 	private Level demoLevel;
 	private EditOptions options;
 	private List<UIPanel> panels;
+	private EditorSettings settings;
 	
 	private JFrame frame;
 	private JPanel mainPanel;
@@ -83,10 +85,17 @@ public class Editor {
 		}
 		
 		animTimer = new AnimTimer(this);
+		
+		settings = new EditorSettings();
+		if (settings.getProjectDirectory() != null)
+		{
+			projectEdit.getProjectSelect().setProject(settings.getProjectDirectory());
+		}
 
 	    frame.addWindowListener(new WindowAdapter(){
 	    	public void windowClosing(WindowEvent e){
 	    		animTimer.getTimer().stop();
+	    		settings.saveToFile();
 	    		System.exit(0);
 	    	}
 	    });	
@@ -191,5 +200,9 @@ public class Editor {
 	public List<UIPanel> getPanels()
 	{
 		return panels;
+	}
+	public EditorSettings getSettings()
+	{
+		return settings;
 	}
 }

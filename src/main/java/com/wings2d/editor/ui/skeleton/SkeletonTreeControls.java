@@ -26,9 +26,10 @@ import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.objects.skeleton.SkeletonPiece;
+import com.wings2d.editor.objects.skeleton.Sprite;
 
 public class SkeletonTreeControls extends SkeletonUIElement{
-	private JButton addAnim, delete, addFrame, rename, addBone;
+	private JButton addAnim, delete, addFrame, rename, addBone, addSprite;
 	private JLabel xPos, yPos, rotation;
 	private JTree tree;
 	private SkeletonDrawingArea drawingArea;
@@ -48,6 +49,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		rename = new JButton("Rename Animation");
 		addFrame = new JButton("New Frame");
 		addBone = new JButton("New Bone");
+		addSprite = new JButton("New Sprite");
 		
 		xPos = new JLabel("X: ", JLabel.CENTER);
 		yPos = new JLabel("Y: ", JLabel.CENTER);
@@ -160,6 +162,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 			addLabel(xPos, "X: " + bone.getX());
 			addLabel(yPos, "Y: " + bone.getY());
 			addLabel(rotation, "Rotation: " + Math.round(bone.getRotation()));
+			panel.add(addSprite);
 			
 			bone.getFrame().setSelectedBone(bone);
 			drawingArea.setSelectedFrame(bone.getFrame());
@@ -324,6 +327,27 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 						}
 					}
 				}			
+			}
+		});
+		addSprite.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
+				if (selectedNode != null)
+				{
+					DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+					TreePath path = tree.getSelectionPath();
+					try {
+						model.insertNodeInto((MutableTreeNode)new Sprite("Sprite", (SkeletonBone)selectedNode),
+								selectedNode, selectedNode.getChildCount());
+						model.reload();
+										
+						tree.expandPath(path);
+						tree.setSelectionPath(path.pathByAddingChild(selectedNode.getChildAt(selectedNode.getChildCount() - 1)));
+					}
+					catch (IllegalArgumentException exception) {
+						JOptionPane.showMessageDialog(panel, exception.getMessage(), "Insert Failed!", JOptionPane.ERROR_MESSAGE);
+					}
+				}
 			}
 		});
 	}

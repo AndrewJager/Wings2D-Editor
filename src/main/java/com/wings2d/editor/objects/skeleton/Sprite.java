@@ -1,19 +1,39 @@
 package com.wings2d.editor.objects.skeleton;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-public class Sprite implements SkeletonNode{
+import com.wings2d.editor.objects.Drawable;
+
+public class Sprite implements SkeletonNode, Drawable{
 	private String name;
 	private SkeletonBone parent;
+	private Path2D path;
+	private Color color;
+	
+	private static final Rectangle2D DEFAULT_SHAPE = new Rectangle2D.Double(0, 0, 50, 40);
 	
 	public Sprite(final String spriteName, final SkeletonBone parent)
 	{
 		this.name = spriteName;
 		this.parent = parent;
+		color = Color.LIGHT_GRAY;
+		path = new Path2D.Double(DEFAULT_SHAPE);
+	}
+	
+	public String toString()
+	{
+		return name;
 	}
 
 	// MutableTreeNode methods
@@ -40,7 +60,7 @@ public class Sprite implements SkeletonNode{
 	@Override
 	public boolean getAllowsChildren() {return false;}
 	@Override
-	public boolean isLeaf() {return false;}
+	public boolean isLeaf() {return true;}
 	@Override
 	public Enumeration<? extends TreeNode> children() {return null;}
 
@@ -48,7 +68,7 @@ public class Sprite implements SkeletonNode{
 	// SkeletonNode methods
 	@Override
 	public void setName(final String newName) {
-		
+		this.name = newName;
 	}
 	@Override
 	public void saveToFile(final PrintWriter out) {
@@ -57,5 +77,25 @@ public class Sprite implements SkeletonNode{
 	@Override
 	public void resyncAll() {
 		
+	}
+
+	// Drawable methods
+	@Override
+	public void draw(final Graphics2D g2d, final double scale) {
+		AffineTransform transform = new AffineTransform();
+		transform.scale(scale, scale);
+		transform.translate(parent.getX() - (path.getBounds2D().getWidth() / 2), 
+				parent.getY() - (path.getBounds2D().getHeight() / 2));
+		Shape draw = transform.createTransformedShape(path);
+		g2d.setColor(color);
+		g2d.fill(draw);
+	}
+	@Override
+	public Dimension getDrawSize(final double scale) {
+		Shape bounds = path.getBounds2D();
+		AffineTransform transform = new AffineTransform();
+		transform.scale(scale, scale);
+		bounds = transform.createTransformedShape(bounds);
+		return new Dimension((int)bounds.getBounds().getWidth(), (int)bounds.getBounds().getHeight());
 	}
 }

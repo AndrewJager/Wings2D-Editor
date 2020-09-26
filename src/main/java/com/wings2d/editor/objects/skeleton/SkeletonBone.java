@@ -326,15 +326,29 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	{
 		return syncBoneID;
 	}
+	public void addSprite(final Sprite newSprite)
+	{
+		sprites.add(newSprite);
+	}
+	public List<Sprite> getSprites()
+	{
+		return sprites;
+	}
 
 	
 	// MutableTreeNode methods
 	@Override
-	public void insert(final MutableTreeNode child, final int index) {}
+	public void insert(final MutableTreeNode child, final int index) {
+		sprites.add(index, (Sprite)child);
+	}
 	@Override
-	public void remove(final int index) {}
+	public void remove(final int index) {
+		sprites.remove(index);
+	}
 	@Override
-	public void remove(final MutableTreeNode node) {}
+	public void remove(final MutableTreeNode node) {
+		sprites.remove(node);
+	}
 	@Override
 	public void setUserObject(final Object object) {}
 	@Override
@@ -419,6 +433,11 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	// Drawable methods
 	@Override
 	public void draw(final Graphics2D g2d, final double scale) {
+		for (int i = 0; i < sprites.size(); i++)
+		{
+			sprites.get(i).draw(g2d, scale);
+		}
+		
 		final int handleSize = 10;
 		g2d.setColor(handleColor);
 		g2d.drawArc((int)((location.getX() * scale) - (handleSize / 2)), (int)((location.getY() * scale) - (handleSize / 2)),

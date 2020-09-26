@@ -143,6 +143,7 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				drawArea.zoom(e.getWheelRotation());
+				drawArea.resizeToDrawItem(skeleton.getEditor().getUIScale());
 			}
 		});
 	}

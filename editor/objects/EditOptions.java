@@ -20,7 +20,7 @@ public class EditOptions {
 	 * Sets cascade changes to true, editing to false, rotating to false, scaling to false
 	 * and edit circle size to 12
 	 */
-	public EditOptions(Editor editor)
+	public EditOptions(final Editor editor)
 	{
 		this.cascadeChanges = true;
 		this.editing = false;
@@ -34,7 +34,7 @@ public class EditOptions {
 		return cascadeChanges;
 	}
 	/** Set whether the changes should cascade to any child frames */
-	public void setCascadeChanges(Boolean cascadeChanges) {
+	public void setCascadeChanges(final Boolean cascadeChanges) {
 		this.cascadeChanges = cascadeChanges;
 	}
 	/** Get if the frames's objects/joints can be edited, meaning that the vertices can be moved */
@@ -42,7 +42,7 @@ public class EditOptions {
 		return editing;
 	}
 	/** Set if the frames's objects/joints can be edited, meaning that the vertices can be moved */
-	public void setEditing(Boolean editing) {
+	public void setEditing(final Boolean editing) {
 		this.editing = editing;
 	}
 	/** Get if the frame's objects/joints can be rotated */
@@ -50,7 +50,7 @@ public class EditOptions {
 		return rotating;
 	}
 	/** Set if the frame's objects/joints can be rotated */
-	public void setRotating(Boolean rotating) {
+	public void setRotating(final Boolean rotating) {
 		this.rotating = rotating;
 	}
 	/** Get if the frame's objects/joints can be scaled */
@@ -70,7 +70,7 @@ public class EditOptions {
 	 * Set the size of the edit handles
 	 * @param size Size in graphics units of the edit handles
 	 */
-	public void setEditHandleSize(int size)
+	public void setEditHandleSize(final int size)
 	{
 		this.editHandleSize = size;
 	}

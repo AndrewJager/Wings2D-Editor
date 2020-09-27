@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 import java.io.PrintWriter;
 import java.util.Enumeration;
@@ -29,6 +30,11 @@ public class Sprite implements SkeletonNode, Drawable{
 		this.parent = parent;
 		color = Color.LIGHT_GRAY;
 		path = new Path2D.Double(DEFAULT_SHAPE);
+		path = new Path2D.Double();
+		path.moveTo(0, 0);
+		path.lineTo(50, 0);
+		path.lineTo(50, 40);
+		path.lineTo(0, 100);
 	}
 	
 	public String toString()

@@ -211,12 +211,16 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		
 		double deltaX = unscaledX - location.getX();
 		double deltaY = unscaledY - location.getY();
-		location.setLocation(Utils.makeInRange(unscaledX, 0, (int)Double.MAX_VALUE), Utils.makeInRange(unscaledY, 0, (int)Double.MAX_VALUE));
-		if (translateChildren)
+
+		if ((unscaledX > 0 && unscaledY > 0) && checkTranslate(deltaX, deltaY))
 		{
-			for (int i = 0; i < childBones.size(); i++)
+			location.setLocation(unscaledX, unscaledY);
+			if (translateChildren)
 			{
-				childBones.get(i).translateBy(deltaX, deltaY);
+				for (int i = 0; i < childBones.size(); i++)
+				{
+					childBones.get(i).translateBy(deltaX, deltaY);
+				}
 			}
 		}
 	}
@@ -246,17 +250,39 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	{
 		return location.getY();
 	}
+
 	public void translateBy(final double x, final double y)
 	{
 		double newX = getX() + x;
 		double newY = getY() + y;
-		newX = Utils.makeInRange(newX, 0, (int)Double.MAX_VALUE);
-		newY = Utils.makeInRange(newY, 0, (int)Double.MAX_VALUE);
 		location.setLocation(newX, newY);
 		for (int i = 0; i < childBones.size(); i++)
 		{
 			childBones.get(i).translateBy(x, y);
 		}
+	}
+	/** Returns true if this bone and all child bones are not being moved outside the edit zone **/
+	private boolean checkTranslate(final double x, final double y)
+	{
+		boolean valid = true;
+		double newX = getX() + x;
+		double newY = getY() + y;
+		if (newX < 0 || newY < 0)
+		{
+			valid = false;
+		}
+		else
+		{
+			for (int i = 0; i < childBones.size(); i++)
+			{
+				if (!childBones.get(i).checkTranslate(x, y)) // Check fails
+				{
+					valid = false;
+					break;
+				}
+			}
+		}
+		return valid;
 	}
 	public void setIsSelected(final boolean selected)
 	{

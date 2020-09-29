@@ -87,7 +87,7 @@ public class Sprite implements SkeletonNode, Drawable{
 
 	// Drawable methods
 	@Override
-	public void draw(final Graphics2D g2d, final double scale) {
+	public void draw(final Graphics2D g2d, final double scale, final DrawMode mode) {
 		AffineTransform transform = new AffineTransform();
 		transform.scale(scale, scale);
 		transform.translate(parent.getX() - (path.getBounds2D().getWidth() / 2), 

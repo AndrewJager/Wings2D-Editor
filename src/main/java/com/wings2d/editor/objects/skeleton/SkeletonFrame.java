@@ -186,13 +186,13 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		
 		return selectedBone;
 	}
-	public SkeletonBone getHandleBone(final Point loc, final double scale)
+	public SkeletonBone getBoneByRotHandle(final Point loc, final double scale)
 	{
 		final double minDistance = 10;
 		SkeletonBone selectedBone = null;
 		for (int i = 0; i < bones.size(); i++)
 		{
-			if (bones.get(i).getShowRotHandle() || bones.get(i).getRotating())
+			if (bones.get(i).getIsSelected())
 			{
 				Point2D rotPoint = bones.get(i).getRotHandle(scale);
 				double dist = Math.sqrt(Math.pow((loc.getX()-(rotPoint.getX() * scale)), 2) 
@@ -217,7 +217,6 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 			else
 			{
 				bones.get(i).setIsSelected(false);
-				bones.get(i).setShowRotHandle(false);
 			}
 		}
 	}
@@ -254,6 +253,13 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	public SkeletonAnimation getAnimation()
 	{
 		return animation;
+	}
+	public void deselectAllBones()
+	{
+		for (int i = 0; i < bones.size(); i++)
+		{
+			bones.get(i).setIsSelected(false);
+		}
 	}
 	
 	// MutableTreeNode methods
@@ -352,10 +358,10 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 	
 	// Drawable methods
 	@Override
-	public void draw(final Graphics2D g2d, final double scale) {
+	public void draw(final Graphics2D g2d, final double scale, final DrawMode mode) {
 		for (int i = 0; i < bones.size(); i++)
 		{
-			bones.get(i).draw(g2d, scale);
+			bones.get(i).draw(g2d, scale, mode);
 		}
 	}
 	@Override

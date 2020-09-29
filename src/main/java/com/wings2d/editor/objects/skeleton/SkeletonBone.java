@@ -36,8 +36,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	private Point2D location;
 	private Color handleColor;
 	private double rotation;
-	private boolean rotating = false;
-	private boolean showRotHandle = false;
+	private boolean selected = false;
 	private List<Sprite> sprites;
 	
 	private static final Color HANDLE_COLOR_UNSELECTED = Color.GREEN;
@@ -286,6 +285,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	}
 	public void setIsSelected(final boolean selected)
 	{
+		this.selected = selected;
 		if (selected)
 		{
 			handleColor = HANDLE_COLOR_SELECTED;
@@ -295,21 +295,9 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 			handleColor = HANDLE_COLOR_UNSELECTED;
 		}
 	}
-	public void setRotating(final boolean draw)
+	public boolean getIsSelected()
 	{
-		rotating = draw;
-	}
-	public boolean getRotating()
-	{
-		return rotating;
-	}
-	public void setShowRotHandle(final boolean show)
-	{
-		showRotHandle = show;
-	}
-	public boolean getShowRotHandle()
-	{
-		return showRotHandle;
+		return selected;
 	}
 	public double getRotation()
 	{
@@ -458,17 +446,17 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	
 	// Drawable methods
 	@Override
-	public void draw(final Graphics2D g2d, final double scale) {
+	public void draw(final Graphics2D g2d, final double scale, final DrawMode mode) {
 		for (int i = 0; i < sprites.size(); i++)
 		{
-			sprites.get(i).draw(g2d, scale);
+			sprites.get(i).draw(g2d, scale, mode);
 		}
 		
 		final int handleSize = 10;
 		g2d.setColor(handleColor);
 		g2d.drawArc((int)((location.getX() * scale) - (handleSize / 2)), (int)((location.getY() * scale) - (handleSize / 2)),
 				handleSize, handleSize, 0, 360);
-		if (rotating || showRotHandle)
+		if (mode == DrawMode.BONE_ROTATE && selected)
 		{	
 			Point2D rotHandleLoc = getRotHandle(scale);
 			g2d.setColor(Color.BLACK);

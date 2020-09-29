@@ -67,6 +67,7 @@ public class SkeletonDrawingControls extends SkeletonUIElement{
 				rotateBtn.setSelected(false);
 				spriteBtn.setSelected(false);	
 				skeleton.setDrawMode(DrawMode.BONE_MOVE);
+				skeleton.getDrawingArea().getDrawArea().repaint();
 			}
 		});
 		rotateBtn.addActionListener(new ActionListener() {
@@ -75,6 +76,7 @@ public class SkeletonDrawingControls extends SkeletonUIElement{
 				moveBtn.setSelected(false);
 				spriteBtn.setSelected(false);
 				skeleton.setDrawMode(DrawMode.BONE_ROTATE);
+				skeleton.getDrawingArea().getDrawArea().repaint();
 			}
 		});
 		spriteBtn.addActionListener(new ActionListener() {
@@ -83,6 +85,7 @@ public class SkeletonDrawingControls extends SkeletonUIElement{
 				moveBtn.setSelected(false);
 				rotateBtn.setSelected(false);
 				skeleton.setDrawMode(DrawMode.SPRITE);
+				skeleton.getDrawingArea().getDrawArea().repaint();
 			}
 		});
 	}

@@ -47,6 +47,8 @@ public class SkeletonEdit extends UIPanel{
 	public void setDrawMode(final DrawMode mode)
 	{
 		drawMode = mode;
+		drawingControls.setControls(mode);
+		drawingArea.getDrawArea().repaint();
 	}
 	public DrawMode getDrawMode()
 	{

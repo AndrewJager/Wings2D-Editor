@@ -26,7 +26,7 @@ public class DrawingArea extends JPanel{
 		super.paintComponent(g);
 		if (drawItem != null)
 		{
-			drawItem.draw((Graphics2D)g, edit.getUIScale() * zoomScale);
+			drawItem.draw((Graphics2D)g, edit.getUIScale() * zoomScale, edit.getSkeletonEdit().getDrawMode());
 		}
 	}
 	

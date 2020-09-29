@@ -69,6 +69,9 @@ public class SkeletonTree extends SkeletonUIElement{
 					else if (selectedNode instanceof SkeletonBone)
 					{
 						treeControls.setupControls(SkeletonPiece.BONE);
+						SkeletonBone bone = (SkeletonBone)selectedNode;
+						bone.getFrame().deselectAllBones();
+						bone.setIsSelected(true);
 					}
 				}
 			}

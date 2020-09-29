@@ -3,6 +3,7 @@ package com.wings2d.editor.objects.skeleton;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
@@ -100,6 +101,21 @@ public class Sprite implements SkeletonNode, Drawable{
 			i++;
 		}
 		return coordsPoint;
+	}
+	public void setLocation(final double x, final double y, final double scale)
+	{
+		double unscale = 1.0 / scale;
+		double unscaledX = x * unscale;
+		double unscaledY = y * unscale;
+		double deltaX = unscaledX - (path.getBounds2D().getX() + parent.getX());
+		double deltaY = unscaledY - (path.getBounds2D().getY() + parent.getY());
+		AffineTransform transform = new AffineTransform();
+		transform.translate(deltaX, deltaY);
+		path.transform(transform);
+	}
+	public void setLocation(final Point loc, final double scale)
+	{
+		setLocation(loc.getX(), loc.getY(), scale);
 	}
 
 	// MutableTreeNode methods

@@ -124,18 +124,23 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 			public void mouseDragged(MouseEvent e) {
 				if (selectedItem != null && SwingUtilities.isLeftMouseButton(e))
 				{
+					double scale = skeleton.getEditor().getUIScale() * drawArea.getZoomScale();
 					switch(skeleton.getDrawMode())
 					{
 					case BONE_MOVE:
 						SkeletonBone bone = (SkeletonBone)selectedItem;
-						bone.setLocation(e.getPoint(), skeleton.getEditor().getUIScale() * drawArea.getZoomScale(), true);
+						bone.setLocation(e.getPoint(), scale, true);
 						break;
 					case BONE_ROTATE:
 						bone = (SkeletonBone)selectedItem;
-						bone.rotateByHandle(e.getPoint(), skeleton.getEditor().getUIScale() * drawArea.getZoomScale());
+						bone.rotateByHandle(e.getPoint(), scale);
 						break;
 					case SPRITE:
 						Sprite sprite = (Sprite)selectedItem;
+						if (sprite.getSelectedVertex() == -1)
+						{
+							sprite.setLocation(e.getPoint(), scale);
+						}
 						break;
 					}
 				}

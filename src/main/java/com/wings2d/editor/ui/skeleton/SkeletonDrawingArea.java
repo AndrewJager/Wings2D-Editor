@@ -72,6 +72,17 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 						skeleton.setDrawMode(DrawMode.BONE_ROTATE);
 					}
 				}
+				else if (SwingUtilities.isMiddleMouseButton(e))
+				{
+					if (skeleton.getDrawMode() == DrawMode.SPRITE)
+					{
+						skeleton.setDrawMode(skeleton.getLastBoneDrawMode());
+					}
+					else
+					{
+						skeleton.setDrawMode(DrawMode.SPRITE);
+					}
+				}
 				selectedBone = frame.getBoneAtPosition(e.getPoint(), skeleton.getEditor().getUIScale() * drawArea.getZoomScale());
 				if (selectedBone == null && skeleton.getDrawMode() == DrawMode.BONE_ROTATE)
 				{

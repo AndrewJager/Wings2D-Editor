@@ -95,6 +95,20 @@ public class Sprite implements SkeletonNode, Drawable{
 		Shape draw = transform.createTransformedShape(path);
 		g2d.setColor(color);
 		g2d.fill(draw);
+		
+		if (mode == DrawMode.SPRITE)
+		{
+			PathIterator iter = path.getPathIterator(transform);
+			g2d.setColor(Color.YELLOW);
+			while(!iter.isDone())
+			{
+				int handleSize = 8;
+				double[] coords = new double[6];
+				iter.currentSegment(coords);
+				g2d.drawArc((int)(coords[0] - (handleSize / 2)), (int)(coords[1] - (handleSize / 2)), handleSize, handleSize, 0, 360);
+				iter.next();
+			}
+		}
 	}
 	@Override
 	public Dimension getDrawSize(final double scale) {

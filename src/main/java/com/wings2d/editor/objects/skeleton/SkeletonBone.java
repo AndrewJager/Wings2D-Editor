@@ -37,6 +37,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	private Color handleColor;
 	private double rotation;
 	private boolean selected = false;
+	private Sprite selectedSprite;
 	private List<Sprite> sprites;
 	
 	private static final Color HANDLE_COLOR_UNSELECTED = Color.GREEN;
@@ -347,6 +348,21 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	public List<Sprite> getSprites()
 	{
 		return sprites;
+	}
+	public void setSelectedSprite(final Sprite sprite)
+	{
+		selectedSprite = sprite;
+	}
+	public Sprite getSelectedSprite()
+	{
+		return selectedSprite;
+	}
+	public void deselectAllVertices()
+	{
+		for (int i = 0; i < sprites.size(); i++)
+		{
+			sprites.get(i).setSelectedVertex(-1);
+		}
 	}
 
 	

@@ -18,6 +18,8 @@ import javax.swing.tree.TreePath;
 import com.wings2d.editor.objects.skeleton.DrawMode;
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonFrame;
+import com.wings2d.editor.objects.skeleton.SkeletonNode;
+import com.wings2d.editor.objects.skeleton.Sprite;
 import com.wings2d.editor.ui.DrawingArea;
 
 public class SkeletonDrawingArea extends SkeletonUIElement{
@@ -25,7 +27,7 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 	private JScrollPane pane;
 	private JTree tree;
 	private SkeletonFrame frame;
-	private SkeletonBone selectedBone;
+	private SkeletonNode selectedItem;
 	private SkeletonTreeControls controls;
 
 	public SkeletonDrawingArea(final SkeletonEdit edit, final Rectangle bounds) {
@@ -83,24 +85,33 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 						skeleton.setDrawMode(DrawMode.SPRITE);
 					}
 				}
-				selectedBone = frame.getBoneAtPosition(e.getPoint(), skeleton.getEditor().getUIScale() * drawArea.getZoomScale());
-				if (selectedBone == null && skeleton.getDrawMode() == DrawMode.BONE_ROTATE)
+				
+				double scale = skeleton.getEditor().getUIScale() * drawArea.getZoomScale();
+				if (skeleton.getDrawMode() != DrawMode.SPRITE)
 				{
-					selectedBone = frame.getBoneByRotHandle(e.getPoint(), skeleton.getEditor().getUIScale() * drawArea.getZoomScale());
+					selectedItem = frame.getBoneAtPosition(e.getPoint(), scale);
+				}
+				if (selectedItem == null && skeleton.getDrawMode() == DrawMode.BONE_ROTATE)
+				{
+					selectedItem = frame.getBoneByRotHandle(e.getPoint(), scale);
+				}
+				else if (selectedItem ==  null && skeleton.getDrawMode() == DrawMode.SPRITE)
+				{
+					selectedItem = frame.spriteSelect(e.getPoint(), scale);
 				}
 				
-				if (selectedBone != null)
+				if (selectedItem != null)
 				{
 					TreePath path = new TreePath(frame);
-					path = path.pathByAddingChild(selectedBone);
+					path = path.pathByAddingChild(selectedItem);
 					tree.setSelectionPath(path);
 				}
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				if (selectedBone != null)
+				if (selectedItem != null)
 				{
-					selectedBone = null;
+					selectedItem = null;
 				}
 			}
 			@Override
@@ -111,22 +122,25 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 		drawArea.addMouseMotionListener(new MouseMotionListener() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				if (selectedBone != null && SwingUtilities.isLeftMouseButton(e))
+				if (selectedItem != null && SwingUtilities.isLeftMouseButton(e))
 				{
 					switch(skeleton.getDrawMode())
 					{
 					case BONE_MOVE:
-						selectedBone.setLocation(e.getPoint(), skeleton.getEditor().getUIScale() * drawArea.getZoomScale(), true);
+						SkeletonBone bone = (SkeletonBone)selectedItem;
+						bone.setLocation(e.getPoint(), skeleton.getEditor().getUIScale() * drawArea.getZoomScale(), true);
 						break;
 					case BONE_ROTATE:
-						selectedBone.rotateByHandle(e.getPoint(), skeleton.getEditor().getUIScale() * drawArea.getZoomScale());
+						bone = (SkeletonBone)selectedItem;
+						bone.rotateByHandle(e.getPoint(), skeleton.getEditor().getUIScale() * drawArea.getZoomScale());
 						break;
 					case SPRITE:
+						Sprite sprite = (Sprite)selectedItem;
 						break;
 					}
 				}
 				
-				controls.updateBoneInfo();
+				controls.updateNodeInfo();
 				drawArea.resizeToDrawItem(skeleton.getEditor().getUIScale());
 				panel.repaint();
 			}

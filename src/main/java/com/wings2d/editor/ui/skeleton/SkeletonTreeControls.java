@@ -201,15 +201,18 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		JScrollPane pane = new JScrollPane(list);
 		panel.add(pane);
 	}
-	public void updateBoneInfo()
+	public void updateNodeInfo()
 	{
 		SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
-		SkeletonBone bone = (SkeletonBone)selectedNode;
-		if (bone != null)
+		if (selectedNode instanceof SkeletonBone)
 		{
-			xPos.setText("X: " + bone.getX());
-			yPos.setText("Y: " + bone.getY());
-			rotation.setText("Rotation: " + Math.round(bone.getRotation()));
+			SkeletonBone bone = (SkeletonBone)selectedNode;
+			if (bone != null)
+			{
+				xPos.setText("X: " + bone.getX());
+				yPos.setText("Y: " + bone.getY());
+				rotation.setText("Rotation: " + Math.round(bone.getRotation()));
+			}
 		}
 	}
 	
@@ -337,9 +340,12 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 					DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 					TreePath path = tree.getSelectionPath();
 					try {
-						model.insertNodeInto((MutableTreeNode)new Sprite("Sprite", (SkeletonBone)selectedNode),
+						SkeletonBone bone = (SkeletonBone)selectedNode;
+						Sprite newSprite = new Sprite("Sprite", bone);
+						model.insertNodeInto((MutableTreeNode)newSprite,
 								selectedNode, selectedNode.getChildCount());
 						model.reload();
+						bone.setSelectedSprite(newSprite);
 										
 						tree.expandPath(path);
 						tree.setSelectionPath(path.pathByAddingChild(selectedNode.getChildAt(selectedNode.getChildCount() - 1)));

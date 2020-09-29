@@ -7,6 +7,7 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.PrintWriter;
 import java.util.Enumeration;
@@ -21,6 +22,7 @@ public class Sprite implements SkeletonNode, Drawable{
 	private SkeletonBone parent;
 	private Path2D path;
 	private Color color;
+	private int selectedVertex = -1;
 	
 	private static final Rectangle2D DEFAULT_SHAPE = new Rectangle2D.Double(0, 0, 50, 40);
 	
@@ -40,6 +42,64 @@ public class Sprite implements SkeletonNode, Drawable{
 	public String toString()
 	{
 		return name;
+	}
+	public Path2D getPath()
+	{
+		return path;
+	}
+	public Path2D getScaledAndTranslatedPath(final double scale)
+	{
+		AffineTransform transform = new AffineTransform();
+		transform.scale(scale, scale);
+		transform.translate(parent.getX() - (path.getBounds2D().getWidth() / 2), 
+				parent.getY() - (path.getBounds2D().getHeight() / 2));
+		return (Path2D)transform.createTransformedShape(path);
+	}
+	public int getAmountOfPoints()
+	{
+		int points = 0;
+		PathIterator iter = path.getPathIterator(null);
+		while(!iter.isDone())
+		{
+			points++;
+			iter.next();
+		}
+		return points;
+	}
+	public void setSelectedVertex(final int vertex)
+	{
+		if (vertex > getAmountOfPoints() || vertex < -1)
+		{
+			throw new IllegalArgumentException("Point " + vertex + " is outside the amount of points in the Sprite's path!");
+		}
+		
+		selectedVertex = vertex;
+	}
+	public int getSelectedVertex()
+	{
+		return selectedVertex;
+	}
+	public Point2D getCoordsOfSelectedVertex(final double scale)
+	{
+		AffineTransform transform = new AffineTransform();
+		transform.scale(scale, scale);
+		transform.translate(parent.getX() - (path.getBounds2D().getWidth() / 2), 
+				parent.getY() - (path.getBounds2D().getHeight() / 2));
+		PathIterator iter = path.getPathIterator(transform);
+		int i = 0;
+		Point2D coordsPoint = null;
+		while(!iter.isDone())
+		{
+			if (i == selectedVertex)
+			{
+				double[] coords = new double[6];
+				iter.currentSegment(coords);
+				coordsPoint = new Point2D.Double(coords[0], coords[1]);
+				break;
+			}
+			i++;
+		}
+		return coordsPoint;
 	}
 
 	// MutableTreeNode methods

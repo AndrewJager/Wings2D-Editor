@@ -3,6 +3,8 @@ package com.wings2d.editor.objects.skeleton;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.PrintWriter;
@@ -205,6 +207,57 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		}
 		return selectedBone;
 	}
+	public Sprite spriteSelect(final Point loc, final double scale)
+	{
+		Sprite selectedSprite = null;
+		final double minDistance = 10;
+		SkeletonBone bone = getSelectedBone();
+		if (bone != null)
+		{
+			bone.deselectAllVertices();
+			// Attempt to select a vertex on the selected Sprite
+			if (bone.getSelectedSprite() != null)
+			{
+				Sprite sprite = bone.getSelectedSprite();
+				Path2D path = bone.getSelectedSprite().getScaledAndTranslatedPath(scale);
+				PathIterator iter = path.getPathIterator(null);
+				double[] coords = new double[6];
+				int vertex = 0;
+				while(!iter.isDone())
+				{
+					iter.currentSegment(coords);
+					double dist = Math.sqrt(Math.pow((loc.getX() - coords[0]), 2) 
+							+ Math.pow((loc.getY() - coords[1]), 2));
+					
+					if (dist <= minDistance)
+					{
+						selectedSprite = sprite;
+						selectedSprite.setSelectedVertex(vertex);
+						break;
+					}
+					
+					vertex++;
+					iter.next();
+				}
+			}
+			
+			// No selected vertex, so attempt to select a sprite with no selected vertex
+			if (bone.getSelectedSprite() == null || bone.getSelectedSprite().getSelectedVertex() == -1)
+			{
+				for (int i = 0; i < bone.getSprites().size(); i++)
+				{
+					Sprite sprite = bone.getSprites().get(i);
+					if (sprite.getScaledAndTranslatedPath(scale).contains(loc))
+					{
+						selectedSprite = sprite;
+						break;
+					}
+				}
+			}
+		}
+		
+		return selectedSprite;
+	}
 	
 	public void setSelectedBone(final SkeletonBone bone)
 	{
@@ -219,6 +272,19 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 				bones.get(i).setIsSelected(false);
 			}
 		}
+	}
+	public SkeletonBone getSelectedBone()
+	{
+		SkeletonBone selected = null;
+		for (int i = 0; i < bones.size(); i++)
+		{
+			if (bones.get(i).getIsSelected())
+			{
+				selected = bones.get(i);
+				break;
+			}
+		}
+		return selected;
 	}
 	
 	public void syncBonePositions()

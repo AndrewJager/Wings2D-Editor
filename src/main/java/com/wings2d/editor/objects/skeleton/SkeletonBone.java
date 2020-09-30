@@ -318,7 +318,11 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		double oldRotation = rotation;
 		rotation = Math.toDegrees(Math.atan2((location.getY() * scale) - loc.getY(), (location.getX() * scale) - loc.getX()));
 		double delta = rotation - oldRotation;
-		for(int i = 0; i < childBones.size(); i++)
+		for (int i = 0; i < sprites.size(); i++)
+		{
+			sprites.get(i).rotateAroundBone(delta, scale);
+		}
+		for (int i = 0; i < childBones.size(); i++)
 		{
 			childBones.get(i).rotateAround(location, delta);
 		}

@@ -156,6 +156,12 @@ public class Sprite implements SkeletonNode, Drawable{
 	{
 		setVertexLocation(loc, getSelectedVertex(), scale);
 	}
+	public void rotateAroundBone(final double delta, final double scale)
+	{
+		AffineTransform transform = new AffineTransform();
+		transform.rotate(Math.toRadians(delta), 0, 0);
+		path = (Path2D)transform.createTransformedShape(path);
+	}
 
 	// MutableTreeNode methods
 	@Override

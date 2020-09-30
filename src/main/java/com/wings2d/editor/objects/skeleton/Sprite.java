@@ -10,8 +10,11 @@ import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.Path2D.Double;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -25,19 +28,16 @@ public class Sprite implements SkeletonNode, Drawable{
 	private Color color;
 	private int selectedVertex = -1;
 	
-	private static final Rectangle2D DEFAULT_SHAPE = new Rectangle2D.Double(0, 0, 50, 40);
-	
 	public Sprite(final String spriteName, final SkeletonBone parent)
 	{
 		this.name = spriteName;
 		this.parent = parent;
 		color = Color.LIGHT_GRAY;
-		path = new Path2D.Double(DEFAULT_SHAPE);
 		path = new Path2D.Double();
-		path.moveTo(0, 0);
-		path.lineTo(50, 0);
-		path.lineTo(50, 40);
-		path.lineTo(0, 100);
+		path.moveTo(-30, -30);
+		path.lineTo(30, -30);
+		path.lineTo(30, 30);
+		path.lineTo(-30, 30);
 	}
 	
 	public String toString()
@@ -52,8 +52,7 @@ public class Sprite implements SkeletonNode, Drawable{
 	{
 		AffineTransform transform = new AffineTransform();
 		transform.scale(scale, scale);
-		transform.translate(parent.getX() - (path.getBounds2D().getWidth() / 2), 
-				parent.getY() - (path.getBounds2D().getHeight() / 2));
+		transform.translate(parent.getX(), parent.getY());
 		return (Path2D)transform.createTransformedShape(path);
 	}
 	public int getAmountOfPoints()
@@ -107,8 +106,8 @@ public class Sprite implements SkeletonNode, Drawable{
 		double unscale = 1.0 / scale;
 		double unscaledX = x * unscale;
 		double unscaledY = y * unscale;
-		double deltaX = unscaledX - (path.getBounds2D().getX() + parent.getX());
-		double deltaY = unscaledY - (path.getBounds2D().getY() + parent.getY());
+		double deltaX = unscaledX - (path.getBounds2D().getX() + (path.getBounds2D().getWidth() / 2) + parent.getX());
+		double deltaY = unscaledY - (path.getBounds2D().getY() + (path.getBounds2D().getHeight() / 2)+ parent.getY());
 		AffineTransform transform = new AffineTransform();
 		transform.translate(deltaX, deltaY);
 		path.transform(transform);
@@ -116,6 +115,46 @@ public class Sprite implements SkeletonNode, Drawable{
 	public void setLocation(final Point loc, final double scale)
 	{
 		setLocation(loc.getX(), loc.getY(), scale);
+	}
+	public List<Point2D> getVertices()
+	{
+		List<Point2D> vertices = new ArrayList<Point2D>();
+		PathIterator iter = path.getPathIterator(null);
+		double[] coords = new double[6];
+		while(!iter.isDone())
+		{
+			iter.currentSegment(coords);
+			vertices.add(new Point2D.Double(coords[0], coords[1]));
+			iter.next();
+		}
+		return vertices;
+	}
+	public void setVertexLocation(final double x, final double y, final int vertex, final double scale)
+	{
+		double unscale = 1.0 / scale;
+		double unscaledX = x * unscale;
+		double unscaledY = y * unscale;
+		List<Point2D> points = getVertices();
+		points.get(vertex).setLocation(unscaledX - parent.getX(), 
+				unscaledY - parent.getY());
+		path = new Path2D.Double();
+		path.moveTo(points.get(0).getX(), points.get(0).getY());
+		if (points.size() > 1)
+		{
+			for (int i = 1; i < points.size(); i++)
+			{
+				path.lineTo(points.get(i).getX(), points.get(i).getY());
+			}
+		}
+	}
+	public void setVertexLocation(final Point loc, final int vertex, final double scale)
+	{
+		setVertexLocation(loc.getX(), loc.getY(), vertex, scale);
+	}
+	/** Calls setVertexLocation with the vertex returned by getSelectedVertex() **/
+	public void setVertexLocation(final Point loc, final double scale)
+	{
+		setVertexLocation(loc, getSelectedVertex(), scale);
 	}
 
 	// MutableTreeNode methods
@@ -166,8 +205,8 @@ public class Sprite implements SkeletonNode, Drawable{
 	public void draw(final Graphics2D g2d, final double scale, final DrawMode mode) {
 		AffineTransform transform = new AffineTransform();
 		transform.scale(scale, scale);
-		transform.translate(parent.getX() - (path.getBounds2D().getWidth() / 2), 
-				parent.getY() - (path.getBounds2D().getHeight() / 2));
+		transform.translate(parent.getX(), 
+				parent.getY());
 		Shape draw = transform.createTransformedShape(path);
 		g2d.setColor(color);
 		g2d.fill(draw);

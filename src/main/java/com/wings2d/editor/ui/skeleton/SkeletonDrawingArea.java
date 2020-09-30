@@ -141,6 +141,10 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 						{
 							sprite.setLocation(e.getPoint(), scale);
 						}
+						else
+						{
+							sprite.setVertexLocation(e.getPoint(), scale);
+						}
 						break;
 					}
 				}

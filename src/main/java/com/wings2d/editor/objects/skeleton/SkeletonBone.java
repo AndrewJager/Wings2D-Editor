@@ -22,6 +22,10 @@ import com.wings2d.framework.Utils;
 
 public class SkeletonBone implements SkeletonNode, Drawable{
 	public static final String BONE_TOKEN = "BONE";
+	public static final String PARENT_BONE_TOKEN = "PARENTBONE";
+	public static final String SYNC_BONE_ID_TOKEN = "SYNCBONEID";
+	public static final String POSITION_TOKEN = "POSITION";
+	public static final Point2D START_POS = new Point2D.Double(10, 15);
 	
 	private SkeletonFrame frame;
 	private String name;
@@ -43,11 +47,6 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	private static final Color HANDLE_COLOR_UNSELECTED = Color.GREEN;
 	private static final Color HANDLE_COLOR_SELECTED = Color.RED;
 	private static final int ROT_HANDLE_OFFSET = 15;
-	
-	public static final Point2D START_POS = new Point2D.Double(10, 15);
-	public static final String PARENT_BONE_TOKEN = "PARENTBONE";
-	public static final String SYNC_BONE_ID_TOKEN = "SYNCBONEID";
-	public static final String POSITION_TOKEN = "POSITION";
 	
 	public SkeletonBone(final String boneName, final SkeletonFrame boneParent)
 	{
@@ -104,6 +103,10 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 			else if (tokens[0].equals(POSITION_TOKEN))
 			{
 				location.setLocation(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
+			}
+			else if (tokens[0].equals(Sprite.SPRITE_TOKEN))
+			{
+				sprites.add(new Sprite(in, this));
 			}
 			else if (tokens[0].equals(END_TOKEN))
 			{
@@ -449,6 +452,10 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 			out.print(SYNC_BONE_ID_TOKEN + ":" + syncBoneID.toString() + "\n");
 		}
 		out.print(POSITION_TOKEN + ":" + location.getX() +":" + location.getY() + "\n");
+		for (int i = 0; i < sprites.size(); i++)
+		{
+			sprites.get(i).saveToFile(out);
+		}
 		
 		out.write(END_TOKEN + ":" + BONE_TOKEN + "\n");
 	}

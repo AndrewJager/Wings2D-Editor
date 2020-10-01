@@ -12,4 +12,5 @@ public interface SkeletonNode extends MutableTreeNode{
 	public static final String NAME_TOKEN = "NAME";
 	public static final String END_TOKEN = "END";
 	public static final String ID_TOKEN = "ID";
+	public static final String COLOR_TOKEN = "COLOR";
 }

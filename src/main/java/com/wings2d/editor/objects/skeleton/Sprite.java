@@ -9,12 +9,11 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.Path2D.Double;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -22,6 +21,8 @@ import javax.swing.tree.TreeNode;
 import com.wings2d.editor.objects.Drawable;
 
 public class Sprite implements SkeletonNode, Drawable{
+	public static final String SPRITE_TOKEN = "SPRITE";
+	public static final String VERTEX_TOKEN = "VERTEX";
 	private String name;
 	private SkeletonBone parent;
 	private Path2D path;
@@ -38,6 +39,41 @@ public class Sprite implements SkeletonNode, Drawable{
 		path.lineTo(30, -30);
 		path.lineTo(30, 30);
 		path.lineTo(-30, 30);
+	}
+	
+	public Sprite(final Scanner in, final SkeletonBone parent)
+	{
+		this.parent = parent;
+		path = new Path2D.Double();
+		boolean keepReading = true;
+		boolean firstPoint = true;
+		while(in.hasNext() && keepReading)
+		{
+			String[] tokens = in.next().split(":");
+			switch(tokens[0])
+			{
+			case NAME_TOKEN:
+				name = tokens[1];
+				break;
+			case COLOR_TOKEN:
+				color = Color.LIGHT_GRAY;
+				break;
+			case VERTEX_TOKEN:
+				if (firstPoint)
+				{
+					path.moveTo(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
+					firstPoint = false;
+				}
+				else
+				{
+					path.lineTo(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
+				}
+				break;
+			case END_TOKEN:
+				keepReading = false;
+				break;
+			}
+		}
 	}
 	
 	public String toString()
@@ -199,7 +235,17 @@ public class Sprite implements SkeletonNode, Drawable{
 	}
 	@Override
 	public void saveToFile(final PrintWriter out) {
+		out.write(SPRITE_TOKEN + "\n");
+		out.print(NAME_TOKEN + ":" + name + "\n");
+		out.write(COLOR_TOKEN + ":" + color.toString()+ "\n");
+		List<Point2D> vertices = getVertices();
+		for (int i = 0; i < vertices.size(); i++)
+		{
+			Point2D vertex = vertices.get(i);
+			out.write(VERTEX_TOKEN + ":" + vertex.getX() + ":" + vertex.getY()+ "\n"); 
+		}
 		
+		out.write(END_TOKEN + ":" + SPRITE_TOKEN + "\n");
 	}
 	@Override
 	public void resyncAll() {

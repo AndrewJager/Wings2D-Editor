@@ -20,6 +20,7 @@ import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.objects.skeleton.SkeletonPiece;
+import com.wings2d.editor.objects.skeleton.Sprite;
 
 public class SkeletonTree extends SkeletonUIElement{
 	private JTree tree;
@@ -72,6 +73,12 @@ public class SkeletonTree extends SkeletonUIElement{
 						SkeletonBone bone = (SkeletonBone)selectedNode;
 						bone.getFrame().deselectAllBones();
 						bone.setIsSelected(true);
+					}
+					else if (selectedNode instanceof Sprite)
+					{
+						treeControls.setupControls(SkeletonPiece.SPRITE);
+						SkeletonBone bone = (SkeletonBone)selectedNode.getParent();
+						bone.setSelectedSprite((Sprite)selectedNode);
 					}
 				}
 			}

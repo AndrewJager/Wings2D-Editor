@@ -5,4 +5,5 @@ public enum SkeletonPiece {
 	ANIMATION,
 	FRAME,
 	BONE,
+	SPRITE,
 }

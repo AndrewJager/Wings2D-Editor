@@ -217,7 +217,9 @@ public class Sprite implements SkeletonNode, Drawable{
 	@Override
 	public int getChildCount() {return 0;}
 	@Override
-	public TreeNode getParent() {return null;}
+	public TreeNode getParent() {
+		return parent;
+	}
 	@Override
 	public int getIndex(final TreeNode node) {return 0;}
 	@Override

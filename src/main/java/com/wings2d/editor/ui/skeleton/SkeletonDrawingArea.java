@@ -63,48 +63,51 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if (SwingUtilities.isRightMouseButton(e))
+				if (frame != null)
 				{
-					if (skeleton.getDrawMode() == DrawMode.BONE_ROTATE)
+					if (SwingUtilities.isRightMouseButton(e))
 					{
-						skeleton.setDrawMode(DrawMode.BONE_MOVE);
+						if (skeleton.getDrawMode() == DrawMode.BONE_ROTATE)
+						{
+							skeleton.setDrawMode(DrawMode.BONE_MOVE);
+						}
+						else
+						{
+							skeleton.setDrawMode(DrawMode.BONE_ROTATE);
+						}
 					}
-					else
+					else if (SwingUtilities.isMiddleMouseButton(e))
 					{
-						skeleton.setDrawMode(DrawMode.BONE_ROTATE);
+						if (skeleton.getDrawMode() == DrawMode.SPRITE)
+						{
+							skeleton.setDrawMode(skeleton.getLastBoneDrawMode());
+						}
+						else
+						{
+							skeleton.setDrawMode(DrawMode.SPRITE);
+						}
 					}
-				}
-				else if (SwingUtilities.isMiddleMouseButton(e))
-				{
-					if (skeleton.getDrawMode() == DrawMode.SPRITE)
+					
+					double scale = skeleton.getEditor().getUIScale() * drawArea.getZoomScale();
+					if (skeleton.getDrawMode() != DrawMode.BONE_MOVE)
 					{
-						skeleton.setDrawMode(skeleton.getLastBoneDrawMode());
+						selectedItem = frame.getBoneAtPosition(e.getPoint(), scale);
 					}
-					else
+					if (selectedItem == null && skeleton.getDrawMode() == DrawMode.BONE_ROTATE)
 					{
-						skeleton.setDrawMode(DrawMode.SPRITE);
+						selectedItem = frame.getBoneByRotHandle(e.getPoint(), scale);
 					}
-				}
-				
-				double scale = skeleton.getEditor().getUIScale() * drawArea.getZoomScale();
-				if (skeleton.getDrawMode() != DrawMode.SPRITE)
-				{
-					selectedItem = frame.getBoneAtPosition(e.getPoint(), scale);
-				}
-				if (selectedItem == null && skeleton.getDrawMode() == DrawMode.BONE_ROTATE)
-				{
-					selectedItem = frame.getBoneByRotHandle(e.getPoint(), scale);
-				}
-				else if (selectedItem ==  null && skeleton.getDrawMode() == DrawMode.SPRITE)
-				{
-					selectedItem = frame.spriteSelect(e.getPoint(), scale);
-				}
-				
-				if (selectedItem != null)
-				{
-					TreePath path = new TreePath(frame);
-					path = path.pathByAddingChild(selectedItem);
-					tree.setSelectionPath(path);
+					else if (selectedItem ==  null && skeleton.getDrawMode() == DrawMode.SPRITE)
+					{
+						selectedItem = frame.spriteSelect(e.getPoint(), scale);
+					}
+					
+					if (selectedItem != null)
+					{
+						TreePath path = new TreePath(frame);
+						path = path.pathByAddingChild(selectedItem);
+						tree.setSelectionPath(path);
+					}
 				}
 			}
 			@Override

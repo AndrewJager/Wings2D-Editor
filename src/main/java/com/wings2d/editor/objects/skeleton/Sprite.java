@@ -198,6 +198,14 @@ public class Sprite implements SkeletonNode, Drawable{
 		transform.rotate(Math.toRadians(delta), 0, 0);
 		path = (Path2D)transform.createTransformedShape(path);
 	}
+	public Color getColor()
+	{
+		return color;
+	}
+	public void setColor(final Color color)
+	{
+		this.color = color;
+	}
 
 	// MutableTreeNode methods
 	@Override

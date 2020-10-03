@@ -192,7 +192,7 @@ public class Sprite implements SkeletonNode, Drawable{
 	{
 		setVertexLocation(loc, getSelectedVertex(), scale);
 	}
-	public void rotateAroundBone(final double delta, final double scale)
+	public void rotateAroundBone(final double delta)
 	{
 		AffineTransform transform = new AffineTransform();
 		transform.rotate(Math.toRadians(delta), 0, 0);

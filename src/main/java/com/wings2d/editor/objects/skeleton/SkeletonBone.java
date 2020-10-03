@@ -323,7 +323,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		double delta = rotation - oldRotation;
 		for (int i = 0; i < sprites.size(); i++)
 		{
-			sprites.get(i).rotateAroundBone(delta, scale);
+			sprites.get(i).rotateAroundBone(delta);
 		}
 		for (int i = 0; i < childBones.size(); i++)
 		{
@@ -335,6 +335,10 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		AffineTransform transform = new AffineTransform();
 		transform.setToRotation(Math.toRadians(amt), point.getX(), point.getY());
 		transform.transform(location, location);
+		for (int i = 0; i < sprites.size(); i++)
+		{
+			sprites.get(i).rotateAroundBone(amt);
+		}
 		for (int i = 0; i < childBones.size(); i++)
 		{
 			childBones.get(i).rotateAround(point, amt);

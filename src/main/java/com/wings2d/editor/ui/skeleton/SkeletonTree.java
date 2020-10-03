@@ -21,6 +21,7 @@ import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.objects.skeleton.SkeletonPiece;
 import com.wings2d.editor.objects.skeleton.Sprite;
+import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
 
 public class SkeletonTree extends SkeletonUIElement{
 	private JTree tree;
@@ -57,26 +58,26 @@ public class SkeletonTree extends SkeletonUIElement{
 				{
 					if (selectedNode instanceof Skeleton)
 					{
-						treeControls.setupControls(SkeletonPiece.SKELETON);	
+						treeControls.showSkeletonControls(selectedNode);
 					}
 					if (selectedNode instanceof SkeletonAnimation)
 					{
-						treeControls.setupControls(SkeletonPiece.ANIMATION);	
+						treeControls.showAnimationControls(selectedNode);
 					}
 					else if (selectedNode instanceof SkeletonFrame)
 					{
-						treeControls.setupControls(SkeletonPiece.FRAME);
+						treeControls.showFrameControls(selectedNode);
 					}
 					else if (selectedNode instanceof SkeletonBone)
 					{
-						treeControls.setupControls(SkeletonPiece.BONE);
+						treeControls.showBoneControls(selectedNode);
 						SkeletonBone bone = (SkeletonBone)selectedNode;
 						bone.getFrame().deselectAllBones();
 						bone.setIsSelected(true);
 					}
 					else if (selectedNode instanceof Sprite)
 					{
-						treeControls.setupControls(SkeletonPiece.SPRITE);
+						treeControls.showSpriteControls(selectedNode);
 						SkeletonBone bone = (SkeletonBone)selectedNode.getParent();
 						bone.setSelectedSprite((Sprite)selectedNode);
 					}

@@ -7,6 +7,7 @@ import com.wings2d.editor.objects.skeleton.Skeleton;
 import com.wings2d.editor.objects.skeleton.SkeletonPiece;
 import com.wings2d.editor.ui.Editor;
 import com.wings2d.editor.ui.UIPanel;
+import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
 
 public class SkeletonEdit extends UIPanel{
 	public static String CARD_ID = "Skeleton";
@@ -39,7 +40,7 @@ public class SkeletonEdit extends UIPanel{
 	{
 		this.skeleton = s;
 		tree.setSkeleton(s);
-		treeControls.setupControls(SkeletonPiece.SKELETON);
+		treeControls.showSkeletonControls(s);
 	}
 	
 	public Skeleton getSkeleton()

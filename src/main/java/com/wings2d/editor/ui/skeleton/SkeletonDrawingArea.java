@@ -21,6 +21,7 @@ import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.objects.skeleton.Sprite;
 import com.wings2d.editor.ui.DrawingArea;
+import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
 
 public class SkeletonDrawingArea extends SkeletonUIElement{
 	private DrawingArea drawArea;
@@ -152,7 +153,7 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 					}
 				}
 				
-				controls.updateNodeInfo();
+				controls.updateNodeInfo(selectedItem);
 				drawArea.resizeToDrawItem(skeleton.getEditor().getUIScale());
 				panel.repaint();
 			}

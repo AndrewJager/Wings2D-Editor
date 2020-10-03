@@ -88,9 +88,9 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 							skeleton.setDrawMode(DrawMode.SPRITE);
 						}
 					}
-					
+
 					double scale = skeleton.getEditor().getUIScale() * drawArea.getZoomScale();
-					if (skeleton.getDrawMode() != DrawMode.BONE_MOVE)
+					if (skeleton.getDrawMode() == DrawMode.BONE_MOVE)
 					{
 						selectedItem = frame.getBoneAtPosition(e.getPoint(), scale);
 					}

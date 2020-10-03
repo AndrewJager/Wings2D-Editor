@@ -56,7 +56,7 @@ public class Sprite implements SkeletonNode, Drawable{
 				name = tokens[1];
 				break;
 			case COLOR_TOKEN:
-				color = Color.LIGHT_GRAY;
+				color = new Color(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]), Integer.parseInt(tokens[3]));
 				break;
 			case VERTEX_TOKEN:
 				if (firstPoint)
@@ -247,7 +247,7 @@ public class Sprite implements SkeletonNode, Drawable{
 	public void saveToFile(final PrintWriter out) {
 		out.write(SPRITE_TOKEN + "\n");
 		out.print(NAME_TOKEN + ":" + name + "\n");
-		out.write(COLOR_TOKEN + ":" + color.toString()+ "\n");
+		out.write(COLOR_TOKEN + ":" + color.getRed() + ":" + color.getGreen() + ":" + color.getBlue() + "\n");
 		List<Point2D> vertices = getVertices();
 		for (int i = 0; i < vertices.size(); i++)
 		{

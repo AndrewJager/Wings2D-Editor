@@ -168,6 +168,10 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 			drawingArea.setSelectedFrame(bone.getFrame());
 			drawingArea.getDrawArea().setDrawItem(bone.getFrame());
 			break;
+		case SPRITE:
+			Sprite sprite = (Sprite)selectedNode;
+			addLabel(sprite.toString());
+			break;
 		default:
 			break;
 		}

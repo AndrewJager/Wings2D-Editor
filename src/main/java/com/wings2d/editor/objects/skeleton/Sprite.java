@@ -14,17 +14,23 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.Drawable;
+import com.wings2d.framework.ShapeComparator;
 
 public class Sprite implements SkeletonNode, Drawable{
 	public static final String SPRITE_TOKEN = "SPRITE";
 	public static final String VERTEX_TOKEN = "VERTEX";
+	public static final String SYNC_ID_TOKEN = "SYNCID";
+	
 	private String name;
 	private SkeletonBone parent;
+	/** ID used to sync sprites between bones **/
+	private UUID syncID;
 	private Path2D path;
 	private Color color;
 	private int selectedVertex = -1;
@@ -33,6 +39,7 @@ public class Sprite implements SkeletonNode, Drawable{
 	{
 		this.name = spriteName;
 		this.parent = parent;
+		syncID = UUID.randomUUID();
 		color = Color.LIGHT_GRAY;
 		path = new Path2D.Double();
 		path.moveTo(-30, -30);
@@ -69,11 +76,22 @@ public class Sprite implements SkeletonNode, Drawable{
 					path.lineTo(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
 				}
 				break;
+			case SYNC_ID_TOKEN:
+				syncID = UUID.fromString(tokens[1]);
+				break;
 			case END_TOKEN:
 				keepReading = false;
 				break;
 			}
 		}
+	}
+	public Sprite copy(final SkeletonBone parent)
+	{
+		Sprite newSprite = new Sprite(new String(this.name), parent);
+		newSprite.color = new Color(this.color.getRGB());
+		newSprite.path = new Path2D.Double(this.path);
+		newSprite.syncID = this.syncID;
+		return newSprite;
 	}
 	
 	public String toString()
@@ -108,7 +126,6 @@ public class Sprite implements SkeletonNode, Drawable{
 		{
 			throw new IllegalArgumentException("Point " + vertex + " is outside the amount of points in the Sprite's path!");
 		}
-		
 		selectedVertex = vertex;
 	}
 	public int getSelectedVertex()
@@ -190,6 +207,16 @@ public class Sprite implements SkeletonNode, Drawable{
 	/** Calls setVertexLocation with the vertex returned by getSelectedVertex() **/
 	public void setVertexLocation(final Point loc, final double scale)
 	{
+		// Set children first to avoid comparing shapes after this shape is changed
+		List<SkeletonBone> syncedBones = parent.getSyncedBones();
+		for (int i = 0; i < syncedBones.size(); i++)
+		{
+			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncID);
+			if (ShapeComparator.similarShapes(this.path, sprite.path))
+			{
+				sprite.setVertexLocation(loc, getSelectedVertex(), scale);
+			}
+		}
 		setVertexLocation(loc, getSelectedVertex(), scale);
 	}
 	public void rotateAroundBone(final double delta)
@@ -205,6 +232,10 @@ public class Sprite implements SkeletonNode, Drawable{
 	public void setColor(final Color color)
 	{
 		this.color = color;
+	}
+	public UUID getSyncID()
+	{
+		return syncID;
 	}
 
 	// MutableTreeNode methods
@@ -247,6 +278,7 @@ public class Sprite implements SkeletonNode, Drawable{
 	public void saveToFile(final PrintWriter out) {
 		out.write(SPRITE_TOKEN + "\n");
 		out.print(NAME_TOKEN + ":" + name + "\n");
+		out.write(SYNC_ID_TOKEN + ":" + syncID + "\n");
 		out.write(COLOR_TOKEN + ":" + color.getRed() + ":" + color.getGreen() + ":" + color.getBlue() + "\n");
 		List<Point2D> vertices = getVertices();
 		for (int i = 0; i < vertices.size(); i++)

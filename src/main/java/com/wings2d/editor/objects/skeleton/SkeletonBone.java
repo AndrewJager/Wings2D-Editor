@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.Drawable;
-import com.wings2d.framework.Utils;
 
 public class SkeletonBone implements SkeletonNode, Drawable{
 	public static final String BONE_TOKEN = "BONE";
@@ -368,6 +368,23 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	{
 		return selectedSprite;
 	}
+	public int getSelectedSpriteIndex()
+	{
+		return sprites.indexOf(selectedSprite);
+	}
+	public Sprite getSpriteBySyncID(final UUID id)
+	{
+		Sprite selectedSprite = null;
+		for (int i = 0; i < sprites.size(); i++)
+		{
+			if (sprites.get(i).getSyncID().equals(id))
+			{
+				selectedSprite = sprites.get(i);
+				break;
+			}
+		}
+		return selectedSprite;
+	}
 	public void deselectAllVertices()
 	{
 		for (int i = 0; i < sprites.size(); i++)
@@ -380,7 +397,13 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	// MutableTreeNode methods
 	@Override
 	public void insert(final MutableTreeNode child, final int index) {
-		sprites.add(index, (Sprite)child);
+		Sprite sprite = (Sprite)child;
+		sprites.add(index, sprite);
+		this.setSelectedSprite(sprite);
+		for (int i = 0; i < syncedBones.size(); i++)
+		{
+			syncedBones.get(i).insert(sprite.copy(syncedBones.get(i)), syncedBones.get(i).getSprites().size());		
+		}
 	}
 	@Override
 	public void remove(final int index) {
@@ -468,6 +491,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		if (syncBoneID != null && (parentSyncedBone == null || (!parentSyncedBone.getID().equals(syncBoneID))))
 		{
 			parentSyncedBone = frame.getAnimation().getSkeleton().getBoneBYID(syncBoneID);
+			parentSyncedBone.getSyncedBones().add(this);
 		}
 		if (parentBoneName != null)
 		{

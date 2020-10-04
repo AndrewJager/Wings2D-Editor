@@ -83,7 +83,6 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 						model.insertNodeInto((MutableTreeNode)newSprite,
 								selectedNode, selectedNode.getChildCount());
 						model.reload();
-						bone.setSelectedSprite(newSprite);
 										
 						controls.getTree().expandPath(path);
 						controls.getTree().setSelectionPath(path.pathByAddingChild(selectedNode.getChildAt(selectedNode.getChildCount() - 1)));

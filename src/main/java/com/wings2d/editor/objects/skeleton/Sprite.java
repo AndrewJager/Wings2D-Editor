@@ -188,6 +188,17 @@ public class Sprite implements SkeletonNode, Drawable{
 		double unscaledX = x * unscale;
 		double unscaledY = y * unscale;
 		List<Point2D> points = getVertices();
+		// Set children first to avoid comparing shapes after this shape is changed
+		List<SkeletonBone> syncedBones = parent.getSyncedBones();
+		for (int i = 0; i < syncedBones.size(); i++)
+		{
+			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncID);
+			if (ShapeComparator.similarShapes(this.path, sprite.path))
+			{
+				sprite.translateVertex(unscaledX - points.get(getSelectedVertex()).getX() - parent.getX(), 
+						unscaledY - points.get(getSelectedVertex()).getY() - parent.getY(), getSelectedVertex(), scale);
+			}
+		}
 		points.get(vertex).setLocation(unscaledX - parent.getX(), 
 				unscaledY - parent.getY());
 		path = new Path2D.Double();
@@ -207,6 +218,10 @@ public class Sprite implements SkeletonNode, Drawable{
 	/** Calls setVertexLocation with the vertex returned by getSelectedVertex() **/
 	public void setVertexLocation(final Point loc, final double scale)
 	{
+		setVertexLocation(loc, getSelectedVertex(), scale);
+	}
+	public void translateVertex(final double deltaX, final double deltaY, final int vertex, final double scale)
+	{
 		// Set children first to avoid comparing shapes after this shape is changed
 		List<SkeletonBone> syncedBones = parent.getSyncedBones();
 		for (int i = 0; i < syncedBones.size(); i++)
@@ -214,10 +229,21 @@ public class Sprite implements SkeletonNode, Drawable{
 			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncID);
 			if (ShapeComparator.similarShapes(this.path, sprite.path))
 			{
-				sprite.setVertexLocation(loc, getSelectedVertex(), scale);
+				sprite.translateVertex(deltaX, deltaY, vertex, scale);
 			}
 		}
-		setVertexLocation(loc, getSelectedVertex(), scale);
+		List<Point2D> points = getVertices();
+		Point2D point = points.get(vertex);
+		points.get(vertex).setLocation(point.getX() + deltaX, point.getY() + deltaY);
+		path = new Path2D.Double();
+		path.moveTo(points.get(0).getX(), points.get(0).getY());
+		if (points.size() > 1)
+		{
+			for (int i = 1; i < points.size(); i++)
+			{
+				path.lineTo(points.get(i).getX(), points.get(i).getY());
+			}
+		}
 	}
 	public void rotateAroundBone(final double delta)
 	{
@@ -236,6 +262,10 @@ public class Sprite implements SkeletonNode, Drawable{
 	public UUID getSyncID()
 	{
 		return syncID;
+	}
+	public SkeletonBone getBone()
+	{
+		return parent;
 	}
 
 	// MutableTreeNode methods

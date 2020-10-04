@@ -258,6 +258,12 @@ public class Sprite implements SkeletonNode, Drawable{
 	public void setColor(final Color color)
 	{
 		this.color = color;
+		List<SkeletonBone> syncedBones = parent.getSyncedBones();
+		for (int i = 0; i < syncedBones.size(); i++)
+		{
+			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncID);
+			sprite.setColor(color);
+		}
 	}
 	public UUID getSyncID()
 	{

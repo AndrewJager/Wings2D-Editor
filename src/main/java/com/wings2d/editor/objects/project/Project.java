@@ -19,7 +19,7 @@ public class Project {
 	{
 		entities = new ArrayList<ProjectEntity>();
 	}
-	public Project(final File directory) throws FileNotFoundException
+	public Project(final File directory, final boolean autoAcceptDir, final String projectName) throws FileNotFoundException
 	{
 		this();
 		validateDirectory(directory);
@@ -39,10 +39,25 @@ public class Project {
 		}
 		else
 		{
-			int result = JOptionPane.showConfirmDialog(null, "Folder does not have a PROJECTINFO.txt file. Would you like to create one?");
+			int result;
+			if (!autoAcceptDir)
+			{
+				result = JOptionPane.showConfirmDialog(null, "Folder does not have a PROJECTINFO.txt file. Would you like to create one?");
+			}
+			else
+			{
+				result = JOptionPane.OK_OPTION;
+			}
 			if (result == JOptionPane.OK_OPTION)
 			{
-				name = JOptionPane.showInputDialog("Enter the project name:", "Project");
+				if (projectName != null)
+				{
+					name = projectName;
+				}
+				else
+				{
+					name = JOptionPane.showInputDialog("Enter the project name:", "Project");
+				}
 				File newProjFile = new File(directory + "/PROJECTINFO.txt");
 				try {
 					newProjFile.createNewFile();
@@ -63,6 +78,11 @@ public class Project {
 		{
 			createAllInDirectory(directory);
 		}
+	}
+	
+	public Project(final File directory) throws FileNotFoundException
+	{
+		this(directory, false, null);
 	}
 	
 	private void createAllInDirectory(File directory)

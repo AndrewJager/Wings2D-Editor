@@ -195,8 +195,8 @@ public class Sprite implements SkeletonNode, Drawable{
 			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncID);
 			if (ShapeComparator.similarShapes(this.path, sprite.path))
 			{
-				sprite.translateVertex(unscaledX - points.get(getSelectedVertex()).getX() - parent.getX(), 
-						unscaledY - points.get(getSelectedVertex()).getY() - parent.getY(), getSelectedVertex(), scale);
+				sprite.translateVertex(this.path, unscaledX - points.get(getSelectedVertex()).getX() - parent.getX(), 
+						unscaledY - points.get(getSelectedVertex()).getY() - parent.getY(), getSelectedVertex());
 			}
 		}
 		points.get(vertex).setLocation(unscaledX - parent.getX(), 
@@ -220,7 +220,7 @@ public class Sprite implements SkeletonNode, Drawable{
 	{
 		setVertexLocation(loc, getSelectedVertex(), scale);
 	}
-	public void translateVertex(final double deltaX, final double deltaY, final int vertex, final double scale)
+	public void translateVertex(final Shape parentPath, final double deltaX, final double deltaY, final int vertex)
 	{
 		// Set children first to avoid comparing shapes after this shape is changed
 		List<SkeletonBone> syncedBones = parent.getSyncedBones();
@@ -229,12 +229,18 @@ public class Sprite implements SkeletonNode, Drawable{
 			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncID);
 			if (ShapeComparator.similarShapes(this.path, sprite.path))
 			{
-				sprite.translateVertex(deltaX, deltaY, vertex, scale);
+				sprite.translateVertex(this.path, deltaX, deltaY, vertex);
 			}
 		}
+
+		double angle = ShapeComparator.getRotationFrom(this.path, parentPath, false);
+		AffineTransform transform = new AffineTransform();
+		transform.rotate(Math.toRadians(angle));
+		path = (Path2D)transform.createTransformedShape(path);
+		
 		List<Point2D> points = getVertices();
-		Point2D point = points.get(vertex);
-		points.get(vertex).setLocation(point.getX() + deltaX, point.getY() + deltaY);
+		Point2D movePoint = points.get(vertex);
+		points.get(vertex).setLocation(movePoint.getX() + deltaX, movePoint.getY() + deltaY);
 		path = new Path2D.Double();
 		path.moveTo(points.get(0).getX(), points.get(0).getY());
 		if (points.size() > 1)
@@ -244,6 +250,9 @@ public class Sprite implements SkeletonNode, Drawable{
 				path.lineTo(points.get(i).getX(), points.get(i).getY());
 			}
 		}
+		transform = new AffineTransform();
+		transform.rotate(Math.toRadians(-angle));
+		path = (Path2D)transform.createTransformedShape(path);
 	}
 	public void rotateAroundBone(final double delta)
 	{

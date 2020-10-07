@@ -68,24 +68,38 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 				{
 					if (SwingUtilities.isRightMouseButton(e))
 					{
-						if (skeleton.getDrawMode() == DrawMode.BONE_ROTATE)
+						if (skeleton.getDrawMode().getSuperMode() == DrawMode.SuperDrawMode.BONE)
 						{
-							skeleton.setDrawMode(DrawMode.BONE_MOVE);
+							if (skeleton.getDrawMode() == DrawMode.BONE_ROTATE)
+							{
+								skeleton.setDrawMode(DrawMode.BONE_MOVE);
+							}
+							else
+							{
+								skeleton.setDrawMode(DrawMode.BONE_ROTATE);
+							}
 						}
-						else
+						else if (skeleton.getDrawMode().getSuperMode() == DrawMode.SuperDrawMode.SPRITE)
 						{
-							skeleton.setDrawMode(DrawMode.BONE_ROTATE);
+							if (skeleton.getDrawMode() == DrawMode.SPRITE_MOVE)
+							{
+								skeleton.setDrawMode(DrawMode.SPRITE_EDIT);
+							}
+							else if (skeleton.getDrawMode() == DrawMode.SPRITE_EDIT)
+							{
+								skeleton.setDrawMode(DrawMode.SPRITE_MOVE);
+							}
 						}
 					}
 					else if (SwingUtilities.isMiddleMouseButton(e))
-					{
-						if (skeleton.getDrawMode() == DrawMode.SPRITE)
+					{	
+						if (skeleton.getDrawMode().getSuperMode() == DrawMode.SuperDrawMode.BONE)
+						{
+							skeleton.setDrawMode(skeleton.getLastSpriteDrawMode());
+						}
+						else if (skeleton.getDrawMode().getSuperMode() == DrawMode.SuperDrawMode.SPRITE)
 						{
 							skeleton.setDrawMode(skeleton.getLastBoneDrawMode());
-						}
-						else
-						{
-							skeleton.setDrawMode(DrawMode.SPRITE);
 						}
 					}
 
@@ -98,9 +112,13 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 					{
 						selectedItem = frame.getBoneByRotHandle(e.getPoint(), scale);
 					}
-					else if (selectedItem ==  null && skeleton.getDrawMode() == DrawMode.SPRITE)
+					else if (selectedItem ==  null && skeleton.getDrawMode() == DrawMode.SPRITE_MOVE)
 					{
-						selectedItem = frame.spriteSelect(e.getPoint(), scale);
+						selectedItem = frame.selectSprite(e.getPoint(), scale);
+					}
+					else if (selectedItem ==  null && skeleton.getDrawMode() == DrawMode.SPRITE_EDIT)
+					{
+						selectedItem = frame.selectSpriteVertex(e.getPoint(), scale);
 					}
 					
 					if (selectedItem != null)
@@ -139,13 +157,13 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 						bone = (SkeletonBone)selectedItem;
 						bone.rotateByHandle(e.getPoint(), scale);
 						break;
-					case SPRITE:
+					case SPRITE_MOVE:
 						Sprite sprite = (Sprite)selectedItem;
-						if (sprite.getSelectedVertex() == -1)
-						{
-							sprite.setLocation(e.getPoint(), scale);
-						}
-						else
+						sprite.setLocation(e.getPoint(), scale);
+						break;
+					case SPRITE_EDIT:
+						sprite = (Sprite)selectedItem;
+						if (sprite.getSelectedVertex() != -1)
 						{
 							sprite.setVertexLocation(e.getPoint(), scale);
 						}

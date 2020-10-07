@@ -350,7 +350,7 @@ public class Sprite implements SkeletonNode, Drawable{
 		g2d.setColor(color);
 		g2d.fill(draw);
 		
-		if (mode == DrawMode.SPRITE)
+		if (mode == DrawMode.SPRITE_MOVE || mode == DrawMode.SPRITE_EDIT)
 		{
 			PathIterator iter = path.getPathIterator(transform);
 			g2d.setColor(Color.YELLOW);

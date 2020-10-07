@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -390,6 +392,64 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		{
 			sprites.get(i).setSelectedVertex(-1);
 		}
+	}
+	public Sprite selectSpriteVertex(final Point loc, final double scale)
+	{
+		deselectAllVertices();
+		
+		Sprite selectedSprite = null;
+		boolean spriteSelected = false;
+		// Attempt to select a vertex on the selected Sprite
+		if (getSelectedSprite() != null)
+		{
+			spriteSelected = checkIfVertexIsSelected(getSelectedSprite(), loc, scale);
+		}
+		if (spriteSelected)
+		{
+			selectedSprite = getSelectedSprite();
+		}
+		else
+		{
+			for (int i = 0; i < sprites.size(); i++)
+			{
+				spriteSelected = checkIfVertexIsSelected(sprites.get(i), loc, scale);
+				if (spriteSelected)
+				{
+					selectedSprite = sprites.get(i);
+					break;
+				}
+			}
+		}
+		
+		return selectedSprite;
+	}
+	
+	/** Returns true if a vertex is close to loc **/
+	private boolean checkIfVertexIsSelected(final Sprite sprite, final Point loc, final double scale)
+	{
+		boolean isSpriteSelected = false;
+		final double MIN_DISTANCE = 10;
+		Path2D path = sprite.getScaledAndTranslatedPath(scale);
+		PathIterator iter = path.getPathIterator(null);
+		double[] coords = new double[6];
+		int vertex = 0;
+		while(!iter.isDone())
+		{
+			iter.currentSegment(coords);
+			double dist = Math.sqrt(Math.pow((loc.getX() - coords[0]), 2) 
+					+ Math.pow((loc.getY() - coords[1]), 2));
+			
+			if (dist <= MIN_DISTANCE)
+			{
+				isSpriteSelected = true;
+				sprite.setSelectedVertex(vertex);
+				break;
+			}
+			
+			vertex++;
+			iter.next();
+		}
+		return isSpriteSelected;
 	}
 
 	

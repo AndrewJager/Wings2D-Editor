@@ -15,6 +15,7 @@ public class SkeletonEdit extends UIPanel{
 	private Skeleton skeleton;
 	private DrawMode drawMode;
 	private DrawMode lastBoneDrawMode;
+	private DrawMode lastSpriteDrawMode;
 	
 	private SkeletonTopBar bar;
 	private SkeletonTree tree;
@@ -26,6 +27,7 @@ public class SkeletonEdit extends UIPanel{
 		super(edit);
 		drawMode = DrawMode.BONE_MOVE;
 		lastBoneDrawMode = DrawMode.BONE_MOVE;
+		lastSpriteDrawMode = DrawMode.SPRITE_MOVE;
 		
 		bar = new SkeletonTopBar(this, new Rectangle(0, 0, edit.frameStartWidth, 50));
 		tree = new SkeletonTree(this, new Rectangle(0, 50, 200, 400));
@@ -56,6 +58,10 @@ public class SkeletonEdit extends UIPanel{
 		{
 			lastBoneDrawMode = mode;
 		}
+		else if (mode == DrawMode.SPRITE_MOVE || mode == DrawMode.SPRITE_EDIT)
+		{
+			lastSpriteDrawMode = mode;
+		}
 	}
 	public DrawMode getDrawMode()
 	{
@@ -64,6 +70,10 @@ public class SkeletonEdit extends UIPanel{
 	public DrawMode getLastBoneDrawMode()
 	{
 		return lastBoneDrawMode;
+	}
+	public DrawMode getLastSpriteDrawMode()
+	{
+		return lastSpriteDrawMode;
 	}
 	public SkeletonTopBar getTopBar()
 	{

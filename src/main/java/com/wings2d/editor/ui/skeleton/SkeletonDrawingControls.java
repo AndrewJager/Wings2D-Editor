@@ -1,18 +1,18 @@
 package com.wings2d.editor.ui.skeleton;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.JSeparator;
 import javax.swing.JToggleButton;
 
 import com.wings2d.editor.objects.skeleton.DrawMode;
 
 public class SkeletonDrawingControls extends SkeletonUIElement{
-	private JToggleButton moveBtn, rotateBtn, spriteBtn;
+	private JToggleButton moveBtn, rotateBtn, spriteMoveBtn, spriteEditBtn;
 
 	public SkeletonDrawingControls(SkeletonEdit edit, Rectangle bounds) {
 		super(edit, bounds);
@@ -27,10 +27,15 @@ public class SkeletonDrawingControls extends SkeletonUIElement{
 		rotateBtn.setToolTipText("Rotate Bones");
 		rotateBtn.setFont(rotateBtn.getFont().deriveFont(fontSize));
 		panel.add(rotateBtn);
-		spriteBtn = new JToggleButton(String.valueOf("\u25ED"));
-		spriteBtn.setToolTipText("Sprite Edit");
-		spriteBtn.setFont(spriteBtn.getFont().deriveFont(fontSize));
-		panel.add(spriteBtn);
+		panel.add(new JSeparator(JSeparator.VERTICAL));
+		spriteMoveBtn = new JToggleButton(String.valueOf("\u25ED"));
+		spriteMoveBtn.setToolTipText("Move Sprite");
+		spriteMoveBtn.setFont(spriteMoveBtn.getFont().deriveFont(fontSize));
+		panel.add(spriteMoveBtn);
+		spriteEditBtn = new JToggleButton("^");
+		spriteEditBtn.setToolTipText("Edit Sprite");
+		spriteEditBtn.setFont(spriteMoveBtn.getFont().deriveFont(fontSize));
+		panel.add(spriteEditBtn);
 		
 		setControls(skeleton.getDrawMode());
 	}
@@ -46,9 +51,11 @@ public class SkeletonDrawingControls extends SkeletonUIElement{
 		case BONE_ROTATE:
 			rotateBtn.setSelected(true);
 			break;
-		case SPRITE:
-			spriteBtn.setSelected(true);
+		case SPRITE_MOVE:
+			spriteMoveBtn.setSelected(true);
 			break;
+		case SPRITE_EDIT:
+			spriteEditBtn.setSelected(true);
 		}
 	}
 	
@@ -56,7 +63,8 @@ public class SkeletonDrawingControls extends SkeletonUIElement{
 	{
 		moveBtn.setSelected(false);
 		rotateBtn.setSelected(false);
-		spriteBtn.setSelected(false);
+		spriteMoveBtn.setSelected(false);
+		spriteEditBtn.setSelected(false);
 	}
 
 	@Override
@@ -64,8 +72,7 @@ public class SkeletonDrawingControls extends SkeletonUIElement{
 		moveBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				rotateBtn.setSelected(false);
-				spriteBtn.setSelected(false);	
+				setControls(DrawMode.BONE_MOVE);
 				skeleton.setDrawMode(DrawMode.BONE_MOVE);
 				skeleton.getDrawingArea().getDrawArea().repaint();
 			}
@@ -73,18 +80,24 @@ public class SkeletonDrawingControls extends SkeletonUIElement{
 		rotateBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				moveBtn.setSelected(false);
-				spriteBtn.setSelected(false);
+				setControls(DrawMode.BONE_ROTATE);
 				skeleton.setDrawMode(DrawMode.BONE_ROTATE);
 				skeleton.getDrawingArea().getDrawArea().repaint();
 			}
 		});
-		spriteBtn.addActionListener(new ActionListener() {
+		spriteMoveBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				moveBtn.setSelected(false);
-				rotateBtn.setSelected(false);
-				skeleton.setDrawMode(DrawMode.SPRITE);
+				setControls(DrawMode.SPRITE_MOVE);
+				skeleton.setDrawMode(DrawMode.SPRITE_MOVE);
+				skeleton.getDrawingArea().getDrawArea().repaint();
+			}
+		});
+		spriteEditBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setControls(DrawMode.SPRITE_EDIT);
+				skeleton.setDrawMode(DrawMode.SPRITE_EDIT);
 				skeleton.getDrawingArea().getDrawArea().repaint();
 			}
 		});

@@ -207,51 +207,56 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		}
 		return selectedBone;
 	}
-	public Sprite spriteSelect(final Point loc, final double scale)
+	public Sprite selectSprite(final Point loc, final double scale)
 	{
 		Sprite selectedSprite = null;
-		final double minDistance = 10;
 		SkeletonBone bone = getSelectedBone();
 		if (bone != null)
 		{
-			bone.deselectAllVertices();
-			// Attempt to select a vertex on the selected Sprite
-			if (bone.getSelectedSprite() != null)
+			for (int i = 0; i < bone.getSprites().size(); i++)
 			{
-				Sprite sprite = bone.getSelectedSprite();
-				Path2D path = bone.getSelectedSprite().getScaledAndTranslatedPath(scale);
-				PathIterator iter = path.getPathIterator(null);
-				double[] coords = new double[6];
-				int vertex = 0;
-				while(!iter.isDone())
+				Sprite sprite = bone.getSprites().get(i);
+				if (sprite.getScaledAndTranslatedPath(scale).contains(loc))
 				{
-					iter.currentSegment(coords);
-					double dist = Math.sqrt(Math.pow((loc.getX() - coords[0]), 2) 
-							+ Math.pow((loc.getY() - coords[1]), 2));
-					
-					if (dist <= minDistance)
-					{
-						selectedSprite = sprite;
-						selectedSprite.setSelectedVertex(vertex);
-						break;
-					}
-					
-					vertex++;
-					iter.next();
+					selectedSprite = sprite;
+					break;
 				}
 			}
-			
-			// No selected vertex, so attempt to select a sprite with no selected vertex
-			if (bone.getSelectedSprite() == null || bone.getSelectedSprite().getSelectedVertex() == -1)
+		}
+		if (bone == null || selectedSprite == null)
+		{
+			for (int i = 0; i < bones.size(); i++)
 			{
-				for (int i = 0; i < bone.getSprites().size(); i++)
+				for (int j = 0; j < bones.get(i).getSprites().size(); j++)
 				{
-					Sprite sprite = bone.getSprites().get(i);
+					Sprite sprite = bones.get(i).getSprites().get(j);
 					if (sprite.getScaledAndTranslatedPath(scale).contains(loc))
 					{
 						selectedSprite = sprite;
 						break;
 					}
+				}
+			}
+		}
+		
+		return selectedSprite;
+	}
+	public Sprite selectSpriteVertex(final Point loc, final double scale)
+	{
+		Sprite selectedSprite = null;
+		SkeletonBone bone = getSelectedBone();
+		if (bone != null)
+		{
+			selectedSprite = bone.selectSpriteVertex(loc, scale);
+		}
+		if (selectedSprite == null)
+		{
+			for (int i = 0; i < bones.size(); i++)
+			{
+				selectedSprite = bones.get(i).selectSpriteVertex(loc, scale);
+				if (selectedSprite != null)
+				{
+					break;
 				}
 			}
 		}

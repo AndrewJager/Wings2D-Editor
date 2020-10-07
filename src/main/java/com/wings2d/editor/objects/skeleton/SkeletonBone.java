@@ -1,5 +1,6 @@
 package com.wings2d.editor.objects.skeleton;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -568,6 +569,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		}
 		
 		final int handleSize = 10;
+		g2d.setStroke(new BasicStroke(2));
 		g2d.setColor(handleColor);
 		g2d.drawArc((int)((location.getX() * scale) - (handleSize / 2)), (int)((location.getY() * scale) - (handleSize / 2)),
 				handleSize, handleSize, 0, 360);

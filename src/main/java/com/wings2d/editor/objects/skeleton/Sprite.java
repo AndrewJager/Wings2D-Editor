@@ -1,5 +1,6 @@
 package com.wings2d.editor.objects.skeleton;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -331,7 +332,6 @@ public class Sprite implements SkeletonNode, Drawable{
 			Point2D vertex = vertices.get(i);
 			out.write(VERTEX_TOKEN + ":" + vertex.getX() + ":" + vertex.getY()+ "\n"); 
 		}
-		
 		out.write(END_TOKEN + ":" + SPRITE_TOKEN + "\n");
 	}
 	@Override
@@ -350,7 +350,13 @@ public class Sprite implements SkeletonNode, Drawable{
 		g2d.setColor(color);
 		g2d.fill(draw);
 		
-		if (mode == DrawMode.SPRITE_MOVE || mode == DrawMode.SPRITE_EDIT)
+		if (mode == DrawMode.SPRITE_MOVE)
+		{
+			g2d.setStroke(new BasicStroke(5));
+			g2d.setColor(Color.YELLOW);
+			g2d.draw(draw);
+		}
+		if (mode == DrawMode.SPRITE_EDIT)
 		{
 			PathIterator iter = path.getPathIterator(transform);
 			g2d.setColor(Color.YELLOW);

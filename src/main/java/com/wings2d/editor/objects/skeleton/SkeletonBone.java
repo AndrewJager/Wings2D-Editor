@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
@@ -25,6 +24,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	public static final String PARENT_BONE_TOKEN = "PARENTBONE";
 	public static final String SYNC_BONE_ID_TOKEN = "SYNCBONEID";
 	public static final String POSITION_TOKEN = "POSITION";
+	public static final String ROTATION_TOKEN = "ROTATION";
 	public static final Point2D START_POS = new Point2D.Double(10, 15);
 	
 	private SkeletonFrame frame;
@@ -84,33 +84,32 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		while(in.hasNext() && keepReading)
 		{
 			String[] tokens = in.next().split(":");
-			if (tokens[0].equals(NAME_TOKEN))
+			switch(tokens[0])
 			{
+			case NAME_TOKEN:
 				name = tokens[1];
-			}
-			else if (tokens[0].equals(ID_TOKEN))
-			{
+				break;
+			case ID_TOKEN:
 				boneID = UUID.fromString(tokens[1]);
-			}
-			else if (tokens[0].equals(PARENT_BONE_TOKEN))
-			{
+				break;
+			case PARENT_BONE_TOKEN:
 				parentBoneName = tokens[1];
-			}
-			else if (tokens[0].equals(SYNC_BONE_ID_TOKEN))
-			{
+				break;
+			case SYNC_BONE_ID_TOKEN:
 				syncBoneID = UUID.fromString(tokens[1]);
-			}
-			else if (tokens[0].equals(POSITION_TOKEN))
-			{
+				break;
+			case POSITION_TOKEN:
 				location.setLocation(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
-			}
-			else if (tokens[0].equals(Sprite.SPRITE_TOKEN))
-			{
+				break;
+			case Sprite.SPRITE_TOKEN:
 				sprites.add(new Sprite(in, this));
-			}
-			else if (tokens[0].equals(END_TOKEN))
-			{
+				break;
+			case ROTATION_TOKEN:
+				rotation = Double.parseDouble(tokens[1]);
+				break;
+			case END_TOKEN:
 				keepReading = false;
+				break;
 			}
 		}
 	}
@@ -479,6 +478,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 			out.print(SYNC_BONE_ID_TOKEN + ":" + syncBoneID.toString() + "\n");
 		}
 		out.print(POSITION_TOKEN + ":" + location.getX() +":" + location.getY() + "\n");
+		out.print(ROTATION_TOKEN + ":" + rotation + "\n");
 		for (int i = 0; i < sprites.size(); i++)
 		{
 			sprites.get(i).saveToFile(out);

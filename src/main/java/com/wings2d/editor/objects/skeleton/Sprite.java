@@ -47,6 +47,7 @@ public class Sprite implements SkeletonNode, Drawable{
 		path.lineTo(30, -30);
 		path.lineTo(30, 30);
 		path.lineTo(-30, 30);
+		path.closePath();
 	}
 	
 	public Sprite(final Scanner in, final SkeletonBone parent)
@@ -81,6 +82,7 @@ public class Sprite implements SkeletonNode, Drawable{
 				syncID = UUID.fromString(tokens[1]);
 				break;
 			case END_TOKEN:
+				path.closePath();
 				keepReading = false;
 				break;
 			}
@@ -116,7 +118,10 @@ public class Sprite implements SkeletonNode, Drawable{
 		PathIterator iter = path.getPathIterator(null);
 		while(!iter.isDone())
 		{
-			points++;
+			if (iter.currentSegment(new float[6]) != PathIterator.SEG_CLOSE)
+			{
+				points++;
+			}
 			iter.next();
 		}
 		return points;
@@ -177,8 +182,10 @@ public class Sprite implements SkeletonNode, Drawable{
 		double[] coords = new double[6];
 		while(!iter.isDone())
 		{
-			iter.currentSegment(coords);
-			vertices.add(new Point2D.Double(coords[0], coords[1]));
+			if (iter.currentSegment(coords) != PathIterator.SEG_CLOSE)
+			{
+				vertices.add(new Point2D.Double(coords[0], coords[1]));
+			}
 			iter.next();
 		}
 		return vertices;
@@ -202,6 +209,10 @@ public class Sprite implements SkeletonNode, Drawable{
 		}
 		points.get(vertex).setLocation(unscaledX - parent.getX(), 
 				unscaledY - parent.getY());
+		recreatePathFromPoints(points);
+	}
+	private void recreatePathFromPoints(final List<Point2D> points)
+	{
 		path = new Path2D.Double();
 		path.moveTo(points.get(0).getX(), points.get(0).getY());
 		if (points.size() > 1)
@@ -211,6 +222,7 @@ public class Sprite implements SkeletonNode, Drawable{
 				path.lineTo(points.get(i).getX(), points.get(i).getY());
 			}
 		}
+		path.closePath();
 	}
 	public void setVertexLocation(final Point loc, final int vertex, final double scale)
 	{
@@ -242,15 +254,7 @@ public class Sprite implements SkeletonNode, Drawable{
 		List<Point2D> points = getVertices();
 		Point2D movePoint = points.get(vertex);
 		points.get(vertex).setLocation(movePoint.getX() + deltaX, movePoint.getY() + deltaY);
-		path = new Path2D.Double();
-		path.moveTo(points.get(0).getX(), points.get(0).getY());
-		if (points.size() > 1)
-		{
-			for (int i = 1; i < points.size(); i++)
-			{
-				path.lineTo(points.get(i).getX(), points.get(i).getY());
-			}
-		}
+		recreatePathFromPoints(points);
 		transform = new AffineTransform();
 		transform.rotate(Math.toRadians(-angle));
 		path = (Path2D)transform.createTransformedShape(path);
@@ -364,8 +368,10 @@ public class Sprite implements SkeletonNode, Drawable{
 			{
 				int handleSize = 8;
 				double[] coords = new double[6];
-				iter.currentSegment(coords);
-				g2d.drawArc((int)(coords[0] - (handleSize / 2)), (int)(coords[1] - (handleSize / 2)), handleSize, handleSize, 0, 360);
+				if (iter.currentSegment(coords) != PathIterator.SEG_CLOSE);
+				{
+					g2d.drawArc((int)(coords[0] - (handleSize / 2)), (int)(coords[1] - (handleSize / 2)), handleSize, handleSize, 0, 360);
+				}
 				iter.next();
 			}
 		}

@@ -4,7 +4,6 @@ import java.awt.Rectangle;
 
 import com.wings2d.editor.objects.skeleton.DrawMode;
 import com.wings2d.editor.objects.skeleton.Skeleton;
-import com.wings2d.editor.objects.skeleton.SkeletonPiece;
 import com.wings2d.editor.ui.Editor;
 import com.wings2d.editor.ui.UIPanel;
 import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;

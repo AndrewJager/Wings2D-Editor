@@ -19,7 +19,6 @@ import com.wings2d.editor.objects.skeleton.SkeletonAnimation;
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
-import com.wings2d.editor.objects.skeleton.SkeletonPiece;
 import com.wings2d.editor.objects.skeleton.Sprite;
 import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
 
@@ -81,6 +80,7 @@ public class SkeletonTree extends SkeletonUIElement{
 						SkeletonBone bone = (SkeletonBone)selectedNode.getParent();
 						bone.setSelectedSprite((Sprite)selectedNode);
 					}
+					skeleton.getDrawingArea().getDrawArea().repaint();
 				}
 			}
 		});

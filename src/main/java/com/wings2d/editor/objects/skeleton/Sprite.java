@@ -287,6 +287,17 @@ public class Sprite implements SkeletonNode, Drawable{
 	{
 		return parent;
 	}
+	public void addVertex()
+	{
+		path.lineTo(0, 0);
+		path.closePath();
+		List<SkeletonBone> syncedBones = parent.getSyncedBones();
+		for (int i = 0; i < syncedBones.size(); i++)
+		{
+			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncID);
+			sprite.addVertex();
+		}
+	}
 
 	// MutableTreeNode methods
 	@Override

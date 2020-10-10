@@ -50,6 +50,7 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Sprite sprite = (Sprite)controls.getTree().getLastSelectedPathComponent();
+				sprite.addVertex();
 			}
 		});
 	}

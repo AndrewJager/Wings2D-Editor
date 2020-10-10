@@ -183,7 +183,6 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 			else
 			{
 				SkeletonBone nullBone = null;
-				System.out.println("cat");
 				syncedBones.get(i).setParentBone(nullBone);
 			}
 		}

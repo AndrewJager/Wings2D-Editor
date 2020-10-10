@@ -66,8 +66,12 @@ public abstract class SkeletonTreeControlsUIElement {
 				SkeletonNode selectedNode = (SkeletonNode)controls.getTree().getLastSelectedPathComponent();
 				if (selectedNode != null)
 				{
+					SkeletonNode parentNode = (SkeletonNode) selectedNode.getParent();
 					DefaultTreeModel model = (DefaultTreeModel)controls.getTree().getModel();
 					model.removeNodeFromParent(selectedNode);
+					model.reload();
+					TreePath path = new TreePath(parentNode);
+					controls.getTree().setSelectionPath(path);		
 				}
 			}
 		});

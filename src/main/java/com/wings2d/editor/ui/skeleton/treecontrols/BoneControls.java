@@ -41,6 +41,7 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 		addNameLine();
 		rename.setText("Rename Bone");
 		panel.add(rename);
+		panel.add(delete);
 		JLabel parentBoneLabel = new JLabel("Parent bone:");
 		panel.add(parentBoneLabel);
 		JComboBox<SkeletonBone> otherBones = new JComboBox<SkeletonBone>(bone.getFrame().getArrayOfBonesExcept(bone));

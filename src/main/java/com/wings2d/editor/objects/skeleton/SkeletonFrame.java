@@ -104,9 +104,18 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		return parentSyncedFrame;
 	}
 	public void setParentSyncedFrame(SkeletonFrame syncedFrame) {
-		this.parentSyncedFrame = syncedFrame;
-		this.syncFrameID = syncedFrame.getGUID();
-		this.parentSyncedFrame.getSyncedFrames().add(this);
+		if (syncedFrame != null)
+		{
+			this.parentSyncedFrame = syncedFrame;
+			this.syncFrameID = syncedFrame.getGUID();
+			this.parentSyncedFrame.getSyncedFrames().add(this);
+		}
+		else
+		{
+			this.parentSyncedFrame.getSyncedFrames().remove(this);
+			this.syncFrameID = null;
+			this.parentSyncedFrame = null;
+		}
 	}
 	public List<SkeletonFrame> getSyncedFrames() {
 		return syncedFrames;
@@ -328,6 +337,14 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		for (int i = 0; i < bones.size(); i++)
 		{
 			bones.get(i).setIsSelected(false);
+		}
+	}
+	public void unsyncAll()
+	{
+		setParentSyncedFrame(null);
+		for (int i = 0; i < bones.size(); i++)
+		{
+			bones.get(i).unsyncAll();
 		}
 	}
 	

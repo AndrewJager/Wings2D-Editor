@@ -94,7 +94,15 @@ public class SkeletonAnimation implements SkeletonNode{
 	}
 	@Override
 	public void remove(final int index) {
-		frames.remove(index);
+		if (frames.get(index).syncedFrames.size() > 0)
+		{
+			throw new IllegalStateException("Cannot remove Frame that has one or more synced Frames!"); 
+		}
+		else
+		{
+			frames.get(index).unsyncAll();
+			frames.remove(index);
+		}
 	}
 	@Override
 	public void remove(final MutableTreeNode node) {

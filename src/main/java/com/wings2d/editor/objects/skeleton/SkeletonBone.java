@@ -140,9 +140,18 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		return parentSyncedBone;
 	}
 	public void setParentSyncedBone(final SkeletonBone syncedBone) {
-		this.parentSyncedBone = syncedBone;
-		this.syncBoneID = syncedBone.getID();
-		this.parentSyncedBone.getSyncedBones().add(this);
+		if (syncedBone != null)
+		{
+			this.parentSyncedBone = syncedBone;
+			this.syncBoneID = syncedBone.getID();
+			this.parentSyncedBone.getSyncedBones().add(this);
+		}
+		else
+		{
+			this.parentSyncedBone.getSyncedBones().remove(this);
+			this.syncBoneID = null;
+			this.parentSyncedBone = null;
+		}
 	}
 	public List<SkeletonBone> getSyncedBones()
 	{
@@ -450,6 +459,10 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 			iter.next();
 		}
 		return isSpriteSelected;
+	}
+	public void unsyncAll()
+	{
+		setParentSyncedBone(null);
 	}
 
 	

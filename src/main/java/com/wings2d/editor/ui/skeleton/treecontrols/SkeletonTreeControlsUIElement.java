@@ -14,6 +14,7 @@ import javax.swing.JSeparator;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import com.wings2d.editor.objects.skeleton.SkeletonMasterFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 
 public abstract class SkeletonTreeControlsUIElement {
@@ -66,12 +67,21 @@ public abstract class SkeletonTreeControlsUIElement {
 				SkeletonNode selectedNode = (SkeletonNode)controls.getTree().getLastSelectedPathComponent();
 				if (selectedNode != null)
 				{
-					SkeletonNode parentNode = (SkeletonNode) selectedNode.getParent();
-					DefaultTreeModel model = (DefaultTreeModel)controls.getTree().getModel();
-					model.removeNodeFromParent(selectedNode);
-					model.reload();
-					TreePath path = new TreePath(parentNode);
-					controls.getTree().setSelectionPath(path);		
+					try {
+						if (selectedNode instanceof SkeletonMasterFrame)
+						{
+							throw new IllegalStateException("Cannot delete Master Frame!");
+						}
+						SkeletonNode parentNode = (SkeletonNode) selectedNode.getParent();
+						DefaultTreeModel model = (DefaultTreeModel)controls.getTree().getModel();
+						model.removeNodeFromParent(selectedNode);
+						model.reload();
+						TreePath path = new TreePath(parentNode);
+						controls.getTree().setSelectionPath(path);		
+					}
+					catch (IllegalStateException ex){
+						JOptionPane.showMessageDialog(panel, ex.getMessage(), "Error!", JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			}
 		});

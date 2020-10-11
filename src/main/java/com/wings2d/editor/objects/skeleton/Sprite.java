@@ -209,9 +209,9 @@ public class Sprite implements SkeletonNode, Drawable{
 		}
 		points.get(vertex).setLocation(unscaledX - parent.getX(), 
 				unscaledY - parent.getY());
-		recreatePathFromPoints(points);
+		recreatePathFromPoints(points, true);
 	}
-	private void recreatePathFromPoints(final List<Point2D> points)
+	private void recreatePathFromPoints(final List<Point2D> points, final boolean close)
 	{
 		path = new Path2D.Double();
 		path.moveTo(points.get(0).getX(), points.get(0).getY());
@@ -222,7 +222,10 @@ public class Sprite implements SkeletonNode, Drawable{
 				path.lineTo(points.get(i).getX(), points.get(i).getY());
 			}
 		}
-		path.closePath();
+		if (close) 
+		{
+			path.closePath();
+		}
 	}
 	public void setVertexLocation(final Point loc, final int vertex, final double scale)
 	{
@@ -254,7 +257,7 @@ public class Sprite implements SkeletonNode, Drawable{
 		List<Point2D> points = getVertices();
 		Point2D movePoint = points.get(vertex);
 		points.get(vertex).setLocation(movePoint.getX() + deltaX, movePoint.getY() + deltaY);
-		recreatePathFromPoints(points);
+		recreatePathFromPoints(points, true);
 		transform = new AffineTransform();
 		transform.rotate(Math.toRadians(-angle));
 		path = (Path2D)transform.createTransformedShape(path);
@@ -289,6 +292,7 @@ public class Sprite implements SkeletonNode, Drawable{
 	}
 	public void addVertex()
 	{
+		recreatePathFromPoints(getVertices(), false);
 		path.lineTo(0, 0);
 		path.closePath();
 		List<SkeletonBone> syncedBones = parent.getSyncedBones();

@@ -473,4 +473,20 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 		
 		return new Dimension((int)bounds.getWidth(), (int)bounds.getHeight());
 	}
+	@Override
+	public void generateRender(final double scale)
+	{
+		for (int i = 0; i < bones.size(); i++)
+		{
+			bones.get(i).generateRender(scale);
+		}
+	}
+	@Override
+	public void drawRender(final Graphics2D g2d, final double scale)
+	{
+		for (int i = 0; i < bones.size(); i++)
+		{
+			bones.get(i).drawRender(g2d, scale);
+		}
+	}
 }

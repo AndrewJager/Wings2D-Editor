@@ -399,4 +399,14 @@ public class Sprite implements SkeletonNode, Drawable{
 		bounds = transform.createTransformedShape(bounds);
 		return new Dimension((int)bounds.getBounds().getWidth(), (int)bounds.getBounds().getHeight());
 	}
+	@Override
+	public void generateRender(final double scale)
+	{
+		
+	}
+	@Override
+	public void drawRender(final Graphics2D g2d, final double scale)
+	{
+		
+	}
 }

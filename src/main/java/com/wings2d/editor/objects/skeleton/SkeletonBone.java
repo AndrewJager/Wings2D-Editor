@@ -600,4 +600,19 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 	public Dimension getDrawSize(double scale) {
 		return new Dimension((int)(Drawable.DRAW_PADDING * scale), (int)(Drawable.DRAW_PADDING * scale));
 	}
+	@Override
+	public void generateRender(final double scale)
+	{
+		for (int i = 0; i < sprites.size(); i++)
+		{
+			sprites.get(i).generateRender(scale);
+		}
+	}
+	public void drawRender(final Graphics2D g2d, final double scale)
+	{
+		for (int i = 0; i < sprites.size(); i++)
+		{
+			sprites.get(i).drawRender(g2d, scale);
+		}
+	}
 }

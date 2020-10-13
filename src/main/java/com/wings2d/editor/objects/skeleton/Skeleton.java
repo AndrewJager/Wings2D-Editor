@@ -134,6 +134,13 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 		}
 		return null; // If no result found
 	}
+	public void generateRender(final double scale)
+	{
+		for (int i = 0; i < animations.size(); i++)
+		{
+			animations.get(i).generateRender(scale);
+		}
+	}
 	
 	// MutableTreeNode methods
 	@Override

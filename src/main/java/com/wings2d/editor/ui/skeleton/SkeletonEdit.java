@@ -21,6 +21,8 @@ public class SkeletonEdit extends UIPanel{
 	private SkeletonTreeControls treeControls;
 	private SkeletonDrawingArea drawingArea;
 	private SkeletonDrawingControls drawingControls;
+	private RenderArea renderArea;
+	private RenderAreaControls renderAreaControls;
 
 	public SkeletonEdit(final Editor edit) {
 		super(edit);
@@ -33,6 +35,8 @@ public class SkeletonEdit extends UIPanel{
 		drawingArea = new SkeletonDrawingArea(this, new Rectangle(420, 50, 400, 400));		
 		treeControls = new SkeletonTreeControls(this, new Rectangle(200, 50, 200, 400));
 		drawingControls = new SkeletonDrawingControls(this, new Rectangle(420, 450, 400, 50));
+		renderArea = new RenderArea(this, new Rectangle(840, 50, 400, 400));
+		renderAreaControls = new RenderAreaControls(this, new Rectangle(840, 450, 400, 50));
 		
 		drawingArea.setControls(treeControls);
 	}
@@ -93,5 +97,13 @@ public class SkeletonEdit extends UIPanel{
 	public SkeletonDrawingControls getDrawingControls()
 	{
 		return drawingControls;
+	}
+	public RenderArea getRenderArea()
+	{
+		return renderArea;
+	}
+	public RenderAreaControls getRenderAreaControls()
+	{
+		return renderAreaControls;
 	}
 }

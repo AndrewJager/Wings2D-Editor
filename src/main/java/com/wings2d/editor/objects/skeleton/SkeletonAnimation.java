@@ -78,6 +78,13 @@ public class SkeletonAnimation implements SkeletonNode{
 	{
 		return skeleton;
 	}
+	public void generateRender(final double scale)
+	{
+		for (int i = 0; i < frames.size(); i++)
+		{
+			frames.get(i).generateRender(scale);
+		}
+	}
 
 	// MutableTreeNode methods
 	@Override

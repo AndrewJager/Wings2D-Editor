@@ -10,6 +10,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -35,6 +36,10 @@ public class Sprite implements SkeletonNode, Drawable{
 	private Path2D path;
 	private Color color;
 	private int selectedVertex = -1;
+	
+	private double imgXOffset;
+	private double imgYOffset;
+	private BufferedImage image;
 	
 	public Sprite(final String spriteName, final SkeletonBone parent)
 	{
@@ -402,7 +407,16 @@ public class Sprite implements SkeletonNode, Drawable{
 	@Override
 	public void generateRender(final double scale)
 	{
-		
+		Shape drawShape = getScaledAndTranslatedPath(scale);
+		image = new BufferedImage((int)drawShape.getBounds2D().getWidth(), (int)drawShape.getBounds2D().getHeight(), BufferedImage.TYPE_INT_ARGB);
+		imgXOffset = drawShape.getBounds2D().getX();
+		imgYOffset = drawShape.getBounds2D().getY();
+		AffineTransform transform = new AffineTransform();
+		transform.translate(-drawShape.getBounds2D().getWidth(), -drawShape.getBounds2D().getHeight());
+		drawShape = transform.createTransformedShape(drawShape);
+		Graphics2D g2d = (Graphics2D)image.getGraphics();
+		g2d.setColor(color);
+		g2d.fill(drawShape);
 	}
 	@Override
 	public void drawRender(final Graphics2D g2d, final double scale)

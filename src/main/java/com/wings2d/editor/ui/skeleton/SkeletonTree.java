@@ -46,6 +46,44 @@ public class SkeletonTree extends SkeletonUIElement{
 		DefaultTreeModel newModel = new DefaultTreeModel(skeleton);
 		tree.setModel(newModel);
 	}
+	/** 
+	 * Gets the currently selected frame, the parent frame of the selected item, or the first frame of the animation,
+	 * depending on the item that is selected. Returns null if no selection.
+	 * @return {@link SkeletonFrame} to render, or null if no item selected
+	 */
+	public SkeletonFrame getFrameToRender()
+	{
+		SkeletonFrame renderFrame = null;
+		SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
+		if (selectedNode != null)
+		{
+			if (selectedNode instanceof Skeleton)
+			{
+				Skeleton skel = (Skeleton)selectedNode;
+				renderFrame = skel.getMasterFrame();
+			}
+			else if (selectedNode instanceof SkeletonAnimation)
+			{
+				SkeletonAnimation anim = (SkeletonAnimation)selectedNode;
+				renderFrame = anim.getFrames().get(0);
+			}
+			else if (selectedNode instanceof SkeletonFrame)
+			{
+				renderFrame = (SkeletonFrame)selectedNode;
+			}
+			else if (selectedNode instanceof SkeletonBone)
+			{
+				SkeletonBone bone = (SkeletonBone)selectedNode;
+				renderFrame = bone.getFrame();
+			}
+			else if (selectedNode instanceof Sprite)
+			{
+				Sprite sprite = (Sprite)selectedNode;
+				renderFrame = sprite.getBone().getFrame();
+			}
+		}
+		return renderFrame;
+	}
 
 	public void createEvents() {
 		tree.addTreeSelectionListener(new TreeSelectionListener() {

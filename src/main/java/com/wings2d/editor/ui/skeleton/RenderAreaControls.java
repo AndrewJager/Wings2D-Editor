@@ -26,7 +26,7 @@ public class RenderAreaControls extends SkeletonUIElement{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				skeleton.getSkeleton().generateRender(skeleton.getEditor().getUIScale());
-				skeleton.getRenderArea().getDrawArea().setDrawItem(skeleton.getSkeleton().getMasterFrame());
+				skeleton.getRenderArea().getDrawArea().setDrawItem(skeleton.getSkeletonTree().getFrameToRender());
 				skeleton.getRenderArea().getDrawArea().repaint();
 			}
 		});

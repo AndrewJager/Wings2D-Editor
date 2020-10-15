@@ -427,6 +427,7 @@ public class Sprite implements SkeletonNode, Drawable{
 	@Override
 	public void drawRender(final Graphics2D g2d, final double scale)
 	{
-		g2d.drawImage(image, (int)(parent.getX() * scale), (int)(parent.getY() * scale), null);
+		g2d.drawImage(image, (int)((parent.getX() + path.getBounds2D().getX()) * scale),
+				(int)((parent.getY() + path.getBounds2D().getY()) * scale), null);
 	}
 }

@@ -35,12 +35,10 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 		super(edit, bounds);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-		// Replace panel with drawing area
-		drawArea = new DrawingArea(edit.getEditor());
+		drawArea = new DrawingArea(edit.getEditor(), DrawingArea.DrawType.DRAW);
 		pane = new JScrollPane(drawArea);
 		panel.setLayout(new GridLayout(0,1));
 		panel.add(pane);
-		panel.getAccessibleContext();
 		tree = edit.getSkeletonTree().getTree();
 	}
 	public void setSelectedFrame(final SkeletonFrame f)

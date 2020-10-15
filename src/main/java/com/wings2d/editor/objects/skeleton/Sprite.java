@@ -110,6 +110,12 @@ public class Sprite implements SkeletonNode, Drawable{
 	{
 		return path;
 	}
+	public Path2D getScaledPath(final double scale)
+	{
+		AffineTransform transform = new AffineTransform();
+		transform.scale(scale, scale);
+		return (Path2D)transform.createTransformedShape(path);
+	}
 	public Path2D getScaledAndTranslatedPath(final double scale)
 	{
 		AffineTransform transform = new AffineTransform();
@@ -407,12 +413,12 @@ public class Sprite implements SkeletonNode, Drawable{
 	@Override
 	public void generateRender(final double scale)
 	{
-		Shape drawShape = getScaledAndTranslatedPath(scale);
+		Shape drawShape = getScaledPath(scale);
 		image = new BufferedImage((int)drawShape.getBounds2D().getWidth(), (int)drawShape.getBounds2D().getHeight(), BufferedImage.TYPE_INT_ARGB);
 		imgXOffset = drawShape.getBounds2D().getX();
 		imgYOffset = drawShape.getBounds2D().getY();
 		AffineTransform transform = new AffineTransform();
-		transform.translate(-drawShape.getBounds2D().getWidth(), -drawShape.getBounds2D().getHeight());
+		transform.translate(-imgXOffset, -imgYOffset);
 		drawShape = transform.createTransformedShape(drawShape);
 		Graphics2D g2d = (Graphics2D)image.getGraphics();
 		g2d.setColor(color);
@@ -421,6 +427,6 @@ public class Sprite implements SkeletonNode, Drawable{
 	@Override
 	public void drawRender(final Graphics2D g2d, final double scale)
 	{
-		
+		g2d.drawImage(image, (int)(parent.getX() * scale), (int)(parent.getY() * scale), null);
 	}
 }

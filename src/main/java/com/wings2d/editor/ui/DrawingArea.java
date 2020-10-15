@@ -9,15 +9,22 @@ import javax.swing.JPanel;
 import com.wings2d.editor.objects.Drawable;
 
 public class DrawingArea extends JPanel{
+	public enum DrawType{
+		DRAW,
+		RENDER,
+	}
+	
 	private static final long serialVersionUID = 1L;
 	private Drawable drawItem;
 	private Editor edit;
 	private double zoomScale;
+	private DrawType drawType;
 	
-	public DrawingArea(final Editor editor)
+	public DrawingArea(final Editor editor, final DrawType type)
 	{
 		edit = editor;
 		zoomScale = 1;
+		drawType = type;
 	}
 
 	@Override
@@ -26,7 +33,15 @@ public class DrawingArea extends JPanel{
 		super.paintComponent(g);
 		if (drawItem != null)
 		{
-			drawItem.draw((Graphics2D)g, edit.getUIScale() * zoomScale, edit.getSkeletonEdit().getDrawMode());
+			switch(drawType)
+			{
+			case DRAW:
+				drawItem.draw((Graphics2D)g, edit.getUIScale() * zoomScale, edit.getSkeletonEdit().getDrawMode());
+				break;
+			case RENDER:
+				drawItem.drawRender((Graphics2D)g, edit.getUIScale() * zoomScale);
+				break;
+			}
 		}
 	}
 	

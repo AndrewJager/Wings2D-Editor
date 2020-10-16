@@ -75,7 +75,10 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 		setParentSyncedBone(syncBone);
 		parentBoneName = syncBone.getParentBoneName();
 		location = new Point2D.Double(syncBone.getX(), syncBone.getY());
-		
+		for (int i = 0; i < syncBone.getSprites().size(); i++)
+		{
+			this.sprites.add(syncBone.getSprites().get(i).copy(this));
+		}
 	}
 	
 	public SkeletonBone(final Scanner in, final SkeletonFrame boneParent)

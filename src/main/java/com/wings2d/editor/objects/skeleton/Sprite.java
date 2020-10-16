@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
@@ -171,6 +172,22 @@ public class Sprite implements SkeletonNode, Drawable{
 		}
 		return coordsPoint;
 	}
+	public void translate(final double deltaX, final double deltaY)
+	{
+		AffineTransform transform = new AffineTransform();
+		transform.rotate(Math.toRadians(parent.getRotation()));
+		transform.translate(deltaX, deltaY);
+		transform.rotate(-Math.toRadians(parent.getRotation()));
+		path.transform(transform);
+		List<SkeletonBone> syncedBones = parent.getSyncedBones();
+		for (int i = 0; i < syncedBones.size(); i++)
+		{
+			if (syncedBones.get(i).getSpriteBySyncID(syncID) != null)
+			{
+				syncedBones.get(i).getSpriteBySyncID(syncID).translate(deltaX, deltaY);
+			}
+		}
+	}
 	public void setLocation(final double x, final double y, final double scale)
 	{
 		double unscale = 1.0 / scale;
@@ -178,9 +195,7 @@ public class Sprite implements SkeletonNode, Drawable{
 		double unscaledY = y * unscale;
 		double deltaX = unscaledX - (path.getBounds2D().getX() + (path.getBounds2D().getWidth() / 2) + parent.getX());
 		double deltaY = unscaledY - (path.getBounds2D().getY() + (path.getBounds2D().getHeight() / 2)+ parent.getY());
-		AffineTransform transform = new AffineTransform();
-		transform.translate(deltaX, deltaY);
-		path.transform(transform);
+		translate(deltaX, deltaY);
 	}
 	public void setLocation(final Point loc, final double scale)
 	{
@@ -421,6 +436,7 @@ public class Sprite implements SkeletonNode, Drawable{
 		transform.translate(-imgXOffset, -imgYOffset);
 		drawShape = transform.createTransformedShape(drawShape);
 		Graphics2D g2d = (Graphics2D)image.getGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setColor(color);
 		g2d.fill(drawShape);
 	}

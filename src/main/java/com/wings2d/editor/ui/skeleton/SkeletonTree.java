@@ -32,9 +32,6 @@ public class SkeletonTree extends SkeletonUIElement{
 		panel.setLayout(new BorderLayout());
 		
 		tree = new JTree();
-		JTextField textField = new JTextField();
-		TreeCellEditor editor = new DefaultCellEditor(textField);
-		tree.setCellEditor(editor);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));		
 		
 		scrollPane = new JScrollPane(tree);

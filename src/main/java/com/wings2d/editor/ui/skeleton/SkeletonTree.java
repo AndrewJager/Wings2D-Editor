@@ -14,6 +14,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
@@ -23,6 +25,7 @@ import com.wings2d.editor.objects.skeleton.Skeleton;
 import com.wings2d.editor.objects.skeleton.SkeletonAnimation;
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonFrame;
+import com.wings2d.editor.objects.skeleton.SkeletonMasterFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.objects.skeleton.SkeletonTreeModelListener;
 import com.wings2d.editor.objects.skeleton.Sprite;
@@ -167,6 +170,45 @@ public class SkeletonTree extends SkeletonUIElement{
 			public void mouseEntered(MouseEvent e) {}
 			@Override
 			public void mouseExited(MouseEvent e) {}
+		});
+		menu.addPopupMenuListener(new PopupMenuListener() {
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
+				editItem.setEnabled(true);
+				moveUpItem.setEnabled(true);
+				moveDownItem.setEnabled(true);
+				if (selectedNode instanceof Skeleton)
+				{
+					moveUpItem.setEnabled(false);
+					moveDownItem.setEnabled(false);
+				}
+				
+				if (selectedNode instanceof SkeletonMasterFrame)
+				{
+					editItem.setEnabled(false);
+					moveUpItem.setEnabled(false);
+					moveDownItem.setEnabled(false);
+				}
+
+				if (selectedNode.getParent() != null)
+				{
+					if (selectedNode.getParent().getIndex(selectedNode) == 0
+							|| (selectedNode.getParent().getIndex(selectedNode) == 1 && selectedNode instanceof SkeletonAnimation))
+					{
+						moveUpItem.setEnabled(false);
+					}
+	
+					if (selectedNode.getParent().getIndex(selectedNode) >= selectedNode.getParent().getChildCount() - 1)
+					{
+						moveDownItem.setEnabled(false);
+					}
+				}
+			}
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {}
 		});
 		editItem.addActionListener(new ActionListener() {
 			@Override

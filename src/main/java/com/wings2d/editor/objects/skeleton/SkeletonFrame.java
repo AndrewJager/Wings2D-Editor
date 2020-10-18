@@ -489,4 +489,16 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 			bones.get(i).drawRender(g2d, scale);
 		}
 	}
+	@Override
+	public void moveUp()
+	{
+		List<SkeletonFrame> frames = animation.getFrames();
+		int index = frames.indexOf(this);
+		if (index > 0) 
+		{
+			SkeletonFrame swap = frames.get(index - 1);
+			frames.remove(swap);
+			frames.add(index, swap);
+		}
+	}
 }

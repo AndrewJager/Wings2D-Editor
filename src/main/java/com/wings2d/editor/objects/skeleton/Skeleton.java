@@ -134,12 +134,9 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 		}
 		return null; // If no result found
 	}
-	public void generateRender(final double scale)
+	public List<SkeletonNode> getAnimations()
 	{
-		for (int i = 0; i < animations.size(); i++)
-		{
-			animations.get(i).generateRender(scale);
-		}
+		return animations;
 	}
 	
 	// MutableTreeNode methods
@@ -213,6 +210,17 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 		{
 			animations.get(i).resyncAll();
 		}
+	}
+	public void generateRender(final double scale)
+	{
+		for (int i = 0; i < animations.size(); i++)
+		{
+			animations.get(i).generateRender(scale);
+		}
+	}
+	public void moveUp()
+	{
+		// Do nothing, as this node has no parent.
 	}
 	
 	// ProjectEntity methods

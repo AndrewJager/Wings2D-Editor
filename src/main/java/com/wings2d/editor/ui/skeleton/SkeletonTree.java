@@ -178,7 +178,10 @@ public class SkeletonTree extends SkeletonUIElement{
 		moveUpItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
+				selectedNode.moveUp();
+				DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+				model.reload();
 			}
 		});
 		moveDownItem.addActionListener(new ActionListener() {

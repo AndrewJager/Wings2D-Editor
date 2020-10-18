@@ -446,4 +446,16 @@ public class Sprite implements SkeletonNode, Drawable{
 		g2d.drawImage(image, (int)((parent.getX() + path.getBounds2D().getX()) * scale),
 				(int)((parent.getY() + path.getBounds2D().getY()) * scale), null);
 	}
+	@Override
+	public void moveUp()
+	{
+		List<Sprite> sprites = parent.getSprites();
+		int index = sprites.indexOf(this);
+		if (index > 0) 
+		{
+			Sprite swap = sprites.get(index - 1);
+			sprites.remove(swap);
+			sprites.add(index, swap);
+		}
+	}
 }

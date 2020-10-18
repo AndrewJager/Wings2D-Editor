@@ -9,6 +9,7 @@ public interface SkeletonNode extends MutableTreeNode{
 	public void saveToFile(final PrintWriter out);
 	public void resyncAll();
 	public void generateRender(final double scale);
+	public void moveUp();
 	
 	public static final String NAME_TOKEN = "NAME";
 	public static final String END_TOKEN = "END";

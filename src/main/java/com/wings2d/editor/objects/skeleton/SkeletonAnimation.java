@@ -78,13 +78,6 @@ public class SkeletonAnimation implements SkeletonNode{
 	{
 		return skeleton;
 	}
-	public void generateRender(final double scale)
-	{
-		for (int i = 0; i < frames.size(); i++)
-		{
-			frames.get(i).generateRender(scale);
-		}
-	}
 
 	// MutableTreeNode methods
 	@Override
@@ -174,6 +167,24 @@ public class SkeletonAnimation implements SkeletonNode{
 		for (int i = 0; i < frames.size(); i++)
 		{
 			frames.get(i).resyncAll();
+		}
+	}
+	public void generateRender(final double scale)
+	{
+		for (int i = 0; i < frames.size(); i++)
+		{
+			frames.get(i).generateRender(scale);
+		}
+	}
+	public void moveUp()
+	{
+		List<SkeletonNode> anims = skeleton.getAnimations();
+		int index = anims.indexOf(this);
+		if (index > 1) // Cannot swap with Master Frame
+		{
+			SkeletonNode swap = anims.get(index - 1);
+			anims.remove(swap);
+			anims.add(index, swap);
 		}
 	}
 }

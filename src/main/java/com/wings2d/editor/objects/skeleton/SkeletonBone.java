@@ -619,4 +619,15 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 			sprites.get(i).drawRender(g2d, scale);
 		}
 	}
+	public void moveUp()
+	{
+		List<SkeletonBone> bones = frame.getBones();
+		int index = bones.indexOf(this);
+		if (index > 0) 
+		{
+			SkeletonBone swap = bones.get(index - 1);
+			bones.remove(swap);
+			bones.add(index, swap);
+		}
+	}
 }

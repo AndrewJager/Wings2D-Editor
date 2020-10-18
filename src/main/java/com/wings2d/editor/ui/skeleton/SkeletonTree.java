@@ -143,7 +143,13 @@ public class SkeletonTree extends SkeletonUIElement{
 		});
 		tree.addMouseListener(new MouseListener() {
 			@Override
-			public void mouseClicked(MouseEvent e) {}
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() >= 2) // Double click
+				{
+					TreePath selectionPath = tree.getSelectionPath();
+					tree.startEditingAtPath(selectionPath);
+				}
+			}
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if (SwingUtilities.isRightMouseButton(e))

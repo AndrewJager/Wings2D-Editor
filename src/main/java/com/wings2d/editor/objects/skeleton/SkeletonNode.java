@@ -1,16 +1,27 @@
 package com.wings2d.editor.objects.skeleton;
 
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.swing.tree.MutableTreeNode;
 
-public interface SkeletonNode extends MutableTreeNode{
-	public void setName(final String newName);
-	public void saveToFile(final PrintWriter out);
-	public void resyncAll();
-	public void generateRender(final double scale);
-	public void moveUp();
-	public void moveDown();
+public abstract class SkeletonNode implements MutableTreeNode{
+	public abstract void setName(final String newName);
+	public abstract void saveToFile(final PrintWriter out);
+	public abstract void resyncAll();
+	public abstract void generateRender(final double scale);
+	public abstract void moveUp();
+	public abstract void moveDown();
+	
+	public static <E> void moveTest(List<E> items, E thisItem)
+	{
+		int index = items.indexOf(thisItem);
+		if (index < items.size() - 1) 
+		{
+			items.remove(thisItem);
+			items.add(index + 1, thisItem);
+		}
+	}
 	
 	public static final String NAME_TOKEN = "NAME";
 	public static final String END_TOKEN = "END";

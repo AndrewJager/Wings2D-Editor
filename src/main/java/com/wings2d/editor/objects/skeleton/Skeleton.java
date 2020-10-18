@@ -15,7 +15,7 @@ import javax.swing.tree.TreeNode;
 import com.wings2d.editor.objects.project.Project;
 import com.wings2d.editor.objects.project.ProjectEntity;
 
-public class Skeleton implements SkeletonNode, ProjectEntity {
+public class Skeleton extends SkeletonNode implements ProjectEntity {
 	public static final String FILE_MARKER = "SKELETON";
 	
 	private List<SkeletonNode> animations;

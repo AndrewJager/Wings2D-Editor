@@ -25,7 +25,7 @@ import javax.swing.tree.TreeNode;
 import com.wings2d.editor.objects.Drawable;
 import com.wings2d.framework.ShapeComparator;
 
-public class Sprite implements SkeletonNode, Drawable{
+public class Sprite extends SkeletonNode implements Drawable{
 	public static final String SPRITE_TOKEN = "SPRITE";
 	public static final String VERTEX_TOKEN = "VERTEX";
 	public static final String SYNC_ID_TOKEN = "SYNCID";

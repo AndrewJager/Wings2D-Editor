@@ -18,7 +18,7 @@ import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.Drawable;
 
-public class SkeletonFrame implements SkeletonNode, Drawable{
+public class SkeletonFrame extends SkeletonNode implements Drawable{
 	public static final String FRAME_TOKEN = "FRAME";
 	
 	protected List<SkeletonBone> bones;

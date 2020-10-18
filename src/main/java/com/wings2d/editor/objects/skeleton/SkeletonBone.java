@@ -22,7 +22,7 @@ import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.Drawable;
 
-public class SkeletonBone implements SkeletonNode, Drawable{
+public class SkeletonBone extends SkeletonNode implements Drawable{
 	public static final String BONE_TOKEN = "BONE";
 	public static final String PARENT_BONE_TOKEN = "PARENTBONE";
 	public static final String SYNC_BONE_ID_TOKEN = "SYNCBONEID";

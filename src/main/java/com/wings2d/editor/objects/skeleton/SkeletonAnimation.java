@@ -10,7 +10,7 @@ import java.util.Scanner;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-public class SkeletonAnimation implements SkeletonNode{
+public class SkeletonAnimation extends SkeletonNode{
 	public static final String ANIM_TOKEN = "ANIMATION";
 	
 	private Skeleton skeleton;

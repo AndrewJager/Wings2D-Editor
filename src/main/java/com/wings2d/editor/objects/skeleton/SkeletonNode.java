@@ -10,6 +10,7 @@ public interface SkeletonNode extends MutableTreeNode{
 	public void resyncAll();
 	public void generateRender(final double scale);
 	public void moveUp();
+	public void moveDown();
 	
 	public static final String NAME_TOKEN = "NAME";
 	public static final String END_TOKEN = "END";

@@ -148,10 +148,12 @@ public class SkeletonAnimation implements SkeletonNode{
 	}
 	
 	// SkeletonNode methods
+	@Override
 	public void setName(final String newName)
 	{
 		name = newName;
 	}
+	@Override
 	public void saveToFile(final PrintWriter out)
 	{
 		out.write(ANIM_TOKEN + "\n");
@@ -162,6 +164,7 @@ public class SkeletonAnimation implements SkeletonNode{
 		}
 		out.write(END_TOKEN + ":" + ANIM_TOKEN + "\n");
 	}
+	@Override
 	public void resyncAll()
 	{
 		for (int i = 0; i < frames.size(); i++)
@@ -169,6 +172,7 @@ public class SkeletonAnimation implements SkeletonNode{
 			frames.get(i).resyncAll();
 		}
 	}
+	@Override
 	public void generateRender(final double scale)
 	{
 		for (int i = 0; i < frames.size(); i++)
@@ -176,6 +180,7 @@ public class SkeletonAnimation implements SkeletonNode{
 			frames.get(i).generateRender(scale);
 		}
 	}
+	@Override
 	public void moveUp()
 	{
 		List<SkeletonNode> anims = skeleton.getAnimations();
@@ -185,6 +190,17 @@ public class SkeletonAnimation implements SkeletonNode{
 			SkeletonNode swap = anims.get(index - 1);
 			anims.remove(swap);
 			anims.add(index, swap);
+		}
+	}
+	@Override
+	public void moveDown()
+	{
+		List<SkeletonNode> anims = skeleton.getAnimations();
+		int index = anims.indexOf(this);
+		if (index < anims.size() - 1) 
+		{
+			anims.remove(this);
+			anims.add(index + 1, this);
 		}
 	}
 }

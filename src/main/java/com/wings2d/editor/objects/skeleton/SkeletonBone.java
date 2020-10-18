@@ -619,6 +619,7 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 			sprites.get(i).drawRender(g2d, scale);
 		}
 	}
+	@Override
 	public void moveUp()
 	{
 		List<SkeletonBone> bones = frame.getBones();
@@ -628,6 +629,17 @@ public class SkeletonBone implements SkeletonNode, Drawable{
 			SkeletonBone swap = bones.get(index - 1);
 			bones.remove(swap);
 			bones.add(index, swap);
+		}
+	}
+	@Override
+	public void moveDown()
+	{
+		List<SkeletonBone> bones = frame.getBones();
+		int index = bones.indexOf(this);
+		if (index < bones.size() - 1) 
+		{
+			bones.remove(this);
+			bones.add(index + 1, this);
 		}
 	}
 }

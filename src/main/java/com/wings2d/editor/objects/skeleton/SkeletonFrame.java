@@ -501,4 +501,15 @@ public class SkeletonFrame implements SkeletonNode, Drawable{
 			frames.add(index, swap);
 		}
 	}
+	@Override
+	public void moveDown()
+	{
+		List<SkeletonFrame> frames = animation.getFrames();
+		int index = frames.indexOf(this);
+		if (index < frames.size() - 1) 
+		{
+			frames.remove(this);
+			frames.add(index + 1, this);
+		}
+	}
 }

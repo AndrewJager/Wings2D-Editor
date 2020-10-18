@@ -458,4 +458,15 @@ public class Sprite implements SkeletonNode, Drawable{
 			sprites.add(index, swap);
 		}
 	}
+	@Override
+	public void moveDown()
+	{
+		List<Sprite> sprites = parent.getSprites();
+		int index = sprites.indexOf(this);
+		if (index < sprites.size() - 1) 
+		{
+			sprites.remove(this);
+			sprites.add(index + 1, this);
+		}
+	}
 }

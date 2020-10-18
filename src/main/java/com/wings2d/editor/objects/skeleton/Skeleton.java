@@ -218,10 +218,8 @@ public class Skeleton implements SkeletonNode, ProjectEntity {
 			animations.get(i).generateRender(scale);
 		}
 	}
-	public void moveUp()
-	{
-		// Do nothing, as this node has no parent.
-	}
+	public void moveUp(){/* Do nothing, as this node has no parent.*/}
+	public void moveDown(){/* Do nothing, as this node has no parent.*/}
 	
 	// ProjectEntity methods
 	public void saveToFile()

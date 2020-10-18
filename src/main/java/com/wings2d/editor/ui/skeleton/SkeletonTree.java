@@ -3,44 +3,66 @@ package com.wings2d.editor.ui.skeleton;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultCellEditor;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeCellEditor;
+import javax.swing.tree.TreePath;
 
 import com.wings2d.editor.objects.skeleton.Skeleton;
 import com.wings2d.editor.objects.skeleton.SkeletonAnimation;
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
+import com.wings2d.editor.objects.skeleton.SkeletonTreeModelListener;
 import com.wings2d.editor.objects.skeleton.Sprite;
 import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
 
 public class SkeletonTree extends SkeletonUIElement{
 	private JTree tree;
+	private SkeletonTreeModelListener treeListener;
 	private JScrollPane scrollPane;
+	private JPopupMenu menu;
+	private JMenuItem editItem, moveUpItem, moveDownItem;
 
 	public SkeletonTree(final SkeletonEdit edit, final Rectangle bounds) {
 		super(edit, bounds);
 
 		panel.setLayout(new BorderLayout());
+		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));	
 		
 		tree = new JTree();
-		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));		
+		tree.setEditable(true);
+		treeListener = new SkeletonTreeModelListener(tree);
+		tree.getModel().addTreeModelListener(treeListener);	
 		
 		scrollPane = new JScrollPane(tree);
 		panel.add(scrollPane, BorderLayout.CENTER);
+		
+		menu = new JPopupMenu();
+		editItem = new JMenuItem("Edit");
+		menu.add(editItem);
+		moveUpItem = new JMenuItem("Move up");
+		menu.add(moveUpItem);
+		moveDownItem = new JMenuItem("Move down");
+		menu.add(moveDownItem);
+		tree.setComponentPopupMenu(menu);
 	}
 	
 	public void setSkeleton(final Skeleton skeleton)
 	{
 		DefaultTreeModel newModel = new DefaultTreeModel(skeleton);
+		newModel.addTreeModelListener(treeListener);
 		tree.setModel(newModel);
 	}
 	/** 
@@ -117,6 +139,46 @@ public class SkeletonTree extends SkeletonUIElement{
 					}
 					skeleton.getDrawingArea().getDrawArea().repaint();
 				}
+			}
+		});
+		tree.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (SwingUtilities.isRightMouseButton(e))
+				{
+                    int row = tree.getRowForLocation(e.getPoint().x, e.getPoint().y);
+                    if(row != -1)
+                    {
+                        tree.setSelectionRow(row);
+                    }
+				}
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+		});
+		editItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TreePath selectionPath = tree.getSelectionPath();
+				tree.startEditingAtPath(selectionPath);
+			}
+		});
+		moveUpItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+		moveDownItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
 			}
 		});
 	}

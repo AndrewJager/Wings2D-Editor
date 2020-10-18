@@ -469,4 +469,9 @@ public class Sprite extends SkeletonNode implements Drawable{
 			sprites.add(index + 1, this);
 		}
 	}
+	@Override
+	public List<SkeletonNode> getNodes()
+	{
+		return null;
+	}
 }

@@ -193,6 +193,16 @@ public class SkeletonAnimation extends SkeletonNode{
 		}
 	}
 	@Override
+	public List<SkeletonNode> getNodes()
+	{
+		List<SkeletonNode> nodes = new ArrayList<SkeletonNode>();
+		for (int i = 0; i < frames.size(); i++)
+		{
+			nodes.add((SkeletonNode)frames.get(i));
+		}
+		return nodes;
+	}
+	@Override
 	public void moveDown()
 	{
 		List<SkeletonNode> anims = skeleton.getAnimations();

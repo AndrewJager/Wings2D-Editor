@@ -15,7 +15,10 @@ public class SkeletonTreeModelListener implements TreeModelListener{
 	@Override
 	public void treeNodesChanged(TreeModelEvent e) {
 		SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
-		selectedNode.setName(tree.getCellEditor().getCellEditorValue().toString());
+		if (!(selectedNode instanceof SkeletonMasterFrame))
+		{
+			selectedNode.setName(tree.getCellEditor().getCellEditorValue().toString());
+		}
 	}
 	@Override
 	public void treeNodesInserted(TreeModelEvent e) {}

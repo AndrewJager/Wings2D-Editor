@@ -642,4 +642,14 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 			bones.add(index + 1, this);
 		}
 	}
+	@Override
+	public List<SkeletonNode> getNodes()
+	{
+		List<SkeletonNode> nodes = new ArrayList<SkeletonNode>();
+		for (int i = 0; i < sprites.size(); i++)
+		{
+			nodes.add((SkeletonNode)sprites.get(i));
+		}
+		return nodes;
+	}
 }

@@ -512,4 +512,14 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 			frames.add(index + 1, this);
 		}
 	}
+	@Override
+	public List<SkeletonNode> getNodes()
+	{
+		List<SkeletonNode> nodes = new ArrayList<SkeletonNode>();
+		for (int i = 0; i < bones.size(); i++)
+		{
+			nodes.add((SkeletonNode)bones.get(i));
+		}
+		return nodes;
+	}
 }

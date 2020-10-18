@@ -12,16 +12,7 @@ public abstract class SkeletonNode implements MutableTreeNode{
 	public abstract void generateRender(final double scale);
 	public abstract void moveUp();
 	public abstract void moveDown();
-	
-	public static <E> void moveTest(List<E> items, E thisItem)
-	{
-		int index = items.indexOf(thisItem);
-		if (index < items.size() - 1) 
-		{
-			items.remove(thisItem);
-			items.add(index + 1, thisItem);
-		}
-	}
+	public abstract List<SkeletonNode> getNodes();
 	
 	public static final String NAME_TOKEN = "NAME";
 	public static final String END_TOKEN = "END";

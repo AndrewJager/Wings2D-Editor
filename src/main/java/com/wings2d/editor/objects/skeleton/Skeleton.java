@@ -220,6 +220,10 @@ public class Skeleton extends SkeletonNode implements ProjectEntity {
 	}
 	public void moveUp(){/* Do nothing, as this node has no parent.*/}
 	public void moveDown(){/* Do nothing, as this node has no parent.*/}
+	public List<SkeletonNode> getNodes()
+	{
+		return getAnimations();
+	}
 	
 	// ProjectEntity methods
 	public void saveToFile()

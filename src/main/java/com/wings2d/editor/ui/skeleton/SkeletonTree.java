@@ -27,6 +27,7 @@ import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonMasterFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
+import com.wings2d.editor.objects.skeleton.SkeletonTreeCellRenderer;
 import com.wings2d.editor.objects.skeleton.SkeletonTreeModelListener;
 import com.wings2d.editor.objects.skeleton.Sprite;
 import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
@@ -48,6 +49,7 @@ public class SkeletonTree extends SkeletonUIElement{
 		tree.setEditable(true);
 		treeListener = new SkeletonTreeModelListener(tree);
 		tree.getModel().addTreeModelListener(treeListener);	
+		tree.setCellRenderer(new SkeletonTreeCellRenderer());
 		
 		scrollPane = new JScrollPane(tree);
 		panel.add(scrollPane, BorderLayout.CENTER);

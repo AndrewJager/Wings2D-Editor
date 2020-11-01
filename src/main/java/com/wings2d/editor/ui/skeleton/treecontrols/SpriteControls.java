@@ -6,21 +6,38 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreePath;
 
+import com.wings2d.editor.objects.skeleton.SkeletonBone;
+import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.objects.skeleton.Sprite;
+import com.wings2d.framework.imageFilters.BasicVariance;
+import com.wings2d.framework.imageFilters.ImageFilter;
 
 public class SpriteControls extends SkeletonTreeControlsUIElement{
 	public static final String CARD_ID = "Sprite";
 	
-	private JButton changeColor, newVertex;
+	private JButton changeColor, newVertex, newFilter;
+	private JList<ImageFilter> filters;
 	private Sprite curSprite;
 
 	public SpriteControls(final SkeletonTreeControls controls) {
 		super(controls);
 		changeColor = new JButton("Change Color");
 		newVertex = new JButton("New Vertex");
+		newFilter = new JButton("New Filter");
+		
+		filters = new JList<ImageFilter>();
+		filters.setLayoutOrientation(JList.VERTICAL);
+		filters.setVisibleRowCount(5);
+		filters.setFixedCellWidth(80);
 	}
 
 	@Override
@@ -31,6 +48,12 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 		panel.add(delete);
 		panel.add(changeColor);
 		panel.add(newVertex);
+		panel.add(new JSeparator(JSeparator.HORIZONTAL));
+		panel.add(newFilter);
+		
+		filters.setListData(curSprite.getFilters().toArray(new ImageFilter[0]));
+		JScrollPane pane = new JScrollPane(filters);
+		panel.add(pane);
 	}
 
 	@Override
@@ -51,6 +74,13 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 			public void actionPerformed(ActionEvent e) {
 				Sprite sprite = (Sprite)controls.getTree().getLastSelectedPathComponent();
 				sprite.addVertex();
+			}
+		});
+		newFilter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				ImageFilter newFilter = new BasicVariance();
+				curSprite.getFilters().add(newFilter);
+				filters.setListData(curSprite.getFilters().toArray(new ImageFilter[0]));
 			}
 		});
 	}

@@ -16,7 +16,7 @@ public class SkeletonTreeCellRenderer extends DefaultTreeCellRenderer{
 	{
 		super();
 		int iconSize = 10;
-		double[] imgScales = new double[] {1.0, 1.25, 1.50};
+		double[] imgScales = new double[] {1.0, 1.25, 1.50, 1.75, 2.0};
 		int padding = 2;
 		
 		skeletonIcon = new ImageIcon(CharImageCreator.CreateMultiImage('\u2444', imgScales, iconSize, padding));

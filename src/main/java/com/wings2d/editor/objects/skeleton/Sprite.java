@@ -24,6 +24,7 @@ import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.Drawable;
 import com.wings2d.framework.ShapeComparator;
+import com.wings2d.framework.imageFilters.ImageFilter;
 
 public class Sprite extends SkeletonNode implements Drawable{
 	public static final String SPRITE_TOKEN = "SPRITE";
@@ -41,6 +42,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	private double imgXOffset;
 	private double imgYOffset;
 	private BufferedImage image;
+	private List<ImageFilter> filters;
 	
 	public Sprite(final String spriteName, final SkeletonBone parent)
 	{
@@ -48,6 +50,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		this.parent = parent;
 		syncID = UUID.randomUUID();
 		color = Color.LIGHT_GRAY;
+		filters = new ArrayList<ImageFilter>();
 		path = new Path2D.Double();
 		path.moveTo(-30, -30);
 		path.lineTo(30, -30);
@@ -60,6 +63,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	{
 		this.parent = parent;
 		path = new Path2D.Double();
+		filters = new ArrayList<ImageFilter>();
 		boolean keepReading = true;
 		boolean firstPoint = true;
 		while(in.hasNext() && keepReading)
@@ -327,6 +331,10 @@ public class Sprite extends SkeletonNode implements Drawable{
 			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncID);
 			sprite.addVertex();
 		}
+	}
+	public List<ImageFilter> getFilters()
+	{
+		return filters;
 	}
 
 	// MutableTreeNode methods

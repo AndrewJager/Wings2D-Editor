@@ -18,16 +18,13 @@ import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.wings2d.editor.objects.EditOptions;
 import com.wings2d.editor.objects.EditorSettings;
-import com.wings2d.editor.objects.EditorSpriteSheet;
 import com.wings2d.editor.objects.skeleton.Skeleton;
 import com.wings2d.editor.ui.project.ProjectEdit;
 import com.wings2d.editor.ui.skeleton.SkeletonEdit;
-import com.wings2d.editor.ui.sprite.SpriteEdit;
 import com.wings2d.framework.Level;
 import com.wings2d.framework.LevelManager;
 
 public class Editor {
-	private EditorSpriteSheet activeSprite;
 	private LevelManager manager;
 	private int timeStep = 10;
 	private boolean playing = false;
@@ -39,11 +36,9 @@ public class Editor {
 	private JFrame frame;
 	private JPanel mainPanel;
 	private CardLayout cards;
-	private AnimTimer animTimer;
 	
 	private ProjectEdit projectEdit;
 	private SkeletonEdit skeletonEdit;
-	private SpriteEdit spriteEdit;
 	
 	private double UIScale;
 	public int frameStartWidth = 1500;
@@ -54,7 +49,6 @@ public class Editor {
 	public void run() {
 		manager = new LevelManager();
 		demoLevel = new Level(manager, 0);
-		activeSprite = new EditorSpriteSheet("Test", demoLevel);
 		options = new EditOptions(this);
 		
 		FlatLightLaf.install();
@@ -72,19 +66,15 @@ public class Editor {
 		panels = new ArrayList<UIPanel>();
 		projectEdit = new ProjectEdit(this);
 		skeletonEdit = new SkeletonEdit(this);
-		spriteEdit = new SpriteEdit(this);
 		
 		mainPanel.add(projectEdit.getPanel(), ProjectEdit.CARD_ID);		
 		mainPanel.add(skeletonEdit.getPanel(), SkeletonEdit.CARD_ID);
-		mainPanel.add(spriteEdit.getPanel(), SpriteEdit.CARD_ID);
 		showProject();
 		
 		for (int i = 0; i < panels.size(); i++)
 		{
 			panels.get(i).initElements();
 		}
-		
-		animTimer = new AnimTimer(this);
 		
 		settings = new EditorSettings();
 		if (settings.getProjectDirectory() != null)
@@ -94,7 +84,6 @@ public class Editor {
 
 	    frame.addWindowListener(new WindowAdapter(){
 	    	public void windowClosing(WindowEvent e){
-	    		animTimer.getTimer().stop();
 	    		settings.saveToFile();
 	    		System.exit(0);
 	    	}
@@ -155,9 +144,6 @@ public class Editor {
 		cards.show(mainPanel, SkeletonEdit.CARD_ID);
 	}
 
-	public EditorSpriteSheet getActiveSprite() {
-		return activeSprite;
-	}
 	public LevelManager getManager() {
 		return manager;
 	}
@@ -178,13 +164,6 @@ public class Editor {
 	}
 	public SkeletonEdit getSkeletonEdit() {
 		return skeletonEdit;
-	}
-	public SpriteEdit getSpriteEdit() {
-		return spriteEdit;
-	}
-	public void setActiveSprite(final EditorSpriteSheet sprite)
-	{
-		activeSprite = sprite;
 	}
 	public boolean getPlaying() {
 		return playing;

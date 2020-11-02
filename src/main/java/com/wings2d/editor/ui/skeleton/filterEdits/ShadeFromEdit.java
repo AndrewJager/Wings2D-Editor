@@ -1,4 +1,4 @@
-package com.wings2d.editor.ui.filterEdits;
+package com.wings2d.editor.ui.skeleton.filterEdits;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;

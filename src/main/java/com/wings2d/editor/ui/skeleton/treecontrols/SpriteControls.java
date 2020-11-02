@@ -18,6 +18,8 @@ import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.objects.skeleton.Sprite;
+import com.wings2d.editor.ui.skeleton.filterEdits.CreateFilterDialog;
+import com.wings2d.editor.ui.skeleton.filterEdits.FilterMap;
 import com.wings2d.framework.imageFilters.BasicVariance;
 import com.wings2d.framework.imageFilters.ImageFilter;
 
@@ -50,6 +52,7 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 		panel.add(newVertex);
 		panel.add(new JSeparator(JSeparator.HORIZONTAL));
 		panel.add(newFilter);
+		panel.add(new JSeparator(JSeparator.HORIZONTAL));
 		
 		filters.setListData(curSprite.getFilters().toArray(new ImageFilter[0]));
 		JScrollPane pane = new JScrollPane(filters);
@@ -78,9 +81,17 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 		});
 		newFilter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				ImageFilter newFilter = new BasicVariance();
-				curSprite.getFilters().add(newFilter);
-				filters.setListData(curSprite.getFilters().toArray(new ImageFilter[0]));
+				CreateFilterDialog filterDlg = new CreateFilterDialog(controls.getSkeleton().getEditor().getFrame());
+				Class<? extends ImageFilter> result = filterDlg.showDialog();
+				if (result != null)
+				{
+					ImageFilter newFilter = FilterMap.runDialog(result, controls.getSkeleton().getEditor().getFrame());
+					if (newFilter != null)
+					{
+						curSprite.getFilters().add(newFilter);
+						filters.setListData(curSprite.getFilters().toArray(new ImageFilter[0]));
+					}
+				}
 			}
 		});
 	}

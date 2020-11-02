@@ -13,4 +13,8 @@ public abstract class SkeletonUIElement extends UIElement{
 		edit.getElements().add(this);
 		this.skeleton = edit;
 	}
+	public SkeletonEdit getSkeleton()
+	{
+		return skeleton;
+	}
 }

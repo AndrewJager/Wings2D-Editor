@@ -7,7 +7,7 @@ import javax.swing.JSpinner;
 import com.wings2d.framework.imageFilters.BasicVariance;
 import com.wings2d.framework.imageFilters.ImageFilter;
 
-public class BasicVarianceEdit extends FilterEdit<BasicVariance>{
+public class BasicVarianceEdit extends FilterEdit{
 	public Class<? extends ImageFilter> FILTER_CLASS = BasicVariance.class;	
 			
 	private JSpinner spinner;

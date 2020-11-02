@@ -11,9 +11,9 @@ import javax.swing.JDialog;
 
 import com.wings2d.framework.imageFilters.ImageFilter;
 
-public abstract class FilterEdit<E extends ImageFilter> extends JDialog{
+public abstract class FilterEdit extends JDialog{
 	private JButton okBtn;
-	private E newFilter;
+	private ImageFilter newFilter;
 	
 	public FilterEdit(final Frame owner)
 	{
@@ -37,11 +37,11 @@ public abstract class FilterEdit<E extends ImageFilter> extends JDialog{
 		this.add(okBtn);
 	}
 	
-	public E showDialog()
+	public ImageFilter showDialog()
 	{
 		setVisible(true);
 		return newFilter;
 	}
 	
-	public abstract E getFilter();
+	public abstract ImageFilter getFilter();
 }

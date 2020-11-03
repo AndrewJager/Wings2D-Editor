@@ -13,7 +13,6 @@ import com.wings2d.framework.imageFilters.ImageFilter;
  * Contains a HashMap mapping the UI edit classes to their corresponding object classes
  */
 public class FilterMap {
-	@SuppressWarnings("rawtypes")
 	public static Map<Class<? extends ImageFilter>, Class<? extends FilterEdit>> FILTER_MAP
 			= new HashMap<Class<? extends ImageFilter>, Class<? extends FilterEdit>>()
 			{
@@ -22,7 +21,6 @@ public class FilterMap {
 				}
 			};
 			
-	@SuppressWarnings("rawtypes")
 	public static ImageFilter runDialog(final Class<? extends ImageFilter> filterClass, final Frame owner)
 	{
 		ImageFilter result = null;

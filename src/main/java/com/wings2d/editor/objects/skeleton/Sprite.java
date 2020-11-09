@@ -447,6 +447,11 @@ public class Sprite extends SkeletonNode implements Drawable{
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setColor(color);
 		g2d.fill(drawShape);
+		
+		for (int i = 0; i < filters.size(); i++)
+		{
+			filters.get(i).filter(image);
+		}
 	}
 	@Override
 	public void drawRender(final Graphics2D g2d, final double scale)

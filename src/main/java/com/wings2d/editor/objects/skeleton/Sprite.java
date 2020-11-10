@@ -23,8 +23,8 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.Drawable;
-import com.wings2d.framework.ShapeComparator;
 import com.wings2d.framework.imageFilters.ImageFilter;
+import com.wings2d.framework.shape.ShapeComparator;
 
 public class Sprite extends SkeletonNode implements Drawable{
 	public static final String SPRITE_TOKEN = "SPRITE";

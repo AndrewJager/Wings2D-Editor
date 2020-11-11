@@ -24,6 +24,7 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.Drawable;
+import com.wings2d.framework.imageFilters.FilterFactory;
 import com.wings2d.framework.imageFilters.ImageFilter;
 import com.wings2d.framework.shape.ShapeComparator;
 
@@ -31,6 +32,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	public static final String SPRITE_TOKEN = "SPRITE";
 	public static final String VERTEX_TOKEN = "VERTEX";
 	public static final String SYNC_ID_TOKEN = "SYNCID";
+	public static final String FILTER_TOKEN = "FILTER";
 	
 	private String name;
 	private SkeletonBone parent;
@@ -91,6 +93,9 @@ public class Sprite extends SkeletonNode implements Drawable{
 				break;
 			case SYNC_ID_TOKEN:
 				syncID = UUID.fromString(tokens[1]);
+				break;
+			case FILTER_TOKEN:
+				filters.add(FilterFactory.fromFileString(tokens[1]));
 				break;
 			case END_TOKEN:
 				path.closePath();
@@ -417,7 +422,11 @@ public class Sprite extends SkeletonNode implements Drawable{
 		for (int i = 0; i < vertices.size(); i++)
 		{
 			Point2D vertex = vertices.get(i);
-			out.write(VERTEX_TOKEN + ":" + vertex.getX() + ":" + vertex.getY()+ "\n"); 
+			out.write(VERTEX_TOKEN + ":" + vertex.getX() + ":" + vertex.getY() + "\n"); 
+		}
+		for (int i = 0; i < filters.size(); i++)
+		{
+			out.write(FILTER_TOKEN + ":" + filters.get(i).getFileString() + "\n");
 		}
 		out.write(END_TOKEN + ":" + SPRITE_TOKEN + "\n");
 	}

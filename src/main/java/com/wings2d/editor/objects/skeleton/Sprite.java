@@ -11,6 +11,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
+import java.awt.image.BaseMultiResolutionImage;
 import java.awt.image.BufferedImage;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	
 	private double imgXOffset;
 	private double imgYOffset;
-	private BufferedImage image;
+	private BaseMultiResolutionImage multiImage;
 	private List<ImageFilter> filters;
 	
 	public Sprite(final String spriteName, final SkeletonBone parent)
@@ -336,6 +337,39 @@ public class Sprite extends SkeletonNode implements Drawable{
 	{
 		return filters;
 	}
+	
+	private BufferedImage createImage(final double scale)
+	{
+		Shape drawShape = getScaledPath(scale);
+		BufferedImage newImage = new BufferedImage((int)drawShape.getBounds2D().getWidth(), (int)drawShape.getBounds2D().getHeight(), BufferedImage.TYPE_INT_ARGB);
+		imgXOffset = drawShape.getBounds2D().getX();
+		imgYOffset = drawShape.getBounds2D().getY();
+		AffineTransform transform = new AffineTransform();
+		transform.translate(-imgXOffset, -imgYOffset);
+		drawShape = transform.createTransformedShape(drawShape);
+		Graphics2D g2d = (Graphics2D)newImage.getGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setColor(color);
+		g2d.fill(drawShape);
+		
+		for (int i = 0; i < filters.size(); i++)
+		{
+			filters.get(i).filter(newImage);
+		}
+		
+		return newImage;
+	}
+	private BaseMultiResolutionImage createMultiImage(final double displayScale)
+	{
+		double[] imgSizes = new double[] {1.0, 1.25, 1.5};
+		BufferedImage[] imgs = new BufferedImage[imgSizes.length];
+		for (int i = 0; i < imgSizes.length; i++)
+		{
+			imgs[i] = createImage(displayScale * imgSizes[i]);
+		}
+		
+		return new BaseMultiResolutionImage(imgs);
+	}
 
 	// MutableTreeNode methods
 	@Override
@@ -436,27 +470,12 @@ public class Sprite extends SkeletonNode implements Drawable{
 	@Override
 	public void generateRender(final double scale)
 	{
-		Shape drawShape = getScaledPath(scale);
-		image = new BufferedImage((int)drawShape.getBounds2D().getWidth(), (int)drawShape.getBounds2D().getHeight(), BufferedImage.TYPE_INT_ARGB);
-		imgXOffset = drawShape.getBounds2D().getX();
-		imgYOffset = drawShape.getBounds2D().getY();
-		AffineTransform transform = new AffineTransform();
-		transform.translate(-imgXOffset, -imgYOffset);
-		drawShape = transform.createTransformedShape(drawShape);
-		Graphics2D g2d = (Graphics2D)image.getGraphics();
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setColor(color);
-		g2d.fill(drawShape);
-		
-		for (int i = 0; i < filters.size(); i++)
-		{
-			filters.get(i).filter(image);
-		}
+		this.multiImage = this.createMultiImage(scale);
 	}
 	@Override
 	public void drawRender(final Graphics2D g2d, final double scale)
 	{
-		g2d.drawImage(image, (int)((parent.getX() + path.getBounds2D().getX()) * scale),
+		g2d.drawImage(multiImage, (int)((parent.getX() + path.getBounds2D().getX()) * scale),
 				(int)((parent.getY() + path.getBounds2D().getY()) * scale), null);
 	}
 	@Override

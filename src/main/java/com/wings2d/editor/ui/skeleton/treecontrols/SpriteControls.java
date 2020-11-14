@@ -7,20 +7,13 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreePath;
 
-import com.wings2d.editor.objects.skeleton.SkeletonBone;
-import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.objects.skeleton.Sprite;
 import com.wings2d.editor.ui.skeleton.filterEdits.CreateFilterDialog;
 import com.wings2d.editor.ui.skeleton.filterEdits.FilterMap;
-import com.wings2d.framework.imageFilters.BasicVariance;
 import com.wings2d.framework.imageFilters.ImageFilter;
 
 public class SpriteControls extends SkeletonTreeControlsUIElement{
@@ -76,7 +69,8 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Sprite sprite = (Sprite)controls.getTree().getLastSelectedPathComponent();
-				sprite.addVertex();
+				sprite.addVertex(controls.getDrawingArea().getDrawArea().getUserLoc(), controls.getDrawingArea().getDrawArea().getScale());
+				controls.getDrawingArea().getDrawArea().repaint();
 			}
 		});
 		newFilter.addActionListener(new ActionListener() {

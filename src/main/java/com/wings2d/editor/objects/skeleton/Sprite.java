@@ -326,16 +326,16 @@ public class Sprite extends SkeletonNode implements Drawable{
 	{
 		return parent;
 	}
-	public void addVertex()
+	public void addVertex(final Point2D point, final double scale)
 	{
 		recreatePathFromPoints(getVertices(), false);
-		path.lineTo(0, 0);
+		path.lineTo((point.getX() - parent.getX()), point.getY() - parent.getY());
 		path.closePath();
 		List<SkeletonBone> syncedBones = parent.getSyncedBones();
 		for (int i = 0; i < syncedBones.size(); i++)
 		{
 			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncID);
-			sprite.addVertex();
+			sprite.addVertex(point, scale);
 		}
 	}
 	public List<ImageFilter> getFilters()

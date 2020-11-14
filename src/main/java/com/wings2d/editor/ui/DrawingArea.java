@@ -99,6 +99,10 @@ public class DrawingArea extends JPanel{
 	{
 		return zoomScale;
 	}
+	public double getScale()
+	{
+		return edit.getUIScale() * zoomScale;
+	}
 	
 	public void setUserLoc(final Point2D point)
 	{

@@ -125,6 +125,11 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 						path = path.pathByAddingChild(selectedItem);
 						tree.setSelectionPath(path);
 					}
+					else
+					{
+						drawArea.setUserLoc(e.getPoint());
+						drawArea.repaint();
+					}
 				}
 			}
 			@Override

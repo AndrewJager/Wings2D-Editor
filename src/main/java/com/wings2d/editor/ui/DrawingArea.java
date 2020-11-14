@@ -1,8 +1,11 @@
 package com.wings2d.editor.ui;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
 
 import javax.swing.JPanel;
 
@@ -19,12 +22,16 @@ public class DrawingArea extends JPanel{
 	private Editor edit;
 	private double zoomScale;
 	private DrawType drawType;
+	private Point2D userLoc;
+	private int CIRCLE_SIZE = 10;
+	private int LINE_LENGTH = 20;
 	
 	public DrawingArea(final Editor editor, final DrawType type)
 	{
 		edit = editor;
 		zoomScale = 1;
 		drawType = type;
+		userLoc = new Point2D.Double(10, 10);
 	}
 
 	@Override
@@ -42,6 +49,20 @@ public class DrawingArea extends JPanel{
 				drawItem.drawRender((Graphics2D)g, edit.getUIScale() * zoomScale);
 				break;
 			}
+		}
+		
+		if (drawType == DrawType.DRAW)
+		{
+			double scale = edit.getUIScale() * zoomScale; 
+			Graphics2D g2d = (Graphics2D)g;
+			g2d.setColor(Color.RED);
+			g2d.setStroke(new BasicStroke(1));
+			g2d.drawArc((int)(userLoc.getX() * scale - (CIRCLE_SIZE / 2)), (int)(userLoc.getY() * scale - (CIRCLE_SIZE / 2)),
+					CIRCLE_SIZE, CIRCLE_SIZE, 0, 360);
+			g2d.drawLine((int)(userLoc.getX()  * scale), (int)(userLoc.getY() * scale - (LINE_LENGTH / 2)), (int)(userLoc.getX() * scale),
+					(int)(userLoc.getY() * scale + (LINE_LENGTH / 2)));
+			g2d.drawLine((int)(userLoc.getX() * scale - (LINE_LENGTH / 2)), (int)(userLoc.getY() * scale),
+					(int)(userLoc.getX() * scale + (LINE_LENGTH / 2)), (int)(userLoc.getY() * scale));
 		}
 	}
 	
@@ -77,5 +98,17 @@ public class DrawingArea extends JPanel{
 	public double getZoomScale()
 	{
 		return zoomScale;
+	}
+	
+	public void setUserLoc(final Point2D point)
+	{
+		double scale = edit.getUIScale() * zoomScale;
+		double unscale = 1.0 / scale;
+		userLoc = new Point2D.Double(point.getX() * unscale, point.getY() * unscale);
+	}
+	
+	public Point2D getUserLoc()
+	{
+		return userLoc;
 	}
 }

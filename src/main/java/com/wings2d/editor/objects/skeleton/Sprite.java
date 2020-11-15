@@ -326,18 +326,42 @@ public class Sprite extends SkeletonNode implements Drawable{
 	{
 		return parent;
 	}
-	public void addVertex(final Point2D point, final double scale)
+	public void addVertex(final Point2D point)
 	{
-		recreatePathFromPoints(getVertices(), false);
-		path.lineTo((point.getX() - parent.getX()), point.getY() - parent.getY());
-		path.closePath();
 		List<SkeletonBone> syncedBones = parent.getSyncedBones();
 		for (int i = 0; i < syncedBones.size(); i++)
 		{
 			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncID);
-			sprite.addVertex(point, scale);
+			double xOffset = path.getBounds2D().getCenterX() + parent.getX() - point.getX();
+			double yOffset = path.getBounds2D().getCenterY() + parent.getY() - point.getY();
+			sprite.addVertex(this.getPath(), xOffset, yOffset);
 		}
+		recreatePathFromPoints(getVertices(), false);
+		path.lineTo((point.getX() - parent.getX()), point.getY() - parent.getY());
+		path.closePath();
 	}
+	public void addVertex(final Shape baseShape, final double xOffset, final double yOffset)
+	{
+		List<SkeletonBone> syncedBones = parent.getSyncedBones();
+		for (int i = 0; i < syncedBones.size(); i++)
+		{
+			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncID);
+			sprite.addVertex(baseShape, xOffset, yOffset);
+		}
+		double angle = ShapeComparator.getRotationFrom(this.path, baseShape, false);
+		AffineTransform transform = new AffineTransform();
+		transform.rotate(Math.toRadians(angle));
+		path = (Path2D)transform.createTransformedShape(path);
+		
+		recreatePathFromPoints(getVertices(), false);
+		path.lineTo(path.getBounds2D().getCenterX() - xOffset, path.getBounds2D().getCenterY() - yOffset);
+		path.closePath();
+		
+		transform = new AffineTransform();
+		transform.rotate(Math.toRadians(-angle));
+		path = (Path2D)transform.createTransformedShape(path);
+	}
+	
 	public List<ImageFilter> getFilters()
 	{
 		return filters;

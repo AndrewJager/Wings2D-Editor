@@ -10,6 +10,7 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
+import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.objects.skeleton.Sprite;
 import com.wings2d.editor.ui.skeleton.filterEdits.CreateFilterDialog;
@@ -50,6 +51,9 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 		filters.setListData(curSprite.getFilters().toArray(new ImageFilter[0]));
 		JScrollPane pane = new JScrollPane(filters);
 		panel.add(pane);
+		
+		SkeletonBone bone = curSprite.getBone();
+		setSelectedBone(bone);
 	}
 
 	@Override
@@ -69,7 +73,7 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Sprite sprite = (Sprite)controls.getTree().getLastSelectedPathComponent();
-				sprite.addVertex(controls.getDrawingArea().getDrawArea().getUserLoc(), controls.getDrawingArea().getDrawArea().getScale());
+				sprite.addVertex(controls.getDrawingArea().getDrawArea().getUserLoc());
 				controls.getDrawingArea().getDrawArea().repaint();
 			}
 		});

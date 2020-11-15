@@ -14,6 +14,7 @@ import javax.swing.JSeparator;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonMasterFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 
@@ -123,5 +124,11 @@ public abstract class SkeletonTreeControlsUIElement {
 		list.setFixedCellWidth(80);
 		JScrollPane pane = new JScrollPane(list);
 		panel.add(pane);
+	}
+	protected void setSelectedBone(final SkeletonBone bone)
+	{
+		bone.getFrame().setSelectedBone(bone);
+		controls.getDrawingArea().setSelectedFrame(bone.getFrame());
+		controls.getDrawingArea().getDrawArea().setDrawItem(bone.getFrame());	
 	}
 }

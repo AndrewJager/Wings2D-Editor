@@ -64,9 +64,7 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 		addLabel(rotation, "Rotation: " + Math.round(bone.getRotation()));
 		panel.add(addSprite);
 		
-		bone.getFrame().setSelectedBone(bone);
-		controls.getDrawingArea().setSelectedFrame(bone.getFrame());
-		controls.getDrawingArea().getDrawArea().setDrawItem(bone.getFrame());		
+		setSelectedBone(bone);		
 	}
 
 	@Override

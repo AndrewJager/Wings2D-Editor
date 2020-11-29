@@ -15,16 +15,14 @@ public class SkeletonTreeCellRenderer extends DefaultTreeCellRenderer{
 	public SkeletonTreeCellRenderer()
 	{
 		super();
-		int iconSize = 10;
-		double[] imgScales = new double[] {1.0, 1.25, 1.50, 1.75, 2.0};
-		int padding = 2;
+		CharImageCreator.ImageOptions options = new CharImageCreator.ImageOptions(10, new double[] {1.0, 1.25, 1.50, 1.75, 2.0}, 2);
 		
-		skeletonIcon = new ImageIcon(CharImageCreator.CreateMultiImage('\u2444', imgScales, iconSize, padding));
-		masterFrameIcon = new ImageIcon(CharImageCreator.CreateMultiImage('\u2B1A', imgScales, iconSize, padding));
-		animationIcon = new ImageIcon(CharImageCreator.CreateMultiImage('\u256C', imgScales, iconSize, padding));
-		frameIcon = new ImageIcon(CharImageCreator.CreateMultiImage('\u25F0', imgScales, iconSize, padding));
-		boneIcon = new ImageIcon(CharImageCreator.CreateMultiImage('\u2425', imgScales, iconSize, padding));
-		spriteIcon = new ImageIcon(CharImageCreator.CreateMultiImage('\u2B53', imgScales, iconSize, padding));
+		skeletonIcon = new ImageIcon(CharImageCreator.CreateMultiImage('\u2444', options));
+		masterFrameIcon = new ImageIcon(CharImageCreator.CreateMultiImage('\u2B1A', options));
+		animationIcon = new ImageIcon(CharImageCreator.CreateMultiImage('\u256C', options));
+		frameIcon = new ImageIcon(CharImageCreator.CreateMultiImage('\u25F0', options));
+		boneIcon = new ImageIcon(CharImageCreator.CreateMultiImage('\u2425', options));
+		spriteIcon = new ImageIcon(CharImageCreator.CreateMultiImage('\u2B53', options));
 	}
 
 	@Override

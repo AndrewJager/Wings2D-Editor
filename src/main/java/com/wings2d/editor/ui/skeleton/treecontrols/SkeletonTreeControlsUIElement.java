@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -21,6 +22,7 @@ import com.wings2d.editor.objects.skeleton.SkeletonNode;
 public abstract class SkeletonTreeControlsUIElement {
 	protected JPanel panel;
 	protected SkeletonTreeControls controls;
+	protected JPanel controlsPanel;
 	protected JButton rename, delete;
 	
 	protected static final int SEPARATOR_WIDTH = 5;
@@ -29,8 +31,12 @@ public abstract class SkeletonTreeControlsUIElement {
 	{
 		this.controls = controls;
 		panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		controlsPanel = new JPanel();
 		delete = new JButton("Delete");
 		rename = new JButton("Rename");
+		controlsPanel.add(rename);
+		controlsPanel.add(delete);
 	}
 	
 	public void updateInfo(final SkeletonNode node)

@@ -1,7 +1,6 @@
 package com.wings2d.editor.ui.skeleton;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
 
@@ -27,7 +26,10 @@ public class RenderArea extends SkeletonUIElement{
 	
 	public void drawRender(final SkeletonFrame frame, final double scale)
 	{
-		drawArea.repaint();
+		if (drawArea != null)
+		{
+			drawArea.repaint();
+		}
 	}
 	
 	public DrawingArea getDrawArea()

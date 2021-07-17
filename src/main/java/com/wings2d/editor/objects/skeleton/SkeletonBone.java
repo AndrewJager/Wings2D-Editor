@@ -228,7 +228,6 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		
 		double deltaX = unscaledX - location.getX();
 		double deltaY = unscaledY - location.getY();
-
 		if ((unscaledX > 0 && unscaledY > 0) && checkTranslate(deltaX, deltaY))
 		{
 			location.setLocation(unscaledX, unscaledY);
@@ -329,6 +328,20 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		transform.setToRotation(Math.toRadians(this.rotation - 90), location.getX(), location.getY());
 		transform.transform(rotHandleLoc, rotHandleLoc);
 		return rotHandleLoc;
+	}
+	public void rotate(final double angle)
+	{
+		double oldRotation = rotation;
+		rotation = angle;
+		double delta = angle - oldRotation;
+		for (int i = 0; i < sprites.size(); i++)
+		{
+			sprites.get(i).rotateAroundBone(delta);
+		}
+		for (int i = 0; i < childBones.size(); i++)
+		{
+			childBones.get(i).rotateAround(location, delta);
+		}
 	}
 	public void rotateByHandle(final Point loc, final double scale)
 	{

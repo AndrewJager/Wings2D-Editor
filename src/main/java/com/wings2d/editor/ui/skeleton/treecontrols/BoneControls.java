@@ -1,12 +1,21 @@
 package com.wings2d.editor.ui.skeleton.treecontrols;
 
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 
+import javax.swing.Box;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
@@ -17,52 +26,87 @@ import com.wings2d.editor.objects.skeleton.Sprite;
 
 public class BoneControls extends SkeletonTreeControlsUIElement{
 	public static final String CARD_ID = "Bone";
+	private SkeletonBone bone;
+	
 	
 	private JButton addSprite;
-	private JLabel xPos, yPos, rotation;
+	private JPanel namePanel, parentBone, xPosPanel, yPosPanel, rotPanel, spritesPanel;
+	private JComboBox<SkeletonBone> otherBones;
+	private JFormattedTextField xPos, yPos, rotation;
+	
 
 	public BoneControls(final SkeletonTreeControls controls) {
 		super(controls);
-		addSprite = new JButton("New Sprite");
+		namePanel = new JPanel();
 		
-		xPos = new JLabel("X: ", JLabel.CENTER);
-		yPos = new JLabel("Y: ", JLabel.CENTER);
-		rotation = new JLabel("Rotation: ", JLabel.CENTER);
-	}
-
-	@Override
-	protected void updatePanelInfo(final SkeletonNode node) {
-		SkeletonBone bone = (SkeletonBone)node;
-		addLabel(node.toString());
-		if (bone.getParentSyncedBone() == null)
-		{
-			addLabel("Unsynced");
-		}
-		addNameLine();
-		rename.setText("Rename Bone");
-		panel.add(rename);
-		panel.add(delete);
-		JLabel parentBoneLabel = new JLabel("Parent bone:");
-		panel.add(parentBoneLabel);
-		JComboBox<SkeletonBone> otherBones = new JComboBox<SkeletonBone>(bone.getFrame().getArrayOfBonesExcept(bone));
-		otherBones.setSelectedItem(bone.getParentBone());
+		parentBone = new JPanel();
+		parentBone.add(new JLabel("Parent Bone: "));
+		otherBones = new JComboBox<SkeletonBone>();
 		otherBones.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				bone.setParentBone((SkeletonBone)otherBones.getSelectedItem());
 			}
 		});
-		panel.add(otherBones);
+		parentBone.add(otherBones);
+		
+		xPosPanel = new JPanel();
+		xPosPanel.add(new JLabel("X:"));
+		xPos = new JFormattedTextField(new DecimalFormat());
+		xPosPanel.add(xPos);
+		
+		yPosPanel = new JPanel();
+		yPosPanel.add(new JLabel("Y:"));
+		yPos = new JFormattedTextField(new DecimalFormat());
+		yPosPanel.add(yPos);
+		
+		rotPanel = new JPanel();
+		rotPanel.add(new JLabel("Rotation:"));
+		rotation = new JFormattedTextField(new DecimalFormat());
+		rotPanel.add(rotation);
+		
+		spritesPanel = new JPanel();
+		addSprite = new JButton("New Sprite");
+		spritesPanel.add(addSprite);
+	}
+
+	@Override
+	protected void updatePanelInfo(final SkeletonNode node) {
+		bone = (SkeletonBone)node;
+		panel.add(namePanel);
+		namePanel.add(new JLabel(node.toString()));
+		if (bone.getParentSyncedBone() == null)
+		{
+			JLabel unsynced = new JLabel("(Unsynced)");
+			unsynced.setFont(unsynced.getFont().deriveFont(Font.ITALIC));
+			namePanel.add(unsynced);
+		}
+		panel.add(new JSeparator());
+		
+		rename.setText("Rename Bone");
+		panel.add(controlsPanel);
+
+		panel.add(parentBone);
+		DefaultComboBoxModel<SkeletonBone> model = new DefaultComboBoxModel<SkeletonBone>(bone.getFrame().getArrayOfBonesExcept(bone));
+		otherBones.setModel(model);
+		otherBones.setSelectedItem(bone.getParentBone());
 		if(bone.getParentSyncedBone() != null)
 		{
 			rename.setEnabled(false);
 			otherBones.setEnabled(false);
 		}
-		addNameLine();
-		addLabel(xPos, "X: " + bone.getX());
-		addLabel(yPos, "Y: " + bone.getY());
-		addLabel(rotation, "Rotation: " + Math.round(bone.getRotation()));
-		panel.add(addSprite);
+		panel.add(new JSeparator());
+
+		panel.add(xPosPanel);
+		xPos.setValue(bone.getX());
+		panel.add(yPosPanel);
+		yPos.setValue(bone.getY());
+		panel.add(rotPanel);
+		rotation.setValue(Math.round(bone.getRotation()));
+		panel.add(new JSeparator());
+		
+		panel.add(spritesPanel);
+		panel.add(Box.createRigidArea(new Dimension(0,100)));
 		
 		setSelectedBone(bone);		
 	}
@@ -91,7 +135,28 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 					}
 				}
 			}
-		});		
+		});	
+		xPos.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				bone.setLocation(Double.parseDouble(xPos.getText()), bone.getY(), true);
+				controls.getSkeleton().getDrawingArea().getDrawArea().repaint();
+			}
+		});
+		yPos.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				bone.setLocation(bone.getX(), Double.parseDouble(yPos.getText()), true);
+				controls.getSkeleton().getDrawingArea().getDrawArea().repaint();
+			}
+		});
+		rotation.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				bone.rotate(Double.parseDouble(rotation.getText()));
+				controls.getSkeleton().getDrawingArea().getDrawArea().repaint();
+			}
+		});
 	}
 
 	@Override 
@@ -100,9 +165,9 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 		SkeletonBone bone = (SkeletonBone)node;
 		if (bone != null)
 		{
-			xPos.setText("X: " + bone.getX());
-			yPos.setText("Y: " + bone.getY());
-			rotation.setText("Rotation: " + Math.round(bone.getRotation()));
+			xPos.setValue(bone.getX());
+			yPos.setValue(bone.getY());
+			rotation.setValue(Math.round(bone.getRotation()));
 		}
 	}
 }

@@ -1,11 +1,12 @@
 package com.wings2d.editor.ui.skeleton.treecontrols;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
@@ -18,33 +19,48 @@ import com.wings2d.editor.objects.skeleton.SkeletonNode;
 public class FrameControls extends SkeletonTreeControlsUIElement{
 	public static final String CARD_ID = "Frame";
 	
+	private JPanel namePanel, syncPanel, bonePanel;
 	private JButton addBone;
+	private JLabel syncLabel;
 
 	public FrameControls(final SkeletonTreeControls controls) {
 		super(controls);
+		
+		namePanel = new JPanel();
+		
+		syncPanel = new JPanel();
+		syncLabel = new JLabel();
+		syncPanel.add(syncLabel);
+		
+		bonePanel = new JPanel();
 		addBone = new JButton("New Bone");
+		bonePanel.add(addBone);
 	}
 
 	@Override
 	protected void updatePanelInfo(final SkeletonNode node) {
 		if (node != null)
 		{
-			addLabel(node.toString());
-			addNameLine();
+			panel.add(namePanel);
+			namePanel.removeAll();
+			namePanel.add(new JLabel(node.toString()));
 		}
-		panel.add(rename);
-		rename.setText("Rename Frame");
-		panel.add(delete);
-		delete.setText("Delete Frame");
+		panel.add(new JSeparator());
+		
+		panel.add(controlsPanel);
+		
+		panel.add(syncPanel);
 		SkeletonFrame frame = (SkeletonFrame)node;
 		if (frame.getParentSyncedFrame() != null)
 		{
-			addLabel(frame.getParentSyncedFrame().toString());
+			syncLabel.setText("Sync: " + frame.getParentSyncedFrame().toString());
 		}
 		else
 		{
-			addLabel("No parent sync frame");
+			syncLabel.setText("No parent sync frame");
 		}
+		
+		JPanel syncPanel = new JPanel();
 		JButton syncBones = new JButton("Sync Bone Locations");
 		syncBones.addActionListener(new ActionListener() {
 			@Override
@@ -53,12 +69,13 @@ public class FrameControls extends SkeletonTreeControlsUIElement{
 				controls.getDrawingArea().getDrawArea().repaint();
 			}
 		});
-		panel.add(syncBones);
+		syncPanel.add(syncBones);
+		panel.add(syncPanel);
+		
 		createList(frame.getSyncedFrameNames());
-		JSeparator line = new JSeparator();
-		line.setPreferredSize(new Dimension(panel.getWidth(), SEPARATOR_WIDTH));
-		panel.add(line);
-		panel.add(addBone);
+		panel.add(new JSeparator());
+		
+		panel.add(bonePanel);
 		
 		controls.getDrawingArea().setSelectedFrame(frame);
 		controls.getDrawingArea().getDrawArea().setDrawItem(frame);

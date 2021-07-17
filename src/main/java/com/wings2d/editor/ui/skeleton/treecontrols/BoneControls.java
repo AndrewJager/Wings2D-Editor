@@ -1,7 +1,6 @@
 package com.wings2d.editor.ui.skeleton.treecontrols;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,10 +28,10 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 	private SkeletonBone bone;
 	
 	
-	private JButton addSprite;
 	private JPanel namePanel, parentBone, xPosPanel, yPosPanel, rotPanel, spritesPanel;
 	private JComboBox<SkeletonBone> otherBones;
 	private JFormattedTextField xPos, yPos, rotation;
+	private JButton addSprite;
 	
 
 	public BoneControls(final SkeletonTreeControls controls) {
@@ -74,6 +73,7 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 	protected void updatePanelInfo(final SkeletonNode node) {
 		bone = (SkeletonBone)node;
 		panel.add(namePanel);
+		namePanel.removeAll();
 		namePanel.add(new JLabel(node.toString()));
 		if (bone.getParentSyncedBone() == null)
 		{

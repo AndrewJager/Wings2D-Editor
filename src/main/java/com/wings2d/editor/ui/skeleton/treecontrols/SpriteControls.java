@@ -1,12 +1,16 @@
 package com.wings2d.editor.ui.skeleton.treecontrols;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
+import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
@@ -20,16 +24,29 @@ import com.wings2d.framework.imageFilters.ImageFilter;
 public class SpriteControls extends SkeletonTreeControlsUIElement{
 	public static final String CARD_ID = "Sprite";
 	
-	private JButton changeColor, newVertex, newFilter;
+	private JPanel namePanel, colorPanel, colorIndicator, vertexPanel;
+	private JButton changeColor, newVertex, addFilter;
 	private JList<ImageFilter> filters;
 	private Sprite curSprite;
 
 	public SpriteControls(final SkeletonTreeControls controls) {
 		super(controls);
-		changeColor = new JButton("Change Color");
-		newVertex = new JButton("New Vertex");
-		newFilter = new JButton("New Filter");
 		
+		namePanel = new JPanel();
+		
+		colorPanel = new JPanel();
+		colorIndicator = new JPanel();
+		colorIndicator.setPreferredSize(new Dimension(10, 10));
+		colorPanel.add(colorIndicator);
+		changeColor = new JButton("Change Color");
+		colorPanel.add(changeColor);
+		
+		vertexPanel = new JPanel();
+		newVertex = new JButton("New Vertex");
+		vertexPanel.add(newVertex);
+		
+
+		addFilter = new JButton("New Filter");
 		filters = new JList<ImageFilter>();
 		filters.setLayoutOrientation(JList.VERTICAL);
 		filters.setVisibleRowCount(5);
@@ -39,18 +56,24 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 	@Override
 	protected void updatePanelInfo(final SkeletonNode node) {
 		curSprite = (Sprite)node;
-		addLabel(curSprite.toString());
-		panel.add(rename);
-		panel.add(delete);
-		panel.add(changeColor);
-		panel.add(newVertex);
-		panel.add(new JSeparator(JSeparator.HORIZONTAL));
-		panel.add(newFilter);
-		panel.add(new JSeparator(JSeparator.HORIZONTAL));
 		
+		panel.add(namePanel);
+		namePanel.add(new JLabel(curSprite.toString()));
+		panel.add(new JSeparator());
+		
+		panel.add(controlsPanel);
+		panel.add(colorPanel);
+		colorIndicator.setBackground(curSprite.getColor());
+		panel.add(vertexPanel);
+		panel.add(new JSeparator());
+		
+		JPanel filterPanel = new JPanel();
+		filterPanel.setLayout(new BorderLayout());
+		filterPanel.add(addFilter, BorderLayout.NORTH);
 		filters.setListData(curSprite.getFilters().toArray(new ImageFilter[0]));
 		JScrollPane pane = new JScrollPane(filters);
-		panel.add(pane);
+		filterPanel.add(pane, BorderLayout.CENTER);
+		panel.add(filterPanel);
 		
 		SkeletonBone bone = curSprite.getBone();
 		setSelectedBone(bone);
@@ -65,6 +88,7 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 				if (color != null)
 				{
 					curSprite.setColor(color);
+					colorIndicator.setBackground(color);
 					controls.getDrawingArea().getDrawArea().repaint();
 				}
 			}
@@ -77,7 +101,7 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 				controls.getDrawingArea().getDrawArea().repaint();
 			}
 		});
-		newFilter.addActionListener(new ActionListener() {
+		addFilter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				CreateFilterDialog filterDlg = new CreateFilterDialog(controls.getSkeleton().getEditor().getFrame());
 				Class<? extends ImageFilter> result = filterDlg.showDialog();

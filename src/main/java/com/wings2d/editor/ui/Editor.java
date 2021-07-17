@@ -57,6 +57,7 @@ public class Editor {
 		frame = new JFrame("Editor");
 		frame.setBackground(Color.BLACK);
 		frame.setLayout(new GridBagLayout());
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		mainPanel = new JPanel();
 		cards = new CardLayout();
 		mainPanel.setLayout(cards);
@@ -126,12 +127,13 @@ public class Editor {
 				demoLevel.rescale();
 			}
 		});
-
 		frame.setSize(frameStartWidth, frameStartHeight);
 		frame.setMinimumSize(new Dimension(1250, 720));
 		frame.setLocationRelativeTo(null);
 		frame.setLayout(null); 
 		frame.setVisible(true);
+		frameStartWidth = frame.getWidth();
+		frameStartHeight = frame.getHeight();
 	}
 	
 	public void showProject()

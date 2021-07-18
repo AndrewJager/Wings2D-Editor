@@ -14,6 +14,8 @@ import com.wings2d.framework.imageFilters.ShadeDir;
 
 
 public abstract class ShadeFromEdit extends FilterEdit{
+	private static final long serialVersionUID = 1L;
+
 	public enum ShadeType{
 		LIGHTEN,
 		DARKEN
@@ -48,6 +50,21 @@ public abstract class ShadeFromEdit extends FilterEdit{
 		
 
 	    addButtons();
+	}
+	
+	public ShadeFromEdit(final ImageFilter filter, final Frame owner, final ShadeType type) {
+		this(owner, type);
+		if (filter instanceof DarkenFrom) {
+			DarkenFrom darken = (DarkenFrom)filter;
+			directionSelect.setSelectedItem(darken.getDirection());
+			filterAmt.setValue(darken.getAmt());
+			
+		}
+		else if (filter instanceof LightenFrom) {
+			LightenFrom lighten = (LightenFrom)filter;
+			directionSelect.setSelectedItem(lighten.getDirection());
+			filterAmt.setValue(lighten.getAmt());
+		}
 	}
 
 	public DarkenFrom getDarken()

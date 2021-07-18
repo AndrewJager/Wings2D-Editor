@@ -71,6 +71,7 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 
 	@Override
 	protected void updatePanelInfo(final SkeletonNode node) {
+		super.updatePanelInfo(node);
 		bone = (SkeletonBone)node;
 		panel.add(namePanel);
 		namePanel.removeAll();

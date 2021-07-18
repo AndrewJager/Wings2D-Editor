@@ -435,6 +435,14 @@ public class Sprite extends SkeletonNode implements Drawable{
 	@Override
 	public void setName(final String newName) {
 		this.name = newName;
+		List<SkeletonBone> syncedBones = parent.getSyncedBones();
+		for (int i = 0; i < syncedBones.size(); i++)
+		{
+			if (syncedBones.get(i).getSpriteBySyncID(syncID) != null)
+			{
+				syncedBones.get(i).getSpriteBySyncID(syncID).setName(newName);
+			}
+		}
 	}
 	@Override
 	public void saveToFile(final PrintWriter out) {

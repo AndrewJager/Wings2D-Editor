@@ -34,6 +34,7 @@ public class SkeletonControls extends SkeletonTreeControlsUIElement{
 
 	@Override
 	public void updatePanelInfo(SkeletonNode node) {
+		super.updatePanelInfo(node);
 		if (node != null)
 		{
 			panel.add(namePanel);

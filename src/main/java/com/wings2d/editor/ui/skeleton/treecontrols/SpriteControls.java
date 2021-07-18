@@ -1,10 +1,11 @@
 package com.wings2d.editor.ui.skeleton.treecontrols;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -13,6 +14,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.SwingUtilities;
 
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
@@ -24,7 +26,7 @@ import com.wings2d.framework.imageFilters.ImageFilter;
 public class SpriteControls extends SkeletonTreeControlsUIElement{
 	public static final String CARD_ID = "Sprite";
 	
-	private JPanel namePanel, colorPanel, colorIndicator, vertexPanel;
+	private JPanel namePanel, colorPanel, colorIndicator, vertexPanel, filterAddPanel;
 	private JButton changeColor, newVertex, addFilter;
 	private JList<ImageFilter> filters;
 	private Sprite curSprite;
@@ -45,19 +47,52 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 		newVertex = new JButton("New Vertex");
 		vertexPanel.add(newVertex);
 		
-
+		filterAddPanel = new JPanel();
 		addFilter = new JButton("New Filter");
+		filterAddPanel.add(addFilter);
+		
 		filters = new JList<ImageFilter>();
 		filters.setLayoutOrientation(JList.VERTICAL);
 		filters.setVisibleRowCount(5);
 		filters.setFixedCellWidth(80);
+		SpriteControls passThis = this;
+		filters.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (SwingUtilities.isRightMouseButton(e))
+				{
+					FiltersPopupMenu menu = new FiltersPopupMenu(filters.getSelectedValue(), curSprite.getFilters(), passThis);
+					menu.show(e.getComponent(), e.getX(), e.getY());
+				}
+				else
+				{
+					if (e.getClickCount() == 2) { // Double click
+						ImageFilter newFilter = FilterMap.runEditDialog(filters.getSelectedValue(), controls.getSkeleton().getEditor().getFrame());
+						if (newFilter != null) {
+							curSprite.getFilters().set(filters.getSelectedIndex(), newFilter);
+							passThis.updatePanelInfo(curSprite);
+						}
+					}
+				}
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+		});
 	}
 
 	@Override
 	protected void updatePanelInfo(final SkeletonNode node) {
+		super.updatePanelInfo(node);
 		curSprite = (Sprite)node;
-		
-		panel.add(namePanel);
+
+		panel.add(namePanel); 
+		namePanel.removeAll();
 		namePanel.add(new JLabel(curSprite.toString()));
 		panel.add(new JSeparator());
 		
@@ -67,13 +102,16 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 		panel.add(vertexPanel);
 		panel.add(new JSeparator());
 		
+		panel.add(filterAddPanel);
+		
 		JPanel filterPanel = new JPanel();
-		filterPanel.setLayout(new BorderLayout());
-		filterPanel.add(addFilter, BorderLayout.NORTH);
 		filters.setListData(curSprite.getFilters().toArray(new ImageFilter[0]));
 		JScrollPane pane = new JScrollPane(filters);
-		filterPanel.add(pane, BorderLayout.CENTER);
+		filterPanel.add(pane);
+		filters.setFixedCellWidth(80);
 		panel.add(filterPanel);
+		
+		panel.revalidate();
 		
 		SkeletonBone bone = curSprite.getBone();
 		setSelectedBone(bone);
@@ -107,7 +145,7 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 				Class<? extends ImageFilter> result = filterDlg.showDialog();
 				if (result != null)
 				{
-					ImageFilter newFilter = FilterMap.runDialog(result, controls.getSkeleton().getEditor().getFrame());
+					ImageFilter newFilter = FilterMap.runCreateDialog(result, controls.getSkeleton().getEditor().getFrame());
 					if (newFilter != null)
 					{
 						curSprite.getFilters().add(newFilter);
@@ -118,4 +156,7 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 		});
 	}
 
+	public Sprite getCurrentSprite() {
+		return curSprite;
+	}
 }

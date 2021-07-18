@@ -21,8 +21,12 @@ import com.wings2d.framework.imageFilters.FilterFactory;
 import com.wings2d.framework.imageFilters.ImageFilter;
 
 public class CreateFilterDialog extends JDialog{
+	private static final long serialVersionUID = 1L;
+
 	private class FiltersCellRenderer extends JLabel implements ListCellRenderer<Class<? extends ImageFilter>>
 	{
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public Component getListCellRendererComponent(JList<? extends Class<? extends ImageFilter>> list,
 				Class<? extends ImageFilter> value, int index, boolean isSelected, boolean cellHasFocus) {

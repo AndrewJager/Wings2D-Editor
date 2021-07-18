@@ -17,6 +17,8 @@ public class FilterMap {
 	public static Map<Class<? extends ImageFilter>, Class<? extends FilterEdit>> FILTER_MAP
 			= new HashMap<Class<? extends ImageFilter>, Class<? extends FilterEdit>>()
 			{
+				private static final long serialVersionUID = 1L;
+
 				{
 					put(BasicVariance.class, BasicVarianceEdit.class);
 					put(LightenFrom.class, LightenFromEdit.class);
@@ -24,7 +26,7 @@ public class FilterMap {
 				}
 			};
 			
-	public static ImageFilter runDialog(final Class<? extends ImageFilter> filterClass, final Frame owner)
+	public static ImageFilter runCreateDialog(final Class<? extends ImageFilter> filterClass, final Frame owner)
 	{
 		ImageFilter result = null;
 		try {
@@ -43,6 +45,27 @@ public class FilterMap {
 				| InvocationTargetException e) {
 			e.printStackTrace();
 		} 
+		return result;
+	}
+	
+	public static ImageFilter runEditDialog(final ImageFilter filter, final Frame owner) {
+		ImageFilter result = null;
+		try {
+			Class<? extends FilterEdit> editClass = FILTER_MAP.get(filter.getClass());
+			if (editClass != null)
+			{
+				Constructor<? extends FilterEdit> con = editClass.getConstructor(filter.getClass(), Frame.class);
+				FilterEdit edit = con.newInstance(filter, owner);
+				result = edit.showDialog();
+			}
+			else
+			{
+				throw new RuntimeException("Class is not defined in FilterMap! Please add it to the list!");
+			}
+		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException 
+				| InvocationTargetException e) {
+			e.printStackTrace();
+		}
 		return result;
 	}
 }

@@ -99,7 +99,9 @@ public abstract class SkeletonTreeControlsUIElement {
 		return panel;
 	}
 	
-	protected abstract void updatePanelInfo(final SkeletonNode node);
+	protected void updatePanelInfo(final SkeletonNode node) {
+		panel.removeAll();
+	}
 	protected abstract void createOtherEvents();
 	/** Only update the text on the labels. Override this event for use when moving objects in editor **/
 	protected void updateVisibleInfo(final SkeletonNode node) {}

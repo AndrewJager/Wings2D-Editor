@@ -12,6 +12,7 @@ import javax.swing.JDialog;
 import com.wings2d.framework.imageFilters.ImageFilter;
 
 public abstract class FilterEdit extends JDialog{
+	private static final long serialVersionUID = 1L;
 	private JButton okBtn;
 	private ImageFilter newFilter;
 	

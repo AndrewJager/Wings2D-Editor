@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JMenuItem;
@@ -30,6 +32,7 @@ import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.objects.skeleton.SkeletonTreeCellRenderer;
 import com.wings2d.editor.objects.skeleton.SkeletonTreeModelListener;
 import com.wings2d.editor.objects.skeleton.Sprite;
+import com.wings2d.editor.objects.skeleton.SpritePoint;
 import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
 
 public class SkeletonTree extends SkeletonUIElement{
@@ -38,6 +41,7 @@ public class SkeletonTree extends SkeletonUIElement{
 	private JScrollPane scrollPane;
 	private JPopupMenu menu;
 	private JMenuItem editItem, moveUpItem, moveDownItem;
+	private List<TreePath> expandedPaths;
 
 	public SkeletonTree(final SkeletonEdit edit, final Rectangle bounds) {
 		super(edit, bounds);
@@ -62,6 +66,8 @@ public class SkeletonTree extends SkeletonUIElement{
 		moveDownItem = new JMenuItem("Move down");
 		menu.add(moveDownItem);
 		tree.setComponentPopupMenu(menu);
+		
+		expandedPaths = new ArrayList<TreePath>();
 	}
 	
 	public void setSkeleton(final Skeleton skeleton)
@@ -105,6 +111,10 @@ public class SkeletonTree extends SkeletonUIElement{
 				Sprite sprite = (Sprite)selectedNode;
 				renderFrame = sprite.getBone().getFrame();
 			}
+			else if (selectedNode instanceof SpritePoint) {
+				SpritePoint point = (SpritePoint)selectedNode;
+				renderFrame = point.getSprite().getBone().getFrame();
+			}
 		}
 		return renderFrame;
 	}
@@ -141,6 +151,11 @@ public class SkeletonTree extends SkeletonUIElement{
 						treeControls.showSpriteControls(selectedNode);
 						SkeletonBone bone = (SkeletonBone)selectedNode.getParent();
 						bone.setSelectedSprite((Sprite)selectedNode);
+					}
+					else if (selectedNode instanceof SpritePoint) {
+						treeControls.showPointControls(selectedNode);
+						SpritePoint point = (SpritePoint)selectedNode;
+						point.getSprite().setSelectedVertex(point.getSprite().getPoints().indexOf(point));
 					}
 					skeleton.getDrawingArea().getDrawArea().repaint();
 				}
@@ -218,8 +233,7 @@ public class SkeletonTree extends SkeletonUIElement{
 			public void actionPerformed(ActionEvent e) {
 				SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
 				selectedNode.moveUp();
-				DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
-				model.reload();
+				reloadModel();
 			}
 		});
 		moveDownItem.addActionListener(new ActionListener() {
@@ -227,8 +241,7 @@ public class SkeletonTree extends SkeletonUIElement{
 			public void actionPerformed(ActionEvent e) {
 				SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
 				selectedNode.moveDown();
-				DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
-				model.reload();
+				reloadModel();
 			}
 		});
 	}
@@ -236,5 +249,28 @@ public class SkeletonTree extends SkeletonUIElement{
 	public JTree getTree()
 	{
 		return tree;
+	}
+	
+	private void getExpandedNodes() {
+		expandedPaths.clear();
+		for (int i = 0; i < tree.getRowCount(); i++) {
+			if (tree.isExpanded(i)) {
+				TreePath path = tree.getPathForRow(i);
+				expandedPaths.add(path);
+			}
+		}
+	}
+	private void setExpandedNodes() {
+		for (int i = 0; i < expandedPaths.size(); i++) {
+			tree.expandPath(expandedPaths.get(i));
+		}
+	}
+	
+	/** Reload the tree model while keeping the expanded state of the tree **/
+	public void reloadModel() {
+		DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+		getExpandedNodes();
+		model.reload();
+		setExpandedNodes();
 	}
 }

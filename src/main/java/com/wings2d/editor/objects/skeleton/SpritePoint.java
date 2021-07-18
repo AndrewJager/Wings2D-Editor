@@ -34,6 +34,10 @@ public class SpritePoint extends SkeletonNode{
 	public void setY(double y) {
 		this.y = y;
 	}
+	
+	public Sprite getSprite() {
+		return parent;
+	}
 
 	// MutableTreeNode methods
 	@Override

@@ -19,9 +19,9 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 	private FrameControls frameControls;
 	private BoneControls boneControls;
 	private SpriteControls spriteControls;
+	private PointControls pointControls;
 	private SkeletonTreeControlsUIElement currentCard;
 	private SkeletonDrawingArea drawingArea;
-	
 
 	public SkeletonTreeControls(final SkeletonEdit edit, final Rectangle bounds) {
 		super(edit, bounds);
@@ -33,12 +33,14 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		frameControls = new FrameControls(this);
 		boneControls = new BoneControls(this);
 		spriteControls = new SpriteControls(this);
+		pointControls = new PointControls(this);
 		
 		panel.add(skeletonControls.getPanel(), SkeletonControls.CARD_ID);
 		panel.add(animationControls.getPanel(), AnimationControls.CARD_ID);
 		panel.add(frameControls.getPanel(), FrameControls.CARD_ID);
 		panel.add(boneControls.getPanel(), BoneControls.CARD_ID);
 		panel.add(spriteControls.getPanel(), SpriteControls.CARD_ID);
+		panel.add(pointControls.getPanel(), PointControls.CARD_ID);
 		
 		this.drawingArea = edit.getDrawingArea();
 		
@@ -77,6 +79,12 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		spriteControls.updateInfo(node);
 		currentCard = spriteControls;
 	}
+	public void showPointControls(final SkeletonNode node)
+	{
+		cards.show(panel, PointControls.CARD_ID);
+		pointControls.updateInfo(node);
+		currentCard = pointControls;
+	}
 
 	public JTree getTree()
 	{
@@ -100,5 +108,6 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		frameControls.createEvents();
 		boneControls.createEvents();
 		spriteControls.createEvents();
+		pointControls.createEvents();
 	}
 }

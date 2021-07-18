@@ -27,7 +27,6 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 	public static final String CARD_ID = "Bone";
 	private SkeletonBone bone;
 	
-	
 	private JPanel namePanel, parentBone, xPosPanel, yPosPanel, rotPanel, spritesPanel;
 	private JComboBox<SkeletonBone> otherBones;
 	private JFormattedTextField xPos, yPos, rotation;

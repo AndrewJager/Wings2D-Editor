@@ -59,9 +59,9 @@ public class Sprite extends SkeletonNode implements Drawable{
 		points = new ArrayList<SpritePoint>();
 		path = new Path2D.Double();
 		moveTo(-30, -30);
-//		lineTo(30, -30);
-//		lineTo(30, 30);
-//		lineTo(-30, 30);
+		lineTo(30, -30);
+		lineTo(30, 30);
+		lineTo(-30, 30);
 		path.closePath();
 	}
 	
@@ -234,7 +234,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		}
 		return vertices;
 	}
-	public void setVertexLocation(final double x, final double y, final int vertex, final double scale)
+	public void setVertexLocation(final double x, final double y, final int vertex, final double scale, final boolean relativeToParent)
 	{
 		double unscale = 1.0 / scale;
 		double unscaledX = x * unscale;
@@ -247,12 +247,24 @@ public class Sprite extends SkeletonNode implements Drawable{
 			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncID);
 			if (ShapeComparator.similarShapes(this.path, sprite.path))
 			{
-				sprite.translateVertex(this.path, unscaledX - points.get(getSelectedVertex()).getX() - parent.getX(), 
-						unscaledY - points.get(getSelectedVertex()).getY() - parent.getY(), getSelectedVertex());
+				if (relativeToParent) {
+					sprite.translateVertex(this.path, unscaledX - points.get(getSelectedVertex()).getX() - parent.getX(), 
+							unscaledY - points.get(getSelectedVertex()).getY() - parent.getY(), getSelectedVertex());
+				}
+				else {
+					sprite.translateVertex(this.path, unscaledX - points.get(getSelectedVertex()).getX(), 
+							unscaledY - points.get(getSelectedVertex()).getY(), getSelectedVertex());
+				}
 			}
 		}
-		points.get(vertex).setLocation(unscaledX - parent.getX(), 
-				unscaledY - parent.getY());
+		if (relativeToParent) {
+			points.get(vertex).setLocation(unscaledX - parent.getX(), 
+					unscaledY - parent.getY());
+		}
+		else {
+			points.get(vertex).setLocation(unscaledX, 
+					unscaledY);
+		}
 		recreatePathFromPoints(points, true);
 	}
 	private void recreatePathFromPoints(final List<Point2D> points, final boolean close)
@@ -264,7 +276,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		{
 			for (int i = 1; i < points.size(); i++)
 			{
-//				lineTo(points.get(i).getX(), points.get(i).getY());
+				lineTo(points.get(i).getX(), points.get(i).getY());
 			}
 		}
 		if (close) 
@@ -272,13 +284,14 @@ public class Sprite extends SkeletonNode implements Drawable{
 			path.closePath();
 		}
 	}
-	public void setVertexLocation(final Point loc, final int vertex, final double scale)
+	public void setVertexLocation(final Point2D loc, final int vertex, final double scale)
 	{
-		setVertexLocation(loc.getX(), loc.getY(), vertex, scale);
+		setVertexLocation(loc.getX(), loc.getY(), vertex, scale, true);
 	}
 	/** Calls setVertexLocation with the vertex returned by getSelectedVertex() **/
-	public void setVertexLocation(final Point loc, final double scale)
+	public void setVertexLocation(final Point2D loc, final double scale)
 	{
+		System.out.println(getSelectedVertex());
 		setVertexLocation(loc, getSelectedVertex(), scale);
 	}
 	public void translateVertex(final Shape parentPath, final double deltaX, final double deltaY, final int vertex)
@@ -306,6 +319,12 @@ public class Sprite extends SkeletonNode implements Drawable{
 		transform = new AffineTransform();
 		transform.rotate(Math.toRadians(-angle));
 		path = (Path2D)transform.createTransformedShape(path);
+	}
+	public void setRelativeVertexLocation(final double x, final double y, final double scale) {
+		setRelativeVertexLocation(x, y , getSelectedVertex(), scale);
+	}
+	public void setRelativeVertexLocation(final double x, final double y, final int vertex, final double scale) {
+		setVertexLocation(x, y, vertex, scale, false);
 	}
 	public void rotateAroundBone(final double delta)
 	{
@@ -354,7 +373,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 			sprite.addVertex(this.getPath(), xOffset, yOffset);
 		}
 		recreatePathFromPoints(getVertices(), false);
-//		lineTo((point.getX() - parent.getX()), point.getY() - parent.getY());
+		lineTo((point.getX() - parent.getX()), point.getY() - parent.getY());
 		path.closePath();
 	}
 	public void addVertex(final Shape baseShape, final double xOffset, final double yOffset)
@@ -371,7 +390,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		path = (Path2D)transform.createTransformedShape(path);
 		
 		recreatePathFromPoints(getVertices(), false);
-//		lineTo(path.getBounds2D().getCenterX() - xOffset, path.getBounds2D().getCenterY() - yOffset);
+		lineTo(path.getBounds2D().getCenterX() - xOffset, path.getBounds2D().getCenterY() - yOffset);
 		path.closePath();
 		
 		transform = new AffineTransform();

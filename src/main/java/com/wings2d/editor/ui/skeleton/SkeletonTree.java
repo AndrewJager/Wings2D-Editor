@@ -33,6 +33,8 @@ import com.wings2d.editor.objects.skeleton.SkeletonTreeCellRenderer;
 import com.wings2d.editor.objects.skeleton.SkeletonTreeModelListener;
 import com.wings2d.editor.objects.skeleton.Sprite;
 import com.wings2d.editor.objects.skeleton.SpritePoint;
+import com.wings2d.editor.ui.edits.MoveDownInTree;
+import com.wings2d.editor.ui.edits.MoveUpInTree;
 import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
 
 public class SkeletonTree extends SkeletonUIElement{
@@ -232,7 +234,7 @@ public class SkeletonTree extends SkeletonUIElement{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
-				selectedNode.moveUp();
+				getSkeleton().getEditor().getEditsManager().edit(new MoveUpInTree(selectedNode));
 				reloadModel();
 			}
 		});
@@ -240,7 +242,7 @@ public class SkeletonTree extends SkeletonUIElement{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
-				selectedNode.moveDown();
+				getSkeleton().getEditor().getEditsManager().edit(new MoveDownInTree(selectedNode));
 				reloadModel();
 			}
 		});

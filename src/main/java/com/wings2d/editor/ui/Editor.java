@@ -19,6 +19,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import com.wings2d.editor.objects.EditOptions;
 import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.skeleton.Skeleton;
+import com.wings2d.editor.ui.edits.EditsManager;
 import com.wings2d.editor.ui.project.ProjectEdit;
 import com.wings2d.editor.ui.skeleton.SkeletonEdit;
 import com.wings2d.framework.Level;
@@ -45,6 +46,8 @@ public class Editor {
 	public int frameStartHeight = 800;
 	public double RENDER_SCALE = 0.25;
 	public double RENDER_SCALE_TO_ACTUAL = 1 / RENDER_SCALE;
+	
+	private EditsManager undo;
 
 	public void run() {
 		manager = new LevelManager();
@@ -67,6 +70,8 @@ public class Editor {
 		panels = new ArrayList<UIPanel>();
 		projectEdit = new ProjectEdit(this);
 		skeletonEdit = new SkeletonEdit(this);
+		
+		undo = new EditsManager(skeletonEdit.getSkeletonTree());
 		
 		mainPanel.add(projectEdit.getPanel(), ProjectEdit.CARD_ID);		
 		mainPanel.add(skeletonEdit.getPanel(), SkeletonEdit.CARD_ID);
@@ -185,5 +190,8 @@ public class Editor {
 	public EditorSettings getSettings()
 	{
 		return settings;
+	}
+	public EditsManager getEditsManager() {
+		return undo;
 	}
 }

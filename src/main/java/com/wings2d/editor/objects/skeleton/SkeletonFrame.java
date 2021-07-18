@@ -17,6 +17,7 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.Drawable;
+import com.wings2d.editor.ui.edits.ActionNotDoneException;
 
 public class SkeletonFrame extends SkeletonNode implements Drawable{
 	public static final String FRAME_TOKEN = "FRAME";
@@ -490,7 +491,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		}
 	}
 	@Override
-	public void moveUp()
+	public void moveUp() throws ActionNotDoneException
 	{
 		List<SkeletonFrame> frames = animation.getFrames();
 		int index = frames.indexOf(this);
@@ -498,15 +499,21 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		{
 			Collections.swap(frames, index, index - 1);
 		}
+		else {
+			throw new ActionNotDoneException("Cannot move up when item is first in list!", false);
+		}
 	}
 	@Override
-	public void moveDown()
+	public void moveDown() throws ActionNotDoneException
 	{
 		List<SkeletonFrame> frames = animation.getFrames();
 		int index = frames.indexOf(this);
 		if (index < frames.size() - 1) 
 		{
 			Collections.swap(frames, index, index + 1);
+		}
+		else {
+			throw new ActionNotDoneException("Cannot move down when item is last in list!", false);
 		}
 	}
 	@Override

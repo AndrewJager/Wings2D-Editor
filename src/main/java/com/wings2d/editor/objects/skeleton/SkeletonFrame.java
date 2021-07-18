@@ -496,9 +496,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		int index = frames.indexOf(this);
 		if (index > 0) 
 		{
-			SkeletonFrame swap = frames.get(index - 1);
-			frames.remove(swap);
-			frames.add(index, swap);
+			Collections.swap(frames, index, index - 1);
 		}
 	}
 	@Override
@@ -508,8 +506,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		int index = frames.indexOf(this);
 		if (index < frames.size() - 1) 
 		{
-			frames.remove(this);
-			frames.add(index + 1, this);
+			Collections.swap(frames, index, index + 1);
 		}
 	}
 	@Override

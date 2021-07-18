@@ -187,9 +187,17 @@ public class SkeletonAnimation extends SkeletonNode{
 		int index = anims.indexOf(this);
 		if (index > 1) // Cannot swap with Master Frame
 		{
-			SkeletonNode swap = anims.get(index - 1);
-			anims.remove(swap);
-			anims.add(index, swap);
+			Collections.swap(anims, index, index - 1);
+		}
+	}
+	@Override
+	public void moveDown()
+	{
+		List<SkeletonNode> anims = skeleton.getAnimations();
+		int index = anims.indexOf(this);
+		if (index < anims.size() - 1) 
+		{
+			Collections.swap(anims, index, index - 1);
 		}
 	}
 	@Override
@@ -201,16 +209,5 @@ public class SkeletonAnimation extends SkeletonNode{
 			nodes.add((SkeletonNode)frames.get(i));
 		}
 		return nodes;
-	}
-	@Override
-	public void moveDown()
-	{
-		List<SkeletonNode> anims = skeleton.getAnimations();
-		int index = anims.indexOf(this);
-		if (index < anims.size() - 1) 
-		{
-			anims.remove(this);
-			anims.add(index + 1, this);
-		}
 	}
 }

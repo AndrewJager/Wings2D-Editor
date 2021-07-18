@@ -15,6 +15,7 @@ import java.awt.image.BaseMultiResolutionImage;
 import java.awt.image.BufferedImage;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Scanner;
@@ -46,6 +47,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	private double imgYOffset;
 	private BaseMultiResolutionImage multiImage;
 	private List<ImageFilter> filters;
+	private List<SpritePoint> points;
 	
 	public Sprite(final String spriteName, final SkeletonBone parent)
 	{
@@ -54,11 +56,12 @@ public class Sprite extends SkeletonNode implements Drawable{
 		syncID = UUID.randomUUID();
 		color = Color.LIGHT_GRAY;
 		filters = new ArrayList<ImageFilter>();
+		points = new ArrayList<SpritePoint>();
 		path = new Path2D.Double();
-		path.moveTo(-30, -30);
-		path.lineTo(30, -30);
-		path.lineTo(30, 30);
-		path.lineTo(-30, 30);
+		moveTo(-30, -30);
+//		lineTo(30, -30);
+//		lineTo(30, 30);
+//		lineTo(-30, 30);
 		path.closePath();
 	}
 	
@@ -67,6 +70,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		this.parent = parent;
 		path = new Path2D.Double();
 		filters = new ArrayList<ImageFilter>();
+		points = new ArrayList<SpritePoint>();
 		boolean keepReading = true;
 		boolean firstPoint = true;
 		while(in.hasNext() && keepReading)
@@ -83,12 +87,12 @@ public class Sprite extends SkeletonNode implements Drawable{
 			case VERTEX_TOKEN:
 				if (firstPoint)
 				{
-					path.moveTo(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
+					moveTo(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
 					firstPoint = false;
 				}
 				else
 				{
-					path.lineTo(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
+					lineTo(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
 				}
 				break;
 			case SYNC_ID_TOKEN:
@@ -109,6 +113,10 @@ public class Sprite extends SkeletonNode implements Drawable{
 		Sprite newSprite = new Sprite(new String(this.name), parent);
 		newSprite.color = new Color(this.color.getRGB());
 		newSprite.path = new Path2D.Double(this.path);
+		newSprite.points = new ArrayList<SpritePoint>();
+		for (int i = 0; i < this.points.size(); i++) {
+			newSprite.points.add(new SpritePoint(this.points.get(i).getX(), this.points.get(i).getY(), newSprite));
+		}
 		newSprite.syncID = this.syncID;
 		return newSprite;
 	}
@@ -250,12 +258,13 @@ public class Sprite extends SkeletonNode implements Drawable{
 	private void recreatePathFromPoints(final List<Point2D> points, final boolean close)
 	{
 		path = new Path2D.Double();
-		path.moveTo(points.get(0).getX(), points.get(0).getY());
+		this.points = new ArrayList<SpritePoint>();
+		moveTo(points.get(0).getX(), points.get(0).getY());
 		if (points.size() > 1)
 		{
 			for (int i = 1; i < points.size(); i++)
 			{
-				path.lineTo(points.get(i).getX(), points.get(i).getY());
+//				lineTo(points.get(i).getX(), points.get(i).getY());
 			}
 		}
 		if (close) 
@@ -326,6 +335,14 @@ public class Sprite extends SkeletonNode implements Drawable{
 	{
 		return parent;
 	}
+	public void lineTo(final double x, final double y) {
+		points.add(new SpritePoint(x, y, this));
+		path.lineTo(x, y);
+	}
+	public void moveTo(final double x, final double y) {
+		points.add(new SpritePoint(x, y, this));
+		path.moveTo(x, y);
+	}
 	public void addVertex(final Point2D point)
 	{
 		List<SkeletonBone> syncedBones = parent.getSyncedBones();
@@ -337,7 +354,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 			sprite.addVertex(this.getPath(), xOffset, yOffset);
 		}
 		recreatePathFromPoints(getVertices(), false);
-		path.lineTo((point.getX() - parent.getX()), point.getY() - parent.getY());
+//		lineTo((point.getX() - parent.getX()), point.getY() - parent.getY());
 		path.closePath();
 	}
 	public void addVertex(final Shape baseShape, final double xOffset, final double yOffset)
@@ -354,7 +371,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		path = (Path2D)transform.createTransformedShape(path);
 		
 		recreatePathFromPoints(getVertices(), false);
-		path.lineTo(path.getBounds2D().getCenterX() - xOffset, path.getBounds2D().getCenterY() - yOffset);
+//		lineTo(path.getBounds2D().getCenterX() - xOffset, path.getBounds2D().getCenterY() - yOffset);
 		path.closePath();
 		
 		transform = new AffineTransform();
@@ -365,6 +382,9 @@ public class Sprite extends SkeletonNode implements Drawable{
 	public List<ImageFilter> getFilters()
 	{
 		return filters;
+	}
+	public List<SpritePoint> getPoints() {
+		return points;
 	}
 	
 	private BufferedImage createImage(final double scale)
@@ -402,33 +422,62 @@ public class Sprite extends SkeletonNode implements Drawable{
 
 	// MutableTreeNode methods
 	@Override
-	public void insert(final MutableTreeNode child, final int index) {}
+	public void insert(final MutableTreeNode child, final int index) {
+		SpritePoint point = (SpritePoint)child;
+		points.add(point);
+//		for (int i = 0; i < this.parent.getSyncedBones().size(); i++)
+//		{
+//			SkeletonBone bone = this.parent.getSyncedBones().get(i);
+//			bone.getSpriteBySyncID(this.getSyncID()).getPoints().add(new SpritePoint(point.getX(), point.getY(),
+//					bone.getSpriteBySyncID(this.getSyncID())));
+//		}
+	}
 	@Override
-	public void remove(final int index) {}
+	public void remove(final int index) {
+		points.remove(index);
+	}
 	@Override
-	public void remove(final MutableTreeNode node) {}
+	public void remove(final MutableTreeNode node) {
+		points.remove(node);
+	}
 	@Override
 	public void setUserObject(final Object object) {}
 	@Override
-	public void removeFromParent() {}
+	public void removeFromParent() {
+		parent.remove(this);
+	}
 	@Override
-	public void setParent(final MutableTreeNode newParent) {}
+	public void setParent(final MutableTreeNode newParent) {
+		parent = (SkeletonBone)newParent;
+	}
 	@Override
-	public TreeNode getChildAt(final int childIndex) {return null;}
+	public TreeNode getChildAt(final int childIndex) {
+		return points.get(childIndex);
+	}
 	@Override
-	public int getChildCount() {return 0;}
+	public int getChildCount() {
+		return points.size();
+	}
 	@Override
 	public TreeNode getParent() {
 		return parent;
 	}
 	@Override
-	public int getIndex(final TreeNode node) {return 0;}
+	public int getIndex(final TreeNode node) {
+		return points.indexOf(node);
+	}
 	@Override
-	public boolean getAllowsChildren() {return false;}
+	public boolean getAllowsChildren() {
+		return true;
+	}
 	@Override
-	public boolean isLeaf() {return true;}
+	public boolean isLeaf() {
+		return (points.size() == 0);
+	}
 	@Override
-	public Enumeration<? extends TreeNode> children() {return null;}
+	public Enumeration<? extends TreeNode> children() {
+		return Collections.enumeration(points);
+	}
 
 
 	// SkeletonNode methods
@@ -526,9 +575,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		int index = sprites.indexOf(this);
 		if (index > 0) 
 		{
-			Sprite swap = sprites.get(index - 1);
-			sprites.remove(swap);
-			sprites.add(index, swap);
+			Collections.swap(sprites, index, index - 1);
 		}
 	}
 	@Override
@@ -538,8 +585,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		int index = sprites.indexOf(this);
 		if (index < sprites.size() - 1) 
 		{
-			sprites.remove(this);
-			sprites.add(index + 1, this);
+			Collections.swap(sprites, index, index + 1);
 		}
 	}
 	@Override

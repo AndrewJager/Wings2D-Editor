@@ -639,9 +639,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		int index = bones.indexOf(this);
 		if (index > 0) 
 		{
-			SkeletonBone swap = bones.get(index - 1);
-			bones.remove(swap);
-			bones.add(index, swap);
+			Collections.swap(bones, index, index - 1);
 		}
 	}
 	@Override
@@ -651,8 +649,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		int index = bones.indexOf(this);
 		if (index < bones.size() - 1) 
 		{
-			bones.remove(this);
-			bones.add(index + 1, this);
+			Collections.swap(bones, index, index + 1);
 		}
 	}
 	@Override

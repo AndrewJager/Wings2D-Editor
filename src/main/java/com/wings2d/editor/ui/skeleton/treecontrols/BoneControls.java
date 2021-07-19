@@ -95,6 +95,10 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 			rename.setEnabled(false);
 			otherBones.setEnabled(false);
 		}
+		else {
+			rename.setEnabled(true);
+			otherBones.setEnabled(true);
+		}
 		panel.add(new JSeparator());
 
 		panel.add(xPosPanel);

@@ -27,7 +27,6 @@ public class EditsManager {
 	public void undo() {
 		if (curEdit > -1) {
 			edits.get(curEdit).undoEdit();
-			System.out.println(edits.get(curEdit).getDescription());
 			curEdit--;
 			tree.reloadModel();
 		}

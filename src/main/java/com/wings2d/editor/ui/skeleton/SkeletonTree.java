@@ -196,9 +196,31 @@ public class SkeletonTree extends SkeletonUIElement{
 					moveUpItem.setEnabled(false);
 					moveDownItem.setEnabled(false);
 				}
-				
-				if (selectedNode instanceof SkeletonMasterFrame)
+				else if (selectedNode instanceof SkeletonMasterFrame)
 				{
+					editItem.setEnabled(false);
+					moveUpItem.setEnabled(false);
+					moveDownItem.setEnabled(false);
+				}
+				else if (selectedNode instanceof SkeletonFrame) {
+					SkeletonFrame frame = (SkeletonFrame)selectedNode;
+					if (frame.getParentSyncedFrame() != null) {
+						editItem.setEnabled(false);
+					}
+				}
+				else if(selectedNode instanceof SkeletonBone) {
+					SkeletonBone bone = (SkeletonBone)selectedNode;
+					if (bone.getParentSyncedBone() != null) {
+						editItem.setEnabled(false);
+					}
+				}
+				else if(selectedNode instanceof Sprite) {
+					Sprite sprite = (Sprite)selectedNode;
+					if (sprite.getBone().getParentSyncedBone() != null) {
+						editItem.setEnabled(false);
+					}
+				}
+				else if (selectedNode instanceof SpritePoint) {
 					editItem.setEnabled(false);
 					moveUpItem.setEnabled(false);
 					moveDownItem.setEnabled(false);

@@ -21,6 +21,7 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.Drawable;
+import com.wings2d.editor.ui.edits.ActionNotDoneException;
 
 public class SkeletonBone extends SkeletonNode implements Drawable{
 	public static final String BONE_TOKEN = "BONE";
@@ -554,6 +555,10 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 			childBones.get(i).setParentBoneName(newName);
 		}
 	}
+	@Override
+	public String getName() {
+		return name;
+	}
 	public void saveToFile(final PrintWriter out)
 	{
 		out.write(BONE_TOKEN + "\n");
@@ -633,7 +638,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		}
 	}
 	@Override
-	public void moveUp()
+	public void moveUp() throws ActionNotDoneException
 	{
 		List<SkeletonBone> bones = frame.getBones();
 		int index = bones.indexOf(this);
@@ -641,15 +646,21 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		{
 			Collections.swap(bones, index, index - 1);
 		}
+		else {
+			throw new ActionNotDoneException(MOVE_UP_ERROR, false);
+		}
 	}
 	@Override
-	public void moveDown()
+	public void moveDown() throws ActionNotDoneException
 	{
 		List<SkeletonBone> bones = frame.getBones();
 		int index = bones.indexOf(this);
 		if (index < bones.size() - 1) 
 		{
 			Collections.swap(bones, index, index + 1);
+		}
+		else {
+			throw new ActionNotDoneException(MOVE_DOWN_ERROR, false);
 		}
 	}
 	@Override

@@ -20,4 +20,8 @@ public class MoveUpInTree extends Edit{
 	public void undo() throws ActionNotDoneException{
 		node.moveDown();
 	}
+	@Override
+	public String getDescription() {
+		return "Move " + node.toString() + " up in tree";
+	}
 }

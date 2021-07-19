@@ -27,12 +27,12 @@ public class EditsManager {
 	public void undo() {
 		if (curEdit > -1) {
 			edits.get(curEdit).undoEdit();
+			System.out.println(edits.get(curEdit).getDescription());
 			curEdit--;
 			tree.reloadModel();
 		}
 	}
 	public void redo() {
-		System.out.println(curEdit + " " + edits.size());
 		if ((curEdit + 1) < edits.size()) {
 			edits.get(curEdit + 1).doEdit();
 			curEdit++;

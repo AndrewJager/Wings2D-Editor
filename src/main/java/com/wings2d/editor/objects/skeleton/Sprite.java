@@ -25,6 +25,7 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.Drawable;
+import com.wings2d.editor.ui.edits.ActionNotDoneException;
 import com.wings2d.framework.imageFilters.FilterFactory;
 import com.wings2d.framework.imageFilters.ImageFilter;
 import com.wings2d.framework.shape.ShapeComparator;
@@ -512,6 +513,9 @@ public class Sprite extends SkeletonNode implements Drawable{
 			}
 		}
 	}
+	public String getName() {
+		return name;
+	}
 	@Override
 	public void saveToFile(final PrintWriter out) {
 		out.write(SPRITE_TOKEN + "\n");
@@ -588,7 +592,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 				(int)((parent.getY() + path.getBounds2D().getY()) * scale), null);
 	}
 	@Override
-	public void moveUp()
+	public void moveUp() throws ActionNotDoneException
 	{
 		List<Sprite> sprites = parent.getSprites();
 		int index = sprites.indexOf(this);
@@ -596,15 +600,21 @@ public class Sprite extends SkeletonNode implements Drawable{
 		{
 			Collections.swap(sprites, index, index - 1);
 		}
+		else {
+			throw new ActionNotDoneException(MOVE_UP_ERROR, false);
+		}
 	}
 	@Override
-	public void moveDown()
+	public void moveDown() throws ActionNotDoneException
 	{
 		List<Sprite> sprites = parent.getSprites();
 		int index = sprites.indexOf(this);
 		if (index < sprites.size() - 1) 
 		{
 			Collections.swap(sprites, index, index + 1);
+		}
+		else {
+			throw new ActionNotDoneException(MOVE_DOWN_ERROR, false);
 		}
 	}
 	@Override

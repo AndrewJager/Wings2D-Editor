@@ -53,7 +53,7 @@ public class SkeletonTree extends SkeletonUIElement{
 		
 		tree = new JTree();
 		tree.setEditable(true);
-		treeListener = new SkeletonTreeModelListener(tree);
+		treeListener = new SkeletonTreeModelListener(tree, this.getSkeleton().getEditor());
 		tree.getModel().addTreeModelListener(treeListener);	
 		tree.setCellRenderer(new SkeletonTreeCellRenderer());
 		

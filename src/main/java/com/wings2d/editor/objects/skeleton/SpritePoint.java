@@ -88,6 +88,8 @@ public class SpritePoint extends SkeletonNode{
 	// SkeletonNode methods
 	@Override
 	public void setName(String newName) {}
+	@Override
+	public String getName() {return null;};
 
 	@Override
 	public void saveToFile(PrintWriter out) {}

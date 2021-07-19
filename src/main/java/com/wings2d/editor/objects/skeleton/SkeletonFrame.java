@@ -411,6 +411,9 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	{
 		name = newName;
 	}
+	public String getName() {
+		return name;
+	}
 	public void saveToFile(final PrintWriter out)
 	{
 		out.write(FRAME_TOKEN + "\n");
@@ -500,7 +503,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 			Collections.swap(frames, index, index - 1);
 		}
 		else {
-			throw new ActionNotDoneException("Cannot move up when item is first in list!", false);
+			throw new ActionNotDoneException(MOVE_UP_ERROR, false);
 		}
 	}
 	@Override
@@ -513,7 +516,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 			Collections.swap(frames, index, index + 1);
 		}
 		else {
-			throw new ActionNotDoneException("Cannot move down when item is last in list!", false);
+			throw new ActionNotDoneException(MOVE_DOWN_ERROR, false);
 		}
 	}
 	@Override

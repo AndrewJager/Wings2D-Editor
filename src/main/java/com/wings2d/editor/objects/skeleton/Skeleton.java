@@ -186,10 +186,16 @@ public class Skeleton extends SkeletonNode implements ProjectEntity {
 	}
 
 	// SkeletonNode methods
+	@Override
 	public void setName(final String newName)
 	{
 		name = newName;
 	}
+	@Override
+	public String getName() {
+		return name;
+	}
+	@Override
 	public void saveToFile(final PrintWriter out)
 	{	
 		out.print(""); // Clear the file
@@ -204,6 +210,7 @@ public class Skeleton extends SkeletonNode implements ProjectEntity {
 		}
 		out.write(END_TOKEN + ":" + FILE_MARKER + "\n");
 	}
+	@Override
 	public void resyncAll()
 	{
 		for (int i = 0; i < animations.size(); i++)
@@ -211,6 +218,7 @@ public class Skeleton extends SkeletonNode implements ProjectEntity {
 			animations.get(i).resyncAll();
 		}
 	}
+	@Override
 	public void generateRender(final double scale)
 	{
 		for (int i = 0; i < animations.size(); i++)
@@ -218,14 +226,18 @@ public class Skeleton extends SkeletonNode implements ProjectEntity {
 			animations.get(i).generateRender(scale);
 		}
 	}
+	@Override
 	public void moveUp(){/* Do nothing, as this node has no parent.*/}
+	@Override
 	public void moveDown(){/* Do nothing, as this node has no parent.*/}
+	@Override
 	public List<SkeletonNode> getNodes()
 	{
 		return getAnimations();
 	}
 	
 	// ProjectEntity methods
+	@Override
 	public void saveToFile()
 	{	
 		try {

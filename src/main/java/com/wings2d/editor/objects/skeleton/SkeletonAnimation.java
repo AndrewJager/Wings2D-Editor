@@ -10,6 +10,8 @@ import java.util.Scanner;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
+import com.wings2d.editor.ui.edits.ActionNotDoneException;
+
 public class SkeletonAnimation extends SkeletonNode{
 	public static final String ANIM_TOKEN = "ANIMATION";
 	
@@ -154,6 +156,10 @@ public class SkeletonAnimation extends SkeletonNode{
 		name = newName;
 	}
 	@Override
+	public String getName() {
+		return name;
+	}
+	@Override
 	public void saveToFile(final PrintWriter out)
 	{
 		out.write(ANIM_TOKEN + "\n");
@@ -181,7 +187,7 @@ public class SkeletonAnimation extends SkeletonNode{
 		}
 	}
 	@Override
-	public void moveUp()
+	public void moveUp() throws ActionNotDoneException
 	{
 		List<SkeletonNode> anims = skeleton.getAnimations();
 		int index = anims.indexOf(this);
@@ -189,15 +195,21 @@ public class SkeletonAnimation extends SkeletonNode{
 		{
 			Collections.swap(anims, index, index - 1);
 		}
+		else {
+			throw new ActionNotDoneException(MOVE_UP_ERROR, false);
+		}
 	}
 	@Override
-	public void moveDown()
+	public void moveDown() throws ActionNotDoneException
 	{
 		List<SkeletonNode> anims = skeleton.getAnimations();
 		int index = anims.indexOf(this);
 		if (index < anims.size() - 1) 
 		{
 			Collections.swap(anims, index, index - 1);
+		}
+		else {
+			throw new ActionNotDoneException(MOVE_DOWN_ERROR, false);
 		}
 	}
 	@Override

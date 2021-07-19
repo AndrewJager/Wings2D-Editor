@@ -11,8 +11,10 @@ public abstract class Edit {
 	
 	public abstract void edit() throws ActionNotDoneException;
 	public abstract void undo() throws ActionNotDoneException;
+	/** Return a description of the Edit **/
+	public abstract String getDescription();
 	
-	public boolean doEdit() {
+	public final boolean doEdit() {
 		try {
 			edit();
 			actionDone = true;
@@ -24,7 +26,7 @@ public abstract class Edit {
 		}
 		return actionDone;
 	}
-	public boolean undoEdit() {
+	public final boolean undoEdit() {
 		if (actionDone) {
 			try {
 				undo();

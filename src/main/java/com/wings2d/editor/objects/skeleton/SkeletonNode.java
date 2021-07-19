@@ -16,6 +16,7 @@ public abstract class SkeletonNode implements MutableTreeNode{
 	public abstract void moveUp() throws ActionNotDoneException;
 	public abstract void moveDown() throws ActionNotDoneException;
 	public abstract List<SkeletonNode> getNodes();
+	public abstract boolean isMaster();
 	
 	public static final String NAME_TOKEN = "NAME";
 	public static final String END_TOKEN = "END";

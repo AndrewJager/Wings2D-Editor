@@ -222,4 +222,8 @@ public class SkeletonAnimation extends SkeletonNode{
 		}
 		return nodes;
 	}
+	@Override
+	public boolean isMaster() {
+		return true;
+	}
 }

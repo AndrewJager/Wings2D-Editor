@@ -529,4 +529,8 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		}
 		return nodes;
 	}
+	@Override
+	public boolean isMaster() {
+		return this.getParentSyncedFrame() == null;
+	}
 }

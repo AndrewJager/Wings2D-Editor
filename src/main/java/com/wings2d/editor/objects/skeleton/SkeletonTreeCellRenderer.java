@@ -1,5 +1,6 @@
 package com.wings2d.editor.objects.skeleton;
 
+import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.ImageIcon;
@@ -30,6 +31,17 @@ public class SkeletonTreeCellRenderer extends DefaultTreeCellRenderer{
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
 			boolean leaf, int row, boolean hasFocus) {
 		super.getTreeCellRendererComponent(tree, value, selected,expanded, leaf, row, hasFocus);
+		
+		if (value instanceof SkeletonNode) {
+			SkeletonNode node = (SkeletonNode)value;
+			if (node.isMaster()) {
+				this.setBackground(Color.LIGHT_GRAY);
+				this.setOpaque(true);
+			}
+			else {
+				this.setOpaque(false);
+			}
+		}
 		if (value instanceof Skeleton)
 		{
 			setIcon(skeletonIcon);

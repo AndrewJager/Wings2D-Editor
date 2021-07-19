@@ -235,6 +235,10 @@ public class Skeleton extends SkeletonNode implements ProjectEntity {
 	{
 		return getAnimations();
 	}
+	@Override
+	public boolean isMaster() {
+		return true;
+	}
 	
 	// ProjectEntity methods
 	@Override

@@ -622,4 +622,8 @@ public class Sprite extends SkeletonNode implements Drawable{
 	{
 		return null;
 	}
+	@Override
+	public boolean isMaster() {
+		return this.getBone().isMaster();
+	}
 }

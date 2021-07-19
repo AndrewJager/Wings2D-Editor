@@ -108,5 +108,8 @@ public class SpritePoint extends SkeletonNode{
 
 	@Override
 	public List<SkeletonNode> getNodes() {return null;}
-
+	@Override
+	public boolean isMaster() {
+		return this.getSprite().isMaster();
+	}
 }

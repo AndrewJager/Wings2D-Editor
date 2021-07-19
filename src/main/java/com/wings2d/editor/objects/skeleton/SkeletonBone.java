@@ -673,4 +673,8 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		}
 		return nodes;
 	}
+	@Override
+	public boolean isMaster() {
+		return this.getParentSyncedBone() == null;
+	}
 }

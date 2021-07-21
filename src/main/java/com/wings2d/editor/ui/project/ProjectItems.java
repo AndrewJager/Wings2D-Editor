@@ -15,8 +15,8 @@ import com.wings2d.editor.objects.project.ProjectEntity;
 public class ProjectItems extends ProjectUIElement{
 	private JList<ProjectEntity> list;
 
-	public ProjectItems(final ProjectEdit edit, final Rectangle bounds) {
-		super(edit, bounds);
+	public ProjectItems(final ProjectEdit edit) {
+		super(edit);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
 		DefaultListModel<ProjectEntity> model = new DefaultListModel<ProjectEntity>();
@@ -35,7 +35,6 @@ public class ProjectItems extends ProjectUIElement{
 		
 	}
 
-	@Override
 	public void createEvents() {
 		list.addListSelectionListener(new ListSelectionListener() {
 			@Override

@@ -1,10 +1,17 @@
 package com.wings2d.editor.ui.project;
 
+import java.awt.FlowLayout;
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 
 import com.wings2d.editor.objects.project.Project;
 import com.wings2d.editor.objects.project.ProjectEntity;
 import com.wings2d.editor.ui.Editor;
+import com.wings2d.editor.ui.UIElement;
 import com.wings2d.editor.ui.UIPanel;
 
 public class ProjectEdit extends UIPanel{
@@ -14,12 +21,33 @@ public class ProjectEdit extends UIPanel{
 	private ProjectSelect projectSelect;
 	private CurrentItemEdit currentItemEdit;
 	private ProjectItems projectItems;
+	protected List<ProjectUIElement> elements;
+	private JSplitPane horizontal, vertical;
 
 	public ProjectEdit(final Editor edit) {
 		super(edit);
-		projectSelect = new ProjectSelect(this, new Rectangle(0, 0, 400, 100));
-		currentItemEdit = new CurrentItemEdit(this, new Rectangle(0, 100, 400, 100));
-		projectItems = new ProjectItems(this, new Rectangle(400, 0, 200, 200));
+		elements = new ArrayList<ProjectUIElement>();
+		panel.setLayout(new FlowLayout());
+		projectSelect = new ProjectSelect(this);
+		currentItemEdit = new CurrentItemEdit(this);
+		projectItems = new ProjectItems(this);
+		
+		JScrollPane pane = new JScrollPane(projectSelect.getPanel());
+		JScrollPane pane2 = new JScrollPane(currentItemEdit.getPanel());
+		JScrollPane pane3 = new JScrollPane(projectItems.getPanel());
+		vertical = new JSplitPane(JSplitPane.VERTICAL_SPLIT, pane, pane2);
+		horizontal = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, vertical, pane3);
+		
+		
+		panel.add(horizontal);
+	}
+	
+	public void initElements()
+	{
+		for (int i = 0; i < elements.size(); i++)
+		{
+			elements.get(i).createEvents();
+		}
 	}
 	
 	public void refreshInfo()
@@ -50,5 +78,9 @@ public class ProjectEdit extends UIPanel{
 	public ProjectItems getProjectItems()
 	{
 		return projectItems;
+	}
+	public List<ProjectUIElement> Elements()
+	{
+		return elements;
 	}
 }

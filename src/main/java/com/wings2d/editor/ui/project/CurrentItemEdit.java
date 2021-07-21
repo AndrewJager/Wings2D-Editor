@@ -17,8 +17,8 @@ public class CurrentItemEdit extends ProjectUIElement{
 	private JButton editItem;
 	private ProjectEntity selectedItem;
 	
-	public CurrentItemEdit(final ProjectEdit edit, final Rectangle bounds) {
-		super(edit, bounds);
+	public CurrentItemEdit(final ProjectEdit edit) {
+		super(edit);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
 		nameLabel = new JLabel("Name");
@@ -38,7 +38,6 @@ public class CurrentItemEdit extends ProjectUIElement{
 		}
 	}
 
-	@Override
 	public void createEvents() {
 		editItem.addActionListener(new ActionListener() {
 			@Override

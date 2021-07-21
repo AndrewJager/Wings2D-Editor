@@ -21,8 +21,8 @@ public class ProjectSelect extends ProjectUIElement{
 	private JButton chooseProject, newAnim, saveProject;
 	private JLabel projectName;
 
-	public ProjectSelect(final ProjectEdit edit, final Rectangle bounds) {
-		super(edit, bounds);
+	public ProjectSelect(final ProjectEdit edit) {
+		super(edit);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
 		chooseProject = new JButton("Select Project Folder");
@@ -53,7 +53,6 @@ public class ProjectSelect extends ProjectUIElement{
 		}
 	}
 
-	@Override
 	public void createEvents() {
 		chooseProject.addActionListener(new ActionListener() {
 			@Override

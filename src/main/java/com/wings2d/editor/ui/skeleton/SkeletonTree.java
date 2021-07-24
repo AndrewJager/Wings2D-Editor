@@ -2,7 +2,6 @@ package com.wings2d.editor.ui.skeleton;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -45,8 +44,8 @@ public class SkeletonTree extends SkeletonUIElement{
 	private JMenuItem editItem, moveUpItem, moveDownItem;
 	private List<TreePath> expandedPaths;
 
-	public SkeletonTree(final SkeletonEdit edit, final Rectangle bounds) {
-		super(edit, bounds);
+	public SkeletonTree(final SkeletonEdit edit) {
+		super(edit);
 
 		panel.setLayout(new BorderLayout());
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));	
@@ -159,7 +158,7 @@ public class SkeletonTree extends SkeletonUIElement{
 						SpritePoint point = (SpritePoint)selectedNode;
 						point.getSprite().setSelectedVertex(point.getSprite().getPoints().indexOf(point));
 					}
-					skeleton.getDrawingArea().getDrawArea().repaint();
+					skeleton.getDrawingArea().getDrawingPanel().getDrawArea().repaint();
 				}
 			}
 		});

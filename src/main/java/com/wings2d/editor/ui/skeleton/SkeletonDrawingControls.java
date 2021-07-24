@@ -1,7 +1,6 @@
 package com.wings2d.editor.ui.skeleton;
 
 import java.awt.Color;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -13,9 +12,12 @@ import com.wings2d.editor.objects.skeleton.DrawMode;
 
 public class SkeletonDrawingControls extends SkeletonUIElement{
 	private JToggleButton moveBtn, rotateBtn, spriteMoveBtn, spriteEditBtn;
+	private SkeletonDrawingPanel drawingPanel;
 
-	public SkeletonDrawingControls(SkeletonEdit edit, Rectangle bounds) {
-		super(edit, bounds);
+	public SkeletonDrawingControls(final SkeletonEdit edit, final SkeletonDrawingPanel drawingPanel) {
+		super(edit);
+		this.drawingPanel = drawingPanel;
+		
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
 		float fontSize = 20f;
@@ -74,7 +76,7 @@ public class SkeletonDrawingControls extends SkeletonUIElement{
 			public void actionPerformed(ActionEvent e) {
 				setControls(DrawMode.BONE_MOVE);
 				skeleton.setDrawMode(DrawMode.BONE_MOVE);
-				skeleton.getDrawingArea().getDrawArea().repaint();
+				drawingPanel.getDrawArea().repaint();
 			}
 		});
 		rotateBtn.addActionListener(new ActionListener() {
@@ -82,7 +84,7 @@ public class SkeletonDrawingControls extends SkeletonUIElement{
 			public void actionPerformed(ActionEvent e) {
 				setControls(DrawMode.BONE_ROTATE);
 				skeleton.setDrawMode(DrawMode.BONE_ROTATE);
-				skeleton.getDrawingArea().getDrawArea().repaint();
+				drawingPanel.getDrawArea().repaint();
 			}
 		});
 		spriteMoveBtn.addActionListener(new ActionListener() {
@@ -90,7 +92,7 @@ public class SkeletonDrawingControls extends SkeletonUIElement{
 			public void actionPerformed(ActionEvent e) {
 				setControls(DrawMode.SPRITE_MOVE);
 				skeleton.setDrawMode(DrawMode.SPRITE_MOVE);
-				skeleton.getDrawingArea().getDrawArea().repaint();
+				drawingPanel.getDrawArea().repaint();
 			}
 		});
 		spriteEditBtn.addActionListener(new ActionListener() {
@@ -98,7 +100,7 @@ public class SkeletonDrawingControls extends SkeletonUIElement{
 			public void actionPerformed(ActionEvent e) {
 				setControls(DrawMode.SPRITE_EDIT);
 				skeleton.setDrawMode(DrawMode.SPRITE_EDIT);
-				skeleton.getDrawingArea().getDrawArea().repaint();
+				drawingPanel.getDrawArea().repaint();
 			}
 		});
 	}

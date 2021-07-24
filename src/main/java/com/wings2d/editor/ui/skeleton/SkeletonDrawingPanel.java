@@ -1,8 +1,8 @@
 package com.wings2d.editor.ui.skeleton;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -23,17 +23,18 @@ import com.wings2d.editor.objects.skeleton.Sprite;
 import com.wings2d.editor.ui.DrawingArea;
 import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
 
-public class SkeletonDrawingArea extends SkeletonUIElement{
+public class SkeletonDrawingPanel extends SkeletonUIElement{
 	private DrawingArea drawArea;
 	private JScrollPane pane;
 	private JTree tree;
 	private SkeletonFrame frame;
 	private SkeletonNode selectedItem;
-	private SkeletonTreeControls controls;
+	private SkeletonTreeControls treeControls;
 
-	public SkeletonDrawingArea(final SkeletonEdit edit, final Rectangle bounds) {
-		super(edit, bounds);
+	public SkeletonDrawingPanel(final SkeletonEdit edit) {
+		super(edit);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		panel.setPreferredSize(new Dimension(400, 400));
 
 		drawArea = new DrawingArea(edit.getEditor(), DrawingArea.DrawType.DRAW);
 		pane = new JScrollPane(drawArea);
@@ -49,9 +50,9 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 	{
 		return drawArea;
 	}
-	public void setControls(final SkeletonTreeControls c)
+	public void setTreeControls(final SkeletonTreeControls c)
 	{
-		controls = c;
+		treeControls = c;
 	}
 
 	@Override
@@ -174,7 +175,7 @@ public class SkeletonDrawingArea extends SkeletonUIElement{
 					}
 				}
 				
-				controls.updateNodeInfo(selectedItem);
+				treeControls.updateNodeInfo(selectedItem);
 				drawArea.resizeToDrawItem(skeleton.getEditor().getUIScale());
 				panel.repaint();
 			}

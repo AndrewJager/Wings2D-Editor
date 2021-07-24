@@ -2,13 +2,12 @@ package com.wings2d.editor.ui.skeleton.treecontrols;
 
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Rectangle;
 
 import javax.swing.BorderFactory;
 import javax.swing.JTree;
 
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
-import com.wings2d.editor.ui.skeleton.SkeletonDrawingArea;
+import com.wings2d.editor.ui.skeleton.SkeletonDrawingPanel;
 import com.wings2d.editor.ui.skeleton.SkeletonEdit;
 import com.wings2d.editor.ui.skeleton.SkeletonUIElement;
 
@@ -21,10 +20,10 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 	private SpriteControls spriteControls;
 	private PointControls pointControls;
 	private SkeletonTreeControlsUIElement currentCard;
-	private SkeletonDrawingArea drawingArea;
+	private SkeletonDrawingPanel drawingArea;
 
-	public SkeletonTreeControls(final SkeletonEdit edit, final Rectangle bounds) {
-		super(edit, bounds);
+	public SkeletonTreeControls(final SkeletonEdit edit) {
+		super(edit);
 		cards = new CardLayout();
 		panel.setLayout(cards);
 		
@@ -42,7 +41,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 		panel.add(spriteControls.getPanel(), SpriteControls.CARD_ID);
 		panel.add(pointControls.getPanel(), PointControls.CARD_ID);
 		
-		this.drawingArea = edit.getDrawingArea();
+		this.drawingArea = edit.getDrawingArea().getDrawingPanel();
 		
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
@@ -90,7 +89,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 	{
 		return skeleton.getSkeletonTree().getTree();
 	}
-	public SkeletonDrawingArea getDrawingArea()
+	public SkeletonDrawingPanel getDrawingArea()
 	{
 		return drawingArea;
 	}

@@ -19,22 +19,11 @@ public abstract class UIPanel {
 		elements = new ArrayList<UIElement>();
 	}
 	
-	public void resize(final JPanel parent, final double scale)
-	{
-		panel.setLocation(0, 0);
-		panel.setSize(parent.getWidth(), parent.getHeight());
-		for (int i = 0; i < elements.size(); i++)
-		{
-			elements.get(i).resize(scale);
-		}
-	}
-	
 	public void initElements()
 	{
 		for (int i = 0; i < elements.size(); i++)
 		{
 			elements.get(i).createEvents();
-			panel.add(elements.get(i).getPanel());
 		}
 	}
 	

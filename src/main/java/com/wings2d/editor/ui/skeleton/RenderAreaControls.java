@@ -1,7 +1,6 @@
 package com.wings2d.editor.ui.skeleton;
 
 import java.awt.Color;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -12,8 +11,8 @@ public class RenderAreaControls extends SkeletonUIElement{
 
 	private JButton render;
 
-	public RenderAreaControls(SkeletonEdit edit, Rectangle bounds) {
-		super(edit, bounds);
+	public RenderAreaControls(SkeletonEdit edit) {
+		super(edit);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
 		render = new JButton("Render");
@@ -26,8 +25,8 @@ public class RenderAreaControls extends SkeletonUIElement{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				skeleton.getSkeleton().generateRender(skeleton.getEditor().getUIScale());
-				skeleton.getRenderArea().getDrawArea().setDrawItem(skeleton.getSkeletonTree().getFrameToRender());
-				skeleton.getRenderArea().getDrawArea().repaint();
+				skeleton.getRenderArea().getRenderPanel().getDrawArea().setDrawItem(skeleton.getSkeletonTree().getFrameToRender());
+				skeleton.getRenderArea().getRenderPanel().getDrawArea().repaint();
 			}
 		});
 		

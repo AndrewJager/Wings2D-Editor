@@ -144,21 +144,21 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				bone.setLocation(Double.parseDouble(xPos.getText()), bone.getY(), true);
-				controls.getSkeleton().getDrawingArea().getDrawArea().repaint();
+				controls.getSkeleton().getDrawingArea().getDrawingPanel().getDrawArea().repaint();
 			}
 		});
 		yPos.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				bone.setLocation(bone.getX(), Double.parseDouble(yPos.getText()), true);
-				controls.getSkeleton().getDrawingArea().getDrawArea().repaint();
+				controls.getSkeleton().getDrawingArea().getDrawingPanel().getDrawArea().repaint();
 			}
 		});
 		rotation.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				bone.rotate(Double.parseDouble(rotation.getText()));
-				controls.getSkeleton().getDrawingArea().getDrawArea().repaint();
+				controls.getSkeleton().getDrawingArea().getDrawingPanel().getDrawArea().repaint();
 			}
 		});
 	}

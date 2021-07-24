@@ -51,7 +51,7 @@ public class PointControls extends SkeletonTreeControlsUIElement{
 			public void actionPerformed(ActionEvent e) {
 				point.getSprite().setRelativeVertexLocation(Double.parseDouble(xPos.getText()), Double.parseDouble(yPos.getText()), 1.0);
 				controls.getSkeleton().getSkeletonTree().reloadModel();
-				controls.getSkeleton().getDrawingArea().getDrawArea().repaint();
+				controls.getSkeleton().getDrawingArea().getDrawingPanel().getDrawArea().repaint();
 			}
 		});
 		yPos.addActionListener(new ActionListener() {
@@ -59,7 +59,7 @@ public class PointControls extends SkeletonTreeControlsUIElement{
 			public void actionPerformed(ActionEvent e) {
 				point.getSprite().setRelativeVertexLocation(Double.parseDouble(xPos.getText()), Double.parseDouble(yPos.getText()), 1.0);
 				controls.getSkeleton().getSkeletonTree().reloadModel();
-				controls.getSkeleton().getDrawingArea().getDrawArea().repaint();
+				controls.getSkeleton().getDrawingArea().getDrawingPanel().getDrawArea().repaint();
 			}
 		});
 	}

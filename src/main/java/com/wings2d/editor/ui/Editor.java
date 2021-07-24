@@ -118,10 +118,6 @@ public class Editor {
 		    	mainPanel.revalidate();
 		    	
 		    	UIScale = Double.valueOf(getMainPanel().getWidth()) / frameStartWidth;
-				for (int i = 0; i < panels.size(); i++)
-				{
-					panels.get(i).resize(mainPanel, UIScale);
-				}
 				
 //				if (animLists.getAnimList().getSelectedIndex() != -1)
 //				{

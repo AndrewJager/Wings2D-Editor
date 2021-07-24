@@ -1,7 +1,6 @@
 package com.wings2d.editor.ui.skeleton;
 
 import java.awt.Color;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -13,8 +12,8 @@ public class SkeletonTopBar extends SkeletonUIElement{
 	private JButton backButton, undoBtn, redoBtn;
 	private JLabel header;
 
-	public SkeletonTopBar(final SkeletonEdit edit, final Rectangle bounds) {
-		super(edit, bounds);
+	public SkeletonTopBar(final SkeletonEdit edit) {
+		super(edit);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
 		backButton = new JButton("Back");

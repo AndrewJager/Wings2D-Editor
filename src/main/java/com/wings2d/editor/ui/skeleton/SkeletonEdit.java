@@ -1,6 +1,9 @@
 package com.wings2d.editor.ui.skeleton;
 
-import java.awt.Rectangle;
+import java.awt.BorderLayout;
+
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 
 import com.wings2d.editor.objects.skeleton.DrawMode;
 import com.wings2d.editor.objects.skeleton.Skeleton;
@@ -10,6 +13,7 @@ import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
 
 public class SkeletonEdit extends UIPanel{
 	public static String CARD_ID = "Skeleton";
+	private JPanel centerPanel;
 	
 	private Skeleton skeleton;
 	private DrawMode drawMode;
@@ -19,26 +23,36 @@ public class SkeletonEdit extends UIPanel{
 	private SkeletonTopBar bar;
 	private SkeletonTree tree;
 	private SkeletonTreeControls treeControls;
-	private SkeletonDrawingArea drawingArea;
-	private SkeletonDrawingControls drawingControls;
+	private SkeletonDrawing drawingArea;
 	private RenderArea renderArea;
-	private RenderAreaControls renderAreaControls;
 
 	public SkeletonEdit(final Editor edit) {
 		super(edit);
 		drawMode = DrawMode.BONE_MOVE;
 		lastBoneDrawMode = DrawMode.BONE_MOVE;
 		lastSpriteDrawMode = DrawMode.SPRITE_MOVE;
+
+		panel.setLayout(new BorderLayout());
 		
-		bar = new SkeletonTopBar(this, new Rectangle(0, 0, edit.frameStartWidth, 50));
-		tree = new SkeletonTree(this, new Rectangle(0, 50, 200, 400));
-		drawingArea = new SkeletonDrawingArea(this, new Rectangle(420, 50, 400, 400));		
-		treeControls = new SkeletonTreeControls(this, new Rectangle(200, 50, 200, 400));
-		drawingControls = new SkeletonDrawingControls(this, new Rectangle(420, 450, 400, 50));
-		renderArea = new RenderArea(this, new Rectangle(840, 50, 400, 400));
-		renderAreaControls = new RenderAreaControls(this, new Rectangle(840, 450, 400, 50));
+		centerPanel = new JPanel();
 		
-		drawingArea.setControls(treeControls);
+		bar = new SkeletonTopBar(this);
+		panel.add(bar.getPanel(), BorderLayout.NORTH);
+		
+		tree = new SkeletonTree(this);
+		
+		drawingArea = new SkeletonDrawing(this);	
+		treeControls = new SkeletonTreeControls(this);
+		renderArea = new RenderArea(this);
+		
+		JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tree.getPanel(), treeControls.getPanel());
+		JSplitPane pane2 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, pane, drawingArea.getPanel());
+		JSplitPane pane3 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, pane2, renderArea.getPanel());
+		centerPanel.add(pane3);
+		
+		panel.add(centerPanel, BorderLayout.CENTER);
+		
+		drawingArea.setTreeControls(treeControls);
 	}
 	
 	public void setCurrentSkeleton(final Skeleton s)
@@ -55,16 +69,16 @@ public class SkeletonEdit extends UIPanel{
 	public void setDrawMode(final DrawMode mode)
 	{
 		drawMode = mode;
-		drawingControls.setControls(mode);
-		drawingArea.getDrawArea().repaint();
-		if (mode == DrawMode.BONE_MOVE || mode == DrawMode.BONE_ROTATE)
-		{
-			lastBoneDrawMode = mode;
-		}
-		else if (mode == DrawMode.SPRITE_MOVE || mode == DrawMode.SPRITE_EDIT)
-		{
-			lastSpriteDrawMode = mode;
-		}
+//		drawingControls.setControls(mode);
+//		drawingArea.getDrawArea().repaint();
+//		if (mode == DrawMode.BONE_MOVE || mode == DrawMode.BONE_ROTATE)
+//		{
+//			lastBoneDrawMode = mode;
+//		}
+//		else if (mode == DrawMode.SPRITE_MOVE || mode == DrawMode.SPRITE_EDIT)
+//		{
+//			lastSpriteDrawMode = mode;
+//		}
 	}
 	public DrawMode getDrawMode()
 	{
@@ -90,20 +104,12 @@ public class SkeletonEdit extends UIPanel{
 	{
 		return treeControls;
 	}
-	public SkeletonDrawingArea getDrawingArea()
+	public SkeletonDrawing getDrawingArea()
 	{
 		return drawingArea;
-	}
-	public SkeletonDrawingControls getDrawingControls()
-	{
-		return drawingControls;
 	}
 	public RenderArea getRenderArea()
 	{
 		return renderArea;
-	}
-	public RenderAreaControls getRenderAreaControls()
-	{
-		return renderAreaControls;
 	}
 }

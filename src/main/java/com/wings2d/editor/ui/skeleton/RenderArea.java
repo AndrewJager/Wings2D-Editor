@@ -1,44 +1,30 @@
 package com.wings2d.editor.ui.skeleton;
 
-import java.awt.Color;
-import java.awt.GridLayout;
-import java.awt.Rectangle;
-
-import javax.swing.BorderFactory;
-import javax.swing.JScrollPane;
-
-import com.wings2d.editor.objects.skeleton.SkeletonFrame;
-import com.wings2d.editor.ui.DrawingArea;
+import java.awt.BorderLayout;
 
 public class RenderArea extends SkeletonUIElement{
-	private DrawingArea drawArea;
-	private JScrollPane pane;
+	private RenderAreaPanel renderPanel;
+	private RenderAreaControls controls;
 
-	public RenderArea(SkeletonEdit edit, Rectangle bounds) {
-		super(edit, bounds);
-		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+	public RenderArea(SkeletonEdit edit) {
+		super(edit);
+		panel.setLayout(new BorderLayout());
 		
-		drawArea = new DrawingArea(edit.getEditor(), DrawingArea.DrawType.RENDER);
-		pane = new JScrollPane(drawArea);
-		panel.setLayout(new GridLayout(0,1));
-		panel.add(pane);
-	}
-	
-	public void drawRender(final SkeletonFrame frame, final double scale)
-	{
-		if (drawArea != null)
-		{
-			drawArea.repaint();
-		}
-	}
-	
-	public DrawingArea getDrawArea()
-	{
-		return drawArea;
+		renderPanel = new RenderAreaPanel(edit);
+		controls = new RenderAreaControls(edit);
+		panel.add(renderPanel.getPanel(), BorderLayout.CENTER);
+		panel.add(controls.getPanel(), BorderLayout.SOUTH);
 	}
 
 	@Override
 	public void createEvents() {
 		
+	}
+	
+	public RenderAreaPanel getRenderPanel() {
+		return renderPanel;
+	}
+	public RenderAreaControls getControls() {
+		return controls;
 	}
 }

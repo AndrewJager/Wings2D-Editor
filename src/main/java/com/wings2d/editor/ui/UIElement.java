@@ -5,9 +5,10 @@ import javax.swing.JPanel;
 public abstract class UIElement {
 	protected JPanel panel;
 	
-	public UIElement()
+	public UIElement(final UIPanel parent)
 	{
 		panel = new JPanel();
+		parent.getElements().add(this);
 	}
 	
 	public JPanel getPanel()

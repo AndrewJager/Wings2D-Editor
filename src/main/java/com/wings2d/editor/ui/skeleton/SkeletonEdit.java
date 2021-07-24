@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.border.EmptyBorder;
 
 import com.wings2d.editor.objects.skeleton.DrawMode;
 import com.wings2d.editor.objects.skeleton.Skeleton;
@@ -35,6 +36,7 @@ public class SkeletonEdit extends UIPanel{
 		panel.setLayout(new BorderLayout());
 		
 		centerPanel = new JPanel();
+		centerPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		
 		bar = new SkeletonTopBar(this);
 		panel.add(bar.getPanel(), BorderLayout.NORTH);
@@ -50,7 +52,7 @@ public class SkeletonEdit extends UIPanel{
 		JSplitPane pane3 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, pane2, renderArea.getPanel());
 		centerPanel.add(pane3);
 		
-		panel.add(centerPanel, BorderLayout.CENTER);
+		panel.add(centerPanel, BorderLayout.WEST);
 		
 		drawingArea.setTreeControls(treeControls);
 	}

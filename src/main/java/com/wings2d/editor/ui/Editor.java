@@ -3,7 +3,6 @@ package com.wings2d.editor.ui;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
@@ -11,6 +10,7 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -59,12 +59,12 @@ public class Editor {
 		
 		frame = new JFrame("Editor");
 		frame.setBackground(Color.BLACK);
-		frame.setLayout(new GridBagLayout());
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		mainPanel = new JPanel();
 		cards = new CardLayout();
 		mainPanel.setLayout(cards);
 		mainPanel.setBackground(Color.DARK_GRAY);
+		mainPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
 		frame.add(mainPanel);
 		
 		panels = new ArrayList<UIPanel>();
@@ -97,26 +97,26 @@ public class Editor {
 		frame.addComponentListener(new ComponentAdapter() 
 		{
 			public void componentResized(ComponentEvent evt) {		
-				int width = frame.getWidth();
-		        int height = frame.getHeight();
-		        double NINE_TO_SIXTEEN = 1.77777778;
-		        double SIXTEEN_TO_NINE = 0.5625;
-
-		    	if ((width * SIXTEEN_TO_NINE) <= height )
-		    	{
-		    		mainPanel.setSize(new Dimension(width, (int)(width * SIXTEEN_TO_NINE)));
-		    	}
-		    	else
-		    	{
-		    		mainPanel.setSize(new Dimension((int)(height * NINE_TO_SIXTEEN), height));
-		    	}
-		    	frame.revalidate();
-		    	int xPos = (frame.getWidth() - mainPanel.getWidth()) / 2;
-		    	int yPos = (frame.getHeight() - mainPanel.getHeight()) / 2;
-		    	mainPanel.setLocation((int)(xPos * 0.5), yPos);
-		    	mainPanel.setLocation(0, 0);
-		    	mainPanel.revalidate();
-		    	
+//				int width = frame.getWidth();
+//		        int height = frame.getHeight();
+//		        double NINE_TO_SIXTEEN = 1.77777778;
+//		        double SIXTEEN_TO_NINE = 0.5625;
+//
+//		    	if ((width * SIXTEEN_TO_NINE) <= height )
+//		    	{
+//		    		mainPanel.setSize(new Dimension(width, (int)(width * SIXTEEN_TO_NINE)));
+//		    	}
+//		    	else
+//		    	{
+//		    		mainPanel.setSize(new Dimension((int)(height * NINE_TO_SIXTEEN), height));
+//		    	}
+//		    	frame.revalidate();
+//		    	int xPos = (frame.getWidth() - mainPanel.getWidth()) / 2;
+//		    	int yPos = (frame.getHeight() - mainPanel.getHeight()) / 2;
+//		    	mainPanel.setLocation((int)(xPos * 0.5), yPos);
+//		    	mainPanel.setLocation(0, 0);
+//		    	mainPanel.revalidate();
+//		    	
 		    	UIScale = Double.valueOf(getMainPanel().getWidth()) / frameStartWidth;
 				
 //				if (animLists.getAnimList().getSelectedIndex() != -1)
@@ -124,14 +124,13 @@ public class Editor {
 //					drawing.setShouldRedraw(true);
 //				}
 //				render.setShouldReRender(true);
-				manager.setScale(RENDER_SCALE * UIScale);
-				demoLevel.rescale();
+//				manager.setScale(RENDER_SCALE * UIScale);
+//				demoLevel.rescale();
 			}
 		});
 		frame.setSize(frameStartWidth, frameStartHeight);
 		frame.setMinimumSize(new Dimension(1250, 720));
 		frame.setLocationRelativeTo(null);
-		frame.setLayout(null); 
 		frame.setVisible(true);
 		frameStartWidth = frame.getWidth();
 		frameStartHeight = frame.getHeight();

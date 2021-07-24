@@ -7,8 +7,7 @@ public abstract class SkeletonUIElement extends UIElement{
 	
 	public SkeletonUIElement(final SkeletonEdit edit)
 	{
-		super();
-		edit.getElements().add(this);
+		super(edit);
 		this.skeleton = edit;
 	}
 	public SkeletonEdit getSkeleton()

@@ -17,7 +17,7 @@ public class RenderAreaPanel extends SkeletonUIElement{
 	public RenderAreaPanel(SkeletonEdit edit) {
 		super(edit);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		panel.setPreferredSize(new Dimension(400, 400));
+//		panel.setPreferredSize(new Dimension(400, 400));
 		
 		drawArea = new DrawingArea(edit.getEditor(), DrawingArea.DrawType.RENDER);
 		pane = new JScrollPane(drawArea);

@@ -1,11 +1,10 @@
 package com.wings2d.editor.ui.project;
 
 import java.awt.FlowLayout;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.border.EmptyBorder;
 
 import com.wings2d.editor.objects.project.Project;
 import com.wings2d.editor.objects.project.ProjectEntity;
@@ -19,13 +18,13 @@ public class ProjectEdit extends UIPanel{
 	private ProjectSelect projectSelect;
 	private CurrentItemEdit currentItemEdit;
 	private ProjectItems projectItems;
-	protected List<ProjectUIElement> elements;
 	private JSplitPane horizontal, vertical;
 
 	public ProjectEdit(final Editor edit) {
 		super(edit);
-		elements = new ArrayList<ProjectUIElement>();
 		panel.setLayout(new FlowLayout());
+		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
+		
 		projectSelect = new ProjectSelect(this);
 		currentItemEdit = new CurrentItemEdit(this);
 		projectItems = new ProjectItems(this);
@@ -75,9 +74,5 @@ public class ProjectEdit extends UIPanel{
 	public ProjectItems getProjectItems()
 	{
 		return projectItems;
-	}
-	public List<ProjectUIElement> Elements()
-	{
-		return elements;
 	}
 }

@@ -153,7 +153,9 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		}
 		else
 		{
-			this.parentSyncedBone.getSyncedBones().remove(this);
+			if (this.parentSyncedBone != null) {
+				this.parentSyncedBone.getSyncedBones().remove(this);
+			}
 			this.syncBoneID = null;
 			this.parentSyncedBone = null;
 		}

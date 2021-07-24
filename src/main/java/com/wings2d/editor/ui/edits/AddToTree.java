@@ -31,5 +31,4 @@ public class AddToTree extends Edit{
 		Skeleton root = (Skeleton) model.getRoot();
 		return "Add " + node.getName() + " to " + root.getName();
 	}
-
 }

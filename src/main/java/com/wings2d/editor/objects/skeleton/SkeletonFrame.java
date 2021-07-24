@@ -113,7 +113,9 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		}
 		else
 		{
-			this.parentSyncedFrame.getSyncedFrames().remove(this);
+			if (this.parentSyncedFrame != null) {
+				this.parentSyncedFrame.getSyncedFrames().remove(this);
+			}
 			this.syncFrameID = null;
 			this.parentSyncedFrame = null;
 		}
@@ -166,7 +168,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		}
 		return allButOne;
 	}
-	/** Set bone parent bones to the bone stored in there parentBoneName variable **/
+	/** Set bone parent bones to the bone stored in their parentBoneName variable **/
 	public void syncBonesToParents()
 	{
 		for (int i = 0; i < bones.size(); i++)

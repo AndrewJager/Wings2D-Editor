@@ -18,6 +18,8 @@ import javax.swing.tree.TreePath;
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonMasterFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
+import com.wings2d.editor.ui.edits.MoveDownInTree;
+import com.wings2d.editor.ui.edits.SetName;
 
 public abstract class SkeletonTreeControlsUIElement {
 	protected JPanel panel;
@@ -54,17 +56,11 @@ public abstract class SkeletonTreeControlsUIElement {
 				SkeletonNode selectedNode = (SkeletonNode)controls.getTree().getLastSelectedPathComponent();
 				if (selectedNode != null)
 				{
-					TreePath path = controls.getTree().getSelectionPath();
 					String newName = (String)JOptionPane.showInputDialog(panel, "","Rename",
 		    				JOptionPane.PLAIN_MESSAGE, null, null, selectedNode.toString());
 					if (newName != null)
 					{
-						selectedNode.setName(newName);
-						DefaultTreeModel model = (DefaultTreeModel) controls.getTree().getModel();
-						model.reload();
-						
-						controls.getTree().expandPath(path);
-						controls.getTree().setSelectionPath(path);
+						controls.getSkeleton().getEditor().getEditsManager().edit(new SetName(selectedNode, newName));
 					}
 				}
 			}
@@ -79,12 +75,12 @@ public abstract class SkeletonTreeControlsUIElement {
 						{
 							throw new IllegalStateException("Cannot delete Master Frame!");
 						}
-						SkeletonNode parentNode = (SkeletonNode) selectedNode.getParent();
-						DefaultTreeModel model = (DefaultTreeModel)controls.getTree().getModel();
-						model.removeNodeFromParent(selectedNode);
-						model.reload();
-						TreePath path = new TreePath(parentNode);
-						controls.getTree().setSelectionPath(path);		
+						int result = JOptionPane.showConfirmDialog(panel, "Deleting a node cannot be undone. Continue?", "Warning", JOptionPane.YES_NO_OPTION);
+						if (result == JOptionPane.OK_OPTION) {
+							DefaultTreeModel model = (DefaultTreeModel)controls.getTree().getModel();
+							model.removeNodeFromParent(selectedNode);
+							controls.getSkeleton().getSkeletonTree().reloadModel();
+						}
 					}
 					catch (IllegalStateException ex){
 						JOptionPane.showMessageDialog(panel, ex.getMessage(), "Error!", JOptionPane.ERROR_MESSAGE);

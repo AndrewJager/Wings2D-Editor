@@ -85,14 +85,18 @@ public class SkeletonAnimation extends SkeletonNode{
 	@Override
 	public void insert(final MutableTreeNode child, final int index) {
 		SkeletonFrame newFrame = (SkeletonFrame)child;
-		SkeletonFrame syncFrame = newFrame.getParentSyncedFrame();
 		frames.add(index, newFrame);
-		for(int i = 0; i < syncFrame.getChildCount(); i++)
-		{
-			SkeletonBone bone = syncFrame.getBones().get(i);
-			newFrame.getBones().add(new SkeletonBone(bone, newFrame));
+		SkeletonFrame syncFrame = newFrame.getParentSyncedFrame();
+		if (syncFrame != null) {
+			for(int i = 0; i < syncFrame.getChildCount(); i++)
+			{
+				SkeletonBone bone = syncFrame.getBones().get(i);
+				if (!newFrame.containsBoneWithName(bone.getName())) {
+					newFrame.getBones().add(new SkeletonBone(bone, newFrame));
+				}
+			}
+			newFrame.syncBonesToParents();
 		}
-		newFrame.syncBonesToParents();
 	}
 	@Override
 	public void remove(final int index) {

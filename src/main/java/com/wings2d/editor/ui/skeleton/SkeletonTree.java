@@ -258,7 +258,6 @@ public class SkeletonTree extends SkeletonUIElement{
 			public void actionPerformed(ActionEvent e) {
 				SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
 				getSkeleton().getEditor().getEditsManager().edit(new MoveUpInTree(selectedNode));
-				reloadModel();
 			}
 		});
 		moveDownItem.addActionListener(new ActionListener() {
@@ -266,7 +265,6 @@ public class SkeletonTree extends SkeletonUIElement{
 			public void actionPerformed(ActionEvent e) {
 				SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
 				getSkeleton().getEditor().getEditsManager().edit(new MoveDownInTree(selectedNode));
-				reloadModel();
 			}
 		});
 	}

@@ -1,7 +1,6 @@
 package com.wings2d.editor.ui.project;
 
 import java.awt.Color;
-import java.awt.Rectangle;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;

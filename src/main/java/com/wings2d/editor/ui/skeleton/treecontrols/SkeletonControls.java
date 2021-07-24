@@ -9,12 +9,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreePath;
 
 import com.wings2d.editor.objects.skeleton.Skeleton;
 import com.wings2d.editor.objects.skeleton.SkeletonAnimation;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
+import com.wings2d.editor.ui.edits.AddToTree;
 
 public class SkeletonControls extends SkeletonTreeControlsUIElement{
 	public static final String CARD_ID = "Skeleton";
@@ -57,10 +56,8 @@ public class SkeletonControls extends SkeletonTreeControlsUIElement{
 					Skeleton root = (Skeleton) model.getRoot();
 					try {
 						SkeletonAnimation newAnim = new SkeletonAnimation(animName, root);	
-						model.insertNodeInto((MutableTreeNode)newAnim, root, root.getChildCount());
-						model.reload();
-						TreePath path = new TreePath(root).pathByAddingChild(newAnim);
-						controls.getTree().setSelectionPath(path);
+						controls.getSkeleton().getEditor().getEditsManager().edit(new AddToTree(model, newAnim));
+						controls.getSkeleton().getSkeletonTree().reloadModel();
 					}
 					catch (IllegalArgumentException exception){
 						JOptionPane.showMessageDialog(panel, exception.getMessage(), "Insert Failed!", JOptionPane.ERROR_MESSAGE);

@@ -63,7 +63,6 @@ public class Editor {
 		mainPanel = new JPanel();
 		cards = new CardLayout();
 		mainPanel.setLayout(cards);
-//		mainPanel.setBackground(Color.DARK_GRAY);
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		frame.add(mainPanel);
 		
@@ -143,6 +142,7 @@ public class Editor {
 	public void showSkeleton(final Skeleton skeleton)
 	{
 		skeletonEdit.setCurrentSkeleton(skeleton);
+		skeletonEdit.getTopBar().setHeaderText(skeleton.getName());
 		cards.show(mainPanel, SkeletonEdit.CARD_ID);
 	}
 

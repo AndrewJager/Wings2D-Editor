@@ -8,13 +8,14 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 import javax.swing.border.BevelBorder;
 
 public class SkeletonToolBar extends SkeletonUIElement{
 	private JToolBar toolbar;
-	private JButton backButton, undoBtn, redoBtn;
+	private JButton backButton, undoBtn, redoBtn, saveBtn;
 	private JLabel header;
 
 	public SkeletonToolBar(final SkeletonEdit edit) {
@@ -29,7 +30,7 @@ public class SkeletonToolBar extends SkeletonUIElement{
 		JSeparator left = new JSeparator();
 		left.setUI(null);
 		toolbar.add(left);
-		header = new JLabel("Skeleton", JLabel.CENTER);
+		header = new JLabel("Header", JLabel.CENTER);
 		header.setFont(header.getFont().deriveFont(Font.BOLD, 20.0f));
 		toolbar.add(header);
 		JSeparator right = new JSeparator();
@@ -40,6 +41,8 @@ public class SkeletonToolBar extends SkeletonUIElement{
 		toolbar.add(undoBtn);
 		redoBtn = new JButton("Redo");
 		toolbar.add(redoBtn);
+		saveBtn = new JButton("Save");
+		toolbar.add(saveBtn);
 	}
 	
 	public void setHeaderText(final String text)
@@ -65,6 +68,12 @@ public class SkeletonToolBar extends SkeletonUIElement{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				skeleton.getEditor().getEditsManager().redo();
+			}
+		});
+		saveBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(panel, "Not implemented yet");
 			}
 		});
 	}

@@ -21,7 +21,7 @@ public class SkeletonEdit extends UIPanel{
 	private DrawMode lastBoneDrawMode;
 	private DrawMode lastSpriteDrawMode;
 	
-	private SkeletonTopBar bar;
+	private SkeletonToolBar bar;
 	private SkeletonTree tree;
 	private SkeletonTreeControls treeControls;
 	private SkeletonDrawing drawingArea;
@@ -38,8 +38,8 @@ public class SkeletonEdit extends UIPanel{
 		centerPanel = new JPanel();
 		centerPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		
-		bar = new SkeletonTopBar(this);
-		panel.add(bar.getPanel(), BorderLayout.NORTH);
+		bar = new SkeletonToolBar(this);
+		panel.add(bar.getToolbar(), BorderLayout.NORTH);
 		
 		tree = new SkeletonTree(this);
 		
@@ -94,7 +94,7 @@ public class SkeletonEdit extends UIPanel{
 	{
 		return lastSpriteDrawMode;
 	}
-	public SkeletonTopBar getTopBar()
+	public SkeletonToolBar getTopBar()
 	{
 		return bar;
 	}

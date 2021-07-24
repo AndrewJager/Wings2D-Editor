@@ -1,7 +1,6 @@
 package com.wings2d.editor.ui.skeleton;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
@@ -17,7 +16,6 @@ public class RenderAreaPanel extends SkeletonUIElement{
 	public RenderAreaPanel(SkeletonEdit edit) {
 		super(edit);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-//		panel.setPreferredSize(new Dimension(400, 400));
 		
 		drawArea = new DrawingArea(edit.getEditor(), DrawingArea.DrawType.RENDER);
 		pane = new JScrollPane(drawArea);

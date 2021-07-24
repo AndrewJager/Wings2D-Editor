@@ -1,30 +1,45 @@
 package com.wings2d.editor.ui.skeleton;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JSeparator;
+import javax.swing.JToolBar;
+import javax.swing.border.BevelBorder;
 
-public class SkeletonTopBar extends SkeletonUIElement{
+public class SkeletonToolBar extends SkeletonUIElement{
+	private JToolBar toolbar;
 	private JButton backButton, undoBtn, redoBtn;
 	private JLabel header;
 
-	public SkeletonTopBar(final SkeletonEdit edit) {
+	public SkeletonToolBar(final SkeletonEdit edit) {
 		super(edit);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
+		toolbar = new JToolBar();
+		toolbar.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+		
 		backButton = new JButton("Back");
-		panel.add(backButton);
+		toolbar.add(backButton);
+		JSeparator left = new JSeparator();
+		left.setUI(null);
+		toolbar.add(left);
 		header = new JLabel("Skeleton", JLabel.CENTER);
-		panel.add(header);
+		header.setFont(header.getFont().deriveFont(Font.BOLD, 20.0f));
+		toolbar.add(header);
+		JSeparator right = new JSeparator();
+		right.setUI(null);
+		toolbar.add(right);
 		
 		undoBtn = new JButton("Undo");
-		panel.add(undoBtn);
+		toolbar.add(undoBtn);
 		redoBtn = new JButton("Redo");
-		panel.add(redoBtn);
+		toolbar.add(redoBtn);
 	}
 	
 	public void setHeaderText(final String text)
@@ -53,4 +68,8 @@ public class SkeletonTopBar extends SkeletonUIElement{
 			}
 		});
 	}
+	
+	public JToolBar getToolbar() {
+		return toolbar;
+	};
 }

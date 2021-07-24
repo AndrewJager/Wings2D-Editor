@@ -63,8 +63,8 @@ public class Editor {
 		mainPanel = new JPanel();
 		cards = new CardLayout();
 		mainPanel.setLayout(cards);
-		mainPanel.setBackground(Color.DARK_GRAY);
-		mainPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+//		mainPanel.setBackground(Color.DARK_GRAY);
+		mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		frame.add(mainPanel);
 		
 		panels = new ArrayList<UIPanel>();

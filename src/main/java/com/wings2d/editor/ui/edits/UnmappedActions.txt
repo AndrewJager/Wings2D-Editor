@@ -1,0 +1,7 @@
+Actions currently left unmapped
+
+Delete node
+	Resolving syncs is hard/impossible
+	
+"Sync Bone Locations" button
+	Unsure how to undo this action

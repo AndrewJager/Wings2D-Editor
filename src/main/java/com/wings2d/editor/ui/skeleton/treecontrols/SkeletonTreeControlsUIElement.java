@@ -13,12 +13,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
 
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonMasterFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
-import com.wings2d.editor.ui.edits.MoveDownInTree;
 import com.wings2d.editor.ui.edits.SetName;
 
 public abstract class SkeletonTreeControlsUIElement {

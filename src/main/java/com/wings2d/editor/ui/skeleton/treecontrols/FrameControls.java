@@ -9,12 +9,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreePath;
 
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
+import com.wings2d.editor.ui.edits.AddToTree;
 
 public class FrameControls extends SkeletonTreeControlsUIElement{
 	public static final String CARD_ID = "Frame";
@@ -89,19 +88,16 @@ public class FrameControls extends SkeletonTreeControlsUIElement{
 				SkeletonNode selectedNode = (SkeletonNode)controls.getTree().getLastSelectedPathComponent();
 				if (selectedNode != null)
 				{
-					TreePath path = controls.getTree().getSelectionPath();
 					String boneName = (String)JOptionPane.showInputDialog(panel, "","Bone Name",
 		    				JOptionPane.PLAIN_MESSAGE, null, null, "Bone");
 					if (boneName != null)
 					{
 						DefaultTreeModel model = (DefaultTreeModel) controls.getTree().getModel();
 						try {
-							model.insertNodeInto((MutableTreeNode)new SkeletonBone(boneName, (SkeletonFrame)selectedNode),
-									selectedNode, selectedNode.getChildCount());
-							model.reload();
-											
-							controls.getTree().expandPath(path);
-							controls.getTree().setSelectionPath(path.pathByAddingChild(selectedNode.getChildAt(selectedNode.getChildCount() - 1)));
+							SkeletonNode node = new SkeletonBone(boneName, (SkeletonFrame)selectedNode);
+
+
+							controls.getSkeleton().getEditor().getEditsManager().edit(new AddToTree(model, node, (SkeletonNode)node.getParent()));
 						}
 						catch (IllegalArgumentException exception) {
 							JOptionPane.showMessageDialog(panel, exception.getMessage(), "Insert Failed!", JOptionPane.ERROR_MESSAGE);

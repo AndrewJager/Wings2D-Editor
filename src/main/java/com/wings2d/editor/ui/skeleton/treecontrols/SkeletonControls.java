@@ -56,7 +56,7 @@ public class SkeletonControls extends SkeletonTreeControlsUIElement{
 					Skeleton root = (Skeleton) model.getRoot();
 					try {
 						SkeletonAnimation newAnim = new SkeletonAnimation(animName, root);	
-						controls.getSkeleton().getEditor().getEditsManager().edit(new AddToTree(model, newAnim));
+						controls.getSkeleton().getEditor().getEditsManager().edit(new AddToTree(model, newAnim, root));
 						controls.getSkeleton().getSkeletonTree().reloadModel();
 					}
 					catch (IllegalArgumentException exception){

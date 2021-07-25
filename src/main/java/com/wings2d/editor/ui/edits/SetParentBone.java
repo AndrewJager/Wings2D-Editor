@@ -24,6 +24,15 @@ public class SetParentBone extends Edit{
 
 	@Override
 	public String getDescription() {
-		return "Set parent bone of " + bone.getName();
+		return "Set parent bone of " + bone.getName() + " from " + getNameOrNull(oldParent) + " to " + getNameOrNull(newParent);
+	}
+	
+	private String getNameOrNull(final SkeletonBone bone) {
+		if (bone != null) {
+			return bone.getName();
+		}
+		else {
+			return "null";
+		}
 	}
 }

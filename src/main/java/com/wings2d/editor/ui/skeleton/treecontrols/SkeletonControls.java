@@ -57,7 +57,8 @@ public class SkeletonControls extends SkeletonTreeControlsUIElement{
 					try {
 						SkeletonAnimation newAnim = new SkeletonAnimation(animName, root);	
 						controls.getSkeleton().getEditor().getEditsManager().edit(new AddToTree(model, newAnim, root));
-						controls.getSkeleton().getSkeletonTree().reloadModel();
+						controls.getTree().setSelectionPath(controls.getTree().getSelectionPath().pathByAddingChild(
+								root.getChildAt(root.getChildCount() - 1)));
 					}
 					catch (IllegalArgumentException exception){
 						JOptionPane.showMessageDialog(panel, exception.getMessage(), "Insert Failed!", JOptionPane.ERROR_MESSAGE);

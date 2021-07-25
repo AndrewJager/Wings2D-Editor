@@ -9,13 +9,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreePath;
 
 import com.wings2d.editor.objects.skeleton.Skeleton;
 import com.wings2d.editor.objects.skeleton.SkeletonAnimation;
 import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
+import com.wings2d.editor.ui.edits.AddToTree;
 
 public class AnimationControls extends SkeletonTreeControlsUIElement{
 	public static final String CARD_ID = "Animation";
@@ -58,7 +57,6 @@ public class AnimationControls extends SkeletonTreeControlsUIElement{
 				SkeletonNode selectedNode = (SkeletonNode)controls.getTree().getLastSelectedPathComponent();
 				if (selectedNode != null)
 				{
-					TreePath path = controls.getTree().getSelectionPath();
 					String frameName = (String)JOptionPane.showInputDialog(panel, "","Frame Name",
 		    				JOptionPane.PLAIN_MESSAGE, null, null, "Frame");
 					if (frameName != null)
@@ -76,12 +74,10 @@ public class AnimationControls extends SkeletonTreeControlsUIElement{
 							{
 								newFrame.setParentSyncedFrame((SkeletonFrame)anim.getChildAt(anim.getChildCount() - 1));
 							}
-							model.insertNodeInto((MutableTreeNode)newFrame,
-									selectedNode, selectedNode.getChildCount());
-							model.reload();
-											
-							controls.getTree().expandPath(path);
-							controls.getTree().setSelectionPath(path.pathByAddingChild(selectedNode.getChildAt(selectedNode.getChildCount() - 1)));
+							controls.getSkeleton().getEditor().getEditsManager().edit(new AddToTree(model, newFrame,
+									(SkeletonNode)selectedNode));
+							controls.getTree().setSelectionPath(controls.getTree().getSelectionPath().pathByAddingChild(
+									selectedNode.getChildAt(selectedNode.getChildCount() - 1)));
 						}
 						catch (IllegalArgumentException exception) {
 							JOptionPane.showMessageDialog(panel, exception.getMessage(), "Insert Failed!", JOptionPane.ERROR_MESSAGE);

@@ -17,7 +17,7 @@ import com.wings2d.editor.objects.project.Project;
 import com.wings2d.editor.objects.skeleton.Skeleton;
 
 public class ProjectSelect extends ProjectUIElement{
-	private JButton chooseProject, newAnim, saveProject;
+	private JButton chooseProject, newAnim, saveProject, settingsBtn;
 	private JLabel projectName;
 
 	public ProjectSelect(final ProjectEdit edit) {
@@ -33,6 +33,8 @@ public class ProjectSelect extends ProjectUIElement{
 		panel.add(projectName);
 		saveProject = new JButton("Save");
 		panel.add(saveProject);
+		settingsBtn = new JButton("Settings");
+		panel.add(settingsBtn);
 	}
 	
 	public void setProject(final File projectPath)
@@ -92,6 +94,11 @@ public class ProjectSelect extends ProjectUIElement{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				projectEdit.getProject().saveProject();
+			}
+		});
+		settingsBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				projectEdit.getEditor().showSettings();
 			}
 		});
 	}

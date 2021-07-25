@@ -21,6 +21,7 @@ import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.skeleton.Skeleton;
 import com.wings2d.editor.ui.edits.EditsManager;
 import com.wings2d.editor.ui.project.ProjectEdit;
+import com.wings2d.editor.ui.settings.SettingsEdit;
 import com.wings2d.editor.ui.skeleton.SkeletonEdit;
 import com.wings2d.framework.Level;
 import com.wings2d.framework.LevelManager;
@@ -30,8 +31,9 @@ public class Editor {
 	private int timeStep = 10;
 	private boolean playing = false;
 	private Level demoLevel;
-	private EditOptions options;
+	
 	private List<UIPanel> panels;
+	private EditOptions options;
 	private EditorSettings settings;
 	
 	private JFrame frame;
@@ -40,6 +42,7 @@ public class Editor {
 	
 	private ProjectEdit projectEdit;
 	private SkeletonEdit skeletonEdit;
+	private SettingsEdit settingsEdit;
 	
 	private double UIScale;
 	public int frameStartWidth = 1500;
@@ -69,11 +72,13 @@ public class Editor {
 		panels = new ArrayList<UIPanel>();
 		projectEdit = new ProjectEdit(this);
 		skeletonEdit = new SkeletonEdit(this);
+		settingsEdit = new SettingsEdit(this);
 		
 		undo = new EditsManager(skeletonEdit.getSkeletonTree());
 		
 		mainPanel.add(projectEdit.getPanel(), ProjectEdit.CARD_ID);		
 		mainPanel.add(skeletonEdit.getPanel(), SkeletonEdit.CARD_ID);
+		mainPanel.add(settingsEdit.getPanel(), SettingsEdit.CARD_ID);
 		showProject();
 		
 		for (int i = 0; i < panels.size(); i++)
@@ -144,6 +149,9 @@ public class Editor {
 		skeletonEdit.setCurrentSkeleton(skeleton);
 		skeletonEdit.getTopBar().setHeaderText(skeleton.getName());
 		cards.show(mainPanel, SkeletonEdit.CARD_ID);
+	}
+	public void showSettings() {
+		cards.show(mainPanel, SettingsEdit.CARD_ID);
 	}
 
 	public LevelManager getManager() {

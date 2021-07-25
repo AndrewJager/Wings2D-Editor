@@ -178,7 +178,10 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	}
 	
 	/**
-	 * Gets the Bone at the location (with a margin of error). Returns null if no Bone is close enough
+	 * Gets the Bone at the location (with a margin of error).
+	 * @param loc Location to check for Bone
+	 * @param scale Scale of the canvas
+	 * @return {@code null} if no Bone is close enough
 	 */
 	public SkeletonBone getBoneAtPosition(final Point loc, final double scale)
 	{
@@ -198,6 +201,64 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		
 		return selectedBone;
 	}
+	/** 
+	 * Returns the a bone by comparing the locations of the X position handle with the {@code loc} Parameter
+	 * @param loc Location to check for X position handle
+	 * @param scale Scale of the canvas
+	 * @return {@code null} if no bone is found
+	 */
+	public SkeletonBone getBoneByXHandle(final Point loc, final double scale)
+	{
+		final double minDistance = 10;
+		SkeletonBone selectedBone = null;
+		for (int i = 0; i < bones.size(); i++)
+		{
+			if (bones.get(i).getIsSelected())
+			{
+				Point2D xPoint = bones.get(i).getXPosHandle(scale);
+				double dist = Math.sqrt(Math.pow((loc.getX()-(xPoint.getX() * scale)), 2) 
+						+ Math.pow((loc.getY()-(xPoint.getY() * scale)), 2));
+				if (dist < minDistance)
+				{
+					selectedBone = bones.get(i);
+					break;
+				}
+			}
+		}
+		return selectedBone;
+	}
+	/** 
+	 * Returns the a bone by comparing the locations of the Y position handle with the {@code loc} Parameter
+	 * @param loc Location to check for Y position handle
+	 * @param scale Scale of the canvas
+	 * @return {@code null} if no bone is found
+	 */
+	public SkeletonBone getBoneByYHandle(final Point loc, final double scale)
+	{
+		final double minDistance = 10;
+		SkeletonBone selectedBone = null;
+		for (int i = 0; i < bones.size(); i++)
+		{
+			if (bones.get(i).getIsSelected())
+			{
+				Point2D yPoint = bones.get(i).getYPosHandle(scale);
+				double dist = Math.sqrt(Math.pow((loc.getX()-(yPoint.getX() * scale)), 2) 
+						+ Math.pow((loc.getY()-(yPoint.getY() * scale)), 2));
+				if (dist < minDistance)
+				{
+					selectedBone = bones.get(i);
+					break;
+				}
+			}
+		}
+		return selectedBone;
+	}
+	/** 
+	 * Returns the a bone by comparing the locations of the rotation handles with the {@code loc} Parameter
+	 * @param loc Location to check for rotation handle
+	 * @param scale Scale of the canvas
+	 * @return {@code null} if no bone is found
+	 */
 	public SkeletonBone getBoneByRotHandle(final Point loc, final double scale)
 	{
 		final double minDistance = 10;
@@ -212,6 +273,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 				if (dist < minDistance)
 				{
 					selectedBone = bones.get(i);
+					break;
 				}
 			}
 		}

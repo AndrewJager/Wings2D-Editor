@@ -24,12 +24,19 @@ import com.wings2d.editor.ui.DrawingArea;
 import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
 
 public class SkeletonDrawingPanel extends SkeletonUIElement{
+	private enum MoveType {
+		MOVE_BOTH,
+		MOVE_X,
+		MOVE_Y
+	}
+	
 	private DrawingArea drawArea;
 	private JScrollPane pane;
 	private JTree tree;
 	private SkeletonFrame frame;
 	private SkeletonNode selectedItem;
 	private SkeletonTreeControls treeControls;
+	private MoveType moveType;
 
 	public SkeletonDrawingPanel(final SkeletonEdit edit) {
 		super(edit);
@@ -58,9 +65,9 @@ public class SkeletonDrawingPanel extends SkeletonUIElement{
 	@Override
 	public void createEvents() {
 		drawArea.addMouseListener(new MouseListener() {
+
 			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
+			public void mouseClicked(MouseEvent e) {}
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if (frame != null)
@@ -106,6 +113,21 @@ public class SkeletonDrawingPanel extends SkeletonUIElement{
 					if (skeleton.getDrawMode() == DrawMode.BONE_MOVE)
 					{
 						selectedItem = frame.getBoneAtPosition(e.getPoint(), scale);
+						if (selectedItem == null) {
+							selectedItem = frame.getBoneByXHandle(e.getPoint(), scale);
+							if (selectedItem == null) {
+								selectedItem = frame.getBoneByYHandle(e.getPoint(), scale);
+								if (selectedItem != null) {
+									moveType = MoveType.MOVE_Y;
+								}
+							}
+							else {
+								moveType = MoveType.MOVE_X;
+							}
+						}
+						else {
+							moveType = MoveType.MOVE_BOTH;
+						}
 					}
 					if (selectedItem == null && skeleton.getDrawMode() == DrawMode.BONE_ROTATE)
 					{
@@ -155,7 +177,18 @@ public class SkeletonDrawingPanel extends SkeletonUIElement{
 					{
 					case BONE_MOVE:
 						SkeletonBone bone = (SkeletonBone)selectedItem;
-						bone.setLocation(e.getPoint(), scale, true);
+						switch(moveType) {
+							case MOVE_BOTH -> {
+								bone.setLocation(e.getPoint(), scale, true);
+							}
+							case MOVE_X -> {
+								bone.setLocation(e.getPoint().getX(), bone.getY() * scale, scale, true);
+							}
+							case MOVE_Y -> {
+								bone.setLocation(bone.getX() * scale, e.getPoint().getY(), scale, true);
+							}
+						}
+						
 						break;
 					case BONE_ROTATE:
 						bone = (SkeletonBone)selectedItem;

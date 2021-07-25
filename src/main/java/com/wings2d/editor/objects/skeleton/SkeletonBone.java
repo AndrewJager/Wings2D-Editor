@@ -21,6 +21,7 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.Drawable;
+import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
 
 public class SkeletonBone extends SkeletonNode implements Drawable{
@@ -614,13 +615,14 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	
 	// Drawable methods
 	@Override
-	public void draw(final Graphics2D g2d, final double scale, final DrawMode mode) {
+	public void draw(final Graphics2D g2d, final double scale, final DrawMode mode, final EditorSettings settings) {
 		for (int i = 0; i < sprites.size(); i++)
 		{
-			sprites.get(i).draw(g2d, scale, mode);
+			sprites.get(i).draw(g2d, scale, mode, settings);
 		}
 		
-		final int handleSize = 10;
+		int handleSize = settings.getHandleSize();
+		
 		g2d.setStroke(new BasicStroke(2));
 		g2d.setColor(handleColor);
 		g2d.drawArc((int)((location.getX() * scale) - (handleSize / 2)), (int)((location.getY() * scale) - (handleSize / 2)),

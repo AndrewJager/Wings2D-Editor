@@ -25,6 +25,7 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.Drawable;
+import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
 import com.wings2d.framework.imageFilters.FilterFactory;
 import com.wings2d.framework.imageFilters.ImageFilter;
@@ -541,7 +542,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 
 	// Drawable methods
 	@Override
-	public void draw(final Graphics2D g2d, final double scale, final DrawMode mode) {
+	public void draw(final Graphics2D g2d, final double scale, final DrawMode mode, final EditorSettings settings) {
 		AffineTransform transform = new AffineTransform();
 		transform.scale(scale, scale);
 		transform.translate(parent.getX(), 

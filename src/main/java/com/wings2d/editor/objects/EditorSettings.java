@@ -10,12 +10,18 @@ public class EditorSettings {
 	private File editorDir;
 	private File projectDir;
 	
+	private int handleSize;
+	
 	private static final String FILE_NAME = "PROJECTSETTINGS.txt";
-	private static final String CUR_PROJECT_TOKEN = "DIR";
 	private static final String SPLIT = ">"; // Don't use ":" due to it being in the path
+	private static final String CUR_PROJECT_TOKEN = "DIR";
+	private static final String HANDLE_SIZE_TOKEN = "HANDLE_SIZE";
 	
 	public EditorSettings()
 	{
+		// Defaults
+		handleSize = 10;
+		
 		editorDir = new File(System.getProperty("user.dir") + "/src/main/resources");
 		File editorFile = new File(editorDir + "/" + FILE_NAME);
 		if (!editorFile.exists())
@@ -36,11 +42,15 @@ public class EditorSettings {
 				String[] tokens = in.next().split(SPLIT);
 				switch(tokens[0])
 				{
-				case CUR_PROJECT_TOKEN:
+				case CUR_PROJECT_TOKEN -> {
 					projectDir = new File(tokens[1]);
+				}
+				case HANDLE_SIZE_TOKEN -> {
+					handleSize = Integer.parseInt(tokens[1]);
+				}
+				default -> {
 					break;
-				default:
-					break;
+				}
 				}
 				
 			}
@@ -56,8 +66,9 @@ public class EditorSettings {
 			out.print(""); // Clear the file
 			if (projectDir != null)
 			{
-				out.print(CUR_PROJECT_TOKEN + SPLIT + projectDir.toString());
+				out.print(CUR_PROJECT_TOKEN + SPLIT + projectDir.toString() + "\n");
 			}
+			out.print(HANDLE_SIZE_TOKEN + SPLIT + handleSize);
 			out.close();
 		} catch (FileNotFoundException e) {e.printStackTrace();}
 	}
@@ -69,5 +80,11 @@ public class EditorSettings {
 	public void setProjectDirectory(final File dir)
 	{
 		projectDir = dir;
-	}	
+	}
+	public int getHandleSize() {
+		return handleSize;
+	}
+	public void setHandleSize(final int size) {
+		handleSize = size;
+	}
 }

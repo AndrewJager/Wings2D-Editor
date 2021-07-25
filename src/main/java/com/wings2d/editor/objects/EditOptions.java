@@ -12,8 +12,6 @@ public class EditOptions {
 	private Boolean rotating;
 	/** Should the object/joint have the scale handles enabled */
 	private Boolean scaling;
-	/** Size of the circles for the edit handles */
-	private int editHandleSize;
 	private Editor editor;
 	
 	/**
@@ -25,8 +23,6 @@ public class EditOptions {
 		this.cascadeChanges = true;
 		this.editing = false;
 		this.rotating = false;
-		this.scaling = false;
-		this.editHandleSize = 12;
 		this.editor = editor;
 	}
 	/** Should the changes cascade to child frames */
@@ -60,19 +56,6 @@ public class EditOptions {
 	/** Set if the frame's objects/joints can be scaled */
 	public void setScaling(Boolean scaling) {
 		this.scaling = scaling;
-	}
-	/** Get the size of the edit handles */
-	public int getEditHandleSize()
-	{
-		return editHandleSize;
-	}
-	/**
-	 * Set the size of the edit handles
-	 * @param size Size in graphics units of the edit handles
-	 */
-	public void setEditHandleSize(final int size)
-	{
-		this.editHandleSize = size;
 	}
 	public Editor getEditor()
 	{

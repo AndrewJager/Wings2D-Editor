@@ -56,6 +56,7 @@ public class Editor {
 		manager = new LevelManager();
 		demoLevel = new Level(manager, 0);
 		options = new EditOptions(this);
+		settings = new EditorSettings();
 		
 		FlatLightLaf.install();
 		UIManager.put( "ScrollBar.showButtons", true );
@@ -72,7 +73,7 @@ public class Editor {
 		panels = new ArrayList<UIPanel>();
 		projectEdit = new ProjectEdit(this);
 		skeletonEdit = new SkeletonEdit(this);
-		settingsEdit = new SettingsEdit(this);
+		settingsEdit = new SettingsEdit(this, settings);
 		
 		undo = new EditsManager(skeletonEdit.getSkeletonTree());
 		
@@ -86,7 +87,6 @@ public class Editor {
 			panels.get(i).initElements();
 		}
 		
-		settings = new EditorSettings();
 		if (settings.getProjectDirectory() != null)
 		{
 			projectEdit.getProjectSelect().setProject(settings.getProjectDirectory());

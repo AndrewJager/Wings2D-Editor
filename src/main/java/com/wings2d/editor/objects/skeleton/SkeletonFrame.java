@@ -17,6 +17,7 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.Drawable;
+import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
 
 public class SkeletonFrame extends SkeletonNode implements Drawable{
@@ -512,10 +513,10 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	
 	// Drawable methods
 	@Override
-	public void draw(final Graphics2D g2d, final double scale, final DrawMode mode) {
+	public void draw(final Graphics2D g2d, final double scale, final DrawMode mode, final EditorSettings settings) {
 		for (int i = 0; i < bones.size(); i++)
 		{
-			bones.get(i).draw(g2d, scale, mode);
+			bones.get(i).draw(g2d, scale, mode, settings);
 		}
 	}
 	@Override

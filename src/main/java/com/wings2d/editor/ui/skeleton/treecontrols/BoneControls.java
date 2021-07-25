@@ -33,7 +33,6 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 	private JComboBox<SkeletonBone> otherBones;
 	private JFormattedTextField xPos, yPos, rotation;
 	private JButton addSprite;
-	
 
 	public BoneControls(final SkeletonTreeControls controls) {
 		super(controls);
@@ -48,6 +47,7 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 		xPosPanel.add(new JLabel("X:"));
 		xPos = new JFormattedTextField(new DecimalFormat());
 		xPosPanel.add(xPos);
+		xPosPanel.add(new JSeparator());
 		
 		yPosPanel = new JPanel();
 		yPosPanel.add(new JLabel("Y:"));

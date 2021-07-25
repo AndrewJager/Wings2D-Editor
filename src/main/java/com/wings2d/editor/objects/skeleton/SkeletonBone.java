@@ -51,6 +51,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	private static final Color HANDLE_COLOR_UNSELECTED = Color.GREEN;
 	private static final Color HANDLE_COLOR_SELECTED = Color.RED;
 	private static final int ROT_HANDLE_OFFSET = 15;
+	private static final int POS_HANDLE_OFFSET = 20;
 	
 	public SkeletonBone(final String boneName, final SkeletonFrame boneParent)
 	{
@@ -332,6 +333,22 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		transform.transform(rotHandleLoc, rotHandleLoc);
 		return rotHandleLoc;
 	}
+	public Point2D getXPosHandle(final double scale)
+	{
+		double scaleBack = 1.0 / scale;
+		Point2D xHandleLoc = new Point2D.Double(location.getX() + (POS_HANDLE_OFFSET * scaleBack), location.getY());
+		AffineTransform transform = new AffineTransform();
+		transform.transform(xHandleLoc, xHandleLoc);
+		return xHandleLoc;
+	}
+	public Point2D getYPosHandle(final double scale)
+	{
+		double scaleBack = 1.0 / scale;
+		Point2D yHandleLoc = new Point2D.Double(location.getX(), location.getY() - (POS_HANDLE_OFFSET * scaleBack));
+		AffineTransform transform = new AffineTransform();
+		transform.transform(yHandleLoc, yHandleLoc);
+		return yHandleLoc;
+	}
 	public void setRotation(final double angle)
 	{
 		double oldRotation = rotation;
@@ -484,7 +501,6 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	{
 		setParentSyncedBone(null);
 	}
-
 	
 	// MutableTreeNode methods
 	@Override
@@ -617,6 +633,20 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 					(int)(rotHandleLoc.getX() * scale), (int)(rotHandleLoc.getY() * scale));
 			g2d.setColor(Color.YELLOW);
 			g2d.drawArc((int)((rotHandleLoc.getX() * scale) - (handleSize / 2)), (int)((rotHandleLoc.getY() * scale) - (handleSize / 2)),
+					handleSize, handleSize, 0, 360);
+		}
+		else if (mode == DrawMode.BONE_MOVE && selected) {
+			Point2D xHandleLoc = getXPosHandle(scale);
+			Point2D yHandleLoc = getYPosHandle(scale);
+			g2d.setColor(Color.BLACK);
+			g2d.drawLine((int)(location.getX() * scale), (int)(location.getY() * scale),
+					(int)(xHandleLoc.getX() * scale), (int)(xHandleLoc.getY() * scale));
+			g2d.drawLine((int)(location.getX() * scale), (int)(location.getY() * scale),
+					(int)(yHandleLoc.getX() * scale), (int)(yHandleLoc.getY() * scale));
+			g2d.setColor(Color.YELLOW);
+			g2d.drawArc((int)((xHandleLoc.getX() * scale) - (handleSize / 2)), (int)((xHandleLoc.getY() * scale) - (handleSize / 2)),
+					handleSize, handleSize, 0, 360);
+			g2d.drawArc((int)((yHandleLoc.getX() * scale) - (handleSize / 2)), (int)((yHandleLoc.getY() * scale) - (handleSize / 2)),
 					handleSize, handleSize, 0, 360);
 		}
 	}

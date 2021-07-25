@@ -22,6 +22,7 @@ import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.objects.skeleton.Sprite;
 import com.wings2d.editor.ui.edits.AddToTree;
 import com.wings2d.editor.ui.edits.SetBoneLocation;
+import com.wings2d.editor.ui.edits.SetBoneRotation;
 import com.wings2d.editor.ui.edits.SetParentBone;
 
 public class BoneControls extends SkeletonTreeControlsUIElement{
@@ -158,8 +159,8 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 		rotation.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				bone.rotate(Double.parseDouble(rotation.getText()));
-				controls.getSkeleton().getDrawingArea().getDrawingPanel().getDrawArea().repaint();
+				controls.getSkeleton().getEditor().getEditsManager().edit(
+						new SetBoneRotation(bone, Double.parseDouble(rotation.getText())));
 			}
 		});
 	}

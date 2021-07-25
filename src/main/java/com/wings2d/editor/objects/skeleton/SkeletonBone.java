@@ -332,7 +332,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		transform.transform(rotHandleLoc, rotHandleLoc);
 		return rotHandleLoc;
 	}
-	public void rotate(final double angle)
+	public void setRotation(final double angle)
 	{
 		double oldRotation = rotation;
 		rotation = angle;

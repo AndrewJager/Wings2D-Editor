@@ -29,6 +29,6 @@ public class SetBoneLocation extends Edit{
 
 	@Override
 	public String getDescription() {
-		return "Set location of bone " + bone.getName() + " from X: " + x + " Y: " + y + " to X: " + x + " Y: " + y;
+		return "Set location of bone " + bone.getName() + " from X: " + oldX + " Y: " + oldY + " to X: " + x + " Y: " + y;
 	}
 }

@@ -21,6 +21,7 @@ import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.objects.skeleton.Sprite;
 import com.wings2d.editor.ui.edits.AddToTree;
+import com.wings2d.editor.ui.edits.SetBoneLocation;
 import com.wings2d.editor.ui.edits.SetParentBone;
 
 public class BoneControls extends SkeletonTreeControlsUIElement{
@@ -143,15 +144,15 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 		xPos.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				bone.setLocation(Double.parseDouble(xPos.getText()), bone.getY(), true);
-				controls.getSkeleton().getDrawingArea().getDrawingPanel().getDrawArea().repaint();
+				controls.getSkeleton().getEditor().getEditsManager().edit(new SetBoneLocation(
+						bone, Double.parseDouble(xPos.getText()), bone.getY(), true));
 			}
 		});
 		yPos.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				bone.setLocation(bone.getX(), Double.parseDouble(yPos.getText()), true);
-				controls.getSkeleton().getDrawingArea().getDrawingPanel().getDrawArea().repaint();
+				controls.getSkeleton().getEditor().getEditsManager().edit(new SetBoneLocation(
+						bone, bone.getX(), Double.parseDouble(yPos.getText()), true));
 			}
 		});
 		rotation.addActionListener(new ActionListener() {

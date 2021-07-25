@@ -208,7 +208,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	 * @param scale Scale of the canvas
 	 * @return {@code null} if no bone is found
 	 */
-	public SkeletonBone getBoneByXHandle(final Point loc, final double scale)
+	public SkeletonBone getBoneByXHandle(final Point loc, final double scale, final EditorSettings settings)
 	{
 		final double minDistance = 10;
 		SkeletonBone selectedBone = null;
@@ -216,7 +216,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		{
 			if (bones.get(i).getIsSelected())
 			{
-				Point2D xPoint = bones.get(i).getXPosHandle(scale);
+				Point2D xPoint = bones.get(i).getXPosHandle(scale, settings);
 				double dist = Math.sqrt(Math.pow((loc.getX()-(xPoint.getX() * scale)), 2) 
 						+ Math.pow((loc.getY()-(xPoint.getY() * scale)), 2));
 				if (dist < minDistance)
@@ -234,7 +234,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	 * @param scale Scale of the canvas
 	 * @return {@code null} if no bone is found
 	 */
-	public SkeletonBone getBoneByYHandle(final Point loc, final double scale)
+	public SkeletonBone getBoneByYHandle(final Point loc, final double scale, final EditorSettings settings)
 	{
 		final double minDistance = 10;
 		SkeletonBone selectedBone = null;
@@ -242,7 +242,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		{
 			if (bones.get(i).getIsSelected())
 			{
-				Point2D yPoint = bones.get(i).getYPosHandle(scale);
+				Point2D yPoint = bones.get(i).getYPosHandle(scale, settings);
 				double dist = Math.sqrt(Math.pow((loc.getX()-(yPoint.getX() * scale)), 2) 
 						+ Math.pow((loc.getY()-(yPoint.getY() * scale)), 2));
 				if (dist < minDistance)
@@ -260,7 +260,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	 * @param scale Scale of the canvas
 	 * @return {@code null} if no bone is found
 	 */
-	public SkeletonBone getBoneByRotHandle(final Point loc, final double scale)
+	public SkeletonBone getBoneByRotHandle(final Point loc, final double scale, final EditorSettings settings)
 	{
 		final double minDistance = 10;
 		SkeletonBone selectedBone = null;
@@ -268,7 +268,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		{
 			if (bones.get(i).getIsSelected())
 			{
-				Point2D rotPoint = bones.get(i).getRotHandle(scale);
+				Point2D rotPoint = bones.get(i).getRotHandle(scale, settings);
 				double dist = Math.sqrt(Math.pow((loc.getX()-(rotPoint.getX() * scale)), 2) 
 						+ Math.pow((loc.getY()-(rotPoint.getY() * scale)), 2));
 				if (dist < minDistance)

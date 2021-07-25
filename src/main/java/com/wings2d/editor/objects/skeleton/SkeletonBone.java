@@ -51,8 +51,6 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	
 	private static final Color HANDLE_COLOR_UNSELECTED = Color.GREEN;
 	private static final Color HANDLE_COLOR_SELECTED = Color.RED;
-	private static final int ROT_HANDLE_OFFSET = 15;
-	private static final int POS_HANDLE_OFFSET = 20;
 	
 	public SkeletonBone(final String boneName, final SkeletonFrame boneParent)
 	{
@@ -325,27 +323,27 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	{
 		return rotation;
 	}
-	public Point2D getRotHandle(final double scale)
+	public Point2D getRotHandle(final double scale, final EditorSettings settings)
 	{
 		double scaleBack = 1.0 / scale;
-		Point2D rotHandleLoc = new Point2D.Double(location.getX(), location.getY() - (ROT_HANDLE_OFFSET * scaleBack));
+		Point2D rotHandleLoc = new Point2D.Double(location.getX(), location.getY() - (settings.getRotHandleOffset() * scaleBack));
 		AffineTransform transform = new AffineTransform();
 		transform.setToRotation(Math.toRadians(this.rotation - 90), location.getX(), location.getY());
 		transform.transform(rotHandleLoc, rotHandleLoc);
 		return rotHandleLoc;
 	}
-	public Point2D getXPosHandle(final double scale)
+	public Point2D getXPosHandle(final double scale, final EditorSettings settings)
 	{
 		double scaleBack = 1.0 / scale;
-		Point2D xHandleLoc = new Point2D.Double(location.getX() + (POS_HANDLE_OFFSET * scaleBack), location.getY());
+		Point2D xHandleLoc = new Point2D.Double(location.getX() + (settings.getPosHandleOffset() * scaleBack), location.getY());
 		AffineTransform transform = new AffineTransform();
 		transform.transform(xHandleLoc, xHandleLoc);
 		return xHandleLoc;
 	}
-	public Point2D getYPosHandle(final double scale)
+	public Point2D getYPosHandle(final double scale, final EditorSettings settings)
 	{
 		double scaleBack = 1.0 / scale;
-		Point2D yHandleLoc = new Point2D.Double(location.getX(), location.getY() - (POS_HANDLE_OFFSET * scaleBack));
+		Point2D yHandleLoc = new Point2D.Double(location.getX(), location.getY() - (settings.getPosHandleOffset() * scaleBack));
 		AffineTransform transform = new AffineTransform();
 		transform.transform(yHandleLoc, yHandleLoc);
 		return yHandleLoc;
@@ -629,7 +627,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 				handleSize, handleSize, 0, 360);
 		if (mode == DrawMode.BONE_ROTATE && selected)
 		{	
-			Point2D rotHandleLoc = getRotHandle(scale);
+			Point2D rotHandleLoc = getRotHandle(scale, settings);
 			g2d.setColor(Color.BLACK);
 			g2d.drawLine((int)(location.getX() * scale), (int)(location.getY() * scale),
 					(int)(rotHandleLoc.getX() * scale), (int)(rotHandleLoc.getY() * scale));
@@ -638,8 +636,8 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 					handleSize, handleSize, 0, 360);
 		}
 		else if (mode == DrawMode.BONE_MOVE && selected) {
-			Point2D xHandleLoc = getXPosHandle(scale);
-			Point2D yHandleLoc = getYPosHandle(scale);
+			Point2D xHandleLoc = getXPosHandle(scale, settings);
+			Point2D yHandleLoc = getYPosHandle(scale, settings);
 			g2d.setColor(Color.BLACK);
 			g2d.drawLine((int)(location.getX() * scale), (int)(location.getY() * scale),
 					(int)(xHandleLoc.getX() * scale), (int)(xHandleLoc.getY() * scale));

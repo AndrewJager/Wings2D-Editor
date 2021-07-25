@@ -11,11 +11,15 @@ public class EditorSettings {
 	private File projectDir;
 	
 	private int handleSize;
+	private int posHandleOffset;
+	private int rotHandleOffset;
 	
 	private static final String FILE_NAME = "PROJECTSETTINGS.txt";
 	private static final String SPLIT = ">"; // Don't use ":" due to it being in the path
 	private static final String CUR_PROJECT_TOKEN = "DIR";
 	private static final String HANDLE_SIZE_TOKEN = "HANDLE_SIZE";
+	private static final String POS_HANDLE_OFFSET_TOKEN = "POS_HANDLE_OFFSET";
+	private static final String ROT_HANDLE_OFFSET_TOKEN = "ROT_HANDLE_OFFSET";
 	
 	public EditorSettings()
 	{
@@ -48,6 +52,12 @@ public class EditorSettings {
 				case HANDLE_SIZE_TOKEN -> {
 					handleSize = Integer.parseInt(tokens[1]);
 				}
+				case POS_HANDLE_OFFSET_TOKEN -> {
+					posHandleOffset = Integer.parseInt(tokens[1]);
+				}
+				case ROT_HANDLE_OFFSET_TOKEN -> {
+					rotHandleOffset = Integer.parseInt(tokens[1]);
+				}
 				default -> {
 					break;
 				}
@@ -68,7 +78,9 @@ public class EditorSettings {
 			{
 				out.print(CUR_PROJECT_TOKEN + SPLIT + projectDir.toString() + "\n");
 			}
-			out.print(HANDLE_SIZE_TOKEN + SPLIT + handleSize);
+			out.print(HANDLE_SIZE_TOKEN + SPLIT + handleSize + "\n");
+			out.print(POS_HANDLE_OFFSET_TOKEN + SPLIT + posHandleOffset + "\n");
+			out.print(ROT_HANDLE_OFFSET_TOKEN + SPLIT + rotHandleOffset + "\n");
 			out.close();
 		} catch (FileNotFoundException e) {e.printStackTrace();}
 	}
@@ -86,5 +98,17 @@ public class EditorSettings {
 	}
 	public void setHandleSize(final int size) {
 		handleSize = size;
+	}
+	public int getRotHandleOffset() {
+		return rotHandleOffset;
+	}
+	public void setRotHandleOffset(final int rotHandleOffset) {
+		this.rotHandleOffset = rotHandleOffset;
+	}
+	public int getPosHandleOffset() {
+		return posHandleOffset;
+	}
+	public void setPosHandleOffset(final int posHandleOffset) {
+		this.posHandleOffset = posHandleOffset;
 	}
 }

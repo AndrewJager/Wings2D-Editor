@@ -38,4 +38,10 @@ public class EditsManager {
 			tree.reloadModel();
 		}
 	}
+	
+	public void printEdits() {
+		for (int i = 0; i < edits.size(); i++) {
+			System.out.println(i + ": " + edits.get(i).getDescription());
+		}
+	}
 }

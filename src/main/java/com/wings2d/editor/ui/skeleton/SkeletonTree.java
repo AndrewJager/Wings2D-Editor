@@ -291,9 +291,11 @@ public class SkeletonTree extends SkeletonUIElement{
 	
 	/** Reload the tree model while keeping the expanded state of the tree **/
 	public void reloadModel() {
+		TreePath selectedPath = tree.getSelectionPath();
 		DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
 		getExpandedNodes();
 		model.reload();
 		setExpandedNodes();
+		tree.setSelectionPath(selectedPath);
 	}
 }

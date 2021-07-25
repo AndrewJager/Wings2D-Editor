@@ -10,6 +10,7 @@ public class AddToTree extends Edit{
 	private SkeletonNode node, parentNode;
 	
 	public AddToTree(final DefaultTreeModel model, final SkeletonNode node, final SkeletonNode parentNode) {
+		super();
 		this.model = model;
 		this.node = node;
 		this.parentNode = parentNode;

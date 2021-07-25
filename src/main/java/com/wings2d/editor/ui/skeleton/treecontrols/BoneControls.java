@@ -22,6 +22,7 @@ import javax.swing.tree.TreePath;
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.objects.skeleton.Sprite;
+import com.wings2d.editor.ui.edits.SetParentBone;
 
 public class BoneControls extends SkeletonTreeControlsUIElement{
 	public static final String CARD_ID = "Bone";
@@ -40,12 +41,6 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 		parentBone = new JPanel();
 		parentBone.add(new JLabel("Parent Bone: "));
 		otherBones = new JComboBox<SkeletonBone>();
-		otherBones.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				bone.setParentBone((SkeletonBone)otherBones.getSelectedItem());
-			}
-		});
 		parentBone.add(otherBones);
 		
 		xPosPanel = new JPanel();
@@ -117,6 +112,14 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 
 	@Override
 	protected void createOtherEvents() {
+		otherBones.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (bone.getParentBone() != (SkeletonBone)otherBones.getSelectedItem()) {
+					controls.getSkeleton().getEditor().getEditsManager().edit(new SetParentBone(bone, (SkeletonBone)otherBones.getSelectedItem()));
+				}
+			}
+		});
 		addSprite.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SkeletonNode selectedNode = (SkeletonNode)controls.getTree().getLastSelectedPathComponent();

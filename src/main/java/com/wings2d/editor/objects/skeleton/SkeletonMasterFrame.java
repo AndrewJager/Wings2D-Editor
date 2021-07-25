@@ -3,16 +3,18 @@ package com.wings2d.editor.objects.skeleton;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import com.wings2d.editor.objects.EditorSettings;
+
 public class SkeletonMasterFrame extends SkeletonFrame{
 	public static final String FILE_MARKER = "MASTERFRAME";
 
-	public SkeletonMasterFrame(String frameName) {
-		super(frameName, null);		
+	public SkeletonMasterFrame(final String frameName, final EditorSettings settings) {
+		super(frameName, null, settings);		
 	}
 	
-	public SkeletonMasterFrame(final Scanner in)
+	public SkeletonMasterFrame(final Scanner in, final EditorSettings settings)
 	{
-		super(in, null);
+		super(in, null, settings);
 	}
 	
 	@Override

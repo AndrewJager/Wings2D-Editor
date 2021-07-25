@@ -114,9 +114,9 @@ public class SkeletonDrawingPanel extends SkeletonUIElement{
 					{
 						selectedItem = frame.getBoneAtPosition(e.getPoint(), scale);
 						if (selectedItem == null) {
-							selectedItem = frame.getBoneByXHandle(e.getPoint(), scale, skeleton.getEditor().getSettings());
+							selectedItem = frame.getBoneByXHandle(e.getPoint(), scale);
 							if (selectedItem == null) {
-								selectedItem = frame.getBoneByYHandle(e.getPoint(), scale, skeleton.getEditor().getSettings());
+								selectedItem = frame.getBoneByYHandle(e.getPoint(), scale);
 								if (selectedItem != null) {
 									moveType = MoveType.MOVE_Y;
 								}
@@ -131,7 +131,7 @@ public class SkeletonDrawingPanel extends SkeletonUIElement{
 					}
 					if (selectedItem == null && skeleton.getDrawMode() == DrawMode.BONE_ROTATE)
 					{
-						selectedItem = frame.getBoneByRotHandle(e.getPoint(), scale, skeleton.getEditor().getSettings());
+						selectedItem = frame.getBoneByRotHandle(e.getPoint(), scale);
 					}
 					else if (selectedItem ==  null && skeleton.getDrawMode() == DrawMode.SPRITE_MOVE)
 					{

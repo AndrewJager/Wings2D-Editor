@@ -12,6 +12,7 @@ import java.util.UUID;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
+import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.project.Project;
 import com.wings2d.editor.objects.project.ProjectEntity;
 
@@ -22,23 +23,26 @@ public class Skeleton extends SkeletonNode implements ProjectEntity {
 	private SkeletonMasterFrame masterFrame;
 	private String name;
 	private Project project;
+	private EditorSettings settings;
 	
-	public Skeleton(final String skeletonName, final Project p)
+	public Skeleton(final String skeletonName, final Project p, final EditorSettings settings)
 	{
 		animations = new ArrayList<SkeletonNode>();
-		masterFrame = new SkeletonMasterFrame("Master");
+		masterFrame = new SkeletonMasterFrame("Master", settings);
 		animations.add(masterFrame);
 		this.name = skeletonName;
-		this.project = p;
+		this.project = p; 
+		this.settings = settings;
 	}
 	
 	/**
 	 * Creates a new skeleton from the file. The file should have been checked first to ensure that it is valid.
 	 * @param file File to create from
 	 */
-	public Skeleton(final Scanner in, final Project p)
+	public Skeleton(final Scanner in, final Project p, final EditorSettings settings)
 	{
 		this.project = p;
+		this.settings = settings;
 		animations = new ArrayList<SkeletonNode>();
 		
 		while(in.hasNext())
@@ -50,7 +54,7 @@ public class Skeleton extends SkeletonNode implements ProjectEntity {
 			}
 			else if (tokens[0].equals(SkeletonMasterFrame.FILE_MARKER))
 			{
-				masterFrame = new SkeletonMasterFrame(in);
+				masterFrame = new SkeletonMasterFrame(in, settings);
 				animations.add(0, masterFrame);
 			}
 			else if (tokens[0].equals(SkeletonAnimation.ANIM_TOKEN))
@@ -134,9 +138,11 @@ public class Skeleton extends SkeletonNode implements ProjectEntity {
 		}
 		return null; // If no result found
 	}
-	public List<SkeletonNode> getAnimations()
-	{
+	public List<SkeletonNode> getAnimations(){
 		return animations;
+	}
+	public EditorSettings getSettings() {
+		return settings;
 	}
 	
 	// MutableTreeNode methods

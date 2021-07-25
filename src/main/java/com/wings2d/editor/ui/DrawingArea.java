@@ -43,7 +43,7 @@ public class DrawingArea extends JPanel{
 			switch(drawType)
 			{
 			case DRAW:
-				drawItem.draw((Graphics2D)g, edit.getUIScale() * zoomScale, edit.getSkeletonEdit().getDrawMode(), edit.getSettings());
+				drawItem.draw((Graphics2D)g, edit.getUIScale() * zoomScale, edit.getSkeletonEdit().getDrawMode());
 				break;
 			case RENDER:
 				drawItem.drawRender((Graphics2D)g, edit.getUIScale() * zoomScale);

@@ -10,11 +10,13 @@ import java.util.Scanner;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
+import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
 
 public class SkeletonAnimation extends SkeletonNode{
 	public static final String ANIM_TOKEN = "ANIMATION";
 	
+	private EditorSettings settings;
 	private Skeleton skeleton;
 	private List<SkeletonFrame> frames;
 	private String name;
@@ -27,6 +29,7 @@ public class SkeletonAnimation extends SkeletonNode{
 		}
 		
 		this.skeleton = animParent;
+		this.settings = animParent.getSettings();
 		frames = new ArrayList<SkeletonFrame>();
 		this.name = animName;
 	}
@@ -34,6 +37,7 @@ public class SkeletonAnimation extends SkeletonNode{
 	public SkeletonAnimation(final Scanner in, final Skeleton animParent)
 	{
 		this.skeleton = animParent;
+		this.settings = animParent.getSettings();
 		frames = new ArrayList<SkeletonFrame>();
 		
 		boolean keepReading = true;
@@ -46,7 +50,7 @@ public class SkeletonAnimation extends SkeletonNode{
 			}
 			else if (tokens[0].equals(SkeletonFrame.FRAME_TOKEN))
 			{
-				frames.add(new SkeletonFrame(in, this));
+				frames.add(new SkeletonFrame(in, this, settings));
 			}
 			else if (tokens[0].equals(END_TOKEN))
 			{
@@ -72,13 +76,14 @@ public class SkeletonAnimation extends SkeletonNode{
 		}
 		return hasName;
 	}
-	public List<SkeletonFrame> getFrames()
-	{
+	public List<SkeletonFrame> getFrames() {
 		return frames;
 	}
-	public Skeleton getSkeleton()
-	{
+	public Skeleton getSkeleton() {
 		return skeleton;
+	}
+	public EditorSettings getSettings() {
+		return settings;
 	}
 
 	// MutableTreeNode methods

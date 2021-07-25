@@ -39,6 +39,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	
 	private String name;
 	private SkeletonBone parent;
+	private EditorSettings settings;
 	/** ID used to sync sprites between bones **/
 	private UUID syncID;
 	private Path2D path;
@@ -55,6 +56,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	{
 		this.name = spriteName;
 		this.parent = parent;
+		this.settings = parent.getSettings();
 		syncID = UUID.randomUUID();
 		color = Color.LIGHT_GRAY;
 		filters = new ArrayList<ImageFilter>();
@@ -70,6 +72,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	public Sprite(final Scanner in, final SkeletonBone parent)
 	{
 		this.parent = parent;
+		this.settings = parent.getSettings();
 		path = new Path2D.Double();
 		filters = new ArrayList<ImageFilter>();
 		points = new ArrayList<SpritePoint>();
@@ -407,6 +410,9 @@ public class Sprite extends SkeletonNode implements Drawable{
 	public List<SpritePoint> getPoints() {
 		return points;
 	}
+	public EditorSettings getSettings() {
+		return settings;
+	}
 	
 	private BufferedImage createImage(final double scale)
 	{
@@ -542,7 +548,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 
 	// Drawable methods
 	@Override
-	public void draw(final Graphics2D g2d, final double scale, final DrawMode mode, final EditorSettings settings) {
+	public void draw(final Graphics2D g2d, final double scale, final DrawMode mode) {
 		AffineTransform transform = new AffineTransform();
 		transform.scale(scale, scale);
 		transform.translate(parent.getX(), 

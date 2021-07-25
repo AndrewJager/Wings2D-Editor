@@ -41,7 +41,7 @@ public class ProjectSelect extends ProjectUIElement{
 	{
 		try
 		{
-			Project proj = new Project(projectPath);
+			Project proj = new Project(projectPath, projectEdit.getEditor().getSettings());
 			projectEdit.getEditor().getSettings().setProjectDirectory(projectPath);
 			projectEdit.setProject(proj);
 			projectEdit.refreshInfo();
@@ -78,7 +78,7 @@ public class ProjectSelect extends ProjectUIElement{
 				int result = file.showOpenDialog(panel);
 				if (result == JFileChooser.APPROVE_OPTION)
 				{
-					Skeleton newSkeleton = new Skeleton(skeletonName, projectEdit.getProject());
+					Skeleton newSkeleton = new Skeleton(skeletonName, projectEdit.getProject(), projectEdit.getEditor().getSettings());
 					projectEdit.getProject().getEntities().add(newSkeleton);
 					projectEdit.refreshInfo();
 					File newFile = new File(file.getSelectedFile() + "/" + skeletonName +".txt");

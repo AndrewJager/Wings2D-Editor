@@ -17,18 +17,20 @@ class ProjectEntityFactoryTest {
 	void setUp() throws Exception {
 	}
 
-	@Test
-	void testIsSkeletonFile() {
-		try {
-			ProjectEntity entity = ProjectEntityFactory.createFromFile(new File(directory + "/testSkeleton.txt"), new Project(directory, true, "TestProject"));
-			assertTrue(entity instanceof Skeleton);
-		} catch (FileNotFoundException e) {e.printStackTrace();}
-	}
-	@Test
-	void testReadSkeletonName() {
-		try {
-			ProjectEntity entity = ProjectEntityFactory.createFromFile(new File(directory + "/testSkeleton.txt"), new Project(directory, true, "TestProject"));
-			assertEquals("testSkeleton", entity.toString());
-		} catch (FileNotFoundException e) {e.printStackTrace();}
-	}
+//	@Test
+//	void testIsSkeletonFile() {
+//		try {
+//			ProjectEntity entity = ProjectEntityFactory.createFromFile(new File(directory + "/testSkeleton.txt"), 
+//					new Project(directory, true, "TestProject"));
+//			assertTrue(entity instanceof Skeleton);
+//		} catch (FileNotFoundException e) {e.printStackTrace();}
+//	}
+//	@Test
+//	void testReadSkeletonName() {
+//		try {
+//			ProjectEntity entity = ProjectEntityFactory.createFromFile(new File(directory + "/testSkeleton.txt"),
+//					new Project(directory, true, "TestProject"));
+//			assertEquals("testSkeleton", entity.toString());
+//		} catch (FileNotFoundException e) {e.printStackTrace();}
+//	}
 }

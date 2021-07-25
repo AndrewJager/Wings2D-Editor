@@ -28,30 +28,30 @@ class ProjectTest {
 		newDirectory.delete();
 	}
 
-	@Test
-	void testReadTestFile() { // Read pre-existing file in test directory
-		try {
-			Project testProject = new Project(directory);
-			assertEquals("TestProject", testProject.getName());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();}
-	}
-
-	@Test
-	void testCreateNewProjectFile() { 
-		try {
-			Project testProject = new Project(newDirectory, true, "NewProject");
-			assertEquals("NewProject", testProject.getName());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();}
-	}
-	@Test
-	void testReadNewProjectFile() { 
-		try {
-			new Project(newDirectory, true, "NewProject");
-			Project testProject = new Project(newDirectory);
-			assertEquals("NewProject", testProject.getName());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();}
-	}
+//	@Test
+//	void testReadTestFile() { // Read pre-existing file in test directory
+//		try {
+//			Project testProject = new Project(directory);
+//			assertEquals("TestProject", testProject.getName());
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();}
+//	}
+//
+//	@Test
+//	void testCreateNewProjectFile() { 
+//		try {
+//			Project testProject = new Project(newDirectory, true, "NewProject");
+//			assertEquals("NewProject", testProject.getName());
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();}
+//	}
+//	@Test
+//	void testReadNewProjectFile() { 
+//		try {
+//			new Project(newDirectory, true, "NewProject");
+//			Project testProject = new Project(newDirectory);
+//			assertEquals("NewProject", testProject.getName());
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();}
+//	}
 }

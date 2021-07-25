@@ -27,6 +27,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	protected String name;
 	protected List<SkeletonFrame> syncedFrames;
 	
+	private EditorSettings settings;
 	private SkeletonAnimation animation;
 	private SkeletonFrame parentSyncedFrame;
 	private UUID syncFrameID;
@@ -34,7 +35,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	
 	public static final String SYNC_FRAME_TOKEN = "SYNCFRAME";
 	
-	public SkeletonFrame(final String frameName, final SkeletonAnimation frameParent)
+	public SkeletonFrame(final String frameName, final SkeletonAnimation frameParent, final EditorSettings settings)
 	{
 		// frameParent will be null for Master Frame
 		if (frameParent != null && frameParent.containsFrameWithName(frameName))
@@ -42,13 +43,13 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 			throw new IllegalArgumentException("A Frame with this name already exists in this Animation!");
 		}
 		name = frameName;
-		setup(frameParent);
+		setup(frameParent, settings);
 		frameID = UUID.randomUUID();
 	}
 	
-	public SkeletonFrame(final Scanner in, final SkeletonAnimation frameParent)
+	public SkeletonFrame(final Scanner in, final SkeletonAnimation frameParent, final EditorSettings settings)
 	{
-		setup(frameParent);
+		setup(frameParent, settings);
 		
 		boolean keepReading = true;
 		while(in.hasNext() && keepReading)
@@ -77,11 +78,12 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		}
 	}
 
-	private void setup(final SkeletonAnimation frameParent)
+	private void setup(final SkeletonAnimation frameParent, final EditorSettings settings)
 	{
 		animation = frameParent;
 		bones = new ArrayList<SkeletonBone>();
 		syncedFrames = new ArrayList<SkeletonFrame>();
+		this.settings = settings;
 	}
 
 	public String toString()
@@ -208,7 +210,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	 * @param scale Scale of the canvas
 	 * @return {@code null} if no bone is found
 	 */
-	public SkeletonBone getBoneByXHandle(final Point loc, final double scale, final EditorSettings settings)
+	public SkeletonBone getBoneByXHandle(final Point loc, final double scale)
 	{
 		final double minDistance = 10;
 		SkeletonBone selectedBone = null;
@@ -216,7 +218,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		{
 			if (bones.get(i).getIsSelected())
 			{
-				Point2D xPoint = bones.get(i).getXPosHandle(scale, settings);
+				Point2D xPoint = bones.get(i).getXPosHandle(scale);
 				double dist = Math.sqrt(Math.pow((loc.getX()-(xPoint.getX() * scale)), 2) 
 						+ Math.pow((loc.getY()-(xPoint.getY() * scale)), 2));
 				if (dist < minDistance)
@@ -234,7 +236,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	 * @param scale Scale of the canvas
 	 * @return {@code null} if no bone is found
 	 */
-	public SkeletonBone getBoneByYHandle(final Point loc, final double scale, final EditorSettings settings)
+	public SkeletonBone getBoneByYHandle(final Point loc, final double scale)
 	{
 		final double minDistance = 10;
 		SkeletonBone selectedBone = null;
@@ -242,7 +244,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		{
 			if (bones.get(i).getIsSelected())
 			{
-				Point2D yPoint = bones.get(i).getYPosHandle(scale, settings);
+				Point2D yPoint = bones.get(i).getYPosHandle(scale);
 				double dist = Math.sqrt(Math.pow((loc.getX()-(yPoint.getX() * scale)), 2) 
 						+ Math.pow((loc.getY()-(yPoint.getY() * scale)), 2));
 				if (dist < minDistance)
@@ -260,7 +262,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	 * @param scale Scale of the canvas
 	 * @return {@code null} if no bone is found
 	 */
-	public SkeletonBone getBoneByRotHandle(final Point loc, final double scale, final EditorSettings settings)
+	public SkeletonBone getBoneByRotHandle(final Point loc, final double scale)
 	{
 		final double minDistance = 10;
 		SkeletonBone selectedBone = null;
@@ -268,7 +270,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		{
 			if (bones.get(i).getIsSelected())
 			{
-				Point2D rotPoint = bones.get(i).getRotHandle(scale, settings);
+				Point2D rotPoint = bones.get(i).getRotHandle(scale);
 				double dist = Math.sqrt(Math.pow((loc.getX()-(rotPoint.getX() * scale)), 2) 
 						+ Math.pow((loc.getY()-(rotPoint.getY() * scale)), 2));
 				if (dist < minDistance)
@@ -390,13 +392,14 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 			}
 		}
 	}
-	public UUID getGUID()
-	{
+	public UUID getGUID() {
 		return frameID;
 	}
-	public SkeletonAnimation getAnimation()
-	{
+	public SkeletonAnimation getAnimation() {
 		return animation;
+	}
+	public EditorSettings getSettings() {
+		return settings;
 	}
 	public void deselectAllBones()
 	{
@@ -513,10 +516,10 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	
 	// Drawable methods
 	@Override
-	public void draw(final Graphics2D g2d, final double scale, final DrawMode mode, final EditorSettings settings) {
+	public void draw(final Graphics2D g2d, final double scale, final DrawMode mode) {
 		for (int i = 0; i < bones.size(); i++)
 		{
-			bones.get(i).draw(g2d, scale, mode, settings);
+			bones.get(i).draw(g2d, scale, mode);
 		}
 	}
 	@Override

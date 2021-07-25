@@ -33,6 +33,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	public static final Point2D START_POS = new Point2D.Double(10, 15);
 	
 	private SkeletonFrame frame;
+	private EditorSettings settings;
 	private String name;
 	private UUID boneID;
 	private SkeletonBone parentSyncedBone;
@@ -125,6 +126,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	private void setup(final SkeletonFrame boneParent)
 	{
 		frame = boneParent;
+		settings = frame.getSettings();
 		syncedBones = new ArrayList<SkeletonBone>();
 		childBones = new ArrayList<SkeletonBone>();
 		sprites = new ArrayList<Sprite>();
@@ -323,7 +325,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	{
 		return rotation;
 	}
-	public Point2D getRotHandle(final double scale, final EditorSettings settings)
+	public Point2D getRotHandle(final double scale)
 	{
 		double scaleBack = 1.0 / scale;
 		Point2D rotHandleLoc = new Point2D.Double(location.getX(), location.getY() - (settings.getRotHandleOffset() * scaleBack));
@@ -332,7 +334,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		transform.transform(rotHandleLoc, rotHandleLoc);
 		return rotHandleLoc;
 	}
-	public Point2D getXPosHandle(final double scale, final EditorSettings settings)
+	public Point2D getXPosHandle(final double scale)
 	{
 		double scaleBack = 1.0 / scale;
 		Point2D xHandleLoc = new Point2D.Double(location.getX() + (settings.getPosHandleOffset() * scaleBack), location.getY());
@@ -340,7 +342,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		transform.transform(xHandleLoc, xHandleLoc);
 		return xHandleLoc;
 	}
-	public Point2D getYPosHandle(final double scale, final EditorSettings settings)
+	public Point2D getYPosHandle(final double scale)
 	{
 		double scaleBack = 1.0 / scale;
 		Point2D yHandleLoc = new Point2D.Double(location.getX(), location.getY() - (settings.getPosHandleOffset() * scaleBack));
@@ -398,24 +400,22 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	{
 		return syncBoneID;
 	}
-	public void addSprite(final Sprite newSprite)
-	{
+	public void addSprite(final Sprite newSprite) {
 		sprites.add(newSprite);
 	}
-	public List<Sprite> getSprites()
-	{
+	public List<Sprite> getSprites() {
 		return sprites;
 	}
-	public void setSelectedSprite(final Sprite sprite)
-	{
+	public EditorSettings getSettings() {
+		return settings;
+	}
+	public void setSelectedSprite(final Sprite sprite) {
 		selectedSprite = sprite;
 	}
-	public Sprite getSelectedSprite()
-	{
+	public Sprite getSelectedSprite() {
 		return selectedSprite;
 	}
-	public int getSelectedSpriteIndex()
-	{
+	public int getSelectedSpriteIndex() {
 		return sprites.indexOf(selectedSprite);
 	}
 	public Sprite getSpriteBySyncID(final UUID id)
@@ -613,10 +613,10 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	
 	// Drawable methods
 	@Override
-	public void draw(final Graphics2D g2d, final double scale, final DrawMode mode, final EditorSettings settings) {
+	public void draw(final Graphics2D g2d, final double scale, final DrawMode mode) {
 		for (int i = 0; i < sprites.size(); i++)
 		{
-			sprites.get(i).draw(g2d, scale, mode, settings);
+			sprites.get(i).draw(g2d, scale, mode);
 		}
 		
 		int handleSize = settings.getHandleSize();
@@ -627,7 +627,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 				handleSize, handleSize, 0, 360);
 		if (mode == DrawMode.BONE_ROTATE && selected)
 		{	
-			Point2D rotHandleLoc = getRotHandle(scale, settings);
+			Point2D rotHandleLoc = getRotHandle(scale);
 			g2d.setColor(Color.BLACK);
 			g2d.drawLine((int)(location.getX() * scale), (int)(location.getY() * scale),
 					(int)(rotHandleLoc.getX() * scale), (int)(rotHandleLoc.getY() * scale));
@@ -636,8 +636,8 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 					handleSize, handleSize, 0, 360);
 		}
 		else if (mode == DrawMode.BONE_MOVE && selected) {
-			Point2D xHandleLoc = getXPosHandle(scale, settings);
-			Point2D yHandleLoc = getYPosHandle(scale, settings);
+			Point2D xHandleLoc = getXPosHandle(scale);
+			Point2D yHandleLoc = getYPosHandle(scale);
 			g2d.setColor(Color.BLACK);
 			g2d.drawLine((int)(location.getX() * scale), (int)(location.getY() * scale),
 					(int)(xHandleLoc.getX() * scale), (int)(xHandleLoc.getY() * scale));

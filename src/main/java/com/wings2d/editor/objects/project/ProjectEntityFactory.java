@@ -4,12 +4,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.skeleton.Skeleton;
 
 /** Factory class to create Project Entities from files **/
 public class ProjectEntityFactory {
 	
-	public static ProjectEntity createFromFile(final File directory, final Project project) throws FileNotFoundException
+	public static ProjectEntity createFromFile(final File directory, final Project project, final EditorSettings settings) throws FileNotFoundException
 	{
 		ProjectEntity newItem = null;
 		Scanner in = new Scanner(directory);
@@ -20,7 +21,7 @@ public class ProjectEntityFactory {
 				String line = in.next();
 				if (line.equals(Skeleton.FILE_MARKER))
 				{
-					newItem = new Skeleton(in, project);
+					newItem = new Skeleton(in, project, settings);
 				}
 			}
 		}

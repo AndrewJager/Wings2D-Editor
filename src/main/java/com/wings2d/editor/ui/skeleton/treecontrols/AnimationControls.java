@@ -64,7 +64,7 @@ public class AnimationControls extends SkeletonTreeControlsUIElement{
 						DefaultTreeModel model = (DefaultTreeModel) controls.getTree().getModel();
 						SkeletonAnimation anim = (SkeletonAnimation)selectedNode;
 						try {
-							SkeletonFrame newFrame = new SkeletonFrame(frameName, anim);
+							SkeletonFrame newFrame = new SkeletonFrame(frameName, anim, controls.getSkeleton().getEditor().getSettings());
 							if (anim.getChildCount() == 0)
 							{
 								Skeleton skeleton = (Skeleton)model.getRoot();

@@ -10,18 +10,27 @@ import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
+import com.wings2d.editor.objects.EditorSettings;
+
 public class Project {
 	private List<ProjectEntity> entities;
 	private String name;
 	private File directory;
+	private EditorSettings settings;
 	
-	public Project()
+	public Project(final EditorSettings settings)
 	{
+		this.settings = settings;
 		entities = new ArrayList<ProjectEntity>();
 	}
-	public Project(final File directory, final boolean autoAcceptDir, final String projectName) throws FileNotFoundException
+	public Project(final File directory, final EditorSettings settings) throws FileNotFoundException
 	{
-		this();
+		this(directory, false, null, settings);
+	}
+	public Project(final File directory, final boolean autoAcceptDir, final String projectName,
+			final EditorSettings settings) throws FileNotFoundException
+	{
+		this(settings);
 		validateDirectory(directory);
 		this.directory = directory;
 		
@@ -80,11 +89,6 @@ public class Project {
 		}
 	}
 	
-	public Project(final File directory) throws FileNotFoundException
-	{
-		this(directory, false, null);
-	}
-	
 	private void createAllInDirectory(File directory)
 	{
 		for (int i = 0; i < directory.listFiles().length; i++)
@@ -96,7 +100,7 @@ public class Project {
 			else
 			{
 				try {
-					ProjectEntity newEntity = ProjectEntityFactory.createFromFile(directory.listFiles()[i], this);
+					ProjectEntity newEntity = ProjectEntityFactory.createFromFile(directory.listFiles()[i], this, settings);
 					if (newEntity != null)
 					{
 						entities.add(newEntity);

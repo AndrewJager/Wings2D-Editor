@@ -8,11 +8,11 @@ import javax.swing.BorderFactory;
 import javax.swing.JTree;
 
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
+import com.wings2d.editor.ui.UIElement;
 import com.wings2d.editor.ui.skeleton.SkeletonDrawingPanel;
 import com.wings2d.editor.ui.skeleton.SkeletonEdit;
-import com.wings2d.editor.ui.skeleton.SkeletonUIElement;
 
-public class SkeletonTreeControls extends SkeletonUIElement{
+public class SkeletonTreeControls extends UIElement<SkeletonEdit>{
 	private CardLayout cards;
 	private SkeletonControls skeletonControls;
 	private AnimationControls animationControls;
@@ -89,7 +89,7 @@ public class SkeletonTreeControls extends SkeletonUIElement{
 
 	public JTree getTree()
 	{
-		return skeleton.getSkeletonTree().getTree();
+		return getEditPanel().getSkeletonTree().getTree();
 	}
 	public SkeletonDrawingPanel getDrawingArea()
 	{

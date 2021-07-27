@@ -13,7 +13,9 @@ import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 import javax.swing.border.BevelBorder;
 
-public class SkeletonToolBar extends SkeletonUIElement{
+import com.wings2d.editor.ui.UIElement;
+
+public class SkeletonToolBar extends UIElement<SkeletonEdit>{
 	private JToolBar toolbar;
 	private JButton backButton, undoBtn, redoBtn, saveBtn;
 	private JLabel header;
@@ -55,19 +57,19 @@ public class SkeletonToolBar extends SkeletonUIElement{
 		backButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				skeleton.getEditor().showProject();
+				getEditPanel().getEditor().showProject();
 			}
 		});
 		undoBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				skeleton.getEditor().getEditsManager().undo();
+				getEditPanel().getEditor().getEditsManager().undo();
 			}
 		});
 		redoBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				skeleton.getEditor().getEditsManager().redo();
+				getEditPanel().getEditor().getEditsManager().redo();
 			}
 		});
 		saveBtn.addActionListener(new ActionListener() {

@@ -10,8 +10,9 @@ import javax.swing.event.ListSelectionListener;
 
 import com.wings2d.editor.objects.project.Project;
 import com.wings2d.editor.objects.project.ProjectEntity;
+import com.wings2d.editor.ui.UIElement;
 
-public class ProjectItems extends ProjectUIElement{
+public class ProjectItems extends UIElement<ProjectEdit>{
 	private JList<ProjectEntity> list;
 
 	public ProjectItems(final ProjectEdit edit) {
@@ -38,7 +39,7 @@ public class ProjectItems extends ProjectUIElement{
 		list.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				projectEdit.setSelectedEntity(list.getSelectedValue());
+				getEditPanel().setSelectedEntity(list.getSelectedValue());
 			}
 		});
 	}

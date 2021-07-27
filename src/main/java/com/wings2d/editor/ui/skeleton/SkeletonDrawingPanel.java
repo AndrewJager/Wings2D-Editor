@@ -21,9 +21,10 @@ import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.objects.skeleton.Sprite;
 import com.wings2d.editor.ui.DrawingArea;
+import com.wings2d.editor.ui.UIElement;
 import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
 
-public class SkeletonDrawingPanel extends SkeletonUIElement{
+public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 	private enum MoveType {
 		MOVE_BOTH,
 		MOVE_X,
@@ -74,43 +75,43 @@ public class SkeletonDrawingPanel extends SkeletonUIElement{
 				{
 					if (SwingUtilities.isRightMouseButton(e))
 					{
-						if (skeleton.getDrawMode().getSuperMode() == DrawMode.SuperDrawMode.BONE)
+						if (getEditPanel().getDrawMode().getSuperMode() == DrawMode.SuperDrawMode.BONE)
 						{
-							if (skeleton.getDrawMode() == DrawMode.BONE_ROTATE)
+							if (getEditPanel().getDrawMode() == DrawMode.BONE_ROTATE)
 							{
-								skeleton.setDrawMode(DrawMode.BONE_MOVE);
+								getEditPanel().setDrawMode(DrawMode.BONE_MOVE);
 							}
 							else
 							{
-								skeleton.setDrawMode(DrawMode.BONE_ROTATE);
+								getEditPanel().setDrawMode(DrawMode.BONE_ROTATE);
 							}
 						}
-						else if (skeleton.getDrawMode().getSuperMode() == DrawMode.SuperDrawMode.SPRITE)
+						else if (getEditPanel().getDrawMode().getSuperMode() == DrawMode.SuperDrawMode.SPRITE)
 						{
-							if (skeleton.getDrawMode() == DrawMode.SPRITE_MOVE)
+							if (getEditPanel().getDrawMode() == DrawMode.SPRITE_MOVE)
 							{
-								skeleton.setDrawMode(DrawMode.SPRITE_EDIT);
+								getEditPanel().setDrawMode(DrawMode.SPRITE_EDIT);
 							}
-							else if (skeleton.getDrawMode() == DrawMode.SPRITE_EDIT)
+							else if (getEditPanel().getDrawMode() == DrawMode.SPRITE_EDIT)
 							{
-								skeleton.setDrawMode(DrawMode.SPRITE_MOVE);
+								getEditPanel().setDrawMode(DrawMode.SPRITE_MOVE);
 							}
 						}
 					}
 					else if (SwingUtilities.isMiddleMouseButton(e))
 					{	
-						if (skeleton.getDrawMode().getSuperMode() == DrawMode.SuperDrawMode.BONE)
+						if (getEditPanel().getDrawMode().getSuperMode() == DrawMode.SuperDrawMode.BONE)
 						{
-							skeleton.setDrawMode(skeleton.getLastSpriteDrawMode());
+							getEditPanel().setDrawMode(getEditPanel().getLastSpriteDrawMode());
 						}
-						else if (skeleton.getDrawMode().getSuperMode() == DrawMode.SuperDrawMode.SPRITE)
+						else if (getEditPanel().getDrawMode().getSuperMode() == DrawMode.SuperDrawMode.SPRITE)
 						{
-							skeleton.setDrawMode(skeleton.getLastBoneDrawMode());
+							getEditPanel().setDrawMode(getEditPanel().getLastBoneDrawMode());
 						}
 					}
 
-					double scale = skeleton.getEditor().getUIScale() * drawArea.getZoomScale();
-					if (skeleton.getDrawMode() == DrawMode.BONE_MOVE)
+					double scale = getEditPanel().getEditor().getUIScale() * drawArea.getZoomScale();
+					if (getEditPanel().getDrawMode() == DrawMode.BONE_MOVE)
 					{
 						selectedItem = frame.getBoneAtPosition(e.getPoint(), scale);
 						if (selectedItem == null) {
@@ -129,15 +130,15 @@ public class SkeletonDrawingPanel extends SkeletonUIElement{
 							moveType = MoveType.MOVE_BOTH;
 						}
 					}
-					if (selectedItem == null && skeleton.getDrawMode() == DrawMode.BONE_ROTATE)
+					if (selectedItem == null && getEditPanel().getDrawMode() == DrawMode.BONE_ROTATE)
 					{
 						selectedItem = frame.getBoneByRotHandle(e.getPoint(), scale);
 					}
-					else if (selectedItem ==  null && skeleton.getDrawMode() == DrawMode.SPRITE_MOVE)
+					else if (selectedItem ==  null && getEditPanel().getDrawMode() == DrawMode.SPRITE_MOVE)
 					{
 						selectedItem = frame.selectSprite(e.getPoint(), scale);
 					}
-					else if (selectedItem ==  null && skeleton.getDrawMode() == DrawMode.SPRITE_EDIT)
+					else if (selectedItem ==  null && getEditPanel().getDrawMode() == DrawMode.SPRITE_EDIT)
 					{
 						selectedItem = frame.selectSpriteVertex(e.getPoint(), scale);
 					}
@@ -172,8 +173,8 @@ public class SkeletonDrawingPanel extends SkeletonUIElement{
 			public void mouseDragged(MouseEvent e) {
 				if (selectedItem != null && SwingUtilities.isLeftMouseButton(e))
 				{
-					double scale = skeleton.getEditor().getUIScale() * drawArea.getZoomScale();
-					switch(skeleton.getDrawMode())
+					double scale = getEditPanel().getEditor().getUIScale() * drawArea.getZoomScale();
+					switch(getEditPanel().getDrawMode())
 					{
 					case BONE_MOVE:
 						SkeletonBone bone = (SkeletonBone)selectedItem;
@@ -209,7 +210,7 @@ public class SkeletonDrawingPanel extends SkeletonUIElement{
 				}
 				
 				treeControls.updateNodeInfo(selectedItem);
-				drawArea.resizeToDrawItem(skeleton.getEditor().getUIScale());
+				drawArea.resizeToDrawItem(getEditPanel().getEditor().getUIScale());
 				panel.repaint();
 			}
 
@@ -220,7 +221,7 @@ public class SkeletonDrawingPanel extends SkeletonUIElement{
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				drawArea.zoom(e.getWheelRotation());
-				drawArea.resizeToDrawItem(skeleton.getEditor().getUIScale());
+				drawArea.resizeToDrawItem(getEditPanel().getEditor().getUIScale());
 			}
 		});
 	}

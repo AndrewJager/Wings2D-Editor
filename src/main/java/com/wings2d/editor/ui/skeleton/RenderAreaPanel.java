@@ -8,8 +8,9 @@ import javax.swing.JScrollPane;
 
 import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.ui.DrawingArea;
+import com.wings2d.editor.ui.UIElement;
 
-public class RenderAreaPanel extends SkeletonUIElement{
+public class RenderAreaPanel extends UIElement<SkeletonEdit>{
 	private DrawingArea drawArea;
 	private JScrollPane pane;
 

@@ -15,8 +15,9 @@ import javax.swing.JOptionPane;
 
 import com.wings2d.editor.objects.project.Project;
 import com.wings2d.editor.objects.skeleton.Skeleton;
+import com.wings2d.editor.ui.UIElement;
 
-public class ProjectSelect extends ProjectUIElement{
+public class ProjectSelect extends UIElement<ProjectEdit>{
 	private JButton chooseProject, newAnim, saveProject, settingsBtn;
 	private JLabel projectName;
 
@@ -41,11 +42,11 @@ public class ProjectSelect extends ProjectUIElement{
 	{
 		try
 		{
-			Project proj = new Project(projectPath, projectEdit.getEditor().getSettings());
-			projectEdit.getEditor().getSettings().setProjectDirectory(projectPath);
-			projectEdit.setProject(proj);
-			projectEdit.refreshInfo();
-			projectName.setText("Name: " + projectEdit.getProject().getName());
+			Project proj = new Project(projectPath, getEditPanel().getEditor().getSettings());
+			getEditPanel().getEditor().getSettings().setProjectDirectory(projectPath);
+			getEditPanel().setProject(proj);
+			getEditPanel().refreshInfo();
+			projectName.setText("Name: " + getEditPanel().getProject().getName());
 			newAnim.setEnabled(true);
 		}
 		catch (FileNotFoundException ex)
@@ -74,13 +75,13 @@ public class ProjectSelect extends ProjectUIElement{
 				String skeletonName = JOptionPane.showInputDialog(panel, "Skeleton Name");
 				JFileChooser file = new JFileChooser();
 				file.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				file.setCurrentDirectory(projectEdit.getProject().getDirectory());
+				file.setCurrentDirectory(getEditPanel().getProject().getDirectory());
 				int result = file.showOpenDialog(panel);
 				if (result == JFileChooser.APPROVE_OPTION)
 				{
-					Skeleton newSkeleton = new Skeleton(skeletonName, projectEdit.getProject(), projectEdit.getEditor().getSettings());
-					projectEdit.getProject().getEntities().add(newSkeleton);
-					projectEdit.refreshInfo();
+					Skeleton newSkeleton = new Skeleton(skeletonName, getEditPanel().getProject(), getEditPanel().getEditor().getSettings());
+					getEditPanel().getProject().getEntities().add(newSkeleton);
+					getEditPanel().refreshInfo();
 					File newFile = new File(file.getSelectedFile() + "/" + skeletonName +".txt");
 					try {
 						newFile.createNewFile();
@@ -93,12 +94,12 @@ public class ProjectSelect extends ProjectUIElement{
 		saveProject.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				projectEdit.getProject().saveProject();
+				getEditPanel().getProject().saveProject();
 			}
 		});
 		settingsBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				projectEdit.getEditor().showSettings();
+				getEditPanel().getEditor().showSettings();
 			}
 		});
 	}

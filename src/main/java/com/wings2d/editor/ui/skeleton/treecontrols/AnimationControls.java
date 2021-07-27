@@ -64,7 +64,7 @@ public class AnimationControls extends SkeletonTreeControlsUIElement{
 						DefaultTreeModel model = (DefaultTreeModel) controls.getTree().getModel();
 						SkeletonAnimation anim = (SkeletonAnimation)selectedNode;
 						try {
-							SkeletonFrame newFrame = new SkeletonFrame(frameName, anim, controls.getSkeleton().getEditor().getSettings());
+							SkeletonFrame newFrame = new SkeletonFrame(frameName, anim, controls.getEditPanel().getEditor().getSettings());
 							if (anim.getChildCount() == 0)
 							{
 								Skeleton skeleton = (Skeleton)model.getRoot();
@@ -74,7 +74,7 @@ public class AnimationControls extends SkeletonTreeControlsUIElement{
 							{
 								newFrame.setParentSyncedFrame((SkeletonFrame)anim.getChildAt(anim.getChildCount() - 1));
 							}
-							controls.getSkeleton().getEditor().getEditsManager().edit(new AddToTree(model, newFrame,
+							controls.getEditPanel().getEditor().getEditsManager().edit(new AddToTree(model, newFrame,
 									(SkeletonNode)selectedNode));
 							controls.getTree().setSelectionPath(controls.getTree().getSelectionPath().pathByAddingChild(
 									selectedNode.getChildAt(selectedNode.getChildCount() - 1)));

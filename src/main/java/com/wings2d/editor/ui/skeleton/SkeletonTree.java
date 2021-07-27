@@ -33,11 +33,12 @@ import com.wings2d.editor.objects.skeleton.SkeletonTreeCellRenderer;
 import com.wings2d.editor.objects.skeleton.SkeletonTreeModelListener;
 import com.wings2d.editor.objects.skeleton.Sprite;
 import com.wings2d.editor.objects.skeleton.SpritePoint;
+import com.wings2d.editor.ui.UIElement;
 import com.wings2d.editor.ui.edits.MoveDownInTree;
 import com.wings2d.editor.ui.edits.MoveUpInTree;
 import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
 
-public class SkeletonTree extends SkeletonUIElement{
+public class SkeletonTree extends UIElement<SkeletonEdit>{
 	private JTree tree;
 	private SkeletonTreeModelListener treeListener;
 	private JScrollPane scrollPane;
@@ -54,7 +55,7 @@ public class SkeletonTree extends SkeletonUIElement{
 		
 		tree = new JTree();
 		tree.setEditable(true);
-		treeListener = new SkeletonTreeModelListener(tree, this.getSkeleton().getEditor());
+		treeListener = new SkeletonTreeModelListener(tree, getEditPanel().getEditor());
 		tree.getModel().addTreeModelListener(treeListener);	
 		tree.setCellRenderer(new SkeletonTreeCellRenderer());
 		
@@ -126,7 +127,7 @@ public class SkeletonTree extends SkeletonUIElement{
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e)
 			{
-				SkeletonTreeControls treeControls = skeleton.getTreeControls();
+				SkeletonTreeControls treeControls = getEditPanel().getTreeControls();
 				SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
 				if (selectedNode != null)
 				{
@@ -160,7 +161,7 @@ public class SkeletonTree extends SkeletonUIElement{
 						SpritePoint point = (SpritePoint)selectedNode;
 						point.getSprite().setSelectedVertex(point.getSprite().getPoints().indexOf(point));
 					}
-					skeleton.getDrawingArea().getDrawingPanel().getDrawArea().repaint();
+					getEditPanel().getDrawingArea().getDrawingPanel().getDrawArea().repaint();
 				}
 			}
 		});
@@ -257,14 +258,14 @@ public class SkeletonTree extends SkeletonUIElement{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
-				getSkeleton().getEditor().getEditsManager().edit(new MoveUpInTree(selectedNode));
+				getEditPanel().getEditor().getEditsManager().edit(new MoveUpInTree(selectedNode));
 			}
 		});
 		moveDownItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SkeletonNode selectedNode = (SkeletonNode)tree.getLastSelectedPathComponent();
-				getSkeleton().getEditor().getEditsManager().edit(new MoveDownInTree(selectedNode));
+				getEditPanel().getEditor().getEditsManager().edit(new MoveDownInTree(selectedNode));
 			}
 		});
 	}

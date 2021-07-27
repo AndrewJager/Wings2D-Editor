@@ -10,8 +10,9 @@ import javax.swing.JLabel;
 
 import com.wings2d.editor.objects.project.ProjectEntity;
 import com.wings2d.editor.objects.skeleton.Skeleton;
+import com.wings2d.editor.ui.UIElement;
 
-public class CurrentItemEdit extends ProjectUIElement{
+public class CurrentItemEdit extends UIElement<ProjectEdit>{
 	private JLabel nameLabel;
 	private JButton editItem;
 	private ProjectEntity selectedItem;
@@ -45,7 +46,7 @@ public class CurrentItemEdit extends ProjectUIElement{
 				{
 					if (selectedItem instanceof Skeleton)
 					{
-						projectEdit.getEditor().showSkeleton((Skeleton)selectedItem);
+						getEditPanel().getEditor().showSkeleton((Skeleton)selectedItem);
 					}
 				}
 			}

@@ -1,17 +1,14 @@
 package com.wings2d.editor.ui.skeleton.treecontrols;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.tree.DefaultTreeModel;
 
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
@@ -58,7 +55,7 @@ public abstract class SkeletonTreeControlsUIElement {
 		    				JOptionPane.PLAIN_MESSAGE, null, null, selectedNode.toString());
 					if (newName != null)
 					{
-						controls.getSkeleton().getEditor().getEditsManager().edit(new SetName(selectedNode, newName));
+						controls.getEditPanel().getEditor().getEditsManager().edit(new SetName(selectedNode, newName));
 					}
 				}
 			}
@@ -77,7 +74,7 @@ public abstract class SkeletonTreeControlsUIElement {
 						if (result == JOptionPane.OK_OPTION) {
 							DefaultTreeModel model = (DefaultTreeModel)controls.getTree().getModel();
 							model.removeNodeFromParent(selectedNode);
-							controls.getSkeleton().getSkeletonTree().reloadModel();
+							controls.getEditPanel().getSkeletonTree().reloadModel();
 						}
 					}
 					catch (IllegalStateException ex){
@@ -100,24 +97,6 @@ public abstract class SkeletonTreeControlsUIElement {
 	/** Only update the text on the labels. Override this event for use when moving objects in editor **/
 	protected void updateVisibleInfo(final SkeletonNode node) {}
 	
-	protected void addNameLine()
-	{
-		JSeparator line = new JSeparator();
-		line.setPreferredSize(new Dimension((int)(panel.getWidth() * 0.6), 1));
-		panel.add(line);
-	}
-	protected void addLabel(final String text)
-	{
-		JLabel label = new JLabel(text, JLabel.CENTER);
-		label.setPreferredSize(new Dimension(panel.getWidth(), (int)label.getPreferredSize().getHeight()));
-		panel.add(label);
-	}
-	protected void addLabel(final JLabel label, final String text)
-	{
-		label.setText(text);
-		label.setPreferredSize(new Dimension(panel.getWidth(), (int)label.getPreferredSize().getHeight()));
-		panel.add(label);
-	}
 	protected void createList(final String[] data)
 	{
 		JList<String> list = new JList<String>(data);

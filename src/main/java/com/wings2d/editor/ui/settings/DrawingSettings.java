@@ -10,8 +10,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.wings2d.editor.objects.EditorSettings;
+import com.wings2d.editor.ui.UIElement;
 
-public class DrawingSettings extends SettingsUIElement{
+public class DrawingSettings extends UIElement<SettingsEdit>{
 	private EditorSettings settings;
 	
 	private JSpinner handleSize, posHandleOffset, rotHandleOffset;

@@ -3,9 +3,10 @@ package com.wings2d.editor.ui.skeleton;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
+import com.wings2d.editor.ui.UIElement;
 import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
 
-public class SkeletonDrawing extends SkeletonUIElement{
+public class SkeletonDrawing extends UIElement<SkeletonEdit>{
 	private SkeletonDrawingPanel drawingPanel;
 	private SkeletonDrawingControls controls;
 

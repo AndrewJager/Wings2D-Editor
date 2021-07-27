@@ -96,7 +96,7 @@ public class FrameControls extends SkeletonTreeControlsUIElement{
 						try {
 							SkeletonNode node = new SkeletonBone(boneName, (SkeletonFrame)selectedNode);
 
-							controls.getSkeleton().getEditor().getEditsManager().edit(new AddToTree(model, node, (SkeletonNode)node.getParent()));
+							controls.getEditPanel().getEditor().getEditsManager().edit(new AddToTree(model, node, (SkeletonNode)node.getParent()));
 							controls.getTree().setSelectionPath(controls.getTree().getSelectionPath().pathByAddingChild(
 									selectedNode.getChildAt(selectedNode.getChildCount() - 1)));
 						}

@@ -7,7 +7,9 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
-public class RenderAreaControls extends SkeletonUIElement{
+import com.wings2d.editor.ui.UIElement;
+
+public class RenderAreaControls extends UIElement<SkeletonEdit>{
 
 	private JButton render;
 
@@ -24,9 +26,9 @@ public class RenderAreaControls extends SkeletonUIElement{
 		render.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				skeleton.getSkeleton().generateRender(skeleton.getEditor().getUIScale());
-				skeleton.getRenderArea().getRenderPanel().getDrawArea().setDrawItem(skeleton.getSkeletonTree().getFrameToRender());
-				skeleton.getRenderArea().getRenderPanel().getDrawArea().repaint();
+				getEditPanel().getSkeleton().generateRender(getEditPanel().getEditor().getUIScale());
+				getEditPanel().getRenderArea().getRenderPanel().getDrawArea().setDrawItem(getEditPanel().getSkeletonTree().getFrameToRender());
+				getEditPanel().getRenderArea().getRenderPanel().getDrawArea().repaint();
 			}
 		});
 		

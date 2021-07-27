@@ -9,8 +9,9 @@ import javax.swing.JSeparator;
 import javax.swing.JToggleButton;
 
 import com.wings2d.editor.objects.skeleton.DrawMode;
+import com.wings2d.editor.ui.UIElement;
 
-public class SkeletonDrawingControls extends SkeletonUIElement{
+public class SkeletonDrawingControls extends UIElement<SkeletonEdit>{
 	private JToggleButton moveBtn, rotateBtn, spriteMoveBtn, spriteEditBtn;
 	private SkeletonDrawingPanel drawingPanel;
 
@@ -39,7 +40,7 @@ public class SkeletonDrawingControls extends SkeletonUIElement{
 		spriteEditBtn.setFont(spriteMoveBtn.getFont().deriveFont(fontSize));
 		panel.add(spriteEditBtn);
 		
-		setControls(skeleton.getDrawMode());
+		setControls(getEditPanel().getDrawMode());
 	}
 	
 	public void setControls(final DrawMode mode)
@@ -75,7 +76,7 @@ public class SkeletonDrawingControls extends SkeletonUIElement{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setControls(DrawMode.BONE_MOVE);
-				skeleton.setDrawMode(DrawMode.BONE_MOVE);
+				getEditPanel().setDrawMode(DrawMode.BONE_MOVE);
 				drawingPanel.getDrawArea().repaint();
 			}
 		});
@@ -83,7 +84,7 @@ public class SkeletonDrawingControls extends SkeletonUIElement{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setControls(DrawMode.BONE_ROTATE);
-				skeleton.setDrawMode(DrawMode.BONE_ROTATE);
+				getEditPanel().setDrawMode(DrawMode.BONE_ROTATE);
 				drawingPanel.getDrawArea().repaint();
 			}
 		});
@@ -91,7 +92,7 @@ public class SkeletonDrawingControls extends SkeletonUIElement{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setControls(DrawMode.SPRITE_MOVE);
-				skeleton.setDrawMode(DrawMode.SPRITE_MOVE);
+				getEditPanel().setDrawMode(DrawMode.SPRITE_MOVE);
 				drawingPanel.getDrawArea().repaint();
 			}
 		});
@@ -99,7 +100,7 @@ public class SkeletonDrawingControls extends SkeletonUIElement{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setControls(DrawMode.SPRITE_EDIT);
-				skeleton.setDrawMode(DrawMode.SPRITE_EDIT);
+				getEditPanel().setDrawMode(DrawMode.SPRITE_EDIT);
 				drawingPanel.getDrawArea().repaint();
 			}
 		});

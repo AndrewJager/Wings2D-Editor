@@ -117,7 +117,7 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (bone.getParentBone() != (SkeletonBone)otherBones.getSelectedItem()) {
-					controls.getSkeleton().getEditor().getEditsManager().edit(new SetParentBone(bone, (SkeletonBone)otherBones.getSelectedItem()));
+					controls.getEditPanel().getEditor().getEditsManager().edit(new SetParentBone(bone, (SkeletonBone)otherBones.getSelectedItem()));
 				}
 			}
 		});
@@ -131,7 +131,7 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 						SkeletonBone bone = (SkeletonBone)selectedNode;
 						Sprite newSprite = new Sprite("Sprite", bone);
 
-						controls.getSkeleton().getEditor().getEditsManager().edit(new AddToTree(model, newSprite, selectedNode));
+						controls.getEditPanel().getEditor().getEditsManager().edit(new AddToTree(model, newSprite, selectedNode));
 						controls.getTree().setSelectionPath(controls.getTree().getSelectionPath().pathByAddingChild(
 								selectedNode.getChildAt(selectedNode.getChildCount() - 1)));
 						
@@ -145,21 +145,21 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 		xPos.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controls.getSkeleton().getEditor().getEditsManager().edit(new SetBoneLocation(
+				controls.getEditPanel().getEditor().getEditsManager().edit(new SetBoneLocation(
 						bone, Double.parseDouble(xPos.getText()), bone.getY(), true));
 			}
 		});
 		yPos.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controls.getSkeleton().getEditor().getEditsManager().edit(new SetBoneLocation(
+				controls.getEditPanel().getEditor().getEditsManager().edit(new SetBoneLocation(
 						bone, bone.getX(), Double.parseDouble(yPos.getText()), true));
 			}
 		});
 		rotation.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controls.getSkeleton().getEditor().getEditsManager().edit(
+				controls.getEditPanel().getEditor().getEditsManager().edit(
 						new SetBoneRotation(bone, Double.parseDouble(rotation.getText())));
 			}
 		});

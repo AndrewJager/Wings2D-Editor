@@ -6,7 +6,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 
-public class SettingsToolBar extends SettingsUIElement{
+import com.wings2d.editor.ui.UIElement;
+
+public class SettingsToolBar extends UIElement<SettingsEdit>{
 	private JToolBar toolbar;
 	private JButton backBtn;
 
@@ -24,7 +26,7 @@ public class SettingsToolBar extends SettingsUIElement{
 		backBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				settingsEdit.getEditor().showProject();
+				getEditPanel().getEditor().showProject();
 			}
 		});
 	}

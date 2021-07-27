@@ -67,7 +67,7 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 				else
 				{
 					if (e.getClickCount() == 2) { // Double click
-						ImageFilter newFilter = FilterMap.runEditDialog(filters.getSelectedValue(), controls.getSkeleton().getEditor().getFrame());
+						ImageFilter newFilter = FilterMap.runEditDialog(filters.getSelectedValue(), controls.getEditPanel().getEditor().getFrame());
 						if (newFilter != null) {
 							curSprite.getFilters().set(filters.getSelectedIndex(), newFilter);
 							passThis.updatePanelInfo(curSprite);
@@ -141,11 +141,11 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 		});
 		addFilter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				CreateFilterDialog filterDlg = new CreateFilterDialog(controls.getSkeleton().getEditor().getFrame());
+				CreateFilterDialog filterDlg = new CreateFilterDialog(controls.getEditPanel().getEditor().getFrame());
 				Class<? extends ImageFilter> result = filterDlg.showDialog();
 				if (result != null)
 				{
-					ImageFilter newFilter = FilterMap.runCreateDialog(result, controls.getSkeleton().getEditor().getFrame());
+					ImageFilter newFilter = FilterMap.runCreateDialog(result, controls.getEditPanel().getEditor().getFrame());
 					if (newFilter != null)
 					{
 						curSprite.getFilters().add(newFilter);

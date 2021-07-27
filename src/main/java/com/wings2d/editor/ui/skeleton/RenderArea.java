@@ -3,7 +3,9 @@ package com.wings2d.editor.ui.skeleton;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
-public class RenderArea extends SkeletonUIElement{
+import com.wings2d.editor.ui.UIElement;
+
+public class RenderArea extends UIElement<SkeletonEdit>{
 	private RenderAreaPanel renderPanel;
 	private RenderAreaControls controls;
 

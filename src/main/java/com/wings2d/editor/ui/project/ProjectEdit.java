@@ -11,7 +11,7 @@ import com.wings2d.editor.objects.project.ProjectEntity;
 import com.wings2d.editor.ui.Editor;
 import com.wings2d.editor.ui.UIPanel;
 
-public class ProjectEdit extends UIPanel{
+public class ProjectEdit extends UIPanel<ProjectEdit>{
 	public static String CARD_ID = "Project";
 	
 	private Project project;

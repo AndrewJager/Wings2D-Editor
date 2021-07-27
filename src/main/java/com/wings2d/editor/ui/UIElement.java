@@ -2,7 +2,7 @@ package com.wings2d.editor.ui;
 
 import javax.swing.JPanel;
 
-public abstract class UIElement<T extends UIPanel> {
+public abstract class UIElement<T extends UIPanel<T>> {
 	private T editPanel;
 	protected JPanel panel;
 	

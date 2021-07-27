@@ -12,7 +12,7 @@ import com.wings2d.editor.ui.Editor;
 import com.wings2d.editor.ui.UIPanel;
 import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
 
-public class SkeletonEdit extends UIPanel{
+public class SkeletonEdit extends UIPanel<SkeletonEdit>{
 	public static String CARD_ID = "Skeleton";
 	private JPanel centerPanel;
 	

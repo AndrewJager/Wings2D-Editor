@@ -5,10 +5,10 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-public abstract class UIPanel {
+public abstract class UIPanel<T extends UIPanel<T>> {
 	protected JPanel panel;
 	protected Editor editor;
-	protected List<UIElement> elements;
+	protected List<UIElement<T>> elements;
 	
 	public UIPanel(final Editor edit)
 	{
@@ -16,7 +16,7 @@ public abstract class UIPanel {
 		panel = new JPanel();
 		panel.setLayout(null);
 		edit.getPanels().add(this);
-		elements = new ArrayList<UIElement>();
+		elements = new ArrayList<UIElement<T>>();
 	}
 	
 	public void initElements()
@@ -31,7 +31,7 @@ public abstract class UIPanel {
 	{
 		return panel;
 	}	
-	public List<UIElement> getElements()
+	public List<UIElement<T>> getElements()
 	{
 		return elements;
 	}

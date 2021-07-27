@@ -8,7 +8,7 @@ import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.ui.Editor;
 import com.wings2d.editor.ui.UIPanel;
 
-public class SettingsEdit extends UIPanel{
+public class SettingsEdit extends UIPanel<SettingsEdit>{
 	public static String CARD_ID = "Settings";
 	
 	private SettingsToolBar toolBar;

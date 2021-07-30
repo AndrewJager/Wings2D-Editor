@@ -15,6 +15,7 @@ import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.TreePath;
 
+import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.skeleton.DrawMode;
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonFrame;
@@ -171,6 +172,7 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 		drawArea.addMouseMotionListener(new MouseMotionListener() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
+				EditorSettings settings = getEditPanel().getEditor().getSettings();
 				if (selectedItem != null && SwingUtilities.isLeftMouseButton(e))
 				{
 					double scale = getEditPanel().getEditor().getUIScale() * drawArea.getZoomScale();
@@ -183,10 +185,10 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 								bone.setLocation(e.getPoint(), scale, true);
 							}
 							case MOVE_X -> {
-								bone.setLocation(e.getPoint().getX(), bone.getY() * scale, scale, true);
+								bone.setLocation(e.getPoint().getX() - settings.getPosHandleOffset(), bone.getY() * scale, scale, true);
 							}
 							case MOVE_Y -> {
-								bone.setLocation(bone.getX() * scale, e.getPoint().getY(), scale, true);
+								bone.setLocation(bone.getX() * scale, e.getPoint().getY() + settings.getPosHandleOffset(), scale, true);
 							}
 						}
 						

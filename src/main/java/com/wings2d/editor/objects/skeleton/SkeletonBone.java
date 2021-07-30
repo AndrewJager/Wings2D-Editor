@@ -30,6 +30,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	public static final String SYNC_BONE_ID_TOKEN = "SYNCBONEID";
 	public static final String POSITION_TOKEN = "POSITION";
 	public static final String ROTATION_TOKEN = "ROTATION";
+	/** Default position that the bone will be added at **/
 	public static final Point2D START_POS = new Point2D.Double(10, 15);
 	
 	private SkeletonFrame frame;

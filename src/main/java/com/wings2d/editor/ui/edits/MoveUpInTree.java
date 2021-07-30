@@ -5,7 +5,6 @@ import com.wings2d.editor.objects.skeleton.SkeletonNode;
 public class MoveUpInTree extends Edit{
 	private SkeletonNode node;
 	
-	
 	public MoveUpInTree(final SkeletonNode node) {
 		super();
 		this.node = node;

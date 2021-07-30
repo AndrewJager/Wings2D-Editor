@@ -14,12 +14,14 @@ import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.ui.edits.AddToTree;
+import com.wings2d.editor.ui.edits.SyncBonePositions;
 
 public class FrameControls extends SkeletonTreeControlsUIElement{
 	public static final String CARD_ID = "Frame";
 	
+	private SkeletonFrame frame;
 	private JPanel namePanel, syncPanel, bonePanel;
-	private JButton addBone;
+	private JButton addBone, cautiousSync, forceSync;
 	private JLabel syncLabel;
 
 	public FrameControls(final SkeletonTreeControls controls) {
@@ -30,6 +32,9 @@ public class FrameControls extends SkeletonTreeControlsUIElement{
 		syncPanel = new JPanel();
 		syncLabel = new JLabel();
 		syncPanel.add(syncLabel);
+		
+		cautiousSync = new JButton("Cautious Sync");
+		forceSync = new JButton("Force Sync");
 		
 		bonePanel = new JPanel();
 		addBone = new JButton("New Bone");
@@ -50,7 +55,7 @@ public class FrameControls extends SkeletonTreeControlsUIElement{
 		panel.add(controlsPanel);
 		
 		panel.add(syncPanel);
-		SkeletonFrame frame = (SkeletonFrame)node;
+		frame = (SkeletonFrame)node;
 		if (frame.getParentSyncedFrame() != null)
 		{
 			syncLabel.setText("Sync: " + frame.getParentSyncedFrame().toString());
@@ -60,17 +65,10 @@ public class FrameControls extends SkeletonTreeControlsUIElement{
 			syncLabel.setText("No parent sync frame");
 		}
 		
-		JPanel syncPanel = new JPanel();
-		JButton syncBones = new JButton("Sync Bone Locations");
-		syncBones.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				frame.cautiousSyncBonePositions();
-				controls.getDrawingArea().getDrawArea().repaint();
-			}
-		});
-		syncPanel.add(syncBones);
-		panel.add(syncPanel);
+		JPanel syncBones = new JPanel();
+		syncBones.add(cautiousSync);
+		syncBones.add(forceSync);
+		panel.add(syncBones);
 		
 		createList(frame.getSyncedFrameNames());
 		panel.add(new JSeparator());
@@ -105,6 +103,20 @@ public class FrameControls extends SkeletonTreeControlsUIElement{
 						}
 					}
 				}			
+			}
+		});
+		cautiousSync.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controls.getEditPanel().getEditor().getEditsManager().edit(new SyncBonePositions(frame, true));
+				controls.getDrawingArea().getDrawArea().repaint();
+			}
+		});
+		forceSync.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controls.getEditPanel().getEditor().getEditsManager().edit(new SyncBonePositions(frame, false));
+				controls.getDrawingArea().getDrawArea().repaint();
 			}
 		});
 	}

@@ -32,7 +32,6 @@ public class Editor {
 	private boolean playing = false;
 	private Level demoLevel;
 	
-	private List<UIPanel> panels;
 	private EditOptions options;
 	private EditorSettings settings;
 	
@@ -70,7 +69,6 @@ public class Editor {
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		frame.add(mainPanel);
 		
-		panels = new ArrayList<UIPanel>();
 		projectEdit = new ProjectEdit(this);
 		skeletonEdit = new SkeletonEdit(this);
 		settingsEdit = new SettingsEdit(this, settings);
@@ -82,10 +80,9 @@ public class Editor {
 		mainPanel.add(settingsEdit.getPanel(), SettingsEdit.CARD_ID);
 		showProject();
 		
-		for (int i = 0; i < panels.size(); i++)
-		{
-			panels.get(i).initElements();
-		}
+		projectEdit.initElements();
+		skeletonEdit.initElements();
+		settingsEdit.initElements();
 		
 		if (settings.getProjectDirectory() != null)
 		{
@@ -185,10 +182,6 @@ public class Editor {
 	public double getUIScale()
 	{
 		return UIScale;
-	}
-	public List<UIPanel> getPanels()
-	{
-		return panels;
 	}
 	public EditorSettings getSettings()
 	{

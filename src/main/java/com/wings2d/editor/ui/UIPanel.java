@@ -15,7 +15,6 @@ public abstract class UIPanel<T extends UIPanel<T>> {
 		this.editor = edit;
 		panel = new JPanel();
 		panel.setLayout(null);
-		edit.getPanels().add(this);
 		elements = new ArrayList<UIElement<T>>();
 	}
 	

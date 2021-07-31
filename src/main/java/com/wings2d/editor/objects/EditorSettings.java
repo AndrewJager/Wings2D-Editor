@@ -7,27 +7,38 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import com.wings2d.editor.objects.save.SaveData;
+import com.wings2d.editor.objects.save.WritableFile;
+import com.wings2d.editor.objects.save.WritableInt;
+
 public class EditorSettings {
 	private File editorDir;
-	private File projectDir;
 	
-	private int handleSize;
-	private int posHandleOffset;
-	private int rotHandleOffset;
+	private WritableFile projectDir;
+	
+	private SaveData data;
+	
+	private WritableInt handleSize;
+	private WritableInt posHandleOffset;
+	private WritableInt rotHandleOffset;
+	
 	private Color selectedHandleColor;
 	private Color unselectedHandleColor;
 	
 	private static final String FILE_NAME = "PROJECTSETTINGS.txt";
 	private static final String SPLIT = ">"; // Don't use ":" due to it being in the path
 	private static final String CUR_PROJECT_TOKEN = "DIR";
-	private static final String HANDLE_SIZE_TOKEN = "HANDLE_SIZE";
-	private static final String POS_HANDLE_OFFSET_TOKEN = "POS_HANDLE_OFFSET";
-	private static final String ROT_HANDLE_OFFSET_TOKEN = "ROT_HANDLE_OFFSET";
 	
 	public EditorSettings()
 	{
+		data = new SaveData(SPLIT);
+		
 		// Defaults
-		handleSize = 10;
+		handleSize = data.add(new WritableInt(10, "HANDLE_SIZE"));
+		posHandleOffset = data.add(new WritableInt(20, "POS_HANDLE_OFFSET"));
+		rotHandleOffset = data.add(new WritableInt(20, "ROT_HANDLE_OFFSET"));
+		projectDir = data.add(new WritableFile(null, "DIR"));
+
 		selectedHandleColor = Color.RED;
 		unselectedHandleColor = Color.GREEN;
 		editorDir = new File(System.getProperty("user.dir") + "/src/main/resources");
@@ -45,29 +56,7 @@ public class EditorSettings {
 	{
 		try {
 			Scanner in = new Scanner(file);
-			while(in.hasNext())
-			{
-				String[] tokens = in.next().split(SPLIT);
-				switch(tokens[0])
-				{
-				case CUR_PROJECT_TOKEN -> {
-					projectDir = new File(tokens[1]);
-				}
-				case HANDLE_SIZE_TOKEN -> {
-					handleSize = Integer.parseInt(tokens[1]);
-				}
-				case POS_HANDLE_OFFSET_TOKEN -> {
-					posHandleOffset = Integer.parseInt(tokens[1]);
-				}
-				case ROT_HANDLE_OFFSET_TOKEN -> {
-					rotHandleOffset = Integer.parseInt(tokens[1]);
-				}
-				default -> {
-					break;
-				}
-				}
-				
-			}
+			data.parseFile(in);
 			in.close();
 		} catch (FileNotFoundException e) {e.printStackTrace();}
 		
@@ -77,43 +66,42 @@ public class EditorSettings {
 	{
 		try {
 			PrintWriter out = new PrintWriter(editorDir + "/" + FILE_NAME);
-			out.print(""); // Clear the file
+			data.saveData(out);
+
 			if (projectDir != null)
 			{
 				out.print(CUR_PROJECT_TOKEN + SPLIT + projectDir.toString() + "\n");
 			}
-			out.print(HANDLE_SIZE_TOKEN + SPLIT + handleSize + "\n");
-			out.print(POS_HANDLE_OFFSET_TOKEN + SPLIT + posHandleOffset + "\n");
-			out.print(ROT_HANDLE_OFFSET_TOKEN + SPLIT + rotHandleOffset + "\n");
+
 			out.close();
 		} catch (FileNotFoundException e) {e.printStackTrace();}
 	}
 	
 	public File getProjectDirectory()
 	{
-		return projectDir;
+		return projectDir.getValue();
 	}
 	public void setProjectDirectory(final File dir)
 	{
-		projectDir = dir;
+		projectDir.setValue(dir);
 	}
 	public int getHandleSize() {
-		return handleSize;
+		return handleSize.getValue();
 	}
 	public void setHandleSize(final int size) {
-		handleSize = size;
+		handleSize.setValue(size);
 	}
 	public int getRotHandleOffset() {
-		return rotHandleOffset;
+		return rotHandleOffset.getValue();
 	}
 	public void setRotHandleOffset(final int rotHandleOffset) {
-		this.rotHandleOffset = rotHandleOffset;
+		this.rotHandleOffset.setValue(rotHandleOffset);
 	}
 	public int getPosHandleOffset() {
-		return posHandleOffset;
+		return posHandleOffset.getValue();
 	}
 	public void setPosHandleOffset(final int posHandleOffset) {
-		this.posHandleOffset = posHandleOffset;
+		this.posHandleOffset.setValue(posHandleOffset);
 	}
 	public Color getSelectedHandleColor() {
 		return selectedHandleColor;

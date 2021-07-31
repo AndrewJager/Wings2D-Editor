@@ -50,9 +50,6 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	private Sprite selectedSprite;
 	private List<Sprite> sprites;
 	
-	private static final Color HANDLE_COLOR_UNSELECTED = Color.GREEN;
-	private static final Color HANDLE_COLOR_SELECTED = Color.RED;
-	
 	public SkeletonBone(final String boneName, final SkeletonFrame boneParent)
 	{
 		if (boneParent.containsBoneWithName(boneName))
@@ -130,7 +127,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		syncedBones = new ArrayList<SkeletonBone>();
 		childBones = new ArrayList<SkeletonBone>();
 		sprites = new ArrayList<Sprite>();
-		handleColor = HANDLE_COLOR_UNSELECTED;
+		handleColor = settings.getUnselectedHandleColor();
 		rotation = 0;
 	}
 	
@@ -310,11 +307,11 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		this.selected = selected;
 		if (selected)
 		{
-			handleColor = HANDLE_COLOR_SELECTED;
+			handleColor = settings.getSelectedHandleColor();
 		}
 		else
 		{
-			handleColor = HANDLE_COLOR_UNSELECTED;
+			handleColor = settings.getUnselectedHandleColor();
 		}
 	}
 	public boolean getIsSelected()

@@ -36,8 +36,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	public static final String VERTEX_TOKEN = "VERTEX";
 	public static final String SYNC_ID_TOKEN = "SYNCID";
 	public static final String FILTER_TOKEN = "FILTER";
-	
-	private String name;
+
 	private SkeletonBone parent;
 	private EditorSettings settings;
 	/** ID used to sync sprites between bones **/
@@ -520,7 +519,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	// SkeletonNode methods
 	@Override
 	public void setName(final String newName) {
-		this.name = newName;
+		super.setName(newName);
 		List<SkeletonBone> syncedBones = parent.getSyncedBones();
 		for (int i = 0; i < syncedBones.size(); i++)
 		{
@@ -529,9 +528,6 @@ public class Sprite extends SkeletonNode implements Drawable{
 				syncedBones.get(i).getSpriteBySyncID(syncID).setName(newName);
 			}
 		}
-	}
-	public String getName() {
-		return name;
 	}
 	@Override
 	public void saveToFile(final PrintWriter out) {

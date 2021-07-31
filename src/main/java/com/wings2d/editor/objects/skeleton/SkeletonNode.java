@@ -8,8 +8,14 @@ import javax.swing.tree.MutableTreeNode;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
 
 public abstract class SkeletonNode implements MutableTreeNode{
-	public abstract void setName(final String newName);
-	public abstract String getName();
+	protected String name;
+	
+	public void setName(final String newName) {
+		this.name = newName;
+	}
+	public String getName() {
+		return name;
+	}
 	public abstract void saveToFile(final PrintWriter out);
 	public abstract void resyncAll();
 	public abstract void generateRender(final double scale);

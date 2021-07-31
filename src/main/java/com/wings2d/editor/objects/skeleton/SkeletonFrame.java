@@ -24,7 +24,6 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	public static final String FRAME_TOKEN = "FRAME";
 	
 	protected List<SkeletonBone> bones;
-	protected String name;
 	protected List<SkeletonFrame> syncedFrames;
 	
 	private EditorSettings settings;
@@ -451,13 +450,6 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	}
 	
 	// SkeletonNode methods
-	public void setName(final String newName)
-	{
-		name = newName;
-	}
-	public String getName() {
-		return name;
-	}
 	public void saveToFile(final PrintWriter out)
 	{
 		out.write(FRAME_TOKEN + "\n");

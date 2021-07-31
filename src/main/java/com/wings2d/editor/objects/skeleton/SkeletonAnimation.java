@@ -19,7 +19,6 @@ public class SkeletonAnimation extends SkeletonNode{
 	private EditorSettings settings;
 	private Skeleton skeleton;
 	private List<SkeletonFrame> frames;
-	private String name;
 	
 	public SkeletonAnimation(final String animName, final Skeleton animParent)
 	{
@@ -159,15 +158,6 @@ public class SkeletonAnimation extends SkeletonNode{
 	}
 	
 	// SkeletonNode methods
-	@Override
-	public void setName(final String newName)
-	{
-		name = newName;
-	}
-	@Override
-	public String getName() {
-		return name;
-	}
 	@Override
 	public void saveToFile(final PrintWriter out)
 	{

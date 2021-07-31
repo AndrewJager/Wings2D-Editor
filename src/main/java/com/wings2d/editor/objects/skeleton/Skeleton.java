@@ -21,7 +21,6 @@ public class Skeleton extends SkeletonNode implements ProjectEntity {
 	
 	private List<SkeletonNode> animations;
 	private SkeletonMasterFrame masterFrame;
-	private String name;
 	private Project project;
 	private EditorSettings settings;
 	
@@ -192,15 +191,6 @@ public class Skeleton extends SkeletonNode implements ProjectEntity {
 	}
 
 	// SkeletonNode methods
-	@Override
-	public void setName(final String newName)
-	{
-		name = newName;
-	}
-	@Override
-	public String getName() {
-		return name;
-	}
 	@Override
 	public void saveToFile(final PrintWriter out)
 	{	

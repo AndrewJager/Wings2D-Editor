@@ -35,7 +35,6 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	
 	private SkeletonFrame frame;
 	private EditorSettings settings;
-	private String name;
 	private UUID boneID;
 	private SkeletonBone parentSyncedBone;
 	private List<SkeletonBone> syncedBones;
@@ -563,7 +562,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	// SkeletonNode methods
 	@Override
 	public void setName(final String newName) {
-		name = newName;
+		super.setName(newName);
 		for(int i = 0; i < syncedBones.size(); i++)
 		{
 			syncedBones.get(i).setName(newName);
@@ -572,10 +571,6 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		{
 			childBones.get(i).setParentBoneName(newName);
 		}
-	}
-	@Override
-	public String getName() {
-		return name;
 	}
 	public void saveToFile(final PrintWriter out)
 	{

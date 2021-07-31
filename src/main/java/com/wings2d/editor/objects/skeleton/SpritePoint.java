@@ -86,10 +86,6 @@ public class SpritePoint extends SkeletonNode{
 	public Enumeration<? extends TreeNode> children() {return null;}
 
 	// SkeletonNode methods
-	@Override
-	public void setName(String newName) {}
-	@Override
-	public String getName() {return null;};
 
 	@Override
 	public void saveToFile(PrintWriter out) {}

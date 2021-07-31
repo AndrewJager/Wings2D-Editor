@@ -272,6 +272,14 @@ public class Sprite extends SkeletonNode implements Drawable{
 		}
 		recreatePathFromPoints(points, true);
 	}
+	private void recreatePathFromPoints(final List<SpritePoint> points) {
+		List<Point2D> otherPoints = new ArrayList<Point2D>();
+		for (int i = 0; i < points.size(); i++) {
+			SpritePoint point = points.get(i);
+			otherPoints.add(new Point2D.Double(point.getX(), point.getY()));
+		}
+		recreatePathFromPoints(otherPoints, true);
+	}
 	private void recreatePathFromPoints(final List<Point2D> points, final boolean close)
 	{
 		path = new Path2D.Double();
@@ -462,10 +470,12 @@ public class Sprite extends SkeletonNode implements Drawable{
 	@Override
 	public void remove(final int index) {
 		points.remove(index);
+		recreatePathFromPoints(points);
 	}
 	@Override
 	public void remove(final MutableTreeNode node) {
 		points.remove(node);
+		recreatePathFromPoints(points);
 	}
 	@Override
 	public void setUserObject(final Object object) {}

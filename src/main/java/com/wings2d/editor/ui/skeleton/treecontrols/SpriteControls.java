@@ -19,6 +19,8 @@ import javax.swing.SwingUtilities;
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.objects.skeleton.Sprite;
+import com.wings2d.editor.ui.edits.AddVertex;
+import com.wings2d.editor.ui.edits.SetSpriteColor;
 import com.wings2d.editor.ui.skeleton.filterEdits.CreateFilterDialog;
 import com.wings2d.editor.ui.skeleton.filterEdits.FilterMap;
 import com.wings2d.framework.imageFilters.ImageFilter;
@@ -125,18 +127,15 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 				Color color = JColorChooser.showDialog(panel, "Choose Sprite color", curSprite.getColor());
 				if (color != null)
 				{
-					curSprite.setColor(color);
-					colorIndicator.setBackground(color);
-					controls.getDrawingArea().getDrawArea().repaint();
+					controls.getEditPanel().getEditor().getEditsManager().edit(new SetSpriteColor(curSprite, color));
 				}
 			}
 		});
 		newVertex.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Sprite sprite = (Sprite)controls.getTree().getLastSelectedPathComponent();
-				sprite.addVertex(controls.getDrawingArea().getDrawArea().getUserLoc());
-				controls.getDrawingArea().getDrawArea().repaint();
+				controls.getEditPanel().getEditor().getEditsManager().edit(new AddVertex(curSprite, 
+						controls.getDrawingArea().getDrawArea().getUserLoc()));
 			}
 		});
 		addFilter.addActionListener(new ActionListener() {

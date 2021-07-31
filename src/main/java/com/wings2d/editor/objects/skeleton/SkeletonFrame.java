@@ -367,6 +367,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		return selected;
 	}
 	
+	
 	public UUID getGUID() {
 		return frameID;
 	}

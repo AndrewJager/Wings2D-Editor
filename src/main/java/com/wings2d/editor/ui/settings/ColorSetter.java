@@ -9,29 +9,26 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.EmptyBorder;
 
 import com.wings2d.editor.ui.UIElement;
 
-public class ColorSetting extends UIElement<SettingsEdit>{
+public class ColorSetter extends UIElement<SettingsEdit>{
 	private Supplier<Color> getter;
 	private Consumer<Color> setter;
 	
 	private JButton editBtn;
 	private JPanel indicator;
 	
-	public ColorSetting(final SettingsEdit parent, final String caption,
+	public ColorSetter(final SettingsEdit parent, final String caption,
 			final Supplier<Color> getter, final Consumer<Color> setter) {
 		super(parent);
 		this.getter = getter;
 		this.setter = setter;
+		
 		panel.setLayout(new BorderLayout());
 		
 		panel.add(new JLabel(caption), BorderLayout.WEST);

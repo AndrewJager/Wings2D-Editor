@@ -9,6 +9,7 @@ public class AddVertex extends Edit{
 	private Point2D point;
 	
 	public AddVertex(final Sprite sprite, final Point2D point) {
+		super();
 		this.sprite = sprite;
 		this.point = point;
 	}

@@ -579,7 +579,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 			g2d.setColor(Color.YELLOW);
 			while(!iter.isDone())
 			{
-				int handleSize = 8;
+				int handleSize = settings.getHandleSize();
 				double[] coords = new double[6];
 				if (iter.currentSegment(coords) != PathIterator.SEG_CLOSE);
 				{

@@ -7,7 +7,7 @@ import com.wings2d.framework.imageFilters.LightenFrom;
 public class LightenFromEdit extends ShadeFromEdit{
 	private static final long serialVersionUID = 1L;
 	
-	public LightenFromEdit(Frame owner) {
+	public LightenFromEdit(final Frame owner) {
 		super(owner, ShadeType.LIGHTEN);
 	}
 	public LightenFromEdit(final LightenFrom filter, final Frame owner) {

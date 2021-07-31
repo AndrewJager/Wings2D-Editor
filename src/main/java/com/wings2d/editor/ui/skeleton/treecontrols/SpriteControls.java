@@ -19,6 +19,7 @@ import javax.swing.SwingUtilities;
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.objects.skeleton.Sprite;
+import com.wings2d.editor.ui.edits.AddFilter;
 import com.wings2d.editor.ui.edits.AddVertex;
 import com.wings2d.editor.ui.edits.SetSpriteColor;
 import com.wings2d.editor.ui.skeleton.filterEdits.CreateFilterDialog;
@@ -147,8 +148,7 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 					ImageFilter newFilter = FilterMap.runCreateDialog(result, controls.getEditPanel().getEditor().getFrame());
 					if (newFilter != null)
 					{
-						curSprite.getFilters().add(newFilter);
-						filters.setListData(curSprite.getFilters().toArray(new ImageFilter[0]));
+						controls.getEditPanel().getEditor().getEditsManager().edit(new AddFilter(curSprite, newFilter));
 					}
 				}
 			}

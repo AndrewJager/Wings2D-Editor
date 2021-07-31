@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 import com.wings2d.editor.objects.save.SaveData;
+import com.wings2d.editor.objects.save.WritableColor;
 import com.wings2d.editor.objects.save.WritableFile;
 import com.wings2d.editor.objects.save.WritableInt;
 
@@ -21,13 +22,11 @@ public class EditorSettings {
 	private WritableInt handleSize;
 	private WritableInt posHandleOffset;
 	private WritableInt rotHandleOffset;
-	
-	private Color selectedHandleColor;
-	private Color unselectedHandleColor;
+	private WritableColor selectedHandleColor;
+	private WritableColor unselectedHandleColor;
 	
 	private static final String FILE_NAME = "PROJECTSETTINGS.txt";
 	private static final String SPLIT = ">"; // Don't use ":" due to it being in the path
-	private static final String CUR_PROJECT_TOKEN = "DIR";
 	
 	public EditorSettings()
 	{
@@ -39,8 +38,8 @@ public class EditorSettings {
 		rotHandleOffset = data.add(new WritableInt(20, "ROT_HANDLE_OFFSET"));
 		projectDir = data.add(new WritableFile(null, "DIR"));
 
-		selectedHandleColor = Color.RED;
-		unselectedHandleColor = Color.GREEN;
+		selectedHandleColor = data.add(new WritableColor(Color.RED, "SELECTED_HANDLE_COLOR"));
+		unselectedHandleColor = data.add(new WritableColor(Color.GREEN, "UNSELECTED_HANDLE_COLOR"));
 		editorDir = new File(System.getProperty("user.dir") + "/src/main/resources");
 		File editorFile = new File(editorDir + "/" + FILE_NAME);
 		if (!editorFile.exists())
@@ -67,12 +66,6 @@ public class EditorSettings {
 		try {
 			PrintWriter out = new PrintWriter(editorDir + "/" + FILE_NAME);
 			data.saveData(out);
-
-			if (projectDir != null)
-			{
-				out.print(CUR_PROJECT_TOKEN + SPLIT + projectDir.toString() + "\n");
-			}
-
 			out.close();
 		} catch (FileNotFoundException e) {e.printStackTrace();}
 	}
@@ -104,15 +97,15 @@ public class EditorSettings {
 		this.posHandleOffset.setValue(posHandleOffset);
 	}
 	public Color getSelectedHandleColor() {
-		return selectedHandleColor;
+		return selectedHandleColor.getValue();
 	}
 	public void setSelectedHandleColor(final Color selectedHandleColor) {
-		this.selectedHandleColor = selectedHandleColor;
+		this.selectedHandleColor.setValue(selectedHandleColor);
 	}
 	public Color getUnselectedHandleColor() {
-		return unselectedHandleColor;
+		return unselectedHandleColor.getValue();
 	}
 	public void setUnselectedHandleColor(final Color unselectedHandleColor) {
-		this.unselectedHandleColor = unselectedHandleColor;
+		this.unselectedHandleColor.setValue(unselectedHandleColor);;
 	}
 }

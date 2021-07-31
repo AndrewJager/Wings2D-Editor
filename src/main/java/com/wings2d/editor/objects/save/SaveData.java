@@ -58,4 +58,8 @@ public class SaveData {
 		data.add(newData);
 		return newData;
 	}
+	public WritableColor add(final WritableColor newData) {
+		data.add(newData);
+		return newData;
+	}
 }

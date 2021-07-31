@@ -42,6 +42,13 @@ public class DrawingSettings extends UIElement<SettingsEdit>{
 		rotHandleOffset = new JSpinner(handleModel);
 		rotHandleOffsetPanel.add(rotHandleOffset);
 		panel.add(rotHandleOffsetPanel);
+		
+		ColorSetting selectedHandleSettings = new ColorSetting(edit, "Selected Handle Color:", 
+				settings::getSelectedHandleColor, settings::setSelectedHandleColor);
+		panel.add(selectedHandleSettings.getPanel());
+		ColorSetting unselectedHandleSettings = new ColorSetting(edit, "Unselected Handle Color:", 
+				settings::getUnselectedHandleColor, settings::setUnselectedHandleColor);
+		panel.add(unselectedHandleSettings.getPanel());
 	}
 
 	@Override

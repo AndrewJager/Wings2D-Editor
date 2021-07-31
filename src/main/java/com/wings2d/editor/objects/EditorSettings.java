@@ -1,5 +1,6 @@
 package com.wings2d.editor.objects;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -13,6 +14,8 @@ public class EditorSettings {
 	private int handleSize;
 	private int posHandleOffset;
 	private int rotHandleOffset;
+	private Color selectedHandleColor;
+	private Color unselectedHandleColor;
 	
 	private static final String FILE_NAME = "PROJECTSETTINGS.txt";
 	private static final String SPLIT = ">"; // Don't use ":" due to it being in the path
@@ -25,7 +28,8 @@ public class EditorSettings {
 	{
 		// Defaults
 		handleSize = 10;
-		
+		selectedHandleColor = Color.RED;
+		unselectedHandleColor = Color.GREEN;
 		editorDir = new File(System.getProperty("user.dir") + "/src/main/resources");
 		File editorFile = new File(editorDir + "/" + FILE_NAME);
 		if (!editorFile.exists())
@@ -110,5 +114,17 @@ public class EditorSettings {
 	}
 	public void setPosHandleOffset(final int posHandleOffset) {
 		this.posHandleOffset = posHandleOffset;
+	}
+	public Color getSelectedHandleColor() {
+		return selectedHandleColor;
+	}
+	public void setSelectedHandleColor(final Color selectedHandleColor) {
+		this.selectedHandleColor = selectedHandleColor;
+	}
+	public Color getUnselectedHandleColor() {
+		return unselectedHandleColor;
+	}
+	public void setUnselectedHandleColor(final Color unselectedHandleColor) {
+		this.unselectedHandleColor = unselectedHandleColor;
 	}
 }

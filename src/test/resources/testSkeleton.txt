@@ -1,5 +1,5 @@
 SKELETON
-NAME:skeleton
+NAME:testSkeleton
 MASTERFRAME
 NAME:Master
 ID:99d42d3f-a48f-4f19-8910-e94973a7748e

@@ -1,4 +1,4 @@
-package com.wings2d.editor.ui.settings;
+package com.wings2d.editor.ui.setters;
 
 import java.awt.BorderLayout;
 import java.util.function.IntConsumer;
@@ -12,13 +12,14 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.wings2d.editor.ui.UIElement;
+import com.wings2d.editor.ui.UIPanel;
 
-public class IntSetter extends UIElement<SettingsEdit>{
+public class IntSetter<T extends UIPanel<T>> extends UIElement<T>{
 	private IntConsumer setter;
 	
 	private JSpinner spinner;
 
-	public IntSetter(final SettingsEdit parent, final String caption,
+	public IntSetter(final T parent, final String caption,
 			final IntSupplier getter, final IntConsumer setter) {
 		super(parent);
 		this.setter = setter;
@@ -27,7 +28,7 @@ public class IntSetter extends UIElement<SettingsEdit>{
 		
 		panel.add(new JLabel(caption), BorderLayout.WEST);
 		
-		SpinnerModel handleModel = new SpinnerNumberModel(getter.getAsInt(), 0, 1000, 1);
+		SpinnerModel handleModel = new SpinnerNumberModel(1, 0, 1000, 1);
 		spinner = new JSpinner(handleModel);
 		panel.add(spinner, BorderLayout.EAST);
 	}

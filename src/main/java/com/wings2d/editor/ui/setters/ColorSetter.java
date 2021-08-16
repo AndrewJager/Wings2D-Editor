@@ -1,4 +1,4 @@
-package com.wings2d.editor.ui.settings;
+package com.wings2d.editor.ui.setters;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.wings2d.editor.ui.UIElement;
+import com.wings2d.editor.ui.settings.SettingsEdit;
 
 public class ColorSetter extends UIElement<SettingsEdit>{
 	private Supplier<Color> getter;

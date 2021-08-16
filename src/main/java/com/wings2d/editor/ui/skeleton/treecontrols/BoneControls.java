@@ -1,16 +1,13 @@
 package com.wings2d.editor.ui.skeleton.treecontrols;
 
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
 
-import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -24,40 +21,59 @@ import com.wings2d.editor.ui.edits.AddToTree;
 import com.wings2d.editor.ui.edits.SetBoneLocation;
 import com.wings2d.editor.ui.edits.SetBoneRotation;
 import com.wings2d.editor.ui.edits.SetParentBone;
+import com.wings2d.editor.ui.setters.DoubleEditSetter;
+import com.wings2d.editor.ui.skeleton.SkeletonEdit;
 
 public class BoneControls extends SkeletonTreeControlsUIElement{
 	public static final String CARD_ID = "Bone";
 	private SkeletonBone bone;
 	
-	private JPanel namePanel, parentBone, xPosPanel, yPosPanel, rotPanel, spritesPanel;
+	private JPanel namePanel, parentBone, spritesPanel;
 	private JComboBox<SkeletonBone> otherBones;
-	private JFormattedTextField xPos, yPos, rotation;
+	private DoubleEditSetter<SkeletonEdit> xPos, yPos, rot;
 	private JButton addSprite;
 
 	public BoneControls(final SkeletonTreeControls controls) {
 		super(controls);
-		namePanel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		namePanel = new JPanel(); 
 		
 		parentBone = new JPanel();
 		parentBone.add(new JLabel("Parent Bone: "));
 		otherBones = new JComboBox<SkeletonBone>();
 		parentBone.add(otherBones);
 		
-		xPosPanel = new JPanel();
-		xPosPanel.add(new JLabel("X:"));
-		xPos = new JFormattedTextField(new DecimalFormat());
-		xPosPanel.add(xPos);
-		xPosPanel.add(new JSeparator());
 		
-		yPosPanel = new JPanel();
-		yPosPanel.add(new JLabel("Y:"));
-		yPos = new JFormattedTextField(new DecimalFormat());
-		yPosPanel.add(yPos);
-		
-		rotPanel = new JPanel();
-		rotPanel.add(new JLabel("Rotation:"));
-		rotation = new JFormattedTextField(new DecimalFormat());
-		rotPanel.add(rotation);
+		xPos = new DoubleEditSetter<SkeletonEdit>(controls.getEditPanel(),
+				"X:",
+				new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						controls.getEditPanel().getEditor().getEditsManager().edit(new SetBoneLocation(
+								bone, xPos.getAmt(), bone.getY(), true));
+					}
+				});
+		panel.add(xPos.getPanel());
+		yPos = new DoubleEditSetter<SkeletonEdit>(controls.getEditPanel(),
+				"Y:",
+				new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						controls.getEditPanel().getEditor().getEditsManager().edit(new SetBoneLocation(
+								bone, bone.getX(), yPos.getAmt(), true));
+					}
+				});
+		panel.add(xPos.getPanel());
+		rot = new DoubleEditSetter<SkeletonEdit>(controls.getEditPanel(),
+				"Rotation:",
+				new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						controls.getEditPanel().getEditor().getEditsManager().edit(
+								new SetBoneRotation(bone, rot.getAmt()));
+					}
+				});
+		panel.add(xPos.getPanel());
 		
 		spritesPanel = new JPanel();
 		addSprite = new JButton("New Sprite");
@@ -97,16 +113,16 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 		}
 		panel.add(new JSeparator());
 
-		panel.add(xPosPanel);
-		xPos.setValue(bone.getX());
-		panel.add(yPosPanel);
-		yPos.setValue(bone.getY());
-		panel.add(rotPanel);
-		rotation.setValue(Math.round(bone.getRotation()));
+		panel.add(xPos.getPanel());
+		xPos.setAmt(bone.getX());
+		panel.add(yPos.getPanel());
+		yPos.setAmt(bone.getY());
+		panel.add(rot.getPanel());
+		rot.setAmt(Math.round(bone.getRotation()));
 		panel.add(new JSeparator());
 		
 		panel.add(spritesPanel);
-		panel.add(Box.createRigidArea(new Dimension(0,100)));
+//		panel.add(Box.createRigidArea(new Dimension(0,100)));
 		
 		setSelectedBone(bone);		
 	}
@@ -142,27 +158,6 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 				}
 			}
 		});	
-		xPos.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				controls.getEditPanel().getEditor().getEditsManager().edit(new SetBoneLocation(
-						bone, Double.parseDouble(xPos.getText()), bone.getY(), true));
-			}
-		});
-		yPos.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				controls.getEditPanel().getEditor().getEditsManager().edit(new SetBoneLocation(
-						bone, bone.getX(), Double.parseDouble(yPos.getText()), true));
-			}
-		});
-		rotation.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				controls.getEditPanel().getEditor().getEditsManager().edit(
-						new SetBoneRotation(bone, Double.parseDouble(rotation.getText())));
-			}
-		});
 	}
 
 	@Override 
@@ -171,9 +166,9 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 		SkeletonBone bone = (SkeletonBone)node;
 		if (bone != null)
 		{
-			xPos.setValue(bone.getX());
-			yPos.setValue(bone.getY());
-			rotation.setValue(Math.round(bone.getRotation()));
+			xPos.setAmt(bone.getX());
+			yPos.setAmt(bone.getY());
+			rot.setAmt(Math.round(bone.getRotation()));
 		}
 	}
 }

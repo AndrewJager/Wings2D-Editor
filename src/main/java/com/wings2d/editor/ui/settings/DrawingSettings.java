@@ -4,6 +4,8 @@ import javax.swing.BoxLayout;
 
 import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.ui.UIElement;
+import com.wings2d.editor.ui.setters.ColorSetter;
+import com.wings2d.editor.ui.setters.IntSetter;
 
 public class DrawingSettings extends UIElement<SettingsEdit>{
 
@@ -11,15 +13,16 @@ public class DrawingSettings extends UIElement<SettingsEdit>{
 		super(edit);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
-		IntSetter handleSize = new IntSetter(edit, "Handle Size:",
+		IntSetter<SettingsEdit> handleSize = new IntSetter<SettingsEdit>(edit, "Handle Size:",
 				settings::getHandleSize, settings::setHandleSize);
 		panel.add(handleSize.getPanel());
 		
-		IntSetter posHandleOffset = new IntSetter(edit, "Position Edit Handle Offset:          ", // Temp hack to get space between label and control
+		IntSetter<SettingsEdit> posHandleOffset = new IntSetter<SettingsEdit>(edit, 
+				"Position Edit Handle Offset:          ", // Temp hack to get space between label and control
 				settings::getPosHandleOffset, settings::setPosHandleOffset);
 		panel.add(posHandleOffset.getPanel());
 		
-		IntSetter rotHandleOffset = new IntSetter(edit, "Rotation Edit Handle Offset:",
+		IntSetter<SettingsEdit> rotHandleOffset = new IntSetter<SettingsEdit>(edit, "Rotation Edit Handle Offset:",
 				settings::getRotHandleOffset, settings::setRotHandleOffset);
 		panel.add(rotHandleOffset.getPanel());
 		

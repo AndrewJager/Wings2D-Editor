@@ -25,7 +25,7 @@ public class EditorSettings {
 	private WritableColor selectedHandleColor;
 	private WritableColor unselectedHandleColor;
 	
-	private static final String FILE_NAME = "PROJECTSETTINGS.txt";
+	private static final String FILE_NAME = "EDITORSETTINGS.txt";
 	private static final String SPLIT = ">"; // Don't use ":" due to it being in the path
 	
 	public EditorSettings()

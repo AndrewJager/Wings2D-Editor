@@ -1,5 +1,6 @@
 package com.wings2d.editor.ui.skeleton.treecontrols;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,6 +39,9 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 		super(controls);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		namePanel = new JPanel(); 
+		namePanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, (int)new JLabel().getPreferredSize().getHeight()));
+		
+		controlsPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, (int)rename.getPreferredSize().getHeight()));
 		
 		parentBone = new ComboEditSetter<SkeletonEdit, SkeletonBone>(controls.getEditPanel(), "Parent Bone:", 
 				new ActionListener() {
@@ -83,6 +87,7 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 		spritesPanel = new JPanel();
 		addSprite = new JButton("New Sprite");
 		spritesPanel.add(addSprite);
+		spritesPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, (int)addSprite.getPreferredSize().getHeight()));
 	}
 
 	@Override

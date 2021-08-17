@@ -1,6 +1,7 @@
 package com.wings2d.editor.ui.setters;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 
@@ -26,6 +27,8 @@ public class DoubleEditSetter<T extends UIPanel<T>> extends UIElement<T> {
 		
 		textField = new JFormattedTextField(new DecimalFormat());
 		panel.add(textField, BorderLayout.EAST);
+		
+		panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, (int)textField.getPreferredSize().getHeight()));
 	}
 	
 	public Double getAmt() {

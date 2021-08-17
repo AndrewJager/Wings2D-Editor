@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -21,6 +20,7 @@ import com.wings2d.editor.ui.edits.AddToTree;
 import com.wings2d.editor.ui.edits.SetBoneLocation;
 import com.wings2d.editor.ui.edits.SetBoneRotation;
 import com.wings2d.editor.ui.edits.SetParentBone;
+import com.wings2d.editor.ui.setters.ComboEditSetter;
 import com.wings2d.editor.ui.setters.DoubleEditSetter;
 import com.wings2d.editor.ui.skeleton.SkeletonEdit;
 
@@ -28,8 +28,9 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 	public static final String CARD_ID = "Bone";
 	private SkeletonBone bone;
 	
-	private JPanel namePanel, parentBone, spritesPanel;
-	private JComboBox<SkeletonBone> otherBones;
+	private JPanel namePanel, spritesPanel;
+	
+	private ComboEditSetter<SkeletonEdit, SkeletonBone> parentBone;
 	private DoubleEditSetter<SkeletonEdit> xPos, yPos, rot;
 	private JButton addSprite;
 
@@ -38,12 +39,16 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		namePanel = new JPanel(); 
 		
-		parentBone = new JPanel();
-		parentBone.add(new JLabel("Parent Bone: "));
-		otherBones = new JComboBox<SkeletonBone>();
-		parentBone.add(otherBones);
-		
-		
+		parentBone = new ComboEditSetter<SkeletonEdit, SkeletonBone>(controls.getEditPanel(), "Parent Bone:", 
+				new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (bone.getParentBone() != parentBone.getValue()) {
+						controls.getEditPanel().getEditor().getEditsManager().edit(new SetParentBone(bone, parentBone.getValue()));
+					}
+				}
+			});
+		panel.add(parentBone.getPanel());
 		xPos = new DoubleEditSetter<SkeletonEdit>(controls.getEditPanel(),
 				"X:",
 				new ActionListener() {
@@ -98,18 +103,18 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 		rename.setText("Rename Bone");
 		panel.add(controlsPanel);
 
-		panel.add(parentBone);
+		panel.add(parentBone.getPanel());
 		DefaultComboBoxModel<SkeletonBone> model = new DefaultComboBoxModel<SkeletonBone>(bone.getFrame().getArrayOfBonesExcept(bone));
-		otherBones.setModel(model);
-		otherBones.setSelectedItem(bone.getParentBone());
+		parentBone.setModel(model);
+		parentBone.setValue(bone.getParentBone());
 		if(bone.getParentSyncedBone() != null)
 		{
 			rename.setEnabled(false);
-			otherBones.setEnabled(false);
+			parentBone.getPanel().setEnabled(false);
 		}
 		else {
 			rename.setEnabled(true);
-			otherBones.setEnabled(true);
+			parentBone.getPanel().setEnabled(true);
 		}
 		panel.add(new JSeparator());
 
@@ -129,14 +134,6 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 
 	@Override
 	protected void createOtherEvents() {
-		otherBones.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (bone.getParentBone() != (SkeletonBone)otherBones.getSelectedItem()) {
-					controls.getEditPanel().getEditor().getEditsManager().edit(new SetParentBone(bone, (SkeletonBone)otherBones.getSelectedItem()));
-				}
-			}
-		});
 		addSprite.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SkeletonNode selectedNode = (SkeletonNode)controls.getTree().getLastSelectedPathComponent();

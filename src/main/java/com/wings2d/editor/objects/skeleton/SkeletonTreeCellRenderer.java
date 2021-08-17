@@ -19,7 +19,7 @@ public class SkeletonTreeCellRenderer extends DefaultTreeCellRenderer{
 	public SkeletonTreeCellRenderer()
 	{
 		super();
-		CharImageOptions options = new CharImageOptions(100, new double[] {1.0, 1.25, 1.50, 1.75, 2.0}, 3);
+		CharImageOptions options = new CharImageOptions(20, new double[] {1.0, 1.25, 1.50, 1.75, 2.0}, 3);
 		options.rotation = 15;
 		options.filters.add(new LightenFrom(ShadeDir.TOP, 5));
 		

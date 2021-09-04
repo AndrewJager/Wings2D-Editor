@@ -16,6 +16,7 @@ import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.wings2d.editor.objects.EditOptions;
 import com.wings2d.editor.objects.EditorSettings;
+import com.wings2d.editor.objects.save.DBAccess;
 import com.wings2d.editor.objects.skeleton.Skeleton;
 import com.wings2d.editor.ui.edits.EditsManager;
 import com.wings2d.editor.ui.project.ProjectEdit;
@@ -50,6 +51,8 @@ public class Editor {
 	private EditsManager undo;
 
 	public void run() {
+		new DBAccess();
+		
 		manager = new LevelManager();
 		demoLevel = new Level(manager, 0);
 		options = new EditOptions(this);

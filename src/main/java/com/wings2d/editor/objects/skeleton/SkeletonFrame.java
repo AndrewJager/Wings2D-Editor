@@ -392,6 +392,29 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		}
 	}
 	
+	/**
+	 * @return The previous frame in the animation. Loops to the end if this frame is the first.
+	 */
+	public SkeletonFrame getPreviousFrame() {
+		int idx = this.getAnimation().getFrames().indexOf(this);
+		if (idx > 0) {
+			return this.getAnimation().getFrames().get(idx - 1);
+		}
+		else {
+			return this.getAnimation().getFrames().get(this.getAnimation().getFrames().size() - 1);
+		}
+	}
+	
+	public SkeletonFrame getNextFrame() {
+		int idx = this.getAnimation().getFrames().indexOf(this);
+		if (idx < (this.getAnimation().getFrames().size() - 1)) {
+			return this.getAnimation().getFrames().get(idx + 1);
+		}
+		else {
+			return this.getAnimation().getFrames().get(0);
+		}
+	}
+	
 	// MutableTreeNode methods
 	@Override
 	public void insert(final MutableTreeNode child, final int index) {

@@ -414,6 +414,22 @@ public class Sprite extends SkeletonNode implements Drawable{
 	{
 		return filters;
 	}
+	public void addFilter(final ImageFilter filter) {
+		filters.add(filter);
+		for (int i = 0; i < this.parent.getSyncedBones().size(); i++)
+		{
+			SkeletonBone bone = this.parent.getSyncedBones().get(i);
+			bone.getSpriteBySyncID(this.getSyncID()).addFilter(filter);
+		}
+	}
+	public void removeFilter(final ImageFilter filter) {
+		filters.remove(filter);
+		for (int i = 0; i < this.parent.getSyncedBones().size(); i++)
+		{
+			SkeletonBone bone = this.parent.getSyncedBones().get(i);
+			bone.getSpriteBySyncID(this.getSyncID()).removeFilter(filter);
+		}
+	}
 	public List<SpritePoint> getPoints() {
 		return points;
 	}
@@ -459,12 +475,12 @@ public class Sprite extends SkeletonNode implements Drawable{
 	public void insert(final MutableTreeNode child, final int index) {
 		SpritePoint point = (SpritePoint)child;
 		points.add(point);
-//		for (int i = 0; i < this.parent.getSyncedBones().size(); i++)
-//		{
-//			SkeletonBone bone = this.parent.getSyncedBones().get(i);
-//			bone.getSpriteBySyncID(this.getSyncID()).getPoints().add(new SpritePoint(point.getX(), point.getY(),
-//					bone.getSpriteBySyncID(this.getSyncID())));
-//		}
+		for (int i = 0; i < this.parent.getSyncedBones().size(); i++)
+		{
+			SkeletonBone bone = this.parent.getSyncedBones().get(i);
+			bone.getSpriteBySyncID(this.getSyncID()).getPoints().add(new SpritePoint(point.getX(), point.getY(),
+					bone.getSpriteBySyncID(this.getSyncID())));
+		}
 	}
 	@Override
 	public void remove(final int index) {

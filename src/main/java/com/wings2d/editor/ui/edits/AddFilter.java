@@ -15,12 +15,12 @@ public class AddFilter extends Edit{
 
 	@Override
 	public void edit() throws ActionNotDoneException {
-		sprite.getFilters().add(filter);
+		sprite.addFilter(filter);
 	}
 
 	@Override
 	public void undo() throws ActionNotDoneException {
-		sprite.getFilters().remove(filter);
+		sprite.removeFilter(filter);
 	}
 
 	@Override

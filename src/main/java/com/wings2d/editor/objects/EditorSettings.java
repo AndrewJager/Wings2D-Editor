@@ -5,7 +5,6 @@ import java.io.File;
 import java.sql.Connection;
 import com.wings2d.editor.objects.project.Project;
 import com.wings2d.editor.objects.save.DBColor;
-import com.wings2d.editor.objects.save.DBFile;
 import com.wings2d.editor.objects.save.DBInt;
 import com.wings2d.editor.objects.save.DBString;
 public class EditorSettings {
@@ -18,7 +17,6 @@ public class EditorSettings {
 	private DBInt rotHandleOffset;
 	private DBColor selectedHandleColor;
 	private DBColor unselectedHandleColor;
-	private DBFile projectDir;
 	
 	
 	public EditorSettings(final Connection con)
@@ -31,17 +29,8 @@ public class EditorSettings {
 		unselectedHandleColor = new DBColor(con, "EDITORSETTINGS", "UnselectedHandleColor");
 		projectID = new DBString(con, "EDITORSETTINGS", "SelectedProject");
 //		selectedProj = new Project(projectLink.getValue(), con);
-		projectDir = new DBFile(con, "EDITORSETTINGS", "ProjectDir");
 	}
 	
-	public File getProjectDirectory()
-	{
-		return projectDir.getValue();
-	}
-	public void setProjectDirectory(final File dir)
-	{
-		projectDir.setValue(dir);
-	}
 	public int getHandleSize() {
 		return handleSize.getValue();
 	}

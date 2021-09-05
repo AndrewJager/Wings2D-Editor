@@ -1,70 +1,78 @@
 package com.wings2d.editor.objects.skeleton;
 
-import java.io.File;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Scanner;
 import java.util.UUID;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.EditorSettings;
-import com.wings2d.editor.objects.project.Project;
 import com.wings2d.editor.objects.project.ProjectEntity;
+import com.wings2d.editor.objects.save.DBString;
 
 public class Skeleton extends SkeletonNode implements ProjectEntity {
 	public static final String FILE_MARKER = "SKELETON";
 	
 	private List<SkeletonNode> animations;
 	private SkeletonMasterFrame masterFrame;
-	private Project project;
 	private EditorSettings settings;
 	
-	public Skeleton(final String skeletonName, final Project p, final EditorSettings settings)
+	/** Insert constructor */
+	public Skeleton(final String skeletonName, final String projID, final EditorSettings settings, final Connection con)
 	{
+		setup(settings);
+		String id = UUID.randomUUID().toString();
+		String query = "INSERT INTO SKELETON (ID, Name, Project)"
+				+ " VALUES(" + "'" + id + "'" + "," + "'" + skeletonName + "'" + "," + "'" + projID + "'" + ")";
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+			stmt.executeUpdate(query);
+			stmt.close();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		query = " SELECT * FROM SKELETON WHERE ID = " + "'" + id + "'";
+		try {
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			initData(con,rs.getString("ID"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/** Read constructor */
+	public Skeleton(final String skelID, final EditorSettings settings, final Connection con) {
+		setup(settings);
+		String query = " SELECT * FROM SKELETON WHERE ID = " + "'" + skelID + "'";
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			initData(con,rs.getString("ID"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	private void setup(final EditorSettings settings) {
 		animations = new ArrayList<SkeletonNode>();
 		masterFrame = new SkeletonMasterFrame("Master", settings);
 		animations.add(masterFrame);
-		this.name = skeletonName;
-		this.project = p; 
 		this.settings = settings;
 	}
-	
-	/**
-	 * Creates a new skeleton from the file. The file should have been checked first to ensure that it is valid.
-	 * @param file File to create from
-	 */
-	public Skeleton(final Scanner in, final Project p, final EditorSettings settings)
-	{
-		this.project = p;
-		this.settings = settings;
-		animations = new ArrayList<SkeletonNode>();
-		
-		while(in.hasNext())
-		{
-			String[] tokens = in.next().split(":");
-			if (tokens[0].equals(NAME_TOKEN))
-			{
-				name = tokens[1];
-			}
-			else if (tokens[0].equals(SkeletonMasterFrame.FILE_MARKER))
-			{
-				masterFrame = new SkeletonMasterFrame(in, settings);
-				animations.add(0, masterFrame);
-			}
-			else if (tokens[0].equals(SkeletonAnimation.ANIM_TOKEN))
-			{
-				animations.add(new SkeletonAnimation(in, this));
-			}
-		}
-		
-		resyncAll();
+	private void initData(final Connection con, final String thisID) throws SQLException {
+		id = new DBString(con, "SKELETON", "ID", thisID);
+		name = new DBString (con, "SKELETON", "Name", thisID);
 	}
-
 	
 	public SkeletonFrame getMasterFrame() {
 		return masterFrame;
@@ -72,7 +80,7 @@ public class Skeleton extends SkeletonNode implements ProjectEntity {
 
 	public String toString()
 	{
-		return name;
+		return name.getValue();
 	}
 	
 	public boolean containsAnimWithName(final String animName)
@@ -240,13 +248,13 @@ public class Skeleton extends SkeletonNode implements ProjectEntity {
 	@Override
 	public void saveToFile()
 	{	
-		try {
-			File saveFile = new File(project.getDirectory() + "/" + name + ".txt");
-			PrintWriter writer = new PrintWriter(saveFile);
-			saveToFile(writer);
-			writer.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			File saveFile = new File(project.getDirectory() + "/" + name + ".txt");
+//			PrintWriter writer = new PrintWriter(saveFile);
+//			saveToFile(writer);
+//			writer.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 }

@@ -21,9 +21,15 @@ public class ProjectEdit extends UIPanel<ProjectEdit>{
 	private CurrentItemEdit currentItemEdit;
 	private ProjectItems projectItems;
 	private JSplitPane horizontal, vertical;
+	
+	private Connection con;
+	private EditorSettings settings;
 
 	public ProjectEdit(final Editor edit, final Connection con, final EditorSettings settings) {
 		super(edit);
+		this.con = con;
+		this.settings = settings;
+		
 		panel.setLayout(new FlowLayout());
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		
@@ -50,7 +56,7 @@ public class ProjectEdit extends UIPanel<ProjectEdit>{
 	
 	public void refreshInfo()
 	{
-		projectItems.setListItems(project);
+		projectItems.setListItems(project, settings, con);
 	}
 	public void setSelectedEntity(final ProjectEntity entity)
 	{

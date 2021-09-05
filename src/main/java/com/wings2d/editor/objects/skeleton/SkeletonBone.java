@@ -57,7 +57,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 			throw new IllegalArgumentException("A Bone with this name already exists in the Frame!");
 		}
 		setup(boneParent);
-		name = boneName;
+//		name = boneName;
 		boneID = UUID.randomUUID();
 		location = new Point2D.Double(START_POS.getX(), START_POS.getY());		
 	}
@@ -69,7 +69,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 			throw new IllegalArgumentException("A Bone with this name already exists in the Frame!");
 		}
 		setup(boneParent);
-		name = syncBone.toString();
+//		name = syncBone.toString();
 		boneID = UUID.randomUUID();
 		setParentSyncedBone(syncBone);
 		parentBoneName = syncBone.getParentBoneName();
@@ -81,44 +81,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		}
 	}
 	
-	public SkeletonBone(final Scanner in, final SkeletonFrame boneParent)
-	{
-		setup(boneParent);
-		location = new Point2D.Double();
-		
-		boolean keepReading = true;
-		while(in.hasNext() && keepReading)
-		{
-			String[] tokens = in.next().split(":");
-			switch(tokens[0])
-			{
-			case NAME_TOKEN:
-				name = tokens[1];
-				break;
-			case ID_TOKEN:
-				boneID = UUID.fromString(tokens[1]);
-				break;
-			case PARENT_BONE_TOKEN:
-				parentBoneName = tokens[1];
-				break;
-			case SYNC_BONE_ID_TOKEN:
-				syncBoneID = UUID.fromString(tokens[1]);
-				break;
-			case POSITION_TOKEN:
-				location.setLocation(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
-				break;
-			case Sprite.SPRITE_TOKEN:
-				sprites.add(new Sprite(in, this));
-				break;
-			case ROTATION_TOKEN:
-				rotation = Double.parseDouble(tokens[1]);
-				break;
-			case END_TOKEN:
-				keepReading = false;
-				break;
-			}
-		}
-	}
+	
 	
 	private void setup(final SkeletonFrame boneParent)
 	{
@@ -133,7 +96,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	
 	public String toString()
 	{
-		return name;
+		return name.getValue();
 	}
 	public SkeletonFrame getFrame()
 	{
@@ -147,7 +110,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		if (syncedBone != null)
 		{
 			this.parentSyncedBone = syncedBone;
-			this.syncBoneID = syncedBone.getID();
+//			this.syncBoneID = syncedBone.getID();
 			this.parentSyncedBone.getSyncedBones().add(this);
 		}
 		else
@@ -389,10 +352,10 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 			childBones.get(i).rotateAround(point, amt);
 		}
 	}
-	public UUID getID()
-	{
-		return boneID;
-	}
+//	public UUID getID()
+//	{
+//		return boneID;
+//	}
 	public UUID getSyncBoneID()
 	{
 		return syncBoneID;

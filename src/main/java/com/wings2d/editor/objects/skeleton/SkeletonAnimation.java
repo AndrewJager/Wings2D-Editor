@@ -30,37 +30,14 @@ public class SkeletonAnimation extends SkeletonNode{
 		this.skeleton = animParent;
 		this.settings = animParent.getSettings();
 		frames = new ArrayList<SkeletonFrame>();
-		this.name = animName;
+//		this.name = animName;
 	}
 	
-	public SkeletonAnimation(final Scanner in, final Skeleton animParent)
-	{
-		this.skeleton = animParent;
-		this.settings = animParent.getSettings();
-		frames = new ArrayList<SkeletonFrame>();
-		
-		boolean keepReading = true;
-		while(in.hasNext() && keepReading)
-		{
-			String[] tokens = in.next().split(":");
-			if (tokens[0].equals(NAME_TOKEN))
-			{
-				name = tokens[1];
-			}
-			else if (tokens[0].equals(SkeletonFrame.FRAME_TOKEN))
-			{
-				frames.add(new SkeletonFrame(in, this, settings));
-			}
-			else if (tokens[0].equals(END_TOKEN))
-			{
-				keepReading = false;
-			}
-		}
-	}
+	
 
 	public String toString()
 	{
-		return name;
+		return name.getValue();
 	}
 	public boolean containsFrameWithName(final String frameName)
 	{

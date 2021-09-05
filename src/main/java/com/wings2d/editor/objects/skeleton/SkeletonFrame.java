@@ -41,42 +41,11 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		{
 			throw new IllegalArgumentException("A Frame with this name already exists in this Animation!");
 		}
-		name = frameName;
+//		name = frameName;
 		setup(frameParent, settings);
 		frameID = UUID.randomUUID();
 	}
 	
-	public SkeletonFrame(final Scanner in, final SkeletonAnimation frameParent, final EditorSettings settings)
-	{
-		setup(frameParent, settings);
-		
-		boolean keepReading = true;
-		while(in.hasNext() && keepReading)
-		{
-			String[] tokens = in.next().split(":");
-			if (tokens[0].equals(NAME_TOKEN))
-			{
-				name = tokens[1];
-			}
-			else if (tokens[0].equals(SkeletonBone.BONE_TOKEN))
-			{
-				bones.add(new SkeletonBone(in, this));
-			}
-			else if (tokens[0].equals(ID_TOKEN))
-			{
-				frameID = UUID.fromString(tokens[1]);
-			}
-			else if (tokens[0].equals(SYNC_FRAME_TOKEN))
-			{
-				syncFrameID = UUID.fromString(tokens[1]);
-			}
-			else if(tokens[0].equals(END_TOKEN))
-			{
-				keepReading = false;
-			}
-		}
-	}
-
 	private void setup(final SkeletonAnimation frameParent, final EditorSettings settings)
 	{
 		animation = frameParent;
@@ -87,7 +56,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 
 	public String toString()
 	{
-		return name;
+		return name.getValue();
 	}
 	public boolean containsBoneWithName(final String boneName)
 	{

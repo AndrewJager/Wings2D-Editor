@@ -1,6 +1,5 @@
 package com.wings2d.editor.objects.project;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -11,37 +10,28 @@ import java.util.List;
 import java.util.UUID;
 
 import com.wings2d.editor.objects.EditorSettings;
-import com.wings2d.editor.objects.save.DBFile;
 import com.wings2d.editor.objects.save.DBString;
+import com.wings2d.editor.objects.skeleton.Skeleton;
 
 public class Project {
-	private List<ProjectEntity> entities;
+	private DBString id;
 	private DBString name;
-	private DBFile directory;
 	
-	public Project()
-	{
-		entities = new ArrayList<ProjectEntity>();
-	}
 	public Project(final Connection con, final String id, final EditorSettings settings) {
-		this();
 		try {
 			initData(con, id);
 		} catch (SQLException e) {e.printStackTrace();}
-		
-		createAllInDirectory(directory.getValue(), settings);
 	}
-	public Project(final File directory, final String name, final EditorSettings settings, final Connection con) throws FileNotFoundException
+	public Project(final String name, final EditorSettings settings, final Connection con) throws FileNotFoundException
 	{
-		this(directory, false, name, settings, con);
+		this(false, name, settings, con);
 	}
-	public Project(final File directoryFile, final boolean autoAcceptDir, final String projectName,
+	public Project(final boolean autoAcceptDir, final String projectName,
 			final EditorSettings settings, final Connection con) throws FileNotFoundException
 	{
-		this();
 		String id = UUID.randomUUID().toString();
-		String query = "INSERT INTO PROJECT (ID, Name, Directory)"
-				+ " VALUES(" + "'" + id + "'" + "," + "'" + projectName + "'" + "," + "'" + directoryFile + "'" + ")";
+		String query = "INSERT INTO PROJECT (ID, Name)"
+				+ " VALUES(" + "'" + id + "'" + "," + "'" + projectName + "'" + ")";
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
@@ -59,67 +49,11 @@ public class Project {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		validateDirectory(directory.getValue());
-		
-		boolean loadProject = true;
-//		File projectFile = new File(directory + "/PROJECTINFO.txt");
-//		if (projectFile.exists())
-//		{
-//			Scanner projFile = new Scanner(projectFile);
-//			if (projFile.hasNext())
-//			{
-//				String[] tokens = projFile.next().split(":");
-//				name = tokens[1];
-//			}
-//			projFile.close();
-//		}
-//		else
-//		{
-//			int result;
-//			if (!autoAcceptDir)
-//			{
-//				result = JOptionPane.showConfirmDialog(null, "Folder does not have a PROJECTINFO.txt file. Would you like to create one?");
-//			}
-//			else
-//			{
-//				result = JOptionPane.OK_OPTION;
-//			}
-//			if (result == JOptionPane.OK_OPTION)
-//			{
-//				if (projectName != null)
-//				{
-//					name = projectName;
-//				}
-//				else
-//				{
-//					name = JOptionPane.showInputDialog("Enter the project name:", "Project");
-//				}
-//				File newProjFile = new File(directory + "/PROJECTINFO.txt");
-//				try {
-//					newProjFile.createNewFile();
-//					PrintWriter writer = new PrintWriter(newProjFile);
-//					writer.print("NAME:" + name + "\n"); 
-//					writer.close();
-//				} catch (IOException e) {
-//					throw new FileNotFoundException("Project file creation failed \n" + e.getMessage());
-//				}
-//			}
-//			else
-//			{
-//				loadProject = false;
-//			}
-//		}
-		
-		if (loadProject)
-		{
-			createAllInDirectory(directory.getValue(), settings);
-		}
 	}
 	
-	private void initData(final Connection con, final String id) throws SQLException {
-		directory = new DBFile(con, "PROJECT", "Directory", id);
-		name = new DBString (con, "PROJECT", "Name", id);
+	private void initData(final Connection con, final String thisID) throws SQLException {
+		id = new DBString(con, "PROJECT", "ID", thisID);
+		name = new DBString (con, "PROJECT", "Name", thisID);
 	}
 	
 	public static List<Project> getAll(final Connection con, final EditorSettings settings) {
@@ -140,56 +74,29 @@ public class Project {
 		return projects;
 	}
 	
-	private void createAllInDirectory(final File directory, final EditorSettings settings)
+	public List<Skeleton> getSkeletons(final EditorSettings settings, final Connection con)
 	{
-		for (int i = 0; i < directory.listFiles().length; i++)
-		{
-			if (directory.listFiles()[i].isDirectory())
-			{
-				createAllInDirectory(directory.listFiles()[i], settings);
+		String id = this.getID();
+		List<Skeleton> entities = new ArrayList<Skeleton>();
+		String query = "SELECT * FROM SKELETON WHERE Project = " + "'" + id + "'";
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while (rs.next()) {
+				entities.add(new Skeleton(rs.getString("ID"), settings, con));
 			}
-			else
-			{
-				try {
-					ProjectEntity newEntity = ProjectEntityFactory.createFromFile(directory.listFiles()[i], this, settings);
-					if (newEntity != null)
-					{
-						entities.add(newEntity);
-					}
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				}
-			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-	}
-	
-	private void validateDirectory(File directory) throws FileNotFoundException
-	{
-		if(!directory.isDirectory())
-		{
-			throw new FileNotFoundException(directory.toString() + " is not a directory!");
-		}
-	}
-	
-	public void saveProject()
-	{
-		for (int i = 0; i < entities.size(); i++)
-		{
-			entities.get(i).saveToFile();
-		}
-	}
-	
-	public List<ProjectEntity> getEntities()
-	{
 		return entities;
 	}
 	public String getName()
 	{
 		return name.getValue();
 	}
-	public File getDirectory()
-	{
-		return directory.getValue();
+	public String getID() {
+		return id.getValue();
 	}
 	
 	@Override

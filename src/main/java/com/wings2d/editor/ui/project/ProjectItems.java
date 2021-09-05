@@ -1,6 +1,9 @@
 package com.wings2d.editor.ui.project;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.sql.Connection;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -8,29 +11,32 @@ import javax.swing.JList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.project.Project;
-import com.wings2d.editor.objects.project.ProjectEntity;
+import com.wings2d.editor.objects.skeleton.Skeleton;
 import com.wings2d.editor.ui.UIElement;
 
 public class ProjectItems extends UIElement<ProjectEdit>{
-	private JList<ProjectEntity> list;
+	private JList<Skeleton> list;
 
 	public ProjectItems(final ProjectEdit edit) {
 		super(edit);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
-		DefaultListModel<ProjectEntity> model = new DefaultListModel<ProjectEntity>();
-		list = new JList<ProjectEntity>(model);
+		DefaultListModel<Skeleton> model = new DefaultListModel<Skeleton>();
+		list = new JList<Skeleton>(model);
+		list.setPreferredSize(new Dimension(150, 100));
 		panel.add(list);
 	}
 	
-	public void setListItems(final Project project)
+	public void setListItems(final Project project, final EditorSettings settings, final Connection con)
 	{
-		DefaultListModel<ProjectEntity> model = (DefaultListModel<ProjectEntity>)list.getModel();
+		DefaultListModel<Skeleton> model = (DefaultListModel<Skeleton>)list.getModel();
 		model.clear();
-		for (int i = 0; i < project.getEntities().size(); i++)
+		List<Skeleton> skeletons = project.getSkeletons(settings, con);
+		for (int i = 0; i < skeletons.size(); i++)
 		{
-			model.addElement(project.getEntities().get(i));
+			model.addElement(skeletons.get(i));
 		}
 		
 	}

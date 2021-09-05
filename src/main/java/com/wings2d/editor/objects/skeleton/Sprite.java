@@ -53,7 +53,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	
 	public Sprite(final String spriteName, final SkeletonBone parent)
 	{
-		this.name = spriteName;
+//		this.name = spriteName;
 		this.parent = parent;
 		this.settings = parent.getSettings();
 		syncID = UUID.randomUUID();
@@ -68,53 +68,53 @@ public class Sprite extends SkeletonNode implements Drawable{
 		path.closePath();
 	}
 	
-	public Sprite(final Scanner in, final SkeletonBone parent)
-	{
-		this.parent = parent;
-		this.settings = parent.getSettings();
-		path = new Path2D.Double();
-		filters = new ArrayList<ImageFilter>();
-		points = new ArrayList<SpritePoint>();
-		boolean keepReading = true;
-		boolean firstPoint = true;
-		while(in.hasNext() && keepReading)
-		{
-			String[] tokens = in.next().split(":");
-			switch(tokens[0])
-			{
-			case NAME_TOKEN:
-				name = tokens[1];
-				break;
-			case COLOR_TOKEN:
-				color = new Color(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]), Integer.parseInt(tokens[3]));
-				break;
-			case VERTEX_TOKEN:
-				if (firstPoint)
-				{
-					moveTo(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
-					firstPoint = false;
-				}
-				else
-				{
-					lineTo(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
-				}
-				break;
-			case SYNC_ID_TOKEN:
-				syncID = UUID.fromString(tokens[1]);
-				break;
-			case FILTER_TOKEN:
-				filters.add(FilterFactory.fromFileString(tokens[1]));
-				break;
-			case END_TOKEN:
-				path.closePath();
-				keepReading = false;
-				break;
-			}
-		}
-	}
+//	public Sprite(final Scanner in, final SkeletonBone parent)
+//	{
+//		this.parent = parent;
+//		this.settings = parent.getSettings();
+//		path = new Path2D.Double();
+//		filters = new ArrayList<ImageFilter>();
+//		points = new ArrayList<SpritePoint>();
+//		boolean keepReading = true;
+//		boolean firstPoint = true;
+//		while(in.hasNext() && keepReading)
+//		{
+//			String[] tokens = in.next().split(":");
+//			switch(tokens[0])
+//			{
+//			case NAME_TOKEN:
+//				name = tokens[1];
+//				break;
+//			case COLOR_TOKEN:
+//				color = new Color(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]), Integer.parseInt(tokens[3]));
+//				break;
+//			case VERTEX_TOKEN:
+//				if (firstPoint)
+//				{
+//					moveTo(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
+//					firstPoint = false;
+//				}
+//				else
+//				{
+//					lineTo(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
+//				}
+//				break;
+//			case SYNC_ID_TOKEN:
+//				syncID = UUID.fromString(tokens[1]);
+//				break;
+//			case FILTER_TOKEN:
+//				filters.add(FilterFactory.fromFileString(tokens[1]));
+//				break;
+//			case END_TOKEN:
+//				path.closePath();
+//				keepReading = false;
+//				break;
+//			}
+//		}
+//	}
 	public Sprite copy(final SkeletonBone parent)
 	{
-		Sprite newSprite = new Sprite(new String(this.name), parent);
+		Sprite newSprite = new Sprite(new String(this.name.getValue()), parent);
 		newSprite.color = new Color(this.color.getRGB());
 		newSprite.path = new Path2D.Double(this.path);
 		newSprite.points = new ArrayList<SpritePoint>();
@@ -127,7 +127,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	
 	public String toString()
 	{
-		return name;
+		return name.getValue();
 	}
 	public Path2D getPath()
 	{

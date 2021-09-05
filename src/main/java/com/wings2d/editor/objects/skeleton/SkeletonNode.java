@@ -5,16 +5,21 @@ import java.util.List;
 
 import javax.swing.tree.MutableTreeNode;
 
+import com.wings2d.editor.objects.save.DBString;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
 
 public abstract class SkeletonNode implements MutableTreeNode{
-	protected String name;
+	protected DBString name;
+	protected DBString id;
 	
 	public void setName(final String newName) {
-		this.name = newName;
+		this.name.setValue(newName);
 	}
 	public String getName() {
-		return name;
+		return name.getValue();
+	}
+	public String getID() {
+		return id.getValue();
 	}
 	public abstract void saveToFile(final PrintWriter out);
 	public abstract void resyncAll();

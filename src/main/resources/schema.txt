@@ -1,0 +1,22 @@
+CREATE TABLE EDITORSETTINGS (
+	ID TEXT PRIMARY KEY NOT NULL,
+	HandleSize INT NOT NULL,
+	PosHandleOffset INT NOT NULL,
+	RotHandleOffset INT NOT NULL,
+	SelectedHandleColor TEXT NOT NULL,
+	UnselectedHandleColor TEXT NOT NULL,
+	SelectedProject TEXT,
+	FOREIGN KEY(SelectedProject) REFERENCES PROJECT(ID)
+)
+^
+
+CREATE TABLE PROJECT (
+	ID TEXT PRIMARY KEY NOT NULL
+)
+^
+
+--Editor defaults
+INSERT INTO EDITORSETTINGS (ID, HandleSize, PosHandleOffset, RotHandleOffset, SelectedHandleColor,
+	UnselectedHandleColor)
+VALUES(0, 10, 20, 20, "255,0,0,255", "0,255,0,255")
+^

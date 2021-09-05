@@ -26,4 +26,5 @@ test/*
 /target/
 .settings/org.eclipse.jdt.core.prefs
 .settings/org.eclipse.m2e.core.prefs
-src/main/resources
+src/main/resources/projects.db
+src/main/resources/EDITORSETTINGS.txt

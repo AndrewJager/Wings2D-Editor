@@ -1,6 +1,9 @@
 package com.wings2d.editor.objects.save;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -102,7 +105,6 @@ public class DBAccess {
             ResultSet rs = stmt.executeQuery(query);
             
 	        while (rs.next()) {
-	        	System.out.println(rs.getInt("id"));
 	        	ids.add(rs.getInt("id"));
 	        }
         } catch (SQLException e) {
@@ -118,14 +120,15 @@ public class DBAccess {
 	
 	private DBEdits getEdits() {
 		DBEdits edits = new DBEdits();
-		edits.add(new DBEdit(
-				"CREATE TABLE EDITORSETTINGS"
-				+ " (ID INT PRIMARY KEY NOT NULL)"
-				));
-		edits.add(new DBEdit(
-				"ALTER TABLE EDITORSETTINGS"
-				+ " ADD COLUMN HandleSize INT"
-				));
+		try {
+			String allEdits = Files.readString(Paths.get(System.getProperty("user.dir") + "/src/main/resources/schema.txt"));
+			String[] sqls = allEdits.split("\\^");
+			for (int i = 0; i < sqls.length; i++) {
+				edits.add(new DBEdit(sqls[i]));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		return edits;
 	}

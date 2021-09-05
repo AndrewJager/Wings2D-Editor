@@ -17,23 +17,23 @@ class ProjectEntityFactoryTest {
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		settings = new EditorSettings();
+//		settings = new EditorSettings();
 	}
 
-	@Test
-	void testIsSkeletonFile() {
-		try {
-			ProjectEntity entity = ProjectEntityFactory.createFromFile(new File(directory + "/testSkeleton.txt"), 
-					new Project(directory, true, "TestProject", settings), settings);
-			assertTrue(entity instanceof Skeleton);
-		} catch (FileNotFoundException e) {e.printStackTrace();}
-	}
-	@Test
-	void testReadSkeletonName() {
-		try {
-			ProjectEntity entity = ProjectEntityFactory.createFromFile(new File(directory + "/testSkeleton.txt"),
-					new Project(directory, true, "TestProject", settings), settings);
-			assertEquals("testSkeleton", entity.toString());
-		} catch (FileNotFoundException e) {e.printStackTrace();}
-	}
+//	@Test
+//	void testIsSkeletonFile() {
+//		try {
+//			ProjectEntity entity = ProjectEntityFactory.createFromFile(new File(directory + "/testSkeleton.txt"), 
+//					new Project(directory, true, "TestProject", settings), settings);
+//			assertTrue(entity instanceof Skeleton);
+//		} catch (FileNotFoundException e) {e.printStackTrace();}
+//	}
+//	@Test
+//	void testReadSkeletonName() {
+//		try {
+//			ProjectEntity entity = ProjectEntityFactory.createFromFile(new File(directory + "/testSkeleton.txt"),
+//					new Project(directory, true, "TestProject", settings), settings);
+//			assertEquals("testSkeleton", entity.toString());
+//		} catch (FileNotFoundException e) {e.printStackTrace();}
+//	}
 }

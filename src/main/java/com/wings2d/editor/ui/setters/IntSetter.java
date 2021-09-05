@@ -28,7 +28,7 @@ public class IntSetter<T extends UIPanel<T>> extends UIElement<T>{
 		
 		panel.add(new JLabel(caption), BorderLayout.WEST);
 		
-		SpinnerModel handleModel = new SpinnerNumberModel(1, 0, 1000, 1);
+		SpinnerModel handleModel = new SpinnerNumberModel(getter.getAsInt(), 0, 1000, 1);
 		spinner = new JSpinner(handleModel);
 		panel.add(spinner, BorderLayout.EAST);
 	}

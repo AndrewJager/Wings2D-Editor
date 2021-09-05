@@ -2,72 +2,36 @@ package com.wings2d.editor.objects;
 
 import java.awt.Color;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Scanner;
-
-import com.wings2d.editor.objects.save.SaveData;
-import com.wings2d.editor.objects.save.WritableColor;
-import com.wings2d.editor.objects.save.WritableFile;
-import com.wings2d.editor.objects.save.WritableInt;
-
+import java.sql.Connection;
+import com.wings2d.editor.objects.project.Project;
+import com.wings2d.editor.objects.save.DBColor;
+import com.wings2d.editor.objects.save.DBFile;
+import com.wings2d.editor.objects.save.DBInt;
+import com.wings2d.editor.objects.save.DBString;
 public class EditorSettings {
-	private File editorDir;
 	
-	private WritableFile projectDir;
+	private DBString projectLink;
+	private Project selectedProj;
 	
-	private SaveData data;
+	private DBInt handleSize;
+	private DBInt posHandleOffset;
+	private DBInt rotHandleOffset;
+	private DBColor selectedHandleColor;
+	private DBColor unselectedHandleColor;
+	private DBFile projectDir;
 	
-	private WritableInt handleSize;
-	private WritableInt posHandleOffset;
-	private WritableInt rotHandleOffset;
-	private WritableColor selectedHandleColor;
-	private WritableColor unselectedHandleColor;
 	
-	private static final String FILE_NAME = "EDITORSETTINGS.txt";
-	private static final String SPLIT = ">"; // Don't use ":" due to it being in the path
-	
-	public EditorSettings()
+	public EditorSettings(final Connection con)
 	{
-		data = new SaveData(SPLIT);
 		
-		// Defaults
-		handleSize = data.add(new WritableInt(10, "HANDLE_SIZE"));
-		posHandleOffset = data.add(new WritableInt(20, "POS_HANDLE_OFFSET"));
-		rotHandleOffset = data.add(new WritableInt(20, "ROT_HANDLE_OFFSET"));
-		projectDir = data.add(new WritableFile(null, "DIR"));
-
-		selectedHandleColor = data.add(new WritableColor(Color.RED, "SELECTED_HANDLE_COLOR"));
-		unselectedHandleColor = data.add(new WritableColor(Color.GREEN, "UNSELECTED_HANDLE_COLOR"));
-		editorDir = new File(System.getProperty("user.dir") + "/src/main/resources");
-		File editorFile = new File(editorDir + "/" + FILE_NAME);
-		if (!editorFile.exists())
-		{
-			try {
-				editorFile.createNewFile();
-			} catch (IOException e) {e.printStackTrace();}
-		}
-		createFromFile(editorFile);
-	}
-
-	private void createFromFile(final File file)
-	{
-		try {
-			Scanner in = new Scanner(file);
-			data.parseFile(in);
-			in.close();
-		} catch (FileNotFoundException e) {e.printStackTrace();}
-		
-	}
-	
-	public void saveToFile()
-	{
-		try {
-			PrintWriter out = new PrintWriter(editorDir + "/" + FILE_NAME);
-			data.saveData(out);
-			out.close();
-		} catch (FileNotFoundException e) {e.printStackTrace();}
+		handleSize = new DBInt(con, "EDITORSETTINGS", "HandleSize");
+		posHandleOffset = new DBInt(con, "EDITORSETTINGS", "PosHandleOffset");
+		rotHandleOffset = new DBInt(con, "EDITORSETTINGS", "RotHandleOffset");
+		selectedHandleColor = new DBColor(con, "EDITORSETTINGS", "SelectedHandleColor");
+		unselectedHandleColor = new DBColor(con, "EDITORSETTINGS", "UnselectedHandleColor");
+//		projectLink = new DBString(con, "PROJECTSETTINGS", "SelectedProject");
+//		selectedProj = new Project(projectLink.getValue(), con);
+		projectDir = new DBFile(con, "EDITORSETTINGS", "ProjectDir");
 	}
 	
 	public File getProjectDirectory()

@@ -40,19 +40,19 @@ public class ProjectSelect extends UIElement<ProjectEdit>{
 	
 	public void setProject(final File projectPath)
 	{
-		try
-		{
-			Project proj = new Project(projectPath, getEditPanel().getEditor().getSettings());
-			getEditPanel().getEditor().getSettings().setProjectDirectory(projectPath);
-			getEditPanel().setProject(proj);
-			getEditPanel().refreshInfo();
-			projectName.setText("Name: " + getEditPanel().getProject().getName());
-			newAnim.setEnabled(true);
-		}
-		catch (FileNotFoundException ex)
-		{
-			JOptionPane.showMessageDialog(panel, ex.getMessage());
-		}
+//		try
+//		{
+//			Project proj = new Project(projectPath, getEditPanel().getEditor().getSettings());
+//			getEditPanel().getEditor().getSettings().setProjectDirectory(projectPath);
+//			getEditPanel().setProject(proj);
+//			getEditPanel().refreshInfo();
+//			projectName.setText("Name: " + getEditPanel().getProject().getName());
+//			newAnim.setEnabled(true);
+//		}
+//		catch (FileNotFoundException ex)
+//		{
+//			JOptionPane.showMessageDialog(panel, ex.getMessage());
+//		}
 	}
 
 	public void createEvents() {

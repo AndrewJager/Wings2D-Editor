@@ -59,28 +59,25 @@ public class DBAccess {
 			return edits;
 		}
 	}
+	
+	private Connection connection;
+	
 	public DBAccess() {
 		boolean dbCreated = new File(System.getProperty("user.dir") + "/src/main/resources/projects.db").exists();
 		
-		Connection c = null;
+		connection = null;
 		
 		try {
-			c = DriverManager.getConnection("jdbc:sqlite:src/main/resources/projects.db");
+			connection = DriverManager.getConnection("jdbc:sqlite:src/main/resources/projects.db");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
 		if (!dbCreated) {
-			createDatabase(c);
+			createDatabase(connection);
 		}
 		
-		runEdits(c);
-		
-		try {
-			c.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		runEdits(connection);
 	}
 	
 	private void createDatabase(final Connection c) {
@@ -131,5 +128,16 @@ public class DBAccess {
 		}
 		
 		return edits;
+	}
+	
+	public Connection getConnection() {
+		return connection;
+	}
+	public void closeConnection() {
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

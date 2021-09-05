@@ -33,6 +33,7 @@ public class Editor {
 	
 	private EditOptions options;
 	private EditorSettings settings;
+	private DBAccess db;
 	
 	private JFrame frame;
 	private JPanel mainPanel;
@@ -51,12 +52,12 @@ public class Editor {
 	private EditsManager undo;
 
 	public void run() {
-		new DBAccess();
+		db = new DBAccess();
 		
 		manager = new LevelManager();
 		demoLevel = new Level(manager, 0);
 		options = new EditOptions(this);
-		settings = new EditorSettings();
+		settings = new EditorSettings(db.getConnection());
 		
 		FlatLightLaf.install();
 		UIManager.put( "ScrollBar.showButtons", true );
@@ -92,7 +93,8 @@ public class Editor {
 
 	    frame.addWindowListener(new WindowAdapter(){
 	    	public void windowClosing(WindowEvent e){
-	    		settings.saveToFile();
+//	    		settings.saveToFile();
+	    		db.closeConnection();
 	    		System.exit(0);
 	    	}
 	    });	

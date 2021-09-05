@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -11,83 +12,88 @@ import java.util.Scanner;
 import javax.swing.JOptionPane;
 
 import com.wings2d.editor.objects.EditorSettings;
+import com.wings2d.editor.objects.save.DBFile;
 
 public class Project {
 	private List<ProjectEntity> entities;
 	private String name;
-	private File directory;
+	private DBFile directory;
 	private EditorSettings settings;
 	
-	public Project(final EditorSettings settings)
-	{
-		this.settings = settings;
+//	public Project(final EditorSettings settings)
+//	{
+//		this.settings = settings;
+//		entities = new ArrayList<ProjectEntity>();
+//	}
+	public Project(final String id, final Connection con) {
 		entities = new ArrayList<ProjectEntity>();
+		directory = new DBFile(con, "PROJECT", "Directory", id);
 	}
-	public Project(final File directory, final EditorSettings settings) throws FileNotFoundException
-	{
-		this(directory, false, null, settings);
-	}
-	public Project(final File directory, final boolean autoAcceptDir, final String projectName,
-			final EditorSettings settings) throws FileNotFoundException
-	{
-		this(settings);
-		validateDirectory(directory);
-		this.directory = directory;
-		
-		boolean loadProject = true;
-		File projectFile = new File(directory + "/PROJECTINFO.txt");
-		if (projectFile.exists())
-		{
-			Scanner projFile = new Scanner(projectFile);
-			if (projFile.hasNext())
-			{
-				String[] tokens = projFile.next().split(":");
-				name = tokens[1];
-			}
-			projFile.close();
-		}
-		else
-		{
-			int result;
-			if (!autoAcceptDir)
-			{
-				result = JOptionPane.showConfirmDialog(null, "Folder does not have a PROJECTINFO.txt file. Would you like to create one?");
-			}
-			else
-			{
-				result = JOptionPane.OK_OPTION;
-			}
-			if (result == JOptionPane.OK_OPTION)
-			{
-				if (projectName != null)
-				{
-					name = projectName;
-				}
-				else
-				{
-					name = JOptionPane.showInputDialog("Enter the project name:", "Project");
-				}
-				File newProjFile = new File(directory + "/PROJECTINFO.txt");
-				try {
-					newProjFile.createNewFile();
-					PrintWriter writer = new PrintWriter(newProjFile);
-					writer.print("NAME:" + name + "\n"); 
-					writer.close();
-				} catch (IOException e) {
-					throw new FileNotFoundException("Project file creation failed \n" + e.getMessage());
-				}
-			}
-			else
-			{
-				loadProject = false;
-			}
-		}
-		
-		if (loadProject)
-		{
-			createAllInDirectory(directory);
-		}
-	}
+//	public Project(final File directory, final EditorSettings settings) throws FileNotFoundException
+//	{
+//		this(directory, false, null, settings);
+//	}
+//	public Project(final File directory, final boolean autoAcceptDir, final String projectName,
+//			final EditorSettings settings) throws FileNotFoundException
+//	{
+//		this(settings);
+//		validateDirectory(directory);
+//		this.directory = directory;
+//		
+//		boolean loadProject = true;
+//		File projectFile = new File(directory + "/PROJECTINFO.txt");
+//		if (projectFile.exists())
+//		{
+//			Scanner projFile = new Scanner(projectFile);
+//			if (projFile.hasNext())
+//			{
+//				String[] tokens = projFile.next().split(":");
+//				name = tokens[1];
+//			}
+//			projFile.close();
+//		}
+//		else
+//		{
+//			int result;
+//			if (!autoAcceptDir)
+//			{
+//				result = JOptionPane.showConfirmDialog(null, "Folder does not have a PROJECTINFO.txt file. Would you like to create one?");
+//			}
+//			else
+//			{
+//				result = JOptionPane.OK_OPTION;
+//			}
+//			if (result == JOptionPane.OK_OPTION)
+//			{
+//				if (projectName != null)
+//				{
+//					name = projectName;
+//				}
+//				else
+//				{
+//					name = JOptionPane.showInputDialog("Enter the project name:", "Project");
+//				}
+//				File newProjFile = new File(directory + "/PROJECTINFO.txt");
+//				try {
+//					newProjFile.createNewFile();
+//					PrintWriter writer = new PrintWriter(newProjFile);
+//					writer.print("NAME:" + name + "\n"); 
+//					writer.close();
+//				} catch (IOException e) {
+//					throw new FileNotFoundException("Project file creation failed \n" + e.getMessage());
+//				}
+//			}
+//			else
+//			{
+//				loadProject = false;
+//			}
+//		}
+//		
+//		if (loadProject)
+//		{
+//			createAllInDirectory(directory);
+//		}
+//	}
 	
 	private void createAllInDirectory(File directory)
 	{
@@ -138,6 +144,6 @@ public class Project {
 	}
 	public File getDirectory()
 	{
-		return directory;
+		return directory.getValue();
 	}
 }

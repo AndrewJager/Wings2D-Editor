@@ -10,7 +10,7 @@ import com.wings2d.editor.objects.save.DBInt;
 import com.wings2d.editor.objects.save.DBString;
 public class EditorSettings {
 	
-	private DBString projectLink;
+	private DBString projectID;
 	private Project selectedProj;
 	
 	private DBInt handleSize;
@@ -29,7 +29,7 @@ public class EditorSettings {
 		rotHandleOffset = new DBInt(con, "EDITORSETTINGS", "RotHandleOffset");
 		selectedHandleColor = new DBColor(con, "EDITORSETTINGS", "SelectedHandleColor");
 		unselectedHandleColor = new DBColor(con, "EDITORSETTINGS", "UnselectedHandleColor");
-//		projectLink = new DBString(con, "PROJECTSETTINGS", "SelectedProject");
+		projectID = new DBString(con, "EDITORSETTINGS", "SelectedProject");
 //		selectedProj = new Project(projectLink.getValue(), con);
 		projectDir = new DBFile(con, "EDITORSETTINGS", "ProjectDir");
 	}
@@ -71,5 +71,8 @@ public class EditorSettings {
 	}
 	public void setUnselectedHandleColor(final Color unselectedHandleColor) {
 		this.unselectedHandleColor.setValue(unselectedHandleColor);;
+	}
+	public String getProjectID() {
+		return this.projectID.getValue();
 	}
 }

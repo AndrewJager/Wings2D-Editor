@@ -21,7 +21,8 @@ public class DBFile extends DBValue<File>{
 			value = new File(rs.getString(column));
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		} catch (NullPointerException e) {/* Let value be null */};
+		
 		return value;
 	}
 

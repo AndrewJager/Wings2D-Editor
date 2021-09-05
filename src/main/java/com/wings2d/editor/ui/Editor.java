@@ -7,6 +7,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -16,6 +18,7 @@ import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.wings2d.editor.objects.EditOptions;
 import com.wings2d.editor.objects.EditorSettings;
+import com.wings2d.editor.objects.project.Project;
 import com.wings2d.editor.objects.save.DBAccess;
 import com.wings2d.editor.objects.skeleton.Skeleton;
 import com.wings2d.editor.ui.edits.EditsManager;
@@ -34,6 +37,7 @@ public class Editor {
 	private EditOptions options;
 	private EditorSettings settings;
 	private DBAccess db;
+	
 	
 	private JFrame frame;
 	private JPanel mainPanel;
@@ -71,7 +75,7 @@ public class Editor {
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		frame.add(mainPanel);
 		
-		projectEdit = new ProjectEdit(this);
+		projectEdit = new ProjectEdit(this, db.getConnection(), settings);
 		skeletonEdit = new SkeletonEdit(this);
 		settingsEdit = new SettingsEdit(this, settings);
 		
@@ -85,15 +89,9 @@ public class Editor {
 		projectEdit.initElements();
 		skeletonEdit.initElements();
 		settingsEdit.initElements();
-		
-		if (settings.getProjectDirectory() != null)
-		{
-			projectEdit.getProjectSelect().setProject(settings.getProjectDirectory());
-		}
 
 	    frame.addWindowListener(new WindowAdapter(){
 	    	public void windowClosing(WindowEvent e){
-//	    		settings.saveToFile();
 	    		db.closeConnection();
 	    		System.exit(0);
 	    	}

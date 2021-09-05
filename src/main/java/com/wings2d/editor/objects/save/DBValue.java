@@ -26,7 +26,7 @@ public abstract class DBValue<T> {
 		T value = null;
 		String query = "SELECT * FROM " + table;
 		if (id != null) {
-			query = query + "WHERE ID = " + id;
+			query = query + " WHERE ID = " + "'" + id +"'";
 		}
 		try {
 			Statement stmt = con.createStatement();

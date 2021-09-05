@@ -74,6 +74,18 @@ public class Skeleton extends SkeletonNode implements ProjectEntity {
 		name = new DBString (con, "SKELETON", "Name", thisID);
 	}
 	
+	public static void delete(final String id, final Connection con) {
+		// Delete this Skeleton
+		String sql = "DELETE FROM PROJECT WHERE ID = " + "'" + id +"'";
+		try {
+			Statement stmt = con.createStatement();
+			stmt.executeUpdate(sql);
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public SkeletonFrame getMasterFrame() {
 		return masterFrame;
 	}

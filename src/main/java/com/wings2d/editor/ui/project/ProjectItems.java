@@ -29,16 +29,21 @@ public class ProjectItems extends UIElement<ProjectEdit>{
 		panel.add(list);
 	}
 	
-	public void setListItems(final Project project, final EditorSettings settings, final Connection con)
+	public void setListItems(final EditorSettings settings, final Connection con)
 	{
+		Project project = getEditPanel().getProjectSelect().getProjectList().getSelectedValue();
 		DefaultListModel<Skeleton> model = (DefaultListModel<Skeleton>)list.getModel();
-		model.clear();
-		List<Skeleton> skeletons = project.getSkeletons(settings, con);
-		for (int i = 0; i < skeletons.size(); i++)
-		{
-			model.addElement(skeletons.get(i));
+		if (project != null) {
+			model.clear();
+			List<Skeleton> skeletons = project.getSkeletons(settings, con);
+			for (int i = 0; i < skeletons.size(); i++)
+			{
+				model.addElement(skeletons.get(i));
+			}
 		}
-		
+		else {
+			model.clear();
+		}
 	}
 
 	public void createEvents() {

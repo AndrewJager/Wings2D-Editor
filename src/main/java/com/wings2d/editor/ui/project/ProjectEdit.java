@@ -15,8 +15,7 @@ import com.wings2d.editor.ui.UIPanel;
 
 public class ProjectEdit extends UIPanel<ProjectEdit>{
 	public static String CARD_ID = "Project";
-	
-	private Project project;
+
 	private ProjectSelect projectSelect;
 	private CurrentItemEdit currentItemEdit;
 	private ProjectItems projectItems;
@@ -56,20 +55,11 @@ public class ProjectEdit extends UIPanel<ProjectEdit>{
 	
 	public void refreshInfo()
 	{
-		projectItems.setListItems(project, settings, con);
+		projectItems.setListItems(settings, con);
 	}
 	public void setSelectedEntity(final ProjectEntity entity)
 	{
 		currentItemEdit.setItem(entity);
-	}
-
-	public Project getProject()
-	{
-		return project;
-	}
-	public void setProject(final Project project)
-	{
-		this.project = project;
 	}
 	public ProjectSelect getProjectSelect()
 	{

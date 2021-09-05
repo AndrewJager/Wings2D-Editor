@@ -103,4 +103,30 @@ public class Project {
 	public String toString() {
 		return name.getValue();
 	}
+	
+	public static void delete(final String id, final Connection con) {
+		// Delete Skeletons assocated with this project
+		String sql = "SELECT * FROM SKELETON WHERE ID = " + "'" + id +"'";
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				Skeleton.delete(rs.getString("ID"), con);
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
+		 
+		// Delete this project
+		sql = "DELETE FROM PROJECT WHERE ID = " + "'" + id +"'";
+		try {
+			stmt = con.createStatement();
+			stmt.executeUpdate(sql);
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

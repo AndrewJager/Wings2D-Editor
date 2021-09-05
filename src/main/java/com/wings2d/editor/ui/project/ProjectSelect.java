@@ -1,5 +1,6 @@
 package com.wings2d.editor.ui.project;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -13,6 +14,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -22,7 +24,8 @@ import com.wings2d.editor.objects.skeleton.Skeleton;
 import com.wings2d.editor.ui.UIElement;
 
 public class ProjectSelect extends UIElement<ProjectEdit>{
-	private JButton newProject, settingsBtn, newAnim;
+	private JButton newProject, settingsBtn, newAnim, deleteProj;
+	private JPanel projectsPnl;
 	private JList<Project> projList;
 	private DefaultListModel<Project> model; 
 	
@@ -39,8 +42,9 @@ public class ProjectSelect extends UIElement<ProjectEdit>{
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		projects = Project.getAll(con, settings);
 		
+		projectsPnl = new JPanel(new BorderLayout());
 		newProject = new JButton("New Project");
-		panel.add(newProject);
+		projectsPnl.add(newProject, BorderLayout.SOUTH);
 		
 		model = new DefaultListModel<Project>();
 		for(int i = 0; i < projects.size(); i++) {
@@ -48,7 +52,12 @@ public class ProjectSelect extends UIElement<ProjectEdit>{
 		}
 		projList = new JList<Project>(model);
 		projList.setPreferredSize(new Dimension(200, 50));
-		panel.add(projList);
+		projectsPnl.add(projList, BorderLayout.CENTER);
+		panel.add(projectsPnl);
+		
+		deleteProj = new JButton("Delete Project");
+		deleteProj.setEnabled(false);
+		panel.add(deleteProj);
 		
 		newAnim = new JButton("New Animation");
 		newAnim.setEnabled(false);
@@ -88,10 +97,9 @@ public class ProjectSelect extends UIElement<ProjectEdit>{
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (e.getValueIsAdjusting()) {
-					Project project = (Project)projList.getSelectedValue();
-					getEditPanel().setProject(project);
 					getEditPanel().refreshInfo();
 					newAnim.setEnabled(true);
+					deleteProj.setEnabled(true);
 				}
 			}
 		});
@@ -105,11 +113,28 @@ public class ProjectSelect extends UIElement<ProjectEdit>{
 			public void actionPerformed(ActionEvent e) {
 				String skeletonName = JOptionPane.showInputDialog(panel, "Skeleton Name");
 				if (skeletonName != null) {
-					new Skeleton(skeletonName, getEditPanel().getProject().getID(),
+					new Skeleton(skeletonName, projList.getSelectedValue().getID(),
 							getEditPanel().getEditor().getSettings(), con);
 					getEditPanel().refreshInfo();
 				}
 			}
 		});
+		deleteProj.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Project.delete(projList.getSelectedValue().getID(), con);
+				model.clear();
+				getEditPanel().refreshInfo();
+				
+				projects = Project.getAll(con, settings);
+				for(int i = 0; i < projects.size(); i++) {
+					model.addElement(projects.get(i));
+				}
+			}
+		});
+	}
+	
+	public JList<Project> getProjectList() {
+		return projList;
 	}
 }

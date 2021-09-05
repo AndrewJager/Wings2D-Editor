@@ -8,8 +8,7 @@ import javax.swing.JSplitPane;
 import javax.swing.border.EmptyBorder;
 
 import com.wings2d.editor.objects.EditorSettings;
-import com.wings2d.editor.objects.project.Project;
-import com.wings2d.editor.objects.project.ProjectEntity;
+import com.wings2d.editor.objects.skeleton.Skeleton;
 import com.wings2d.editor.ui.Editor;
 import com.wings2d.editor.ui.UIPanel;
 
@@ -20,21 +19,16 @@ public class ProjectEdit extends UIPanel<ProjectEdit>{
 	private CurrentItemEdit currentItemEdit;
 	private ProjectItems projectItems;
 	private JSplitPane horizontal, vertical;
-	
-	private Connection con;
-	private EditorSettings settings;
 
 	public ProjectEdit(final Editor edit, final Connection con, final EditorSettings settings) {
 		super(edit);
-		this.con = con;
-		this.settings = settings;
 		
 		panel.setLayout(new FlowLayout());
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		
 		projectSelect = new ProjectSelect(this, con, settings);
-		currentItemEdit = new CurrentItemEdit(this);
-		projectItems = new ProjectItems(this);
+		currentItemEdit = new CurrentItemEdit(this, con);
+		projectItems = new ProjectItems(this, settings, con);
 		
 		JScrollPane pane = new JScrollPane(projectSelect.getPanel());
 		JScrollPane pane2 = new JScrollPane(currentItemEdit.getPanel());
@@ -55,11 +49,11 @@ public class ProjectEdit extends UIPanel<ProjectEdit>{
 	
 	public void refreshInfo()
 	{
-		projectItems.setListItems(settings, con);
+		projectItems.setListItems();
 	}
-	public void setSelectedEntity(final ProjectEntity entity)
+	public void setSelectedSkeleton(final Skeleton skeleton)
 	{
-		currentItemEdit.setItem(entity);
+		currentItemEdit.setItem(skeleton);
 	}
 	public ProjectSelect getProjectSelect()
 	{

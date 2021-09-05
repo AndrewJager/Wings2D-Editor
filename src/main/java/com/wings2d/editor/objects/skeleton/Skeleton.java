@@ -15,10 +15,9 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.EditorSettings;
-import com.wings2d.editor.objects.project.ProjectEntity;
 import com.wings2d.editor.objects.save.DBString;
 
-public class Skeleton extends SkeletonNode implements ProjectEntity {
+public class Skeleton extends SkeletonNode {
 	public static final String FILE_MARKER = "SKELETON";
 	
 	private List<SkeletonNode> animations;
@@ -76,7 +75,7 @@ public class Skeleton extends SkeletonNode implements ProjectEntity {
 	
 	public static void delete(final String id, final Connection con) {
 		// Delete this Skeleton
-		String sql = "DELETE FROM PROJECT WHERE ID = " + "'" + id +"'";
+		String sql = "DELETE FROM SKELETON WHERE ID = " + "'" + id +"'";
 		try {
 			Statement stmt = con.createStatement();
 			stmt.executeUpdate(sql);
@@ -254,19 +253,5 @@ public class Skeleton extends SkeletonNode implements ProjectEntity {
 	@Override
 	public boolean isMaster() {
 		return true;
-	}
-	
-	// ProjectEntity methods
-	@Override
-	public void saveToFile()
-	{	
-//		try {
-//			File saveFile = new File(project.getDirectory() + "/" + name + ".txt");
-//			PrintWriter writer = new PrintWriter(saveFile);
-//			saveToFile(writer);
-//			writer.close();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
 	}
 }

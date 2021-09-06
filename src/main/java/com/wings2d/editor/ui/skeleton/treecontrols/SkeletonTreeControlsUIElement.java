@@ -2,6 +2,7 @@ package com.wings2d.editor.ui.skeleton.treecontrols;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -22,11 +23,15 @@ public abstract class SkeletonTreeControlsUIElement {
 	protected JPanel controlsPanel;
 	protected JButton rename, delete;
 	
+	protected Connection con;
+	
 	protected static final int SEPARATOR_WIDTH = 5;
 
-	public SkeletonTreeControlsUIElement(final SkeletonTreeControls controls)
+	public SkeletonTreeControlsUIElement(final SkeletonTreeControls controls, final Connection con)
 	{
 		this.controls = controls;
+		this.con = con;
+		
 		panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		controlsPanel = new JPanel();
@@ -72,6 +77,8 @@ public abstract class SkeletonTreeControlsUIElement {
 						}
 						int result = JOptionPane.showConfirmDialog(panel, "Deleting a node cannot be undone. Continue?", "Warning", JOptionPane.YES_NO_OPTION);
 						if (result == JOptionPane.OK_OPTION) {
+							SkeletonNode.delete(selectedNode.getID(), selectedNode.getTableName(), con);
+							
 							DefaultTreeModel model = (DefaultTreeModel)controls.getTree().getModel();
 							model.removeNodeFromParent(selectedNode);
 							controls.getEditPanel().getSkeletonTree().reloadModel();

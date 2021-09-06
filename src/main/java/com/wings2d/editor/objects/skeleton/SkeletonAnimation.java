@@ -28,6 +28,8 @@ public class SkeletonAnimation extends SkeletonNode{
 	/** Insert constructor */
 	public SkeletonAnimation(final String animName, final String skeletonID, final Skeleton parent, final Connection con)
 	{
+		super("ANIMATION");
+		
 		if (parent.containsAnimWithName(animName))
 		{
 			throw new IllegalArgumentException("An Animation with this name already exists!");
@@ -57,6 +59,7 @@ public class SkeletonAnimation extends SkeletonNode{
 	}
 	
 	public SkeletonAnimation(final String animID, final Skeleton parent, final Connection con) {
+		super("ANIMATION");
 		setup(parent);
 		
 		String query = " SELECT * FROM ANIMATION WHERE ID = " + "'" + animID + "'";
@@ -81,14 +84,7 @@ public class SkeletonAnimation extends SkeletonNode{
 	
 	public static void delete(final String id, final Connection con) {
 		// Delete this Animation
-		String sql = "DELETE FROM Animation WHERE ID = " + "'" + id +"'";
-		try {
-			Statement stmt = con.createStatement();
-			stmt.executeUpdate(sql);
-			stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		SkeletonNode.delete(id, "ANIMATION", con);
 	}
 
 	public String toString()

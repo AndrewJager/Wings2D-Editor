@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.Connection;
 
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -34,8 +35,8 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 	private JList<ImageFilter> filters;
 	private Sprite curSprite;
 
-	public SpriteControls(final SkeletonTreeControls controls) {
-		super(controls);
+	public SpriteControls(final SkeletonTreeControls controls, final Connection con) {
+		super(controls, con);
 		
 		namePanel = new JPanel();
 		

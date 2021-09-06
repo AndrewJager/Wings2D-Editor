@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -35,8 +36,8 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 	private DoubleEditSetter<SkeletonEdit> xPos, yPos, rot;
 	private JButton addSprite;
 
-	public BoneControls(final SkeletonTreeControls controls) {
-		super(controls);
+	public BoneControls(final SkeletonTreeControls controls, final Connection con) {
+		super(controls, con);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		namePanel = new JPanel(); 
 		namePanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, (int)new JLabel().getPreferredSize().getHeight()));

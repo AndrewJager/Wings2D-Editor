@@ -26,7 +26,8 @@ public class Skeleton extends SkeletonNode {
 	
 	/** Insert constructor */
 	public Skeleton(final String skeletonName, final String projID, final EditorSettings settings, final Connection con)
-	{
+	{	
+		super("SKELETON");
 		setup(settings);
 		String id = UUID.randomUUID().toString();
 		String query = "INSERT INTO SKELETON (ID, Name, Project)"
@@ -52,6 +53,7 @@ public class Skeleton extends SkeletonNode {
 	
 	/** Read constructor */
 	public Skeleton(final String skelID, final EditorSettings settings, final Connection con) {
+		super("SKELETON");
 		setup(settings);
 		String query = " SELECT * FROM SKELETON WHERE ID = " + "'" + skelID + "'";
 		try {
@@ -100,14 +102,7 @@ public class Skeleton extends SkeletonNode {
 		}
 		
 		// Delete this Skeleton
-		sql = "DELETE FROM SKELETON WHERE ID = " + "'" + id +"'";
-		try {
-			stmt = con.createStatement();
-			stmt.executeUpdate(sql);
-			stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		SkeletonNode.delete(id, "SKELETON", con);
 	}
 	
 	public SkeletonFrame getMasterFrame() {

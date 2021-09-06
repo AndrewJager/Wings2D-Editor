@@ -12,6 +12,7 @@ import java.util.UUID;
 import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.save.DBString;
 import com.wings2d.editor.objects.skeleton.Skeleton;
+import com.wings2d.editor.objects.skeleton.SkeletonNode;
 
 public class Project {
 	private DBString id;
@@ -120,13 +121,6 @@ public class Project {
 
 		 
 		// Delete this project
-		sql = "DELETE FROM PROJECT WHERE ID = " + "'" + id +"'";
-		try {
-			stmt = con.createStatement();
-			stmt.executeUpdate(sql);
-			stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		SkeletonNode.delete(id, "PROJECT", con);
 	}
 }

@@ -52,6 +52,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	
 	public SkeletonBone(final String boneName, final SkeletonFrame boneParent)
 	{
+		super("BONE");
 		if (boneParent.containsBoneWithName(boneName))
 		{
 			throw new IllegalArgumentException("A Bone with this name already exists in the Frame!");
@@ -64,6 +65,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	/** Create a copy of the bone passed in to this constructor **/
 	public SkeletonBone(final SkeletonBone syncBone, final SkeletonFrame boneParent)
 	{
+		super("BONE");
 		if (boneParent.containsBoneWithName(syncBone.toString()))
 		{
 			throw new IllegalArgumentException("A Bone with this name already exists in the Frame!");

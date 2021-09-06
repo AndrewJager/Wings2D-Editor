@@ -25,7 +25,7 @@ public class SkeletonControls extends SkeletonTreeControlsUIElement{
 	private Connection con;
 	
 	public SkeletonControls(final SkeletonTreeControls controls, final Connection con) {
-		super(controls);
+		super(controls, con);
 		this.con = con;
 		
 		namePanel = new JPanel();

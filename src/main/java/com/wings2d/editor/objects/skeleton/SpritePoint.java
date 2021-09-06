@@ -13,6 +13,7 @@ public class SpritePoint extends SkeletonNode{
 	private double y;
 	
 	public SpritePoint(final double x, final double y, final Sprite parent) {
+		super("POINT");
 		this.parent = parent;
 		this.x = x;
 		this.y = y;

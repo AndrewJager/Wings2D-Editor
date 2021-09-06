@@ -2,6 +2,7 @@ package com.wings2d.editor.ui.skeleton.treecontrols;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.text.DecimalFormat;
 
 import javax.swing.JFormattedTextField;
@@ -18,8 +19,8 @@ public class PointControls extends SkeletonTreeControlsUIElement{
 	private JPanel xPosPanel, yPosPanel;
 	private JFormattedTextField xPos, yPos;
 	
-	public PointControls(final SkeletonTreeControls controls) {
-		super(controls);
+	public PointControls(final SkeletonTreeControls controls, final Connection con) {
+		super(controls, con);
 
 		xPosPanel = new JPanel();
 		xPosPanel.add(new JLabel("X:"));

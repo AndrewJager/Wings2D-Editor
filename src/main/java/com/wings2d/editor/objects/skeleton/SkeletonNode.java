@@ -1,6 +1,9 @@
 package com.wings2d.editor.objects.skeleton;
 
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import javax.swing.tree.MutableTreeNode;
@@ -9,8 +12,24 @@ import com.wings2d.editor.objects.save.DBString;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
 
 public abstract class SkeletonNode implements MutableTreeNode{
+	protected String tableName;
 	protected DBString name;
 	protected DBString id;
+	
+	public SkeletonNode(final String tableName) {
+		this.tableName = tableName;
+	}
+	
+	public static void delete(final String id, final String tableName, final Connection con) {
+		String sql = "DELETE FROM " + tableName + " WHERE ID = " + "'" + id +"'";
+		try {
+			Statement stmt = con.createStatement();
+			stmt.executeUpdate(sql);
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public void setName(final String newName) {
 		this.name.setValue(newName);
@@ -21,6 +40,10 @@ public abstract class SkeletonNode implements MutableTreeNode{
 	public String getID() {
 		return id.getValue();
 	}
+	public String getTableName() {
+		return tableName;
+	}
+	
 	public abstract void saveToFile(final PrintWriter out);
 	public abstract void resyncAll();
 	public abstract void generateRender(final double scale);

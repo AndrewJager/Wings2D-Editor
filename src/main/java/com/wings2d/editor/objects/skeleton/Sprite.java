@@ -53,6 +53,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	
 	public Sprite(final String spriteName, final SkeletonBone parent)
 	{
+		super("FRAME");
 //		this.name = spriteName;
 		this.parent = parent;
 		this.settings = parent.getSettings();

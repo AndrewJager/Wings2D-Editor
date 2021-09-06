@@ -36,6 +36,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	
 	public SkeletonFrame(final String frameName, final SkeletonAnimation frameParent, final EditorSettings settings)
 	{
+		super("FRAME");
 		// frameParent will be null for Master Frame
 		if (frameParent != null && frameParent.containsFrameWithName(frameName))
 		{

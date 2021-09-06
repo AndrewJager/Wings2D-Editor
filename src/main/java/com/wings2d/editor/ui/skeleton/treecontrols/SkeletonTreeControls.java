@@ -31,11 +31,11 @@ public class SkeletonTreeControls extends UIElement<SkeletonEdit>{
 		panel.setPreferredSize(new Dimension(200, 400));
 		
 		skeletonControls = new SkeletonControls(this, con);
-		animationControls = new AnimationControls(this);
-		frameControls = new FrameControls(this);
-		boneControls = new BoneControls(this);
-		spriteControls = new SpriteControls(this);
-		pointControls = new PointControls(this);
+		animationControls = new AnimationControls(this, con);
+		frameControls = new FrameControls(this, con);
+		boneControls = new BoneControls(this, con);
+		spriteControls = new SpriteControls(this, con);
+		pointControls = new PointControls(this, con);
 		
 		panel.add(skeletonControls.getPanel(), SkeletonControls.CARD_ID);
 		panel.add(animationControls.getPanel(), AnimationControls.CARD_ID);

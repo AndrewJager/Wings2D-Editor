@@ -71,6 +71,18 @@ public class Skeleton extends SkeletonNode {
 	private void initData(final Connection con, final String thisID) throws SQLException {
 		id = new DBString(con, "SKELETON", "ID", thisID);
 		name = new DBString (con, "SKELETON", "Name", thisID);
+		
+		// Add Animations
+		String query = " SELECT * FROM ANIMATION WHERE Skeleton = " + "'" + id.getValue() + "'";
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while(rs.next()) {
+				animations.add(new SkeletonAnimation(rs.getString("ID"), this, con));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void delete(final String id, final Connection con) {

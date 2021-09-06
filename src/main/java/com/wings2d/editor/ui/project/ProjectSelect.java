@@ -24,7 +24,7 @@ import com.wings2d.editor.objects.skeleton.Skeleton;
 import com.wings2d.editor.ui.UIElement;
 
 public class ProjectSelect extends UIElement<ProjectEdit>{
-	private JButton newProject, settingsBtn, newAnim, deleteProj;
+	private JButton newProject, settingsBtn, newSkeleton, deleteProj;
 	private JPanel projectsPnl;
 	private JList<Project> projList;
 	private DefaultListModel<Project> model; 
@@ -59,9 +59,9 @@ public class ProjectSelect extends UIElement<ProjectEdit>{
 		deleteProj.setEnabled(false);
 		panel.add(deleteProj);
 		
-		newAnim = new JButton("New Animation");
-		newAnim.setEnabled(false);
-		panel.add(newAnim);
+		newSkeleton = new JButton("New Skeleton");
+		newSkeleton.setEnabled(false);
+		panel.add(newSkeleton);
 		
 		settingsBtn = new JButton("Settings");
 		panel.add(settingsBtn);
@@ -98,7 +98,7 @@ public class ProjectSelect extends UIElement<ProjectEdit>{
 			public void valueChanged(ListSelectionEvent e) {
 				if (e.getValueIsAdjusting()) {
 					getEditPanel().refreshInfo();
-					newAnim.setEnabled(true);
+					newSkeleton.setEnabled(true);
 					deleteProj.setEnabled(true);
 				}
 			}
@@ -108,7 +108,7 @@ public class ProjectSelect extends UIElement<ProjectEdit>{
 				getEditPanel().getEditor().showSettings();
 			}
 		});
-		newAnim.addActionListener(new ActionListener() {
+		newSkeleton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String skeletonName = JOptionPane.showInputDialog(panel, "Skeleton Name");

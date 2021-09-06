@@ -76,7 +76,7 @@ public class Editor {
 		frame.add(mainPanel);
 		
 		projectEdit = new ProjectEdit(this, db.getConnection(), settings);
-		skeletonEdit = new SkeletonEdit(this);
+		skeletonEdit = new SkeletonEdit(this, db.getConnection());
 		settingsEdit = new SettingsEdit(this, settings);
 		
 		undo = new EditsManager(skeletonEdit.getSkeletonTree());

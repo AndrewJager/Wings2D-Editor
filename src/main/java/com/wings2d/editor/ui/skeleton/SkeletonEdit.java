@@ -1,6 +1,7 @@
 package com.wings2d.editor.ui.skeleton;
 
 import java.awt.BorderLayout;
+import java.sql.Connection;
 
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -27,7 +28,7 @@ public class SkeletonEdit extends UIPanel<SkeletonEdit>{
 	private SkeletonDrawing drawingArea;
 	private RenderArea renderArea;
 
-	public SkeletonEdit(final Editor edit) {
+	public SkeletonEdit(final Editor edit, final Connection con) {
 		super(edit);
 		drawMode = DrawMode.BONE_MOVE;
 		lastBoneDrawMode = DrawMode.BONE_MOVE;
@@ -44,7 +45,7 @@ public class SkeletonEdit extends UIPanel<SkeletonEdit>{
 		tree = new SkeletonTree(this);
 		
 		drawingArea = new SkeletonDrawing(this);	
-		treeControls = new SkeletonTreeControls(this);
+		treeControls = new SkeletonTreeControls(this, con);
 		renderArea = new RenderArea(this);
 		
 		JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tree.getPanel(), treeControls.getPanel());

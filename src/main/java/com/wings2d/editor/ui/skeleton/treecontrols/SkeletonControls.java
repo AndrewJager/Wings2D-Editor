@@ -2,6 +2,7 @@ package com.wings2d.editor.ui.skeleton.treecontrols;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -21,8 +22,11 @@ public class SkeletonControls extends SkeletonTreeControlsUIElement{
 	private JPanel namePanel, addAnimPanel;
 	private JButton addAnim;
 	
-	public SkeletonControls(SkeletonTreeControls controls) {
+	private Connection con;
+	
+	public SkeletonControls(final SkeletonTreeControls controls, final Connection con) {
 		super(controls);
+		this.con = con;
 		
 		namePanel = new JPanel();
 		
@@ -55,7 +59,7 @@ public class SkeletonControls extends SkeletonTreeControlsUIElement{
 					DefaultTreeModel model = (DefaultTreeModel) controls.getTree().getModel();
 					Skeleton root = (Skeleton) model.getRoot();
 					try {
-						SkeletonAnimation newAnim = new SkeletonAnimation(animName, root);	
+						SkeletonAnimation newAnim = new SkeletonAnimation(animName, root.getID(), root, con);	
 						controls.getEditPanel().getEditor().getEditsManager().edit(new AddToTree(model, newAnim, root));
 						controls.getTree().setSelectionPath(controls.getTree().getSelectionPath().pathByAddingChild(
 								root.getChildAt(root.getChildCount() - 1)));

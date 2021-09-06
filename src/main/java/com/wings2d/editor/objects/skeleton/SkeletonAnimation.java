@@ -1,16 +1,22 @@
 package com.wings2d.editor.objects.skeleton;
 
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.EditorSettings;
+import com.wings2d.editor.objects.save.DBString;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
 
 public class SkeletonAnimation extends SkeletonNode{
@@ -20,20 +26,59 @@ public class SkeletonAnimation extends SkeletonNode{
 	private Skeleton skeleton;
 	private List<SkeletonFrame> frames;
 	
-	public SkeletonAnimation(final String animName, final Skeleton animParent)
+	/** Insert constructor */
+	public SkeletonAnimation(final String animName, final String skeletonID, final Skeleton parent, final Connection con)
 	{
-		if (animParent.containsAnimWithName(animName))
+		if (parent.containsAnimWithName(animName))
 		{
 			throw new IllegalArgumentException("An Animation with this name already exists!");
 		}
+		setup(parent);
 		
-		this.skeleton = animParent;
-		this.settings = animParent.getSettings();
-		frames = new ArrayList<SkeletonFrame>();
-//		this.name = animName;
+		String id = UUID.randomUUID().toString();
+		String query = "INSERT INTO ANIMATION (ID, Name, Skeleton)"
+				+ " VALUES(" + "'" + id + "'" + "," + "'" + animName + "'" + "," + "'" + skeletonID + "'" + ")";
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+			stmt.executeUpdate(query);
+			stmt.close();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		query = " SELECT * FROM ANIMATION WHERE ID = " + "'" + id + "'";
+		try {
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			initData(con,rs.getString("ID"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
+	public SkeletonAnimation(final String animID, final Skeleton parent, final Connection con) {
+		setup(parent);
+		
+		String query = " SELECT * FROM ANIMATION WHERE ID = " + "'" + animID + "'";
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			initData(con,rs.getString("ID"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	
+	private void setup(final Skeleton parent) {
+		this.skeleton = parent;
+		this.settings = parent.getSettings();
+		frames = new ArrayList<SkeletonFrame>();
+	}
+	private void initData(final Connection con, final String thisID) throws SQLException {
+		id = new DBString(con, "ANIMATION", "ID", thisID);
+		name = new DBString (con, "ANIMATION", "Name", thisID);
+	}
 
 	public String toString()
 	{

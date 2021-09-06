@@ -3,6 +3,7 @@ package com.wings2d.editor.ui.skeleton.treecontrols;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.sql.Connection;
 
 import javax.swing.BorderFactory;
 import javax.swing.JTree;
@@ -23,13 +24,13 @@ public class SkeletonTreeControls extends UIElement<SkeletonEdit>{
 	private SkeletonTreeControlsUIElement currentCard;
 	private SkeletonDrawingPanel drawingArea;
 
-	public SkeletonTreeControls(final SkeletonEdit edit) {
+	public SkeletonTreeControls(final SkeletonEdit edit, final Connection con) {
 		super(edit);
 		cards = new CardLayout();
 		panel.setLayout(cards);
 		panel.setPreferredSize(new Dimension(200, 400));
 		
-		skeletonControls = new SkeletonControls(this);
+		skeletonControls = new SkeletonControls(this, con);
 		animationControls = new AnimationControls(this);
 		frameControls = new FrameControls(this);
 		boneControls = new BoneControls(this);

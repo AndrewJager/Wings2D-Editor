@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Scanner;
 import java.util.UUID;
 
 import javax.swing.tree.MutableTreeNode;
@@ -78,6 +77,18 @@ public class SkeletonAnimation extends SkeletonNode{
 	private void initData(final Connection con, final String thisID) throws SQLException {
 		id = new DBString(con, "ANIMATION", "ID", thisID);
 		name = new DBString (con, "ANIMATION", "Name", thisID);
+	}
+	
+	public static void delete(final String id, final Connection con) {
+		// Delete this Animation
+		String sql = "DELETE FROM Animation WHERE ID = " + "'" + id +"'";
+		try {
+			Statement stmt = con.createStatement();
+			stmt.executeUpdate(sql);
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public String toString()

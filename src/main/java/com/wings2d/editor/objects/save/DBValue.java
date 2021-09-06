@@ -43,7 +43,7 @@ public abstract class DBValue<T> {
 	public void setValue(final T value) {
 		String query = getBaseQuery() + "'" + saveValue(value) + "'";
 		if (id != null) {
-			query = query + "WHERE ID = " + id;
+			query = query + "WHERE ID = " + "'" + id +"'";
 		}
 		try {
 			Statement stmt = con.createStatement();

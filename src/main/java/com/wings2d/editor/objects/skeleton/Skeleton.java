@@ -86,10 +86,23 @@ public class Skeleton extends SkeletonNode {
 	}
 	
 	public static void delete(final String id, final Connection con) {
-		// Delete this Skeleton
-		String sql = "DELETE FROM SKELETON WHERE ID = " + "'" + id +"'";
+		// Delete Animations assocated with the skeleton
+		String sql = "SELECT * FROM ANIMATION WHERE Skeleton = " + "'" + id +"'";
+		Statement stmt;
 		try {
-			Statement stmt = con.createStatement();
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				SkeletonAnimation.delete(rs.getString("ID"), con);
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		// Delete this Skeleton
+		sql = "DELETE FROM SKELETON WHERE ID = " + "'" + id +"'";
+		try {
+			stmt = con.createStatement();
 			stmt.executeUpdate(sql);
 			stmt.close();
 		} catch (SQLException e) {

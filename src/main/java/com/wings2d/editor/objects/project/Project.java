@@ -106,7 +106,7 @@ public class Project {
 	
 	public static void delete(final String id, final Connection con) {
 		// Delete Skeletons assocated with this project
-		String sql = "SELECT * FROM SKELETON WHERE ID = " + "'" + id +"'";
+		String sql = "SELECT * FROM SKELETON WHERE Project = " + "'" + id +"'";
 		Statement stmt;
 		try {
 			stmt = con.createStatement();

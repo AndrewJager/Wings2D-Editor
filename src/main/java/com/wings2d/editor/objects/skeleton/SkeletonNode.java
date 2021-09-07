@@ -43,8 +43,7 @@ public abstract class SkeletonNode implements MutableTreeNode{
 	public String getTableName() {
 		return tableName;
 	}
-	
-	public abstract void saveToFile(final PrintWriter out);
+
 	public abstract void resyncAll();
 	public abstract void generateRender(final double scale);
 	public abstract void moveUp() throws ActionNotDoneException;

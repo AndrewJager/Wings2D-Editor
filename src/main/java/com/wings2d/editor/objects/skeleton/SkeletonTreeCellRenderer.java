@@ -50,17 +50,19 @@ public class SkeletonTreeCellRenderer extends DefaultTreeCellRenderer{
 		{
 			setIcon(skeletonIcon);
 		}
-		else if (value instanceof SkeletonMasterFrame)
-		{
-			setIcon(masterFrameIcon);
-		}
 		else if (value instanceof SkeletonAnimation)
 		{
 			setIcon(animationIcon);
 		}
 		else if (value instanceof SkeletonFrame)
 		{
-			setIcon(frameIcon);
+			SkeletonFrame frame = (SkeletonFrame)value;
+			if (frame.getIsMaster()) {
+				setIcon(masterFrameIcon);
+			}
+			else {
+				setIcon(frameIcon);
+			}
 		}
 		else if (value instanceof SkeletonBone)
 		{

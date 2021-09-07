@@ -546,7 +546,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 			}
 		}
 	}
-	@Override
+//	@Override
 	public void saveToFile(final PrintWriter out) {
 		out.write(SPRITE_TOKEN + "\n");
 		out.print(NAME_TOKEN + ":" + name + "\n");

@@ -36,9 +36,9 @@ public class SkeletonAnimation extends SkeletonNode{
 		}
 		setup(parent);
 		
-		String id = UUID.randomUUID().toString();
+		String newID = UUID.randomUUID().toString();
 		String query = "INSERT INTO ANIMATION (ID, Name, Skeleton)"
-				+ " VALUES(" + "'" + id + "'" + "," + "'" + animName + "'" + "," + "'" + skeletonID + "'" + ")";
+				+ " VALUES(" + "'" + newID + "'" + "," + "'" + animName + "'" + "," + "'" + skeletonID + "'" + ")";
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
@@ -48,7 +48,7 @@ public class SkeletonAnimation extends SkeletonNode{
 			e1.printStackTrace();
 		}
 		
-		query = " SELECT * FROM ANIMATION WHERE ID = " + "'" + id + "'";
+		query = " SELECT * FROM ANIMATION WHERE ID = " + "'" + newID + "'";
 		try {
 			stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
@@ -186,18 +186,6 @@ public class SkeletonAnimation extends SkeletonNode{
 		return Collections.enumeration(frames);
 	}
 	
-	// SkeletonNode methods
-	@Override
-	public void saveToFile(final PrintWriter out)
-	{
-		out.write(ANIM_TOKEN + "\n");
-		out.write(NAME_TOKEN + ":" + name + "\n");
-		for (int i = 0; i < frames.size(); i++)
-		{
-			frames.get(i).saveToFile(out);
-		}
-		out.write(END_TOKEN + ":" + ANIM_TOKEN + "\n");
-	}
 	@Override
 	public void resyncAll()
 	{

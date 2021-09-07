@@ -13,7 +13,7 @@ import javax.swing.JScrollPane;
 import javax.swing.tree.DefaultTreeModel;
 
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
-import com.wings2d.editor.objects.skeleton.SkeletonMasterFrame;
+import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.ui.edits.SetName;
 
@@ -71,9 +71,12 @@ public abstract class SkeletonTreeControlsUIElement {
 				if (selectedNode != null)
 				{
 					try {
-						if (selectedNode instanceof SkeletonMasterFrame)
+						if (selectedNode instanceof SkeletonFrame)
 						{
-							throw new IllegalStateException("Cannot delete Master Frame!");
+							SkeletonFrame frame = (SkeletonFrame)selectedNode;
+							if (frame.getIsMaster()) {
+								throw new IllegalStateException("Cannot delete Master Frame!");
+							}
 						}
 						int result = JOptionPane.showConfirmDialog(panel, "Deleting a node cannot be undone. Continue?", "Warning", JOptionPane.YES_NO_OPTION);
 						if (result == JOptionPane.OK_OPTION) {

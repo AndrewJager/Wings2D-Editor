@@ -21,18 +21,30 @@ public class Skeleton extends SkeletonNode {
 	public static final String FILE_MARKER = "SKELETON";
 	
 	private List<SkeletonNode> animations;
-	private SkeletonMasterFrame masterFrame;
+	private SkeletonFrame masterFrame;
 	private EditorSettings settings;
 	
 	/** Insert constructor */
 	public Skeleton(final String skeletonName, final String projID, final EditorSettings settings, final Connection con)
 	{	
 		super("SKELETON");
-		setup(settings);
 		String id = UUID.randomUUID().toString();
 		String query = "INSERT INTO SKELETON (ID, Name, Project)"
 				+ " VALUES(" + "'" + id + "'" + "," + "'" + skeletonName + "'" + "," + "'" + projID + "'" + ")";
 		Statement stmt;
+		try {
+			stmt = con.createStatement();
+			stmt.executeUpdate(query);
+			stmt.close();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		// Create Master Frame
+		query = "INSERT INTO FRAME (ID, Name, Animation, Skeleton, IsMaster, SyncFrame)"
+				+ " VALUES(" + "'" + UUID.randomUUID() + "'" + "," + "'" + "Master" + "'" + "," + "'" + " " + "'" 
+				+ "," + "'" + id + "'" + "," + true + "," + "'" + " " + "'" + ")";
+		System.out.println(query);
 		try {
 			stmt = con.createStatement();
 			stmt.executeUpdate(query);
@@ -49,12 +61,13 @@ public class Skeleton extends SkeletonNode {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		setup(settings, con);
 	}
 	
 	/** Read constructor */
 	public Skeleton(final String skelID, final EditorSettings settings, final Connection con) {
 		super("SKELETON");
-		setup(settings);
 		String query = " SELECT * FROM SKELETON WHERE ID = " + "'" + skelID + "'";
 		try {
 			Statement stmt = con.createStatement();
@@ -63,11 +76,23 @@ public class Skeleton extends SkeletonNode {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		setup(settings, con);
 	}
-	private void setup(final EditorSettings settings) {
+	private void setup(final EditorSettings settings, final Connection con) {
 		animations = new ArrayList<SkeletonNode>();
-		masterFrame = new SkeletonMasterFrame("Master", settings);
-		animations.add(masterFrame);
+		
+		// Get Master Frame
+		String query = " SELECT * FROM FRAME WHERE Skeleton = " + "'" + this.getID() + "'";
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			masterFrame = new SkeletonFrame(rs.getString("ID"), null, con, settings, true, this.getID());
+			animations.add(masterFrame);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		this.settings = settings;
 	}
 	private void initData(final Connection con, final String thisID) throws SQLException {
@@ -88,7 +113,7 @@ public class Skeleton extends SkeletonNode {
 	}
 	
 	public static void delete(final String id, final Connection con) {
-		// Delete Animations assocated with the skeleton
+		// Delete Animations associated with the skeleton
 		String sql = "SELECT * FROM ANIMATION WHERE Skeleton = " + "'" + id +"'";
 		Statement stmt;
 		try {
@@ -96,6 +121,18 @@ public class Skeleton extends SkeletonNode {
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()) {
 				SkeletonAnimation.delete(rs.getString("ID"), con);
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		// Delete Master Frame associated with this skeleton
+		sql = "SELECT * FROM Frame WHERE Skeleton = " + "'" + id +"'";
+		try {
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				SkeletonFrame.delete(rs.getString("ID"), con);
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -230,21 +267,6 @@ public class Skeleton extends SkeletonNode {
 	}
 
 	// SkeletonNode methods
-	@Override
-	public void saveToFile(final PrintWriter out)
-	{	
-		out.print(""); // Clear the file
-		out.print(FILE_MARKER + "\n");
-		out.print(NAME_TOKEN + ":" + name + "\n");
-		if (masterFrame != null)
-		{
-			for (int i = 0; i < animations.size(); i++)
-			{
-				animations.get(i).saveToFile(out);
-			}
-		}
-		out.write(END_TOKEN + ":" + FILE_MARKER + "\n");
-	}
 	@Override
 	public void resyncAll()
 	{

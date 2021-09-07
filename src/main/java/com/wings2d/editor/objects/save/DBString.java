@@ -23,5 +23,4 @@ public class DBString extends DBValue<String>{
 		}
 		return value;
 	}
-
 }

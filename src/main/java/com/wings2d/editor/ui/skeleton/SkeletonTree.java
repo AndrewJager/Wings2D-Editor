@@ -27,7 +27,6 @@ import com.wings2d.editor.objects.skeleton.Skeleton;
 import com.wings2d.editor.objects.skeleton.SkeletonAnimation;
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonFrame;
-import com.wings2d.editor.objects.skeleton.SkeletonMasterFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.objects.skeleton.SkeletonTreeCellRenderer;
 import com.wings2d.editor.objects.skeleton.SkeletonTreeModelListener;
@@ -198,15 +197,14 @@ public class SkeletonTree extends UIElement<SkeletonEdit>{
 					moveUpItem.setEnabled(false);
 					moveDownItem.setEnabled(false);
 				}
-				else if (selectedNode instanceof SkeletonMasterFrame)
-				{
-					editItem.setEnabled(false);
-					moveUpItem.setEnabled(false);
-					moveDownItem.setEnabled(false);
-				}
 				else if (selectedNode instanceof SkeletonFrame) {
 					SkeletonFrame frame = (SkeletonFrame)selectedNode;
-					if (frame.getParentSyncedFrame() != null) {
+					if (frame.getIsMaster()) {
+						editItem.setEnabled(false);
+						moveUpItem.setEnabled(false);
+						moveDownItem.setEnabled(false);
+					}
+					else if (frame.getParentSyncedFrame() != null) {
 						editItem.setEnabled(false);
 					}
 				}

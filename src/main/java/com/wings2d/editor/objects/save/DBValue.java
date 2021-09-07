@@ -62,6 +62,11 @@ public abstract class DBValue<T> {
 	protected abstract T initValue(final ResultSet rs);
 	
 	protected String saveValue(final T value) {
-		return value.toString();
+		if (value != null) {
+			return value.toString();
+		}
+		else { 
+			return "";
+		}
 	}
 }

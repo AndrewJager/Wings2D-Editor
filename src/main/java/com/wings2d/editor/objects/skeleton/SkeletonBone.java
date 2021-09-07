@@ -560,7 +560,8 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	{
 		if (syncBoneID != null && (parentSyncedBone == null || (!parentSyncedBone.getID().equals(syncBoneID))))
 		{
-			parentSyncedBone = frame.getAnimation().getSkeleton().getBoneBYID(syncBoneID);
+			SkeletonAnimation animation = (SkeletonAnimation)frame.getParent();
+			parentSyncedBone = animation.getSkeleton().getBoneBYID(syncBoneID);
 			parentSyncedBone.getSyncedBones().add(this);
 		}
 		if (parentBoneName != null)

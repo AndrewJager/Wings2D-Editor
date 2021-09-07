@@ -57,12 +57,11 @@ public class Skeleton extends SkeletonNode {
 		try {
 			stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
+			setup(settings, con);
 			initData(con,rs.getString("ID"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		setup(settings, con);
 	}
 	
 	/** Read constructor */
@@ -72,26 +71,14 @@ public class Skeleton extends SkeletonNode {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
+			setup(settings, con);
 			initData(con,rs.getString("ID"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		setup(settings, con);
 	}
 	private void setup(final EditorSettings settings, final Connection con) {
 		animations = new ArrayList<SkeletonNode>();
-		
-		// Get Master Frame
-		String query = " SELECT * FROM FRAME WHERE Skeleton = " + "'" + this.getID() + "'";
-		try {
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			masterFrame = new SkeletonFrame(rs.getString("ID"), null, con, settings, true, this.getID());
-			animations.add(masterFrame);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 
 		this.settings = settings;
 	}
@@ -99,8 +86,19 @@ public class Skeleton extends SkeletonNode {
 		id = new DBString(con, "SKELETON", "ID", thisID);
 		name = new DBString (con, "SKELETON", "Name", thisID);
 		
+		// Get Master Frame
+		String query = " SELECT * FROM FRAME WHERE Skeleton = " + "'" + this.getID() + "'";
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			masterFrame = new SkeletonFrame(rs.getString("ID"), null, con, settings, true, this);
+			animations.add(masterFrame);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		// Add Animations
-		String query = " SELECT * FROM ANIMATION WHERE Skeleton = " + "'" + id.getValue() + "'";
+		query = " SELECT * FROM ANIMATION WHERE Skeleton = " + "'" + id.getValue() + "'";
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);

@@ -80,11 +80,11 @@ public abstract class SkeletonTreeControlsUIElement {
 						}
 						int result = JOptionPane.showConfirmDialog(panel, "Deleting a node cannot be undone. Continue?", "Warning", JOptionPane.YES_NO_OPTION);
 						if (result == JOptionPane.OK_OPTION) {
-							SkeletonNode.delete(selectedNode.getID(), selectedNode.getTableName(), con);
-							
 							DefaultTreeModel model = (DefaultTreeModel)controls.getTree().getModel();
 							model.removeNodeFromParent(selectedNode);
 							controls.getEditPanel().getSkeletonTree().reloadModel();
+							
+							SkeletonNode.delete(selectedNode.getID(), selectedNode.getTableName(), con);
 						}
 					}
 					catch (IllegalStateException ex){

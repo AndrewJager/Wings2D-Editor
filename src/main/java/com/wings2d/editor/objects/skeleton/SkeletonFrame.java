@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Scanner;
 import java.util.UUID;
 
 import javax.swing.tree.MutableTreeNode;
@@ -33,7 +31,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	protected List<SkeletonFrame> syncedFrames;
 	
 	private EditorSettings settings;
-	private SkeletonAnimation animation;
+	private SkeletonNode parent;
 	private SkeletonFrame parentSyncedFrame;
 	
 	private DBString syncFrameID;
@@ -44,27 +42,41 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	public SkeletonFrame(final String frameName, final SkeletonAnimation frameParent, final EditorSettings settings, 
 			final Connection con)
 	{
-		this(frameName, frameParent, settings, con, false, "");
+		this(frameName, frameParent, settings, con, false, null);
 	}
 	public SkeletonFrame(final String frameName, final SkeletonAnimation frameParent, final EditorSettings settings, 
-			final Connection con, final boolean isMaster, final String skeletonID)
+			final Connection con, final boolean isMaster, final Skeleton skeleton)
 	{
 		super("FRAME");
+		if ((frameParent == null) && (skeleton == null)) {
+			throw new IllegalArgumentException("Frame must be provided a parent!");
+		}
+		
 		// frameParent will be null for Master Frame
 		if (frameParent != null && frameParent.containsFrameWithName(frameName))
 		{
 			throw new IllegalArgumentException("A Frame with this name already exists in this Animation!");
 		}
 
-		setup(frameParent, settings);
+		if (isMaster) {
+			setup(skeleton, settings);
+		}
+		else {
+			setup(frameParent, settings);
+		}
+		
 		String animID = "";
 		if (frameParent != null) {
 			animID = frameParent.getID();
 		}
+		String skelID = "";
+		if (skeleton != null) {
+			skelID = skeleton.getID();
+		}
 		String newID = UUID.randomUUID().toString();
 		String query = "INSERT INTO FRAME (ID, Name, Animation, Skeleton, IsMaster, SyncFrame)"
 				+ " VALUES(" + "'" + newID + "'" + "," + "'" + frameName + "'" + "," + "'" + animID + "'" 
-				+ "," + "'" + skeletonID + "'" + "," + isMaster + "," + " " + ")";
+				+ "," + "'" + skelID + "'" + "," + isMaster + "," + "'" + " " + "'" + ")";
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
@@ -83,12 +95,23 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 			e.printStackTrace();
 		}
 	}
+	public SkeletonFrame(final String thisID, final SkeletonAnimation frameParent, final Connection con, final EditorSettings settings) {
+		this(thisID, frameParent, con, settings, false, null);
+	}
 	public SkeletonFrame(final String thisID, final SkeletonAnimation frameParent, final Connection con, final EditorSettings settings, 
-			final boolean isMaster, final String skeletonID)
+			final boolean isMaster, final Skeleton skeleton)
 	{
 		super("FRAME");
+		if ((frameParent == null) && (skeleton == null)) {
+			throw new IllegalArgumentException("Frame must be provided a parent!");
+		}
 
-		setup(frameParent, settings);
+		if (isMaster) {
+			setup(skeleton, settings);
+		}
+		else {
+			setup(frameParent, settings);
+		}
 		
 		String query = " SELECT * FROM FRAME WHERE ID = " + "'" + thisID + "'";
 		try {
@@ -100,9 +123,9 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		}
 	}
 	
-	private void setup(final SkeletonAnimation frameParent, final EditorSettings settings)
+	private void setup(final SkeletonNode frameParent, final EditorSettings settings)
 	{
-		animation = frameParent;
+		parent = frameParent;
 		bones = new ArrayList<SkeletonBone>();
 		syncedFrames = new ArrayList<SkeletonFrame>();
 		this.settings = settings;
@@ -411,9 +434,6 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	public UUID getGUID() {
 		return UUID.fromString(id.getValue());
 	}
-	public SkeletonAnimation getAnimation() {
-		return animation;
-	}
 	public EditorSettings getSettings() {
 		return settings;
 	}
@@ -430,29 +450,6 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		for (int i = 0; i < bones.size(); i++)
 		{
 			bones.get(i).unsyncAll();
-		}
-	}
-	
-	/**
-	 * @return The previous frame in the animation. Loops to the end if this frame is the first.
-	 */
-	public SkeletonFrame getPreviousFrame() {
-		int idx = this.getAnimation().getFrames().indexOf(this);
-		if (idx > 0) {
-			return this.getAnimation().getFrames().get(idx - 1);
-		}
-		else {
-			return this.getAnimation().getFrames().get(this.getAnimation().getFrames().size() - 1);
-		}
-	}
-	
-	public SkeletonFrame getNextFrame() {
-		int idx = this.getAnimation().getFrames().indexOf(this);
-		if (idx < (this.getAnimation().getFrames().size() - 1)) {
-			return this.getAnimation().getFrames().get(idx + 1);
-		}
-		else {
-			return this.getAnimation().getFrames().get(0);
 		}
 	}
 	
@@ -478,11 +475,11 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	public void setUserObject(final Object object) {}
 	@Override
 	public void removeFromParent() {
-		animation.remove(this);
+		parent.remove(this);
 	}
 	@Override
 	public void setParent(final MutableTreeNode newParent) {
-		animation = (SkeletonAnimation)newParent;
+		parent = (SkeletonNode)newParent;
 	}
 	@Override
 	public TreeNode getChildAt(final int childIndex) {
@@ -494,7 +491,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	}
 	@Override
 	public TreeNode getParent() {
-		return animation;
+		return parent;
 	}
 	@Override
 	public int getIndex(final TreeNode node) {
@@ -518,7 +515,11 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	{
 		if (syncFrameID.getValue() != null)
 		{
-			setParentSyncedFrame(animation.getSkeleton().getFrameByID(UUID.fromString(syncFrameID.getValue())));
+			// Won't need to do this for Master Frame
+			if (!this.isMaster()) {
+				SkeletonAnimation animation = (SkeletonAnimation)parent;
+				setParentSyncedFrame(animation.getSkeleton().getFrameByID(UUID.fromString(syncFrameID.getValue())));
+			}
 		}
 		for (int i = 0; i < bones.size(); i++)
 		{
@@ -576,27 +577,35 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	@Override
 	public void moveUp() throws ActionNotDoneException
 	{
-		List<SkeletonFrame> frames = animation.getFrames();
-		int index = frames.indexOf(this);
-		if (index > 0) 
-		{
-			Collections.swap(frames, index, index - 1);
-		}
-		else {
-			throw new ActionNotDoneException(MOVE_UP_ERROR, false);
+		// Won't need to do this if Master Frame
+		if (parent instanceof SkeletonAnimation) {
+			SkeletonAnimation animation = (SkeletonAnimation)parent;
+			List<SkeletonFrame> frames = animation.getFrames();
+			int index = frames.indexOf(this);
+			if (index > 0) 
+			{
+				Collections.swap(frames, index, index - 1);
+			}
+			else {
+				throw new ActionNotDoneException(MOVE_UP_ERROR, false);
+			}
 		}
 	}
 	@Override
 	public void moveDown() throws ActionNotDoneException
 	{
-		List<SkeletonFrame> frames = animation.getFrames();
-		int index = frames.indexOf(this);
-		if (index < frames.size() - 1) 
-		{
-			Collections.swap(frames, index, index + 1);
-		}
-		else {
-			throw new ActionNotDoneException(MOVE_DOWN_ERROR, false);
+		// Won't need to do this if Master Frame
+		if (parent instanceof SkeletonAnimation) {
+			SkeletonAnimation animation = (SkeletonAnimation)parent;
+			List<SkeletonFrame> frames = animation.getFrames();
+			int index = frames.indexOf(this);
+			if (index < frames.size() - 1) 
+			{
+				Collections.swap(frames, index, index + 1);
+			}
+			else {
+				throw new ActionNotDoneException(MOVE_DOWN_ERROR, false);
+			}
 		}
 	}
 	@Override

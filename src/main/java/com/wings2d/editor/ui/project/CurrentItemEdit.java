@@ -58,7 +58,7 @@ public class CurrentItemEdit extends UIElement<ProjectEdit>{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (curItem != null) {
-					Skeleton.delete(curItem.getID(), con);
+					curItem.delete(con);
 					getEditPanel().getProjectItems().setListItems();
 				}
 			}

@@ -10,6 +10,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -94,6 +95,11 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		sprites = new ArrayList<Sprite>();
 		handleColor = settings.getUnselectedHandleColor();
 		rotation = 0;
+	}
+	
+	@Override
+	public void deleteChildren(final String ID, final Connection con) {
+		
 	}
 	
 	public String toString()

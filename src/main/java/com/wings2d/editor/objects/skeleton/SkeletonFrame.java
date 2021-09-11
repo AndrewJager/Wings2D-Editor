@@ -137,8 +137,9 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		syncFrameID = new DBString(con, "FRAME", "SyncFrame", thisID);
 	}
 	
-	public static void delete(final String ID, final Connection con) {
-		SkeletonNode.delete(ID, "FRAME", con);
+	@Override
+	public void deleteChildren(final String ID, final Connection con) {
+		
 	}
 
 	public String toString()

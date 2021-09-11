@@ -12,7 +12,6 @@ import java.util.UUID;
 import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.save.DBString;
 import com.wings2d.editor.objects.skeleton.Skeleton;
-import com.wings2d.editor.objects.skeleton.SkeletonNode;
 
 public class Project {
 	private DBString id;
@@ -105,22 +104,22 @@ public class Project {
 		return name.getValue();
 	}
 	
-	public static void delete(final String id, final Connection con) {
+	public void delete(final Connection con, final EditorSettings settings) {
 		// Delete Skeletons assocated with this project
-		String sql = "SELECT * FROM SKELETON WHERE Project = " + "'" + id +"'";
-		Statement stmt;
-		try {
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-			while(rs.next()) {
-				Skeleton.delete(rs.getString("ID"), con);
-			}
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		List<Skeleton> sks = getSkeletons(settings, con);
+		for (int i = 0; i < sks.size(); i++) {
+			sks.get(i).delete(con);
 		}
 
 		 
 		// Delete this project
-		SkeletonNode.delete(id, "PROJECT", con);
+		String sql = "DELETE FROM PROJECT WHERE ID = " + "'" + this.getID() +"'";
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+			stmt.executeUpdate(sql);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 	}
 }

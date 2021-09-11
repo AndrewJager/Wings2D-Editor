@@ -1,6 +1,7 @@
 package com.wings2d.editor.objects.skeleton;
 
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -17,6 +18,11 @@ public class SpritePoint extends SkeletonNode{
 		this.parent = parent;
 		this.x = x;
 		this.y = y;
+	}
+	
+	@Override
+	public void deleteChildren(final String ID, final Connection con) {
+		
 	}
 	
 	public String toString() {

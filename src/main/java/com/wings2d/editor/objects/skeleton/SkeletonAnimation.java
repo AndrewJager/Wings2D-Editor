@@ -1,6 +1,5 @@
 package com.wings2d.editor.objects.skeleton;
 
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -94,9 +93,12 @@ public class SkeletonAnimation extends SkeletonNode{
 		}
 	}
 	
-	public static void delete(final String id, final Connection con) {
-		// Delete this Animation
-		SkeletonNode.delete(id, "ANIMATION", con);
+	@Override
+	public void deleteChildren(final String id, final Connection con) {
+		// Delete Frames 
+		for (int i = 0; i < frames.size(); i++) {
+			frames.get(i).delete(con);
+		}
 	}
 
 	public String toString()

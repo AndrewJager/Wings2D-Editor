@@ -1,6 +1,5 @@
 package com.wings2d.editor.objects.skeleton;
 
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -44,7 +43,6 @@ public class Skeleton extends SkeletonNode {
 		query = "INSERT INTO FRAME (ID, Name, Animation, Skeleton, IsMaster, SyncFrame)"
 				+ " VALUES(" + "'" + UUID.randomUUID() + "'" + "," + "'" + "Master" + "'" + "," + "'" + " " + "'" 
 				+ "," + "'" + id + "'" + "," + true + "," + "'" + " " + "'" + ")";
-		System.out.println(query);
 		try {
 			stmt = con.createStatement();
 			stmt.executeUpdate(query);
@@ -110,34 +108,12 @@ public class Skeleton extends SkeletonNode {
 		}
 	}
 	
-	public static void delete(final String id, final Connection con) {
-		// Delete Animations associated with the skeleton
-		String sql = "SELECT * FROM ANIMATION WHERE Skeleton = " + "'" + id +"'";
-		Statement stmt;
-		try {
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-			while(rs.next()) {
-				SkeletonAnimation.delete(rs.getString("ID"), con);
-			}
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+	@Override
+	public void deleteChildren(final String id, final Connection con) {
+		// Delete Animations (and Master Frame) associated with the skeleton
+		for(int i = 0; i < animations.size(); i++) {
+			animations.get(i).delete(con);
 		}
-		
-		// Delete Master Frame associated with this skeleton
-		sql = "SELECT * FROM Frame WHERE Skeleton = " + "'" + id +"'";
-		try {
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-			while(rs.next()) {
-				SkeletonFrame.delete(rs.getString("ID"), con);
-			}
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-		
-		// Delete this Skeleton
-		SkeletonNode.delete(id, "SKELETON", con);
 	}
 	
 	public SkeletonFrame getMasterFrame() {

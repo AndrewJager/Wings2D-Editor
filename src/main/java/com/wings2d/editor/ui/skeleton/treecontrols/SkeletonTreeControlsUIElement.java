@@ -84,7 +84,7 @@ public abstract class SkeletonTreeControlsUIElement {
 							model.removeNodeFromParent(selectedNode);
 							controls.getEditPanel().getSkeletonTree().reloadModel();
 							
-							SkeletonNode.delete(selectedNode.getID(), selectedNode.getTableName(), con);
+							selectedNode.delete(con);
 						}
 					}
 					catch (IllegalStateException ex){

@@ -14,6 +14,7 @@ import java.awt.geom.Point2D;
 import java.awt.image.BaseMultiResolutionImage;
 import java.awt.image.BufferedImage;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -67,6 +68,11 @@ public class Sprite extends SkeletonNode implements Drawable{
 		lineTo(30, 30);
 		lineTo(-30, 30);
 		path.closePath();
+	}
+	
+	@Override
+	public void deleteChildren(final String ID, final Connection con) {
+		
 	}
 	
 //	public Sprite(final Scanner in, final SkeletonBone parent)

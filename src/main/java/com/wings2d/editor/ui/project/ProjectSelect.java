@@ -122,7 +122,7 @@ public class ProjectSelect extends UIElement<ProjectEdit>{
 		deleteProj.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Project.delete(projList.getSelectedValue().getID(), con);
+				projList.getSelectedValue().delete(con, settings);
 				model.clear();
 				getEditPanel().refreshInfo();
 				

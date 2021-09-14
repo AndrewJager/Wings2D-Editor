@@ -84,7 +84,7 @@ public class Project {
 			stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			while (rs.next()) {
-				entities.add(new Skeleton(rs.getString("ID"), settings, con));
+				entities.add(Skeleton.read(rs.getString("ID"), settings, con));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

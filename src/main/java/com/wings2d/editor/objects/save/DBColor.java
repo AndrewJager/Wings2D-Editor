@@ -24,6 +24,9 @@ public class DBColor extends DBValue<Color>{
 	public DBColor(final Connection con, final String table, final String column) {
 		super(con, table, column);
 	}
+	public DBColor(final Connection con, final String table, final String column, final String id) {
+		super(con, table, column, id);
+	}
 
 	@Override
 	protected Color initValue(ResultSet rs) {

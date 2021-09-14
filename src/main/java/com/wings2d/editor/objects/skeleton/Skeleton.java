@@ -17,14 +17,23 @@ import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.save.DBString;
 
 public class Skeleton extends SkeletonNode {
-	public static final String FILE_MARKER = "SKELETON";
+	public class SkeletonFactory {
+
+	}
 	
 	private List<SkeletonNode> animations;
 	private SkeletonFrame masterFrame;
 	private EditorSettings settings;
 	
+	public static Skeleton insert(final String skeletonName, final String projID, final EditorSettings settings, final Connection con) {
+		return new Skeleton(skeletonName, projID, settings, con);
+	}
+	public static Skeleton read(final String skelID, final EditorSettings settings, final Connection con) {
+		return new Skeleton(skelID, settings, con);
+	}
+	
 	/** Insert constructor */
-	public Skeleton(final String skeletonName, final String projID, final EditorSettings settings, final Connection con)
+	private Skeleton(final String skeletonName, final String projID, final EditorSettings settings, final Connection con)
 	{	
 		super("SKELETON");
 		String id = UUID.randomUUID().toString();
@@ -63,7 +72,7 @@ public class Skeleton extends SkeletonNode {
 	}
 	
 	/** Read constructor */
-	public Skeleton(final String skelID, final EditorSettings settings, final Connection con) {
+	private Skeleton(final String skelID, final EditorSettings settings, final Connection con) {
 		super("SKELETON");
 		String query = " SELECT * FROM SKELETON WHERE ID = " + "'" + skelID + "'";
 		try {
@@ -80,7 +89,9 @@ public class Skeleton extends SkeletonNode {
 
 		this.settings = settings;
 	}
-	private void initData(final Connection con, final String thisID) throws SQLException {
+	
+	@Override
+	protected void initData(final Connection con, final String thisID) throws SQLException {
 		id = new DBString(con, "SKELETON", "ID", thisID);
 		name = new DBString (con, "SKELETON", "Name", thisID);
 		
@@ -89,7 +100,7 @@ public class Skeleton extends SkeletonNode {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
-			masterFrame = new SkeletonFrame(rs.getString("ID"), null, con, settings, true, this);
+			masterFrame = SkeletonFrame.read(rs.getString("ID"), null, con, settings, true, this);
 			animations.add(masterFrame);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -101,7 +112,7 @@ public class Skeleton extends SkeletonNode {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			while(rs.next()) {
-				animations.add(new SkeletonAnimation(rs.getString("ID"), this, con));
+				animations.add(SkeletonAnimation.read(rs.getString("ID"), this, con));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -109,7 +120,7 @@ public class Skeleton extends SkeletonNode {
 	}
 	
 	@Override
-	public void deleteChildren(final String id, final Connection con) {
+	protected void deleteChildren(final String id, final Connection con) {
 		// Delete Animations (and Master Frame) associated with the skeleton
 		for(int i = 0; i < animations.size(); i++) {
 			animations.get(i).delete(con);

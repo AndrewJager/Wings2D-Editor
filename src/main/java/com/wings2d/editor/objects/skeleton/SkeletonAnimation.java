@@ -18,14 +18,22 @@ import com.wings2d.editor.objects.save.DBString;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
 
 public class SkeletonAnimation extends SkeletonNode{
-	public static final String ANIM_TOKEN = "ANIMATION";
 	
 	private EditorSettings settings;
 	private Skeleton skeleton;
 	private List<SkeletonFrame> frames;
 	
+	private Connection con;
+	
+	public static SkeletonAnimation insert(final String animName, final String skeletonID, final Skeleton parent, final Connection con) {
+		return new SkeletonAnimation(animName, skeletonID, parent, con);
+	}
+	public static SkeletonAnimation read(final String animID, final Skeleton parent, final Connection con) {
+		return new SkeletonAnimation(animID, parent, con);
+	}
+	
 	/** Insert constructor */
-	public SkeletonAnimation(final String animName, final String skeletonID, final Skeleton parent, final Connection con)
+	private SkeletonAnimation(final String animName, final String skeletonID, final Skeleton parent, final Connection con)
 	{
 		super("ANIMATION");
 		
@@ -33,7 +41,7 @@ public class SkeletonAnimation extends SkeletonNode{
 		{
 			throw new IllegalArgumentException("An Animation with this name already exists!");
 		}
-		setup(parent);
+		setup(parent, con);
 		
 		String newID = UUID.randomUUID().toString();
 		String query = "INSERT INTO ANIMATION (ID, Name, Skeleton)"
@@ -57,9 +65,9 @@ public class SkeletonAnimation extends SkeletonNode{
 		}
 	}
 	
-	public SkeletonAnimation(final String animID, final Skeleton parent, final Connection con) {
+	private SkeletonAnimation(final String animID, final Skeleton parent, final Connection con) {
 		super("ANIMATION");
-		setup(parent);
+		setup(parent, con);
 		
 		String query = " SELECT * FROM ANIMATION WHERE ID = " + "'" + animID + "'";
 		try {
@@ -71,12 +79,15 @@ public class SkeletonAnimation extends SkeletonNode{
 		}
 	}
 	
-	private void setup(final Skeleton parent) {
+	private void setup(final Skeleton parent, final Connection con) {
 		this.skeleton = parent;
 		this.settings = parent.getSettings();
+		this.con = con;
 		frames = new ArrayList<SkeletonFrame>();
 	}
-	private void initData(final Connection con, final String thisID) throws SQLException {
+	
+	@Override
+	protected void initData(final Connection con, final String thisID) throws SQLException {
 		id = new DBString(con, "ANIMATION", "ID", thisID);
 		name = new DBString (con, "ANIMATION", "Name", thisID);
 		
@@ -86,7 +97,7 @@ public class SkeletonAnimation extends SkeletonNode{
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			while(rs.next()) {
-				frames.add(new SkeletonFrame(rs.getString("ID"), this, con, settings));
+				frames.add(SkeletonFrame.read(rs.getString("ID"), this, con, settings));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -94,7 +105,7 @@ public class SkeletonAnimation extends SkeletonNode{
 	}
 	
 	@Override
-	public void deleteChildren(final String id, final Connection con) {
+	protected void deleteChildren(final String id, final Connection con) {
 		// Delete Frames 
 		for (int i = 0; i < frames.size(); i++) {
 			frames.get(i).delete(con);
@@ -139,7 +150,7 @@ public class SkeletonAnimation extends SkeletonNode{
 			{
 				SkeletonBone bone = syncFrame.getBones().get(i);
 				if (!newFrame.containsBoneWithName(bone.getName())) {
-					newFrame.getBones().add(new SkeletonBone(bone, newFrame));
+					newFrame.getBones().add(new SkeletonBone(bone, newFrame, con));
 				}
 			}
 			newFrame.syncBonesToParents();

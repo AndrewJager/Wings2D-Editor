@@ -2,6 +2,7 @@ package com.wings2d.editor.objects.skeleton;
 
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -18,6 +19,11 @@ public class SpritePoint extends SkeletonNode{
 		this.parent = parent;
 		this.x = x;
 		this.y = y;
+	}
+	
+	@Override 
+	protected void initData(final Connection con, final String thisID) throws SQLException {
+		
 	}
 	
 	@Override

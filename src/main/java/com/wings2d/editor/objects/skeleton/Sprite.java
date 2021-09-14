@@ -15,6 +15,7 @@ import java.awt.image.BaseMultiResolutionImage;
 import java.awt.image.BufferedImage;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -68,6 +69,11 @@ public class Sprite extends SkeletonNode implements Drawable{
 		lineTo(30, 30);
 		lineTo(-30, 30);
 		path.closePath();
+	}
+	
+	@Override 
+	protected void initData(final Connection con, final String thisID) throws SQLException {
+		
 	}
 	
 	@Override

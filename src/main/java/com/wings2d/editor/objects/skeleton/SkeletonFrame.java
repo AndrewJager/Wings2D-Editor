@@ -37,14 +37,32 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	private DBString syncFrameID;
 	private DBBoolean isMaster;
 	
-	public static final String SYNC_FRAME_TOKEN = "SYNCFRAME";
+	private Connection con;
 	
-	public SkeletonFrame(final String frameName, final SkeletonAnimation frameParent, final EditorSettings settings, 
+	public static SkeletonFrame insert(final String frameName, final SkeletonAnimation frameParent, final EditorSettings settings, 
+			final Connection con) {
+		return new SkeletonFrame(frameName, frameParent, settings, con);
+	}
+	public static SkeletonFrame insert(final String frameName, final SkeletonAnimation frameParent, final EditorSettings settings, 
+			final Connection con, final boolean isMaster, final Skeleton skeleton) {
+		return new SkeletonFrame(frameName, frameParent, settings, con, isMaster, skeleton);
+	}
+	
+	public static SkeletonFrame read(final String thisID, final SkeletonAnimation frameParent, final Connection con, final EditorSettings settings) {
+		return new SkeletonFrame(thisID, frameParent, con, settings);
+	}
+	public static SkeletonFrame read(final String thisID, final SkeletonAnimation frameParent, final Connection con, final EditorSettings settings, 
+			final boolean isMaster, final Skeleton skeleton) 
+	{
+		return new SkeletonFrame(thisID, frameParent, con, settings, isMaster, skeleton);
+	}
+	
+	private SkeletonFrame(final String frameName, final SkeletonAnimation frameParent, final EditorSettings settings, 
 			final Connection con)
 	{
 		this(frameName, frameParent, settings, con, false, null);
 	}
-	public SkeletonFrame(final String frameName, final SkeletonAnimation frameParent, final EditorSettings settings, 
+	private SkeletonFrame(final String frameName, final SkeletonAnimation frameParent, final EditorSettings settings, 
 			final Connection con, final boolean isMaster, final Skeleton skeleton)
 	{
 		super("FRAME");
@@ -59,10 +77,10 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		}
 
 		if (isMaster) {
-			setup(skeleton, settings);
+			setup(skeleton, settings, con);
 		}
 		else {
-			setup(frameParent, settings);
+			setup(frameParent, settings, con);
 		}
 		
 		String animID = "";
@@ -95,10 +113,10 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 			e.printStackTrace();
 		}
 	}
-	public SkeletonFrame(final String thisID, final SkeletonAnimation frameParent, final Connection con, final EditorSettings settings) {
+	private SkeletonFrame(final String thisID, final SkeletonAnimation frameParent, final Connection con, final EditorSettings settings) {
 		this(thisID, frameParent, con, settings, false, null);
 	}
-	public SkeletonFrame(final String thisID, final SkeletonAnimation frameParent, final Connection con, final EditorSettings settings, 
+	private SkeletonFrame(final String thisID, final SkeletonAnimation frameParent, final Connection con, final EditorSettings settings, 
 			final boolean isMaster, final Skeleton skeleton)
 	{
 		super("FRAME");
@@ -107,10 +125,10 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		}
 
 		if (isMaster) {
-			setup(skeleton, settings);
+			setup(skeleton, settings, con);
 		}
 		else {
-			setup(frameParent, settings);
+			setup(frameParent, settings, con);
 		}
 		
 		String query = " SELECT * FROM FRAME WHERE ID = " + "'" + thisID + "'";
@@ -123,23 +141,40 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		}
 	}
 	
-	private void setup(final SkeletonNode frameParent, final EditorSettings settings)
+	private void setup(final SkeletonNode frameParent, final EditorSettings settings, final Connection con)
 	{
 		parent = frameParent;
+		this.con = con;
 		bones = new ArrayList<SkeletonBone>();
 		syncedFrames = new ArrayList<SkeletonFrame>();
 		this.settings = settings;
 	}
-	private void initData(final Connection con, final String thisID) throws SQLException {
+	
+	@Override
+	protected void initData(final Connection con, final String thisID) throws SQLException {
 		id = new DBString(con, "FRAME", "ID", thisID);
 		name = new DBString (con, "FRAME", "Name", thisID);
 		isMaster = new DBBoolean(con, "FRAME", "IsMaster", thisID);
 		syncFrameID = new DBString(con, "FRAME", "SyncFrame", thisID);
+		
+		// Get Bones
+		String query = " SELECT * FROM BONE WHERE Frame = " + "'" + this.getID() + "'";
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while(rs.next()) {
+				bones.add(SkeletonBone.read(rs.getString("ID"), con, this));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
-	public void deleteChildren(final String ID, final Connection con) {
-		
+	protected void deleteChildren(final String ID, final Connection con) {
+		for(int i = 0; i < bones.size(); i++) {
+			bones.get(i).delete(con);
+		}
 	}
 
 	public String toString()
@@ -461,7 +496,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		bones.add(index, newBone);
 		for(int i = 0; i < syncedFrames.size(); i++)
 		{
-			syncedFrames.get(i).insert(new SkeletonBone(newBone, syncedFrames.get(i)), index);
+			syncedFrames.get(i).insert(new SkeletonBone(newBone, syncedFrames.get(i), con), index);
 		}
 	}
 	@Override

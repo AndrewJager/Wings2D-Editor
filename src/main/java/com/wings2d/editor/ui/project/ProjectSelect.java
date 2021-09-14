@@ -113,8 +113,7 @@ public class ProjectSelect extends UIElement<ProjectEdit>{
 			public void actionPerformed(ActionEvent e) {
 				String skeletonName = JOptionPane.showInputDialog(panel, "Skeleton Name");
 				if (skeletonName != null) {
-					new Skeleton(skeletonName, projList.getSelectedValue().getID(),
-							getEditPanel().getEditor().getSettings(), con);
+					Skeleton.insert(skeletonName, projList.getSelectedValue().getID(), settings, con);
 					getEditPanel().refreshInfo();
 				}
 			}

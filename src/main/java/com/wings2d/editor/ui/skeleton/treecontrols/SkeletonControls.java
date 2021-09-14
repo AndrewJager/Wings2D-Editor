@@ -59,7 +59,7 @@ public class SkeletonControls extends SkeletonTreeControlsUIElement{
 					DefaultTreeModel model = (DefaultTreeModel) controls.getTree().getModel();
 					Skeleton root = (Skeleton) model.getRoot();
 					try {
-						SkeletonAnimation newAnim = new SkeletonAnimation(animName, root.getID(), root, con);	
+						SkeletonAnimation newAnim = SkeletonAnimation.insert(animName, root.getID(), root, con);	
 						controls.getEditPanel().getEditor().getEditsManager().edit(new AddToTree(model, newAnim, root));
 						controls.getTree().setSelectionPath(controls.getTree().getSelectionPath().pathByAddingChild(
 								root.getChildAt(root.getChildCount() - 1)));

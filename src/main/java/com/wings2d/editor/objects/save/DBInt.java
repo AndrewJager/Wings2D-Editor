@@ -9,6 +9,9 @@ public class DBInt extends DBValue<Integer>{
 	public DBInt(final Connection con, final String table, final String column) {
 		super(con, table, column);
 	}
+	public DBInt(final Connection con, final String table, final String column, final String id) {
+		super(con, table, column, id);
+	}
 
 	protected Integer initValue(final ResultSet rs) {
 		Integer value = null;

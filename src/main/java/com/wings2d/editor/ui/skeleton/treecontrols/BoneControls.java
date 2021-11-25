@@ -60,7 +60,7 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						controls.getEditPanel().getEditor().getEditsManager().edit(new SetBoneLocation(
-								bone, xPos.getAmt(), bone.getY(), true));
+								bone, xPos.getAmt(), bone.getY(), true, true));
 					}
 				});
 		panel.add(xPos.getPanel());
@@ -70,7 +70,7 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						controls.getEditPanel().getEditor().getEditsManager().edit(new SetBoneLocation(
-								bone, bone.getX(), yPos.getAmt(), true));
+								bone, bone.getX(), yPos.getAmt(), true, true));
 					}
 				});
 		panel.add(xPos.getPanel());

@@ -14,7 +14,7 @@ public class DBString extends DBValue<String>{
 	}
 
 	@Override
-	protected String initValue(final ResultSet rs) {
+	protected String readValue(final ResultSet rs) {
 		String value = null;
 		try {
 			value = rs.getString(column);

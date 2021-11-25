@@ -11,6 +11,8 @@ public abstract class DBValue<T> {
 	protected String column;
 	protected String id;
 	
+	protected T bufferValue;
+	
 	public DBValue(final Connection con, final String table, final String column) {
 		this(con, table, column, null);
 	}
@@ -23,25 +25,53 @@ public abstract class DBValue<T> {
 	}
 	
 	public T getValue() {
+		return getValue(false);
+	}
+	public T getValue(final boolean useBuffer) {
 		T value = null;
-		String query = "SELECT * FROM " + table;
-		if (id != null) {
-			query = query + " WHERE ID = " + "'" + id +"'";
+		if (useBuffer) {
+			value = bufferValue;
 		}
-		try {
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			
-			value = initValue(rs);
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
+		else {
+			String query = "SELECT * FROM " + table;
+			if (id != null) {
+				query = query + " WHERE ID = " + "'" + id +"'";
+			}
+			try {
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery(query);
+				
+				value = initValue(rs);
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return value;
 	}
-	
 	public void setValue(final T value) {
-		String query = getBaseQuery() + "'" + saveValue(value) + "'";
+		setValue(value, false);
+	}
+	public void setValue(final T value, final boolean useBuffer) {
+		bufferValue = value;
+		if (!useBuffer) {
+			String query = getBaseQuery() + "'" + saveValue(value) + "'";
+			if (id != null) {
+				query = query + "WHERE ID = " + "'" + id +"'";
+			}
+			try {
+				Statement stmt = con.createStatement();
+				stmt.executeUpdate(query);
+				stmt.close();
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	/** Commit the value in the buffer to the database */
+	public void commitBuffer() {
+		String query = getBaseQuery() + "'" + saveValue(bufferValue) + "'";
 		if (id != null) {
 			query = query + "WHERE ID = " + "'" + id +"'";
 		}
@@ -59,7 +89,11 @@ public abstract class DBValue<T> {
 		return "UPDATE " + table
 				+ " SET " + column + " = ";
 	}
-	protected abstract T initValue(final ResultSet rs);
+	public T initValue(final ResultSet rs) {
+		bufferValue = readValue(rs);
+		return bufferValue;
+	}
+	protected abstract T readValue(final ResultSet rs);
 	
 	protected String saveValue(final T value) {
 		if (value != null) {

@@ -13,7 +13,7 @@ public class DBDouble extends DBValue<Double>{
 		super(con, table, column, id);
 	}
 
-	protected Double initValue(final ResultSet rs) {
+	protected Double readValue(final ResultSet rs) {
 		Double value = null;
 		try {
 			value = rs.getDouble(column);

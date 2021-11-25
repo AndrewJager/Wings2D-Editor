@@ -29,7 +29,7 @@ public class DBColor extends DBValue<Color>{
 	}
 
 	@Override
-	protected Color initValue(ResultSet rs) {
+	protected Color readValue(ResultSet rs) {
 		Color value = null;
 		try {
 			value = ColorUtils.fromString(rs.getString(column));

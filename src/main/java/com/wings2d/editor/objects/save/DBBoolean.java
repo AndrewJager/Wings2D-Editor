@@ -14,7 +14,7 @@ public class DBBoolean extends DBValue<Boolean>{
 	}
 
 	@Override
-	protected Boolean initValue(final ResultSet rs) {
+	protected Boolean readValue(final ResultSet rs) {
 		Boolean value = null;
 		try {
 			value = rs.getBoolean(column);

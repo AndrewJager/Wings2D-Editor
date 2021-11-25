@@ -13,7 +13,7 @@ public class DBInt extends DBValue<Integer>{
 		super(con, table, column, id);
 	}
 
-	protected Integer initValue(final ResultSet rs) {
+	protected Integer readValue(final ResultSet rs) {
 		Integer value = null;
 		try {
 			value = rs.getInt(column);

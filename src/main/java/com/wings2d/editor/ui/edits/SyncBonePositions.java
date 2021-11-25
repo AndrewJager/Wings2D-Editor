@@ -30,7 +30,7 @@ public class SyncBonePositions extends Edit{
 				if ((!cautious) || 
 					((bone.getX() == SkeletonBone.START_POS.getX()) && (bone.getY() == SkeletonBone.START_POS.getY()))) 
 				{
-					moves.add(new SetBoneLocation(bone, bone.getParentSyncedBone().getX(), bone.getParentSyncedBone().getY(), false));
+					moves.add(new SetBoneLocation(bone, bone.getParentSyncedBone().getX(), bone.getParentSyncedBone().getY(), false, true));
 				}
 			}
 		}

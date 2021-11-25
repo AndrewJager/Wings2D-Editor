@@ -25,7 +25,7 @@ public class DBPoint extends DBValue<Point2D>{
 	}
 
 	@Override
-	protected Point2D initValue(ResultSet rs) {
+	protected Point2D readValue(ResultSet rs) {
 		Point2D value = null;
 		try {
 			value = PointUtils.fromString(rs.getString(column));

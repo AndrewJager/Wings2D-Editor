@@ -161,6 +161,10 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 			public void mouseReleased(MouseEvent e) {
 				if (selectedItem != null)
 				{
+					if (selectedItem instanceof SkeletonBone) {
+						SkeletonBone bone = (SkeletonBone)selectedItem;
+						bone.commitLocData();
+					}
 					selectedItem = null;
 				}
 			}
@@ -182,13 +186,13 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 						SkeletonBone bone = (SkeletonBone)selectedItem;
 						switch(moveType) {
 							case MOVE_BOTH -> {
-								bone.setLocation(e.getPoint(), scale, true);
+								bone.setLocation(e.getPoint(), scale, true, true);
 							}
 							case MOVE_X -> {
-								bone.setLocation(e.getPoint().getX() - settings.getPosHandleOffset(), bone.getY() * scale, scale, true);
+								bone.setLocation(e.getPoint().getX() - settings.getPosHandleOffset(), bone.getY() * scale, scale, true, true);
 							}
 							case MOVE_Y -> {
-								bone.setLocation(bone.getX() * scale, e.getPoint().getY() + settings.getPosHandleOffset(), scale, true);
+								bone.setLocation(bone.getX() * scale, e.getPoint().getY() + settings.getPosHandleOffset(), scale, true, true);
 							}
 						}
 						

@@ -269,17 +269,17 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	{
 		return childBones;
 	}
-	public void setLocation(final double x, final double y, final double scale, final boolean translateChildren)
+	public void setLocation(final double x, final double y, final double scale, final boolean translateChildren, final boolean buffer)
 	{
 		double unscale = 1.0 / scale;
 		double unscaledX = x * unscale;
 		double unscaledY = y * unscale;
 		
-		double deltaX = unscaledX - location.getValue().getX();
-		double deltaY = unscaledY - location.getValue().getY();
+		double deltaX = unscaledX - location.getValue(buffer).getX();
+		double deltaY = unscaledY - location.getValue(buffer).getY();
 		if ((unscaledX > 0 && unscaledY > 0) && checkTranslate(deltaX, deltaY))
 		{
-			location.setValue(new Point2D.Double(unscaledX, unscaledY));
+			location.setValue(new Point2D.Double(unscaledX, unscaledY), buffer);
 			if (translateChildren)
 			{
 				for (int i = 0; i < childBones.size(); i++)
@@ -290,18 +290,18 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		}
 	}
 	/** Calls setLocation with scale = 1 **/
-	public void setLocation(final double x, final double y, final boolean translateChildren)
+	public void setLocation(final double x, final double y, final boolean translateChildren, final boolean buffer)
 	{
-		setLocation(x, y, 1, translateChildren);
+		setLocation(x, y, 1, translateChildren, buffer);
 	}
-	public void setLocation(final Point loc, final double scale, final boolean translateChildren)
+	public void setLocation(final Point loc, final double scale, final boolean translateChildren, final boolean buffer)
 	{
-		this.setLocation(loc.getX(), loc.getY(), scale, translateChildren);
+		this.setLocation(loc.getX(), loc.getY(), scale, translateChildren, buffer);
 	}
 	/** Calls setLocation with scale = 1 **/
-	public void setLocation(final Point loc, final boolean translateChildren)
+	public void setLocation(final Point loc, final boolean translateChildren, final boolean buffer)
 	{
-		setLocation(loc, 1, translateChildren);
+		setLocation(loc, 1, translateChildren, buffer);
 	}
 	public Point2D getLocation()
 	{
@@ -544,6 +544,10 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	public void unsyncAll()
 	{
 		setParentSyncedBone(null);
+	}
+	public void commitLocData() {
+		location.commitBuffer();
+		rotation.commitBuffer();
 	}
 	
 	// MutableTreeNode methods

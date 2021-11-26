@@ -17,10 +17,6 @@ import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.save.DBString;
 
 public class Skeleton extends SkeletonNode {
-	public class SkeletonFactory {
-
-	}
-	
 	private List<SkeletonNode> animations;
 	private SkeletonFrame masterFrame;
 	private EditorSettings settings;
@@ -35,88 +31,27 @@ public class Skeleton extends SkeletonNode {
 	/** Insert constructor */
 	private Skeleton(final String skeletonName, final String projID, final EditorSettings settings, final Connection con)
 	{	
-		super("SKELETON");
-		String id = UUID.randomUUID().toString();
-		String query = "INSERT INTO SKELETON (ID, Name, Project)"
-				+ " VALUES(" + "'" + id + "'" + "," + "'" + skeletonName + "'" + "," + "'" + projID + "'" + ")";
-		Statement stmt;
-		try {
-			stmt = con.createStatement();
-			stmt.executeUpdate(query);
-			stmt.close();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
+		this(settings);
+		
+		this.insert(con);
+		
 		
 		// Create Master Frame
-		query = "INSERT INTO FRAME (ID, Name, Animation, Skeleton, IsMaster, SyncFrame)"
-				+ " VALUES(" + "'" + UUID.randomUUID() + "'" + "," + "'" + "Master" + "'" + "," + "'" + " " + "'" 
-				+ "," + "'" + id + "'" + "," + true + "," + "'" + " " + "'" + ")";
-		try {
-			stmt = con.createStatement();
-			stmt.executeUpdate(query);
-			stmt.close();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
+
 		
-		query = " SELECT * FROM SKELETON WHERE ID = " + "'" + id + "'";
-		try {
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			setup(settings, con);
-			initData(con,rs.getString("ID"));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		this.query(con, id.getStoredValue());
 	}
 	
 	/** Read constructor */
 	private Skeleton(final String skelID, final EditorSettings settings, final Connection con) {
-		super("SKELETON");
-		String query = " SELECT * FROM SKELETON WHERE ID = " + "'" + skelID + "'";
-		try {
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			setup(settings, con);
-			initData(con,rs.getString("ID"));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	private void setup(final EditorSettings settings, final Connection con) {
-		animations = new ArrayList<SkeletonNode>();
-
-		this.settings = settings;
+		this(settings);
+		this.query(con, skelID);
 	}
 	
-	@Override
-	protected void initData(final Connection con, final String thisID) throws SQLException {
-		id = new DBString(con, "SKELETON", "ID", thisID);
-		name = new DBString (con, "SKELETON", "Name", thisID);
-		
-		// Get Master Frame
-		String query = " SELECT * FROM FRAME WHERE Skeleton = " + "'" + this.getID() + "'";
-		try {
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			masterFrame = SkeletonFrame.read(rs.getString("ID"), null, con, settings, true, this);
-			animations.add(masterFrame);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		// Add Animations
-		query = " SELECT * FROM ANIMATION WHERE Skeleton = " + "'" + id.getValue() + "'";
-		try {
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			while(rs.next()) {
-				animations.add(SkeletonAnimation.read(rs.getString("ID"), this, con));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	private Skeleton(final EditorSettings settings) {
+		super("SKELETON");
+		animations = new ArrayList<SkeletonNode>();
+		this.settings = settings;
 	}
 	
 	@Override
@@ -127,13 +62,39 @@ public class Skeleton extends SkeletonNode {
 		}
 	}
 	
+	@Override
+	protected void queryChildren(final String id, final Connection con)
+	{
+		String sql = " SELECT * FROM " + SkeletonFrame.TABLE_NAME + " WHERE Skeleton = " + quoteStr(id);
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				animations.add(SkeletonFrame.read(rs.getString("ID"), null, con, settings, true, this));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		sql = " SELECT * FROM " + SkeletonAnimation.TABLE_NAME + " WHERE Skeleton = " + quoteStr(id);
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				animations.add(SkeletonAnimation.read(rs.getString("ID"), this, con));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public SkeletonFrame getMasterFrame() {
 		return masterFrame;
 	}
 
 	public String toString()
 	{
-		return name.getValue();
+		return name.getStoredValue();
 	}
 	
 	public boolean containsAnimWithName(final String animName)

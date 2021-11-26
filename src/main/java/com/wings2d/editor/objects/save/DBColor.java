@@ -1,12 +1,8 @@
 package com.wings2d.editor.objects.save;
 
 import java.awt.Color;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class DBColor extends DBValue<Color>{
-
 	public static class ColorUtils {
 		public static String toString(final Color col) {
 			return col.getRed() + ","
@@ -21,26 +17,17 @@ public class DBColor extends DBValue<Color>{
 		}
 	}
 
-	public DBColor(final Connection con, final String table, final String column) {
-		super(con, table, column);
-	}
-	public DBColor(final Connection con, final String table, final String column, final String id) {
-		super(con, table, column, id);
+	public DBColor(final String column) {
+		super(column);
 	}
 
 	@Override
-	protected Color readValue(ResultSet rs) {
-		Color value = null;
-		try {
-			value = ColorUtils.fromString(rs.getString(column));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return value;
-	}
-
-	@Override
-	protected String saveValue(final Color value) {
+	public String asString() {
 		return ColorUtils.toString(value);
+	}
+
+	@Override
+	public void fromString(String str) {
+		value = ColorUtils.fromString(str);
 	}
 }

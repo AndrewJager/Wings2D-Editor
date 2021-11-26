@@ -11,16 +11,14 @@ import java.util.UUID;
 
 import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.save.DBString;
+import com.wings2d.editor.objects.skeleton.DBObject;
 import com.wings2d.editor.objects.skeleton.Skeleton;
 
-public class Project {
-	private DBString id;
-	private DBString name;
+public class Project extends DBObject{
 	
 	public Project(final Connection con, final String id, final EditorSettings settings) {
-		try {
-			initData(con, id);
-		} catch (SQLException e) {e.printStackTrace();}
+		super("PROJECT");
+		this.query(con, id);
 	}
 	public Project(final String name, final EditorSettings settings, final Connection con) throws FileNotFoundException
 	{
@@ -29,31 +27,9 @@ public class Project {
 	public Project(final boolean autoAcceptDir, final String projectName,
 			final EditorSettings settings, final Connection con) throws FileNotFoundException
 	{
-		String id = UUID.randomUUID().toString();
-		String query = "INSERT INTO PROJECT (ID, Name)"
-				+ " VALUES(" + "'" + id + "'" + "," + "'" + projectName + "'" + ")";
-		Statement stmt;
-		try {
-			stmt = con.createStatement();
-			stmt.executeUpdate(query);
-			stmt.close();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-		
-		query = " SELECT * FROM PROJECT WHERE ID = " + "'" + id + "'";
-		try {
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			initData(con,rs.getString("ID"));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private void initData(final Connection con, final String thisID) throws SQLException {
-		id = new DBString(con, "PROJECT", "ID", thisID);
-		name = new DBString (con, "PROJECT", "Name", thisID);
+		super("PROJECT");
+		this.insert(con);
+		this.query(con, id.getStoredValue());
 	}
 	
 	public static List<Project> getAll(final Connection con, final EditorSettings settings) {
@@ -93,15 +69,15 @@ public class Project {
 	}
 	public String getName()
 	{
-		return name.getValue();
+		return name.getStoredValue();
 	}
 	public String getID() {
-		return id.getValue();
+		return id.getStoredValue();
 	}
 	
 	@Override
 	public String toString() {
-		return name.getValue();
+		return name.getStoredValue();
 	}
 	
 	public void delete(final Connection con, final EditorSettings settings) {
@@ -121,5 +97,13 @@ public class Project {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
+	}
+	@Override
+	protected void deleteChildren(final String id, final Connection con) {
+		
+	}
+	@Override
+	protected void queryChildren(final String id, final Connection con) {
+		
 	}
 }

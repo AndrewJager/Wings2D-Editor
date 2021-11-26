@@ -25,7 +25,7 @@ import com.wings2d.editor.objects.save.DBString;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
 
 public class SkeletonFrame extends SkeletonNode implements Drawable{
-	public static final String FRAME_TOKEN = "FRAME";
+	public static final String TABLE_NAME = "FRAME";
 	
 	protected List<SkeletonBone> bones;
 	protected List<SkeletonFrame> syncedFrames;
@@ -65,7 +65,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	private SkeletonFrame(final String frameName, final SkeletonAnimation frameParent, final EditorSettings settings, 
 			final Connection con, final boolean isMaster, final Skeleton skeleton)
 	{
-		super("FRAME");
+		super(TABLE_NAME);
 		if ((frameParent == null) && (skeleton == null)) {
 			throw new IllegalArgumentException("Frame must be provided a parent!");
 		}
@@ -91,27 +91,9 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		if (skeleton != null) {
 			skelID = skeleton.getID();
 		}
-		String newID = UUID.randomUUID().toString();
-		String query = "INSERT INTO FRAME (ID, Name, Animation, Skeleton, IsMaster, SyncFrame)"
-				+ " VALUES(" + "'" + newID + "'" + "," + "'" + frameName + "'" + "," + "'" + animID + "'" 
-				+ "," + "'" + skelID + "'" + "," + isMaster + "," + "'" + " " + "'" + ")";
-		Statement stmt;
-		try {
-			stmt = con.createStatement();
-			stmt.executeUpdate(query);
-			stmt.close();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
 		
-		query = " SELECT * FROM FRAME WHERE ID = " + "'" + newID + "'";
-		try {
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			initData(con,rs.getString("ID"));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		this.insert(con);
+		this.query(con, id.getStoredValue());
 	}
 	private SkeletonFrame(final String thisID, final SkeletonAnimation frameParent, final Connection con, final EditorSettings settings) {
 		this(thisID, frameParent, con, settings, false, null);
@@ -119,7 +101,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	private SkeletonFrame(final String thisID, final SkeletonAnimation frameParent, final Connection con, final EditorSettings settings, 
 			final boolean isMaster, final Skeleton skeleton)
 	{
-		super("FRAME");
+		super(TABLE_NAME);
 		if ((frameParent == null) && (skeleton == null)) {
 			throw new IllegalArgumentException("Frame must be provided a parent!");
 		}
@@ -131,14 +113,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 			setup(frameParent, settings, con);
 		}
 		
-		String query = " SELECT * FROM FRAME WHERE ID = " + "'" + thisID + "'";
-		try {
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			initData(con,rs.getString("ID"));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		this.query(con, thisID);
 	}
 	
 	private void setup(final SkeletonNode frameParent, final EditorSettings settings, final Connection con)
@@ -148,26 +123,9 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		bones = new ArrayList<SkeletonBone>();
 		syncedFrames = new ArrayList<SkeletonFrame>();
 		this.settings = settings;
-	}
-	
-	@Override
-	protected void initData(final Connection con, final String thisID) throws SQLException {
-		id = new DBString(con, "FRAME", "ID", thisID);
-		name = new DBString (con, "FRAME", "Name", thisID);
-		isMaster = new DBBoolean(con, "FRAME", "IsMaster", thisID);
-		syncFrameID = new DBString(con, "FRAME", "SyncFrame", thisID);
 		
-		// Get Bones
-		String query = " SELECT * FROM BONE WHERE Frame = " + "'" + this.getID() + "'";
-		try {
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			while(rs.next()) {
-				bones.add(SkeletonBone.read(rs.getString("ID"), con, this));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		fields.add(syncFrameID = new DBString("SyncFrame"));
+		fields.add(isMaster = new DBBoolean("IsMaster"));
 	}
 	
 	@Override
@@ -176,18 +134,24 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 			bones.get(i).delete(con);
 		}
 	}
+	
+	@Override
+	protected void queryChildren(final String id, final Connection con)
+	{
+
+	}
 
 	public String toString()
 	{
-		if (!isMaster.getValue()) {
-			return name.getValue();
+		if (!isMaster.getStoredValue()) {
+			return name.getStoredValue();
 		}
 		else {
-			return name.getValue() + " (Master)";
+			return name.getStoredValue() + " (Master)";
 		}
 	}
 	public boolean getIsMaster() {
-		return isMaster.getValue();
+		return isMaster.getStoredValue();
 	}
 	public boolean containsBoneWithName(final String boneName)
 	{
@@ -210,7 +174,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		if (syncedFrame != null)
 		{
 			this.parentSyncedFrame = syncedFrame;
-			this.syncFrameID.setValue(syncedFrame.getGUID().toString());
+			this.syncFrameID.setStoredValue(syncedFrame.getGUID().toString());
 			this.parentSyncedFrame.getSyncedFrames().add(this);
 		}
 		else
@@ -218,7 +182,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 			if (this.parentSyncedFrame != null) {
 				this.parentSyncedFrame.getSyncedFrames().remove(this);
 			}
-			this.syncFrameID.setValue(null);
+			this.syncFrameID.setStoredValue(null);
 			this.parentSyncedFrame = null;
 		}
 	}
@@ -468,7 +432,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	
 	
 	public UUID getGUID() {
-		return UUID.fromString(id.getValue());
+		return UUID.fromString(id.getStoredValue());
 	}
 	public EditorSettings getSettings() {
 		return settings;
@@ -549,12 +513,12 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	// SkeletonNode methods
 	public void resyncAll()
 	{
-		if (syncFrameID.getValue() != null)
+		if (syncFrameID.getStoredValue() != null)
 		{
 			// Won't need to do this for Master Frame
 			if (!this.isMaster()) {
 				SkeletonAnimation animation = (SkeletonAnimation)parent;
-				setParentSyncedFrame(animation.getSkeleton().getFrameByID(UUID.fromString(syncFrameID.getValue())));
+				setParentSyncedFrame(animation.getSkeleton().getFrameByID(UUID.fromString(syncFrameID.getStoredValue())));
 			}
 		}
 		for (int i = 0; i < bones.size(); i++)

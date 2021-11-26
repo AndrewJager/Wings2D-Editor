@@ -21,13 +21,13 @@ public class SpritePoint extends SkeletonNode{
 		this.y = y;
 	}
 	
-	@Override 
-	protected void initData(final Connection con, final String thisID) throws SQLException {
+	@Override
+	public void deleteChildren(final String ID, final Connection con) {
 		
 	}
 	
 	@Override
-	public void deleteChildren(final String ID, final Connection con) {
+	public void queryChildren(final String ID, final Connection con) {
 		
 	}
 	

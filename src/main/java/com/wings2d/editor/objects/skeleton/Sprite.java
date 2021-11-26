@@ -71,13 +71,13 @@ public class Sprite extends SkeletonNode implements Drawable{
 		path.closePath();
 	}
 	
-	@Override 
-	protected void initData(final Connection con, final String thisID) throws SQLException {
+	@Override
+	public void deleteChildren(final String ID, final Connection con) {
 		
 	}
 	
 	@Override
-	public void deleteChildren(final String ID, final Connection con) {
+	public void queryChildren(final String ID, final Connection con) {
 		
 	}
 	
@@ -127,7 +127,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 //	}
 	public Sprite copy(final SkeletonBone parent)
 	{
-		Sprite newSprite = new Sprite(new String(this.name.getValue()), parent);
+		Sprite newSprite = new Sprite(new String(this.name.getStoredValue()), parent);
 		newSprite.color = new Color(this.color.getRGB());
 		newSprite.path = new Path2D.Double(this.path);
 		newSprite.points = new ArrayList<SpritePoint>();
@@ -140,7 +140,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	
 	public String toString()
 	{
-		return name.getValue();
+		return name.getStoredValue();
 	}
 	public Path2D getPath()
 	{

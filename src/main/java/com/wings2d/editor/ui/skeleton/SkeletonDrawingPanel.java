@@ -163,7 +163,6 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 				{
 					if (selectedItem instanceof SkeletonBone) {
 						SkeletonBone bone = (SkeletonBone)selectedItem;
-						bone.commitLocData();
 					}
 					selectedItem = null;
 				}

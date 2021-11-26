@@ -31,6 +31,7 @@ import com.wings2d.editor.objects.save.DBString;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
 
 public class SkeletonBone extends SkeletonNode implements Drawable{
+	public static final String TABLE_NAME = "BONE";
 	/** Default position that the bone will be added at **/
 	public static final Point2D START_POS = new Point2D.Double(10, 15);
 	
@@ -64,95 +65,69 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	/** Insert constructor */
 	private SkeletonBone(final String boneName, final SkeletonFrame boneParent, final Connection con)
 	{
-		super("BONE");
+		this(boneParent);
 		if (boneParent.containsBoneWithName(boneName))
 		{
 			throw new IllegalArgumentException("A Bone with this name already exists in the Frame!");
 		}
-		setup(boneParent);
 		
-		String newID = UUID.randomUUID().toString();
-		String query = "INSERT INTO BONE (ID, Name, Frame, Location, SyncBone, ParentBoneName, Rotation)"
-				+ " VALUES(" + quoteStr(newID) + "," + quoteStr(boneName) + "," + quoteStr(boneParent.getID()) 
-				+ "," + quoteStr(PointUtils.toString(START_POS)) + "," + quoteStr(" ") + "," + quoteStr(" ") + "," + 0 + ")";
-		Statement stmt;
-		try {
-			stmt = con.createStatement();
-			stmt.executeUpdate(query);
-			stmt.close();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-		
-		query = " SELECT * FROM BONE WHERE ID = " + quoteStr(newID);
-		try {
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			initData(con,rs.getString("ID"));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}	
+		this.insert(con);
+		this.query(con, id.getStoredValue());	
 	}
 	
 	/** Read constructor */
 	private SkeletonBone(final String boneID, final Connection con, final SkeletonFrame boneParent)
 	{
-		super("BONE");
-		setup(boneParent);
+		this(boneParent);
 	
-		String query = " SELECT * FROM BONE WHERE ID = " + quoteStr(boneID);
-		try {
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			initData(con,rs.getString("ID"));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}	
+		this.query(con, boneID);	
 	}
 	
 	/** Copy constructor **/
 	public SkeletonBone(final SkeletonBone syncBone, final SkeletonFrame boneParent, final Connection con)
 	{
-		super("BONE");
+		this(boneParent);
 		if (boneParent.containsBoneWithName(syncBone.toString()))
 		{
 			throw new IllegalArgumentException("A Bone with this name already exists in the Frame!");
 		}
-		setup(boneParent);
+
+		throw new IllegalArgumentException("Copy constructor not implemented yet!");
 		
-		String newID = UUID.randomUUID().toString();
-		String query = "INSERT INTO BONE (ID, Name, Frame, Location, SyncBone, ParentBoneName, Rotation)"
-				+ " VALUES(" + quoteStr(newID) + "," + quoteStr(syncBone.toString()) + "," + quoteStr(boneParent.getID()) 
-				+ "," + quoteStr(PointUtils.toString(new Point2D.Double(syncBone.getX(), syncBone.getY()))) 
-				+ "," + quoteStr(" ") + "," + quoteStr(syncBone.getParentBoneName()) + "," + syncBone.getRotation() + ")";
-		System.out.println(query);
-		Statement stmt;
-		try {
-			stmt = con.createStatement();
-			stmt.executeUpdate(query);
-			stmt.close();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-		
-		this.setParentSyncedBone(syncBone);
-		for (int i = 0; i < syncBone.getSprites().size(); i++)
-		{
-			this.sprites.add(syncBone.getSprites().get(i).copy(this));
-		}
-		
-		query = " SELECT * FROM BONE WHERE ID = " + quoteStr(newID);
-		try {
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			initData(con,rs.getString("ID"));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+//		String newID = UUID.randomUUID().toString();
+//		String query = "INSERT INTO BONE (ID, Name, Frame, Location, SyncBone, ParentBoneName, Rotation)"
+//				+ " VALUES(" + quoteStr(newID) + "," + quoteStr(syncBone.toString()) + "," + quoteStr(boneParent.getID()) 
+//				+ "," + quoteStr(PointUtils.toString(new Point2D.Double(syncBone.getX(), syncBone.getY()))) 
+//				+ "," + quoteStr(" ") + "," + quoteStr(syncBone.getParentBoneName()) + "," + syncBone.getRotation() + ")";
+//		System.out.println(query);
+//		Statement stmt;
+//		try {
+//			stmt = con.createStatement();
+//			stmt.executeUpdate(query);
+//			stmt.close();
+//		} catch (SQLException e1) {
+//			e1.printStackTrace();
+//		}
+//		
+//		this.setParentSyncedBone(syncBone);
+//		for (int i = 0; i < syncBone.getSprites().size(); i++)
+//		{
+//			this.sprites.add(syncBone.getSprites().get(i).copy(this));
+//		}
+//		
+//		query = " SELECT * FROM BONE WHERE ID = " + quoteStr(newID);
+//		try {
+//			stmt = con.createStatement();
+//			ResultSet rs = stmt.executeQuery(query);
+//			initData(con,rs.getString("ID"));
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
 	}
 	
-	private void setup(final SkeletonFrame boneParent)
+	private SkeletonBone(final SkeletonFrame boneParent)
 	{
+		super(TABLE_NAME);
 		frame = boneParent;
 		settings = frame.getSettings();
 		syncedBones = new ArrayList<SkeletonBone>();
@@ -161,16 +136,13 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		handleColor = settings.getUnselectedHandleColor();
 	
 		selected = false;
-	}
-	
-	@Override
-	public void initData(final Connection con, final String thisID) throws SQLException {
-		id = new DBString(con, "BONE", "ID", thisID);
-		name = new DBString (con, "BONE", "Name", thisID);
-		location = new DBPoint(con, "BONE", "Location", thisID);
-		syncBoneID = new DBString(con, "BONE", "SyncBone", thisID);
-		parentBoneName = new DBString(con, "BONE", "ParentBoneName", thisID);
-		rotation = new DBDouble(con, "BONE", "Rotation", thisID);
+		
+		id = new DBString("ID");
+		name = new DBString ("Name");
+		location = new DBPoint("Location");
+		syncBoneID = new DBString("SyncBone");
+		parentBoneName = new DBString("ParentBoneName");
+		rotation = new DBDouble("Rotation");
 	}
 	
 	@Override
@@ -178,9 +150,14 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		
 	}
 	
+	@Override
+	public void queryChildren(final String ID, final Connection con) {
+		
+	}
+	
 	public String toString()
 	{
-		return name.getValue();
+		return name.getStoredValue();
 	}
 	public SkeletonFrame getFrame()
 	{
@@ -224,7 +201,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		if (bone != null)
 		{
 			parentBone = bone;
-			parentBoneName.setValue(bone.toString());
+			parentBoneName.setStoredValue(bone.toString());
 			parentBone.getChildBones().add(this);
 		}
 		else
@@ -259,11 +236,11 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	}
 	public String getParentBoneName()
 	{
-		return parentBoneName.getValue();
+		return parentBoneName.getStoredValue();
 	}
 	public void setParentBoneName(final String newName) 
 	{
-		parentBoneName.setValue(newName);
+		parentBoneName.setStoredValue(newName);
 	}
 	public List<SkeletonBone> getChildBones()
 	{
@@ -275,11 +252,11 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		double unscaledX = x * unscale;
 		double unscaledY = y * unscale;
 		
-		double deltaX = unscaledX - location.getValue(buffer).getX();
-		double deltaY = unscaledY - location.getValue(buffer).getY();
+		double deltaX = unscaledX - location.getStoredValue().getX();
+		double deltaY = unscaledY - location.getStoredValue().getY();
 		if ((unscaledX > 0 && unscaledY > 0) && checkTranslate(deltaX, deltaY))
 		{
-			location.setValue(new Point2D.Double(unscaledX, unscaledY), buffer);
+			location.setStoredValue(new Point2D.Double(unscaledX, unscaledY));
 			if (translateChildren)
 			{
 				for (int i = 0; i < childBones.size(); i++)
@@ -305,22 +282,22 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	}
 	public Point2D getLocation()
 	{
-		return location.getValue();
+		return location.getStoredValue();
 	}
 	public double getX()
 	{
-		return location.getValue().getX();
+		return location.getStoredValue().getX();
 	}
 	public double getY()
 	{
-		return location.getValue().getY();
+		return location.getStoredValue().getY();
 	}
 
 	public void translateBy(final double x, final double y)
 	{
 		double newX = getX() + x;
 		double newY = getY() + y;
-		location.setValue(new Point2D.Double(newX, newY));
+		location.setStoredValue(new Point2D.Double(newX, newY));
 		for (int i = 0; i < childBones.size(); i++)
 		{
 			childBones.get(i).translateBy(x, y);
@@ -367,21 +344,24 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	}
 	public double getRotation()
 	{
-		return rotation.getValue();
+		return rotation.getStoredValue();
 	}
 	public Point2D getRotHandle(final double scale)
 	{
 		double scaleBack = 1.0 / scale;
-		Point2D rotHandleLoc = new Point2D.Double(location.getValue().getX(), location.getValue().getY() - (settings.getRotHandleOffset() * scaleBack));
+		Point2D rotHandleLoc = new Point2D.Double(location.getStoredValue().getX(), location.getStoredValue().getY() 
+				- (settings.getRotHandleOffset() * scaleBack));
 		AffineTransform transform = new AffineTransform();
-		transform.setToRotation(Math.toRadians(this.rotation.getValue() - 90), location.getValue().getX(), location.getValue().getY());
+		transform.setToRotation(Math.toRadians(this.rotation.getStoredValue() - 90), location.getStoredValue().getX(), 
+				location.getStoredValue().getY());
 		transform.transform(rotHandleLoc, rotHandleLoc);
 		return rotHandleLoc;
 	}
 	public Point2D getXPosHandle(final double scale)
 	{
 		double scaleBack = 1.0 / scale;
-		Point2D xHandleLoc = new Point2D.Double(location.getValue().getX() + (settings.getPosHandleOffset() * scaleBack), location.getValue().getY());
+		Point2D xHandleLoc = new Point2D.Double(location.getStoredValue().getX() + (settings.getPosHandleOffset() * scaleBack), 
+				location.getStoredValue().getY());
 		AffineTransform transform = new AffineTransform();
 		transform.transform(xHandleLoc, xHandleLoc);
 		return xHandleLoc;
@@ -389,15 +369,16 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	public Point2D getYPosHandle(final double scale)
 	{
 		double scaleBack = 1.0 / scale;
-		Point2D yHandleLoc = new Point2D.Double(location.getValue().getX(), location.getValue().getY() - (settings.getPosHandleOffset() * scaleBack));
+		Point2D yHandleLoc = new Point2D.Double(location.getStoredValue().getX(), 
+				location.getStoredValue().getY() - (settings.getPosHandleOffset() * scaleBack));
 		AffineTransform transform = new AffineTransform();
 		transform.transform(yHandleLoc, yHandleLoc);
 		return yHandleLoc;
 	}
 	public void setRotation(final double angle)
 	{
-		double oldRotation = rotation.getValue();
-		rotation.setValue(angle);
+		double oldRotation = rotation.getStoredValue();
+		rotation.setStoredValue(angle);
 		double delta = angle - oldRotation;
 		for (int i = 0; i < sprites.size(); i++)
 		{
@@ -405,22 +386,22 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		}
 		for (int i = 0; i < childBones.size(); i++)
 		{
-			childBones.get(i).rotateAround(location.getValue(), delta);
+			childBones.get(i).rotateAround(location.getStoredValue(), delta);
 		}
 	}
 	public void rotateByHandle(final Point loc, final double scale)
 	{
-		double oldRotation = rotation.getValue();
-		rotation.setValue(Math.toDegrees(Math.atan2((location.getValue().getY() * scale) - loc.getY(), 
-				(location.getValue().getX() * scale) - loc.getX())));
-		double delta = rotation.getValue() - oldRotation;
+		double oldRotation = rotation.getStoredValue();
+		rotation.setStoredValue(Math.toDegrees(Math.atan2((location.getStoredValue().getY() * scale) - loc.getY(), 
+				(location.getStoredValue().getX() * scale) - loc.getX())));
+		double delta = rotation.getStoredValue() - oldRotation;
 		for (int i = 0; i < sprites.size(); i++)
 		{
 			sprites.get(i).rotateAroundBone(delta);
 		}
 		for (int i = 0; i < childBones.size(); i++)
 		{
-			childBones.get(i).rotateAround(location.getValue(), delta);
+			childBones.get(i).rotateAround(location.getStoredValue(), delta);
 		}
 	}
 	public void rotateAround(final Point2D point, final double amt)
@@ -429,8 +410,8 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		transform.setToRotation(Math.toRadians(amt), point.getX(), point.getY());
 		
 		Point2D newPoint = new Point2D.Double();
-		transform.transform(location.getValue(), newPoint);
-		location.setValue(newPoint);
+		transform.transform(location.getStoredValue(), newPoint);
+		location.setStoredValue(newPoint);
 		
 		for (int i = 0; i < sprites.size(); i++)
 		{
@@ -443,7 +424,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	}
 	public UUID getSyncBoneID()
 	{
-		return UUID.fromString(syncBoneID.getValue());
+		return UUID.fromString(syncBoneID.getStoredValue());
 	}
 	public void addSprite(final Sprite newSprite) {
 		sprites.add(newSprite);
@@ -545,10 +526,6 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	{
 		setParentSyncedBone(null);
 	}
-	public void commitLocData() {
-		location.commitBuffer();
-		rotation.commitBuffer();
-	}
 	
 	// MutableTreeNode methods
 	@Override
@@ -624,15 +601,15 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 
 	public void resyncAll()
 	{
-		if (!syncBoneID.getValue().isEmpty() && (parentSyncedBone == null || (!parentSyncedBone.getID().equals(syncBoneID))))
+		if (!syncBoneID.getStoredValue().isEmpty() && (parentSyncedBone == null || (!parentSyncedBone.getID().equals(syncBoneID))))
 		{
 			SkeletonAnimation animation = (SkeletonAnimation)frame.getParent();
-			parentSyncedBone = animation.getSkeleton().getBoneBYID(UUID.fromString(syncBoneID.getValue()));
+			parentSyncedBone = animation.getSkeleton().getBoneBYID(UUID.fromString(syncBoneID.getStoredValue()));
 			parentSyncedBone.getSyncedBones().add(this);
 		}
-		if (!parentBoneName.getValue().isEmpty())
+		if (!parentBoneName.getStoredValue().isEmpty())
 		{
-			setParentBone(parentBoneName.getValue());
+			setParentBone(parentBoneName.getStoredValue());
 		}
 	}
 	
@@ -648,13 +625,14 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		
 		g2d.setStroke(new BasicStroke(2));
 		g2d.setColor(handleColor);
-		g2d.drawArc((int)((location.getValue().getX() * scale) - (handleSize / 2)), (int)((location.getValue().getY() * scale) - (handleSize / 2)),
+		g2d.drawArc((int)((location.getStoredValue().getX() * scale) - (handleSize / 2)), 
+				(int)((location.getStoredValue().getY() * scale) - (handleSize / 2)),
 				handleSize, handleSize, 0, 360);
 		if (mode == DrawMode.BONE_ROTATE && selected)
 		{	
 			Point2D rotHandleLoc = getRotHandle(scale);
 			g2d.setColor(Color.BLACK);
-			g2d.drawLine((int)(location.getValue().getX() * scale), (int)(location.getValue().getY() * scale),
+			g2d.drawLine((int)(location.getStoredValue().getX() * scale), (int)(location.getStoredValue().getY() * scale),
 					(int)(rotHandleLoc.getX() * scale), (int)(rotHandleLoc.getY() * scale));
 			g2d.setColor(Color.YELLOW);
 			g2d.drawArc((int)((rotHandleLoc.getX() * scale) - (handleSize / 2)), (int)((rotHandleLoc.getY() * scale) - (handleSize / 2)),
@@ -664,9 +642,9 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 			Point2D xHandleLoc = getXPosHandle(scale);
 			Point2D yHandleLoc = getYPosHandle(scale);
 			g2d.setColor(Color.BLACK);
-			g2d.drawLine((int)(location.getValue().getX() * scale), (int)(location.getValue().getY() * scale),
+			g2d.drawLine((int)(location.getStoredValue().getX() * scale), (int)(location.getStoredValue().getY() * scale),
 					(int)(xHandleLoc.getX() * scale), (int)(xHandleLoc.getY() * scale));
-			g2d.drawLine((int)(location.getValue().getX() * scale), (int)(location.getValue().getY() * scale),
+			g2d.drawLine((int)(location.getStoredValue().getX() * scale), (int)(location.getStoredValue().getY() * scale),
 					(int)(yHandleLoc.getX() * scale), (int)(yHandleLoc.getY() * scale));
 			g2d.setColor(Color.YELLOW);
 			g2d.drawArc((int)((xHandleLoc.getX() * scale) - (handleSize / 2)), (int)((xHandleLoc.getY() * scale) - (handleSize / 2)),

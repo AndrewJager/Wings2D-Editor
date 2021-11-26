@@ -1,9 +1,6 @@
 package com.wings2d.editor.objects.save;
 
 import java.awt.geom.Point2D;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class DBPoint extends DBValue<Point2D>{
 	
@@ -16,27 +13,18 @@ public class DBPoint extends DBValue<Point2D>{
 			return new Point2D.Double(Double.parseDouble(tokens[0]), Double.parseDouble(tokens[1]));
 		}
 	}
-
-	public DBPoint(final Connection con, final String table, final String column) {
-		super(con, table, column);
-	}
-	public DBPoint(final Connection con, final String table, final String column, final String id) {
-		super(con, table, column, id);
+	
+	public DBPoint(final String column) {
+		super(column);
 	}
 
 	@Override
-	protected Point2D readValue(ResultSet rs) {
-		Point2D value = null;
-		try {
-			value = PointUtils.fromString(rs.getString(column));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return value;
-	}
-
-	@Override
-	protected String saveValue(final Point2D value) {
+	public String asString() {
 		return PointUtils.toString(value);
+	}
+
+	@Override
+	public void fromString(String str) {
+		value = PointUtils.fromString(str);	
 	}
 }

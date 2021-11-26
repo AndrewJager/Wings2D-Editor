@@ -18,14 +18,12 @@ import com.wings2d.editor.ui.UIElement;
 
 public class ProjectItems extends UIElement<ProjectEdit>{
 	private JList<Skeleton> list;
-	
-	private EditorSettings settings;
+
 	final Connection con;
 
 	public ProjectItems(final ProjectEdit edit, final EditorSettings settings, final Connection con) {
 		super(edit);
-		
-		this.settings = settings;
+
 		this.con = con;
 		
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -42,7 +40,8 @@ public class ProjectItems extends UIElement<ProjectEdit>{
 		DefaultListModel<Skeleton> model = (DefaultListModel<Skeleton>)list.getModel();
 		if (project != null) {
 			model.clear();
-			List<Skeleton> skeletons = project.getSkeletons(settings, con);
+			project.query(con, project.getID());
+			List<Skeleton> skeletons = project.getSkeletons();
 			for (int i = 0; i < skeletons.size(); i++)
 			{
 				model.addElement(skeletons.get(i));

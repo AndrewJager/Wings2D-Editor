@@ -14,11 +14,15 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.EditorSettings;
+import com.wings2d.editor.objects.save.DBString;
 
 public class Skeleton extends SkeletonNode {
+	public static final String TABLE_NAME = "SKELETON";
 	private List<SkeletonNode> animations;
 	private SkeletonFrame masterFrame;
 	private EditorSettings settings;
+	
+	private DBString projID;
 	
 	public static Skeleton insert(final String skeletonName, final String projID, final EditorSettings settings, final Connection con) {
 		return new Skeleton(skeletonName, projID, settings, con);
@@ -31,12 +35,12 @@ public class Skeleton extends SkeletonNode {
 	private Skeleton(final String skeletonName, final String projID, final EditorSettings settings, final Connection con)
 	{	
 		this(settings);
+		this.projID.setStoredValue(projID);
+		name.setStoredValue(skeletonName);
 		
 		this.insert(con);
 		
-		
-		// Create Master Frame
-
+		SkeletonFrame.insert("Master", null, settings, con, true, this);
 		
 		this.query(con, id.getStoredValue());
 	}
@@ -48,9 +52,11 @@ public class Skeleton extends SkeletonNode {
 	}
 	
 	private Skeleton(final EditorSettings settings) {
-		super("SKELETON");
+		super(TABLE_NAME);
 		animations = new ArrayList<SkeletonNode>();
 		this.settings = settings;
+		
+		fields.add(projID = new DBString("Project"));
 	}
 	
 	@Override
@@ -64,6 +70,7 @@ public class Skeleton extends SkeletonNode {
 	@Override
 	protected void queryChildren(final String id, final Connection con)
 	{
+		animations.clear();
 		String sql = " SELECT * FROM " + SkeletonFrame.TABLE_NAME + " WHERE Skeleton = " + quoteStr(id);
 		try {
 			Statement stmt = con.createStatement();

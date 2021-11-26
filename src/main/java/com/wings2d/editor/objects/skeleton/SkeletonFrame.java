@@ -84,11 +84,17 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		isMaster.setStoredValue(isMasterFrame);
 		if (frameParent != null) {
 			animID.setStoredValue(frameParent.getID());
-			syncFrameID.setStoredValue(frameParent.getFrames().get(frameParent.getFrames().size() - 1).getID());
+			if (frameParent.getFrames().size() == 0) {
+				syncFrameID.setStoredValue(frameParent.getSkeleton().getMasterFrame().getID());
+			}
+			else {
+				syncFrameID.setStoredValue(frameParent.getFrames().get(frameParent.getFrames().size() - 1).getID());
+			}
 		}
 		if (skeleton != null) {
 			skelID.setStoredValue(skeleton.getID());
 		}
+		name.setStoredValue(frameName);
 		
 		this.insert(con);
 		this.query(con, id.getStoredValue());

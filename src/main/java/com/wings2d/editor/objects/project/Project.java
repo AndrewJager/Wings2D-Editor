@@ -13,11 +13,18 @@ import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.save.DBString;
 import com.wings2d.editor.objects.skeleton.DBObject;
 import com.wings2d.editor.objects.skeleton.Skeleton;
+import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 
 public class Project extends DBObject{
+	public static final String TABLE_NAME = "PROJECT";
+	
+	private List<Skeleton> skeletons;
+	private EditorSettings settings;
 	
 	public Project(final Connection con, final String id, final EditorSettings settings) {
-		super("PROJECT");
+		super(TABLE_NAME);
+		skeletons = new ArrayList<Skeleton>();
+		this.settings = settings;
 		this.query(con, id);
 	}
 	public Project(final String name, final EditorSettings settings, final Connection con) throws FileNotFoundException
@@ -27,7 +34,10 @@ public class Project extends DBObject{
 	public Project(final boolean autoAcceptDir, final String projectName,
 			final EditorSettings settings, final Connection con) throws FileNotFoundException
 	{
-		super("PROJECT");
+		super(TABLE_NAME);
+		skeletons = new ArrayList<Skeleton>();
+		this.settings = settings;
+		
 		this.insert(con);
 		this.query(con, id.getStoredValue());
 	}
@@ -49,24 +59,7 @@ public class Project extends DBObject{
 		
 		return projects;
 	}
-	
-	public List<Skeleton> getSkeletons(final EditorSettings settings, final Connection con)
-	{
-		String id = this.getID();
-		List<Skeleton> entities = new ArrayList<Skeleton>();
-		String query = "SELECT * FROM SKELETON WHERE Project = " + "'" + id + "'";
-		Statement stmt;
-		try {
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			while (rs.next()) {
-				entities.add(Skeleton.read(rs.getString("ID"), settings, con));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return entities;
-	}
+
 	public String getName()
 	{
 		return name.getStoredValue();
@@ -80,34 +73,34 @@ public class Project extends DBObject{
 		return name.getStoredValue();
 	}
 	
-	public void delete(final Connection con, final EditorSettings settings) {
-		// Delete Skeletons assocated with this project
-		List<Skeleton> sks = getSkeletons(settings, con);
-		for (int i = 0; i < sks.size(); i++) {
-			sks.get(i).delete(con);
-		}
-
-		 
-		// Delete this project
-		String sql = "DELETE FROM PROJECT WHERE ID = " + "'" + this.getID() +"'";
-		Statement stmt;
-		try {
-			stmt = con.createStatement();
-			stmt.executeUpdate(sql);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-	}
 	@Override
 	protected void deleteChildren(final String id, final Connection con) {
-		
+		for (int i = 0; i < skeletons.size(); i++) {
+			skeletons.get(i).delete(con);
+		}
 	}
 	@Override
 	protected void queryChildren(final String id, final Connection con) {
-		
+		skeletons.clear();
+		String sql = " SELECT * FROM " + Skeleton.TABLE_NAME + " WHERE Project = " + quoteStr(id);
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				skeletons.add(Skeleton.read(rs.getString("ID"), settings, con));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	@Override
 	protected void updateChildren(final Connection con) {
-
+		for (int i = 0; i < skeletons.size(); i++) {
+			skeletons.get(i).update(con);
+		}
+	}
+	
+	public List<Skeleton> getSkeletons() {
+		return skeletons;
 	}
 }

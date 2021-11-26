@@ -6,6 +6,9 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -144,7 +147,17 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	@Override
 	protected void queryChildren(final String id, final Connection con)
 	{
-
+		bones.clear();
+		String sql = " SELECT * FROM " + SkeletonBone.TABLE_NAME + " WHERE Frame = " + quoteStr(id);
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				bones.add(SkeletonBone.read(rs.getString("ID"), con, this));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

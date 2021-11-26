@@ -46,8 +46,8 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	/** Used to determine the parent bone when copying bones between frames **/
 	private DBString parentBoneName;
 	private DBPoint location;
-	
 	private DBDouble rotation;
+	private DBString frameID;
 	
 	private SkeletonBone parentBone;
 	private List<SkeletonBone> childBones;
@@ -70,6 +70,21 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		{
 			throw new IllegalArgumentException("A Bone with this name already exists in the Frame!");
 		}
+		
+		name.setStoredValue(boneName);
+		frameID.setStoredValue(boneParent.getID());
+		if (boneParent != null) {
+			if (boneParent.getParentSyncedFrame() != null) {
+				if (boneParent.getParentSyncedFrame().getBoneWithName(boneName) != null) 
+				{
+					SkeletonBone syncBone = boneParent.getParentSyncedFrame().getBoneWithName(boneName);
+					syncBoneID.setStoredValue(syncBone.getID());
+					parentBoneName.setStoredValue(syncBone.getName());
+				}	
+			}
+		}
+		location.setStoredValue(START_POS);
+		rotation.setStoredValue(0.0);
 		
 		this.insert(con);
 		this.query(con, id.getStoredValue());	
@@ -137,12 +152,11 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	
 		selected = false;
 		
-		id = new DBString("ID");
-		name = new DBString ("Name");
-		location = new DBPoint("Location");
-		syncBoneID = new DBString("SyncBone");
-		parentBoneName = new DBString("ParentBoneName");
-		rotation = new DBDouble("Rotation");
+		fields.add(frameID = new DBString("Frame"));
+		fields.add(location = new DBPoint("Location"));
+		fields.add(syncBoneID = new DBString("SyncBone"));
+		fields.add(parentBoneName = new DBString("ParentBoneName"));
+		fields.add(rotation = new DBDouble("Rotation"));
 	}
 	
 	@Override

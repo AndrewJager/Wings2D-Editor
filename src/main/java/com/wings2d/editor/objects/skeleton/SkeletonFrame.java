@@ -6,9 +6,6 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -36,6 +33,8 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	
 	private DBString syncFrameID;
 	private DBBoolean isMaster;
+	private DBString animID;
+	private DBString skelID;
 	
 	private Connection con;
 	
@@ -63,7 +62,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		this(frameName, frameParent, settings, con, false, null);
 	}
 	private SkeletonFrame(final String frameName, final SkeletonAnimation frameParent, final EditorSettings settings, 
-			final Connection con, final boolean isMaster, final Skeleton skeleton)
+			final Connection con, final boolean isMasterFrame, final Skeleton skeleton)
 	{
 		super(TABLE_NAME);
 		if ((frameParent == null) && (skeleton == null)) {
@@ -76,20 +75,19 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 			throw new IllegalArgumentException("A Frame with this name already exists in this Animation!");
 		}
 
-		if (isMaster) {
+		if (isMasterFrame) {
 			setup(skeleton, settings, con);
 		}
 		else {
 			setup(frameParent, settings, con);
 		}
-		
-		String animID = "";
+		isMaster.setStoredValue(isMasterFrame);
 		if (frameParent != null) {
-			animID = frameParent.getID();
+			animID.setStoredValue(frameParent.getID());
+			syncFrameID.setStoredValue(frameParent.getFrames().get(frameParent.getFrames().size() - 1).getID());
 		}
-		String skelID = "";
 		if (skeleton != null) {
-			skelID = skeleton.getID();
+			skelID.setStoredValue(skeleton.getID());
 		}
 		
 		this.insert(con);
@@ -126,6 +124,8 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		
 		fields.add(syncFrameID = new DBString("SyncFrame"));
 		fields.add(isMaster = new DBBoolean("IsMaster"));
+		fields.add(animID = new DBString("Animation"));
+		fields.add(skelID = new DBString("Skeleton"));
 	}
 	
 	@Override
@@ -139,6 +139,13 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	protected void queryChildren(final String id, final Connection con)
 	{
 
+	}
+	
+	@Override
+	protected void updateChildren(final Connection con) {
+		for(int i = 0; i < bones.size(); i++) {
+			bones.get(i).update(con);
+		}
 	}
 
 	public String toString()

@@ -31,6 +31,11 @@ public class SpritePoint extends SkeletonNode{
 		
 	}
 	
+	@Override
+	protected void updateChildren(final Connection con) {
+
+	}
+	
 	public String toString() {
 		return "X: " + Math.round(x) + " - Y: " + Math.round(y); 
 	}

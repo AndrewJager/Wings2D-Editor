@@ -80,6 +80,10 @@ public class Sprite extends SkeletonNode implements Drawable{
 	public void queryChildren(final String ID, final Connection con) {
 		
 	}
+	@Override
+	protected void updateChildren(final Connection con) {
+
+	}
 	
 //	public Sprite(final Scanner in, final SkeletonBone parent)
 //	{

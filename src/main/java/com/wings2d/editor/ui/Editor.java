@@ -7,8 +7,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Connection;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -18,7 +17,6 @@ import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.wings2d.editor.objects.EditOptions;
 import com.wings2d.editor.objects.EditorSettings;
-import com.wings2d.editor.objects.project.Project;
 import com.wings2d.editor.objects.save.DBAccess;
 import com.wings2d.editor.objects.skeleton.Skeleton;
 import com.wings2d.editor.ui.edits.EditsManager;
@@ -190,5 +188,8 @@ public class Editor {
 	}
 	public EditsManager getEditsManager() {
 		return undo;
+	}
+	public Connection getConnection() {
+		return db.getConnection();
 	}
 }

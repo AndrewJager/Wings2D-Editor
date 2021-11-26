@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.UUID;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -25,6 +24,7 @@ public class SkeletonAnimation extends SkeletonNode{
 	private List<SkeletonFrame> frames;
 	
 	private Connection con;
+	private DBString skelID;
 	
 	public static SkeletonAnimation insert(final String animName, final String skeletonID, final Skeleton parent, final Connection con) {
 		return new SkeletonAnimation(animName, skeletonID, parent, con);
@@ -42,6 +42,7 @@ public class SkeletonAnimation extends SkeletonNode{
 		{
 			throw new IllegalArgumentException("An Animation with this name already exists!");
 		}
+		name.setStoredValue(animName);
 		
 		this.insert(con);
 		this.query(con, id.getStoredValue());
@@ -59,6 +60,9 @@ public class SkeletonAnimation extends SkeletonNode{
 		this.settings = parent.getSettings();
 		this.con = con;
 		frames = new ArrayList<SkeletonFrame>();
+		
+		fields.add(skelID = new DBString("Skeleton"));
+		skelID.setStoredValue(parent.getID());
 	}
 	
 	@Override
@@ -71,7 +75,22 @@ public class SkeletonAnimation extends SkeletonNode{
 	
 	@Override
 	protected void queryChildren(final String id, final Connection con) {
-		
+		String sql = " SELECT * FROM " + SkeletonFrame.TABLE_NAME + " WHERE Animation = " + quoteStr(id);
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				frames.add(SkeletonFrame.read(rs.getString("ID"), this, con, settings));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	@Override
+	protected void updateChildren(final Connection con) {
+		for(int i = 0; i < frames.size(); i++) {
+			frames.get(i).update(con);
+		}
 	}
 
 	public String toString()

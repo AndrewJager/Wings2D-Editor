@@ -14,7 +14,6 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.EditorSettings;
-import com.wings2d.editor.objects.save.DBString;
 
 public class Skeleton extends SkeletonNode {
 	private List<SkeletonNode> animations;
@@ -71,6 +70,7 @@ public class Skeleton extends SkeletonNode {
 			ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				animations.add(SkeletonFrame.read(rs.getString("ID"), null, con, settings, true, this));
+				masterFrame = (SkeletonFrame)animations.get(0);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -85,6 +85,14 @@ public class Skeleton extends SkeletonNode {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	protected void updateChildren(final Connection con) {
+		masterFrame.update(con);
+		for(int i = 0; i < animations.size(); i++) {
+			animations.get(i).update(con);
 		}
 	}
 	

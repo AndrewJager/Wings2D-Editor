@@ -155,6 +155,11 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		
 	}
 	
+	@Override
+	protected void updateChildren(final Connection con) {
+
+	}
+	
 	public String toString()
 	{
 		return name.getStoredValue();

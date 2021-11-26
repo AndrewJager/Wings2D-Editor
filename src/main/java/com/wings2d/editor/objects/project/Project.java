@@ -106,4 +106,8 @@ public class Project extends DBObject{
 	protected void queryChildren(final String id, final Connection con) {
 		
 	}
+	@Override
+	protected void updateChildren(final Connection con) {
+
+	}
 }

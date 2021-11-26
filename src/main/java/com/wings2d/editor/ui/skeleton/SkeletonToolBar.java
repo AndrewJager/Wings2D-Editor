@@ -75,7 +75,7 @@ public class SkeletonToolBar extends UIElement<SkeletonEdit>{
 		saveBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(panel, "Not implemented yet");
+				getEditPanel().getEditor().getSkeletonEdit().getSkeleton().update(getEditPanel().getEditor().getConnection());
 			}
 		});
 	}

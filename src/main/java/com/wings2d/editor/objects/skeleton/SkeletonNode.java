@@ -7,7 +7,6 @@ import javax.swing.tree.MutableTreeNode;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
 
 public abstract class SkeletonNode extends DBObject implements MutableTreeNode{
-	protected List<DBObject> dbItems;
 	
 	public SkeletonNode(final String tableName) {
 		super(tableName);

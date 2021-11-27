@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.tree.DefaultTreeModel;
 
 import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.project.Project;
@@ -24,7 +25,7 @@ import com.wings2d.editor.objects.skeleton.Skeleton;
 import com.wings2d.editor.ui.UIElement;
 
 public class ProjectSelect extends UIElement<ProjectEdit>{
-	private JButton newProject, settingsBtn, newSkeleton, deleteProj;
+	private JButton newProject, settingsBtn, newSkeleton, deleteProj, renameProj;
 	private JPanel projectsPnl;
 	private JList<Project> projList;
 	private DefaultListModel<Project> model; 
@@ -58,6 +59,10 @@ public class ProjectSelect extends UIElement<ProjectEdit>{
 		deleteProj = new JButton("Delete Project");
 		deleteProj.setEnabled(false);
 		panel.add(deleteProj);
+		
+		renameProj = new JButton("Rename");
+		renameProj.setEnabled(false);
+		panel.add(renameProj);
 		
 		newSkeleton = new JButton("New Skeleton");
 		newSkeleton.setEnabled(false);
@@ -100,6 +105,7 @@ public class ProjectSelect extends UIElement<ProjectEdit>{
 					getEditPanel().refreshInfo();
 					newSkeleton.setEnabled(true);
 					deleteProj.setEnabled(true);
+					renameProj.setEnabled(true);
 				}
 			}
 		});
@@ -121,14 +127,42 @@ public class ProjectSelect extends UIElement<ProjectEdit>{
 		deleteProj.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				projList.getSelectedValue().delete(con);
-				model.clear();
-				getEditPanel().refreshInfo();
-				
-				projects = Project.getAll(con, settings);
-				for(int i = 0; i < projects.size(); i++) {
-					model.addElement(projects.get(i));
+				int result = JOptionPane.showConfirmDialog(panel, "Deleting a project cannot be undone. Continue?", "Warning", JOptionPane.YES_NO_OPTION);
+				if (result == JOptionPane.OK_OPTION) {
+					projList.getSelectedValue().delete(con);
+					model.clear();
+					getEditPanel().refreshInfo();
+					
+					projects = Project.getAll(con, settings);
+					for(int i = 0; i < projects.size(); i++) {
+						model.addElement(projects.get(i));
+					}
 				}
+			}
+		});
+		renameProj.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+	            String name = (String)JOptionPane.showInputDialog(
+	                    panel,
+	                    "Choose project name", 
+	                    "Rename project",            
+	                    JOptionPane.PLAIN_MESSAGE,
+	                    null,            
+	                    null, 
+	                    projList.getSelectedValue().getName()
+	                 );
+	            
+	           if (name != null) {
+	        	   projList.getSelectedValue().setName(name);
+	        	   projList.getSelectedValue().update(con);
+					model.clear();
+					getEditPanel().refreshInfo();
+					projects = Project.getAll(con, settings);
+					for(int i = 0; i < projects.size(); i++) {
+						model.addElement(projects.get(i));
+					}
+	           }
 			}
 		});
 	}

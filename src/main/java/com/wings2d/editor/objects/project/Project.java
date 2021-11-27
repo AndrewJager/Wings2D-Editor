@@ -35,6 +35,7 @@ public class Project extends DBObject{
 			final EditorSettings settings, final Connection con) throws FileNotFoundException
 	{
 		super(TABLE_NAME);
+		name.setStoredValue(projectName);
 		skeletons = new ArrayList<Skeleton>();
 		this.settings = settings;
 		

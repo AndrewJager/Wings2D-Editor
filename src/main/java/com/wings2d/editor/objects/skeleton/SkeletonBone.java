@@ -26,7 +26,6 @@ import com.wings2d.editor.objects.Drawable;
 import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.save.DBDouble;
 import com.wings2d.editor.objects.save.DBPoint;
-import com.wings2d.editor.objects.save.DBPoint.PointUtils;
 import com.wings2d.editor.objects.save.DBString;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
 
@@ -41,6 +40,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	private List<SkeletonBone> syncedBones;
 	private Color handleColor;
 	public Boolean selected;
+	private Connection storedCon;
 	
 	private DBString syncBoneID;
 	/** Used to determine the parent bone when copying bones between frames **/
@@ -65,7 +65,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	/** Insert constructor */
 	private SkeletonBone(final String boneName, final SkeletonFrame boneParent, final Connection con)
 	{
-		this(boneParent);
+		this(boneParent, con);
 		if (boneParent.containsBoneWithName(boneName))
 		{
 			throw new IllegalArgumentException("A Bone with this name already exists in the Frame!");
@@ -93,7 +93,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	/** Read constructor */
 	private SkeletonBone(final String boneID, final Connection con, final SkeletonFrame boneParent)
 	{
-		this(boneParent);
+		this(boneParent, con);
 	
 		this.query(con, boneID);	
 	}
@@ -101,46 +101,27 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	/** Copy constructor **/
 	public SkeletonBone(final SkeletonBone syncBone, final SkeletonFrame boneParent, final Connection con)
 	{
-		this(boneParent);
+		this(boneParent, con);
 		if (boneParent.containsBoneWithName(syncBone.toString()))
 		{
 			throw new IllegalArgumentException("A Bone with this name already exists in the Frame!");
 		}
-
-		throw new IllegalArgumentException("Copy constructor not implemented yet!");
 		
-//		String newID = UUID.randomUUID().toString();
-//		String query = "INSERT INTO BONE (ID, Name, Frame, Location, SyncBone, ParentBoneName, Rotation)"
-//				+ " VALUES(" + quoteStr(newID) + "," + quoteStr(syncBone.toString()) + "," + quoteStr(boneParent.getID()) 
-//				+ "," + quoteStr(PointUtils.toString(new Point2D.Double(syncBone.getX(), syncBone.getY()))) 
-//				+ "," + quoteStr(" ") + "," + quoteStr(syncBone.getParentBoneName()) + "," + syncBone.getRotation() + ")";
-//		System.out.println(query);
-//		Statement stmt;
-//		try {
-//			stmt = con.createStatement();
-//			stmt.executeUpdate(query);
-//			stmt.close();
-//		} catch (SQLException e1) {
-//			e1.printStackTrace();
-//		}
-//		
-//		this.setParentSyncedBone(syncBone);
-//		for (int i = 0; i < syncBone.getSprites().size(); i++)
-//		{
-//			this.sprites.add(syncBone.getSprites().get(i).copy(this));
-//		}
-//		
-//		query = " SELECT * FROM BONE WHERE ID = " + quoteStr(newID);
-//		try {
-//			stmt = con.createStatement();
-//			ResultSet rs = stmt.executeQuery(query);
-//			initData(con,rs.getString("ID"));
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
+		name.setStoredValue(syncBone.getName());
+		frameID.setStoredValue(boneParent.getID());	
+		syncBoneID.setStoredValue(syncBone.getID());
+		parentBoneName.setStoredValue(syncBone.getName());
+
+		location.setStoredValue((Point2D)syncBone.getLocation().clone());
+		rotation.setStoredValue(syncBone.getRotation());
+		
+		// Copy sprites
+		
+		this.insert(con);
+		this.query(con, id.getStoredValue());	
 	}
 	
-	private SkeletonBone(final SkeletonFrame boneParent)
+	private SkeletonBone(final SkeletonFrame boneParent, final Connection con)
 	{
 		super(TABLE_NAME);
 		frame = boneParent;
@@ -149,6 +130,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		childBones = new ArrayList<SkeletonBone>();
 		sprites = new ArrayList<Sprite>();
 		handleColor = settings.getUnselectedHandleColor();
+		storedCon = con;
 	
 		selected = false;
 		
@@ -161,17 +143,31 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	
 	@Override
 	public void deleteChildren(final String ID, final Connection con) {
-		
+		for(int i = 0; i < sprites.size(); i++) {
+			sprites.get(i).delete(con);
+		}
 	}
 	
 	@Override
 	public void queryChildren(final String ID, final Connection con) {
-		
+		sprites.clear();
+		String sql = " SELECT * FROM " + Sprite.TABLE_NAME + " WHERE Bone = " + quoteStr(ID);
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				sprites.add(Sprite.read(rs.getString("ID"), this, con));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
 	protected void updateChildren(final Connection con) {
-
+		for(int i = 0; i < sprites.size(); i++) {
+			sprites.get(i).update(con);
+		}
 	}
 	
 	public String toString()
@@ -360,6 +356,9 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	public boolean getIsSelected()
 	{
 		return selected;
+	}
+	public Connection getStoredConnection() {
+		return storedCon;
 	}
 	public double getRotation()
 	{
@@ -554,7 +553,11 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		this.setSelectedSprite(sprite);
 		for (int i = 0; i < syncedBones.size(); i++)
 		{
-			syncedBones.get(i).insert(sprite.copy(syncedBones.get(i)), syncedBones.get(i).getSprites().size());		
+			try {
+				syncedBones.get(i).insert(sprite.copy(syncedBones.get(i)), syncedBones.get(i).getSprites().size());
+			} catch (Exception e) {
+				// TODO REMOVE THIS try/catch
+			}		
 		}
 	}
 	@Override

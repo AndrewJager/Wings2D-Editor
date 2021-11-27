@@ -13,14 +13,14 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.image.BaseMultiResolutionImage;
 import java.awt.image.BufferedImage;
-import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Scanner;
 import java.util.UUID;
 
 import javax.swing.tree.MutableTreeNode;
@@ -28,23 +28,24 @@ import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.Drawable;
 import com.wings2d.editor.objects.EditorSettings;
+import com.wings2d.editor.objects.save.DBColor;
+import com.wings2d.editor.objects.save.DBString;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
-import com.wings2d.framework.imageFilters.FilterFactory;
 import com.wings2d.framework.imageFilters.ImageFilter;
 import com.wings2d.framework.shape.ShapeComparator;
 
 public class Sprite extends SkeletonNode implements Drawable{
-	public static final String SPRITE_TOKEN = "SPRITE";
-	public static final String VERTEX_TOKEN = "VERTEX";
-	public static final String SYNC_ID_TOKEN = "SYNCID";
-	public static final String FILTER_TOKEN = "FILTER";
+	public static final String TABLE_NAME = "SPRITE";
+	
+	private DBString boneID;
+	/** ID used to sync sprites between bones **/
+	private DBString syncSpriteID;
+	private DBColor color;
 
 	private SkeletonBone parent;
 	private EditorSettings settings;
-	/** ID used to sync sprites between bones **/
-	private UUID syncID;
+
 	private Path2D path;
-	private Color color;
 	private int selectedVertex = -1;
 	
 	private double imgXOffset;
@@ -53,17 +54,28 @@ public class Sprite extends SkeletonNode implements Drawable{
 	private List<ImageFilter> filters;
 	private List<SpritePoint> points;
 	
-	public Sprite(final String spriteName, final SkeletonBone parent)
+	public static Sprite insert(final String spriteName, final SkeletonBone parent, final Connection con) {
+		return new Sprite(spriteName, parent, con);
+	}
+	public static Sprite read(final String spriteID, final SkeletonBone parent, final Connection con) {
+		return new Sprite(parent, spriteID, con);
+	}
+	
+	/** Insert constructor */
+	private Sprite(final String spriteName, final SkeletonBone parent, final Connection con)
 	{
-		super("FRAME");
-//		this.name = spriteName;
-		this.parent = parent;
-		this.settings = parent.getSettings();
-		syncID = UUID.randomUUID();
-		color = Color.LIGHT_GRAY;
-		filters = new ArrayList<ImageFilter>();
-		points = new ArrayList<SpritePoint>();
-		path = new Path2D.Double();
+		this(parent);
+		name.setStoredValue(spriteName);
+		boneID.setStoredValue(parent.getID());
+
+//		syncID = UUID.randomUUID();
+		
+		color.setStoredValue(Color.LIGHT_GRAY);
+		
+		this.insert(con);
+		this.query(con, id.getStoredValue());
+		
+		// Default shape
 		moveTo(-30, -30);
 		lineTo(30, -30);
 		lineTo(30, 30);
@@ -71,75 +83,70 @@ public class Sprite extends SkeletonNode implements Drawable{
 		path.closePath();
 	}
 	
+	/** Read constructor */
+	public Sprite(final SkeletonBone parent, final String spriteID, final Connection con) {
+		this(parent);
+		
+		this.query(con, spriteID);
+		recreatePathFromPoints(points);
+	}
+	
+	public Sprite(final SkeletonBone parent) {
+		super(TABLE_NAME);
+		this.parent = parent;
+		this.settings = parent.getSettings();
+		filters = new ArrayList<ImageFilter>();
+		points = new ArrayList<SpritePoint>();
+		path = new Path2D.Double();
+		
+		fields.add(boneID = new DBString("Bone"));
+		fields.add(syncSpriteID = new DBString("SyncSprite"));
+		fields.add(color = new DBColor("Color"));
+	}
+	
+	
 	@Override
 	public void deleteChildren(final String ID, final Connection con) {
-		
+		System.out.println("delete " + points.size());
+		for(int i = 0; i < points.size(); i++) {
+			points.get(i).delete(con);
+		}
 	}
 	
 	@Override
 	public void queryChildren(final String ID, final Connection con) {
-		
+		points.clear();
+		String sql = " SELECT * FROM " + SpritePoint.TABLE_NAME + " WHERE Sprite = " + quoteStr(ID);
+		sql = sql + " ORDER BY Position DESC";
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				points.add(SpritePoint.read(rs.getString("ID"), this, con));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	@Override
 	protected void updateChildren(final Connection con) {
-
-	}
-	
-//	public Sprite(final Scanner in, final SkeletonBone parent)
-//	{
-//		this.parent = parent;
-//		this.settings = parent.getSettings();
-//		path = new Path2D.Double();
-//		filters = new ArrayList<ImageFilter>();
-//		points = new ArrayList<SpritePoint>();
-//		boolean keepReading = true;
-//		boolean firstPoint = true;
-//		while(in.hasNext() && keepReading)
-//		{
-//			String[] tokens = in.next().split(":");
-//			switch(tokens[0])
-//			{
-//			case NAME_TOKEN:
-//				name = tokens[1];
-//				break;
-//			case COLOR_TOKEN:
-//				color = new Color(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]), Integer.parseInt(tokens[3]));
-//				break;
-//			case VERTEX_TOKEN:
-//				if (firstPoint)
-//				{
-//					moveTo(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
-//					firstPoint = false;
-//				}
-//				else
-//				{
-//					lineTo(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
-//				}
-//				break;
-//			case SYNC_ID_TOKEN:
-//				syncID = UUID.fromString(tokens[1]);
-//				break;
-//			case FILTER_TOKEN:
-//				filters.add(FilterFactory.fromFileString(tokens[1]));
-//				break;
-//			case END_TOKEN:
-//				path.closePath();
-//				keepReading = false;
-//				break;
-//			}
-//		}
-//	}
-	public Sprite copy(final SkeletonBone parent)
-	{
-		Sprite newSprite = new Sprite(new String(this.name.getStoredValue()), parent);
-		newSprite.color = new Color(this.color.getRGB());
-		newSprite.path = new Path2D.Double(this.path);
-		newSprite.points = new ArrayList<SpritePoint>();
-		for (int i = 0; i < this.points.size(); i++) {
-			newSprite.points.add(new SpritePoint(this.points.get(i).getX(), this.points.get(i).getY(), newSprite));
+		for(int i = 0; i < points.size(); i++) {
+			points.get(i).update(con);
 		}
-		newSprite.syncID = this.syncID;
-		return newSprite;
+	}
+
+	public Sprite copy(final SkeletonBone parent) throws Exception
+	{
+		throw new Exception("Copy construtor not implemented!");
+//		Sprite newSprite = new Sprite(new String(this.name.getStoredValue()), parent);
+//		newSprite.color = new Color(this.color.getRGB());
+//		newSprite.path = new Path2D.Double(this.path);
+//		newSprite.points = new ArrayList<SpritePoint>();
+//		for (int i = 0; i < this.points.size(); i++) {
+//			newSprite.points.add(new SpritePoint(this.points.get(i).getX(), this.points.get(i).getY(), newSprite));
+//		}
+//		newSprite.syncID = this.syncID;
+//		return newSprite;
 	}
 	
 	public String toString()
@@ -221,9 +228,9 @@ public class Sprite extends SkeletonNode implements Drawable{
 		List<SkeletonBone> syncedBones = parent.getSyncedBones();
 		for (int i = 0; i < syncedBones.size(); i++)
 		{
-			if (syncedBones.get(i).getSpriteBySyncID(syncID) != null)
+			if (syncedBones.get(i).getSpriteBySyncID(UUID.fromString(syncSpriteID.getStoredValue())) != null)
 			{
-				syncedBones.get(i).getSpriteBySyncID(syncID).translate(deltaX, deltaY);
+				syncedBones.get(i).getSpriteBySyncID(UUID.fromString(syncSpriteID.getStoredValue())).translate(deltaX, deltaY);
 			}
 		}
 	}
@@ -265,7 +272,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		List<SkeletonBone> syncedBones = parent.getSyncedBones();
 		for (int i = 0; i < syncedBones.size(); i++)
 		{
-			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncID);
+			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(UUID.fromString(syncSpriteID.getStoredValue()));
 			if (ShapeComparator.similarShapes(this.path, sprite.path))
 			{
 				if (relativeToParent) {
@@ -300,12 +307,12 @@ public class Sprite extends SkeletonNode implements Drawable{
 	{
 		path = new Path2D.Double();
 		this.points = new ArrayList<SpritePoint>();
-		moveTo(points.get(0).getX(), points.get(0).getY());
+		path.moveTo(points.get(0).getX(), points.get(0).getY());
 		if (points.size() > 1)
 		{
 			for (int i = 1; i < points.size(); i++)
 			{
-				lineTo(points.get(i).getX(), points.get(i).getY());
+				path.lineTo(points.get(i).getX(), points.get(i).getY());
 			}
 		}
 		if (close) 
@@ -320,7 +327,6 @@ public class Sprite extends SkeletonNode implements Drawable{
 	/** Calls setVertexLocation with the vertex returned by getSelectedVertex() **/
 	public void setVertexLocation(final Point2D loc, final double scale)
 	{
-		System.out.println(getSelectedVertex());
 		setVertexLocation(loc, getSelectedVertex(), scale);
 	}
 	public void translateVertex(final Shape parentPath, final double deltaX, final double deltaY, final int vertex)
@@ -329,7 +335,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		List<SkeletonBone> syncedBones = parent.getSyncedBones();
 		for (int i = 0; i < syncedBones.size(); i++)
 		{
-			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncID);
+			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(UUID.fromString(syncSpriteID.getStoredValue()));
 			if (ShapeComparator.similarShapes(this.path, sprite.path))
 			{
 				sprite.translateVertex(this.path, deltaX, deltaY, vertex);
@@ -363,32 +369,32 @@ public class Sprite extends SkeletonNode implements Drawable{
 	}
 	public Color getColor()
 	{
-		return color;
+		return color.getStoredValue();
 	}
 	public void setColor(final Color color)
 	{
-		this.color = color;
+		this.color.setStoredValue(color);
 		List<SkeletonBone> syncedBones = parent.getSyncedBones();
 		for (int i = 0; i < syncedBones.size(); i++)
 		{
-			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncID);
+			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(UUID.fromString(syncSpriteID.getStoredValue()));
 			sprite.setColor(color);
 		}
 	}
 	public UUID getSyncID()
 	{
-		return syncID;
+		return UUID.fromString(syncSpriteID.getStoredValue());
 	}
 	public SkeletonBone getBone()
 	{
 		return parent;
 	}
 	public void lineTo(final double x, final double y) {
-		points.add(new SpritePoint(x, y, this));
+		points.add(SpritePoint.insert(x, y, this.getAmountOfPoints(), this, parent.getStoredConnection()));
 		path.lineTo(x, y);
 	}
 	public void moveTo(final double x, final double y) {
-		points.add(new SpritePoint(x, y, this));
+		points.add(SpritePoint.insert(x, y, this.getAmountOfPoints(), this, parent.getStoredConnection()));
 		path.moveTo(x, y);
 	}
 	public void addVertex(final Point2D point)
@@ -396,7 +402,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		List<SkeletonBone> syncedBones = parent.getSyncedBones();
 		for (int i = 0; i < syncedBones.size(); i++)
 		{
-			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncID);
+			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(getSyncID());
 			double xOffset = path.getBounds2D().getCenterX() + parent.getX() - point.getX();
 			double yOffset = path.getBounds2D().getCenterY() + parent.getY() - point.getY();
 			sprite.addVertex(this.getPath(), xOffset, yOffset);
@@ -410,7 +416,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		List<SkeletonBone> syncedBones = parent.getSyncedBones();
 		for (int i = 0; i < syncedBones.size(); i++)
 		{
-			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncID);
+			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(getSyncID());
 			sprite.addVertex(baseShape, xOffset, yOffset);
 		}
 		double angle = ShapeComparator.getRotationFrom(this.path, baseShape, false);
@@ -465,7 +471,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		drawShape = transform.createTransformedShape(drawShape);
 		Graphics2D g2d = (Graphics2D)newImage.getGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setColor(color);
+		g2d.setColor(color.getStoredValue());
 		g2d.fill(drawShape);
 		
 		for (int i = 0; i < filters.size(); i++)
@@ -495,8 +501,9 @@ public class Sprite extends SkeletonNode implements Drawable{
 		for (int i = 0; i < this.parent.getSyncedBones().size(); i++)
 		{
 			SkeletonBone bone = this.parent.getSyncedBones().get(i);
-			bone.getSpriteBySyncID(this.getSyncID()).getPoints().add(new SpritePoint(point.getX(), point.getY(),
-					bone.getSpriteBySyncID(this.getSyncID())));
+			bone.getSpriteBySyncID(this.getSyncID()).getPoints().add(SpritePoint.insert(point.getX(), point.getY(), 
+					bone.getSpriteBySyncID(getSyncID()).getAmountOfPoints(),
+					bone.getSpriteBySyncID(this.getSyncID()), parent.getStoredConnection()));
 		}
 	}
 	@Override
@@ -556,30 +563,13 @@ public class Sprite extends SkeletonNode implements Drawable{
 		List<SkeletonBone> syncedBones = parent.getSyncedBones();
 		for (int i = 0; i < syncedBones.size(); i++)
 		{
-			if (syncedBones.get(i).getSpriteBySyncID(syncID) != null)
+			if (syncedBones.get(i).getSpriteBySyncID(getSyncID()) != null)
 			{
-				syncedBones.get(i).getSpriteBySyncID(syncID).setName(newName);
+				syncedBones.get(i).getSpriteBySyncID(getSyncID()).setName(newName);
 			}
 		}
 	}
-//	@Override
-	public void saveToFile(final PrintWriter out) {
-		out.write(SPRITE_TOKEN + "\n");
-		out.print(NAME_TOKEN + ":" + name + "\n");
-		out.write(SYNC_ID_TOKEN + ":" + syncID + "\n");
-		out.write(COLOR_TOKEN + ":" + color.getRed() + ":" + color.getGreen() + ":" + color.getBlue() + "\n");
-		List<Point2D> vertices = getVertices();
-		for (int i = 0; i < vertices.size(); i++)
-		{
-			Point2D vertex = vertices.get(i);
-			out.write(VERTEX_TOKEN + ":" + vertex.getX() + ":" + vertex.getY() + "\n"); 
-		}
-		for (int i = 0; i < filters.size(); i++)
-		{
-			out.write(FILTER_TOKEN + ":" + filters.get(i).getFileString() + "\n");
-		}
-		out.write(END_TOKEN + ":" + SPRITE_TOKEN + "\n");
-	}
+
 	@Override
 	public void resyncAll() {
 		
@@ -593,7 +583,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		transform.translate(parent.getX(), 
 				parent.getY());
 		Shape draw = transform.createTransformedShape(path);
-		g2d.setColor(color);
+		g2d.setColor(color.getStoredValue());
 		g2d.fill(draw);
 		
 		if (mode == DrawMode.SPRITE_MOVE)

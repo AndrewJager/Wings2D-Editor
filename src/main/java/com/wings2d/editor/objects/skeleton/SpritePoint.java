@@ -1,56 +1,85 @@
 package com.wings2d.editor.objects.skeleton;
 
-import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-public class SpritePoint extends SkeletonNode{
-	private Sprite parent;
-	private double x;
-	private double y;
-	
-	public SpritePoint(final double x, final double y, final Sprite parent) {
-		super("POINT");
-		this.parent = parent;
-		this.x = x;
-		this.y = y;
-	}
-	
-	@Override
-	public void deleteChildren(final String ID, final Connection con) {
-		
-	}
-	
-	@Override
-	public void queryChildren(final String ID, final Connection con) {
-		
-	}
-	
-	@Override
-	protected void updateChildren(final Connection con) {
+import com.wings2d.editor.objects.save.DBDouble;
+import com.wings2d.editor.objects.save.DBInt;
+import com.wings2d.editor.objects.save.DBString;
 
+public class SpritePoint extends SkeletonNode{
+	public static final String TABLE_NAME = "SPRITEPOINT";
+	
+	private Sprite parent;
+	
+	private DBString spriteID;
+	private DBDouble x;
+	private DBDouble y;
+	private DBInt index;
+	
+	public static SpritePoint insert(final double x, final double y, final int idx, final Sprite parent, final Connection con) {
+		return new SpritePoint(x, y, idx, parent, con);
 	}
+	public static SpritePoint read(final String pointID, final Sprite parent, final Connection con) {
+		return new SpritePoint(pointID, con, parent);
+	}
+	
+	/** Insert constructor */
+	private SpritePoint(final double x, final double y, final int idx, final Sprite parent, final Connection con) {
+		this(parent);
+//		System.out.println(parent);
+		spriteID.setStoredValue(parent.getID());
+		this.x.setStoredValue(x);
+		this.y.setStoredValue(y);
+		this.index.setStoredValue(idx);
+		
+		this.insert(con);
+		this.query(con, id.getStoredValue());
+	}
+	
+	/** Read constructor */
+	private SpritePoint(final String pointID, final Connection con, final Sprite parent) {
+		this(parent);
+
+		this.query(con, pointID);
+	}
+	
+	private SpritePoint(final Sprite parent) {
+		super(TABLE_NAME, false);
+		this.parent = parent;
+		
+		fields.add(spriteID = new DBString("Sprite"));
+		fields.add(x = new DBDouble("X"));
+		fields.add(y = new DBDouble("Y"));
+		fields.add(index = new DBInt("Position"));
+	}
+	
+	@Override
+	public void deleteChildren(final String ID, final Connection con) {}
+	@Override
+	public void queryChildren(final String ID, final Connection con) {}
+	@Override
+	protected void updateChildren(final Connection con) {}
 	
 	public String toString() {
-		return "X: " + Math.round(x) + " - Y: " + Math.round(y); 
+		return "X: " + Math.round(x.getStoredValue()) + " - Y: " + Math.round(y.getStoredValue()); 
 	}
 	
 	public double getX() {
-		return x;
+		return x.getStoredValue();
 	}
 	public void setX(double x) {
-		this.x = x;
+		this.x.setStoredValue(x);;
 	}
 	public double getY() {
-		return y;
+		return y.getStoredValue();
 	}
 	public void setY(double y) {
-		this.y = y;
+		this.y.setStoredValue(y);
 	}
 	
 	public Sprite getSprite() {

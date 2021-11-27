@@ -148,7 +148,7 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 					DefaultTreeModel model = (DefaultTreeModel)controls.getTree().getModel();
 					try {
 						SkeletonBone bone = (SkeletonBone)selectedNode;
-						Sprite newSprite = new Sprite("Sprite", bone);
+						Sprite newSprite = Sprite.insert("Sprite", bone, controls.getEditPanel().getEditor().getConnection());
 
 						controls.getEditPanel().getEditor().getEditsManager().edit(new AddToTree(model, newSprite, selectedNode));
 						controls.getTree().setSelectionPath(controls.getTree().getSelectionPath().pathByAddingChild(

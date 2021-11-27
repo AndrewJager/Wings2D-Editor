@@ -1,7 +1,6 @@
 package com.wings2d.editor.objects;
 
 import java.awt.Color;
-import java.io.File;
 import java.sql.Connection;
 import com.wings2d.editor.objects.project.Project;
 import com.wings2d.editor.objects.save.DBColor;

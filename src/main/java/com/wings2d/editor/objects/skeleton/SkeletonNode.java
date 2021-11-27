@@ -9,7 +9,10 @@ import com.wings2d.editor.ui.edits.ActionNotDoneException;
 public abstract class SkeletonNode extends DBObject implements MutableTreeNode{
 	
 	public SkeletonNode(final String tableName) {
-		super(tableName);
+		this(tableName, true);
+	}
+	public SkeletonNode(final String tableName, final Boolean hasName) {
+		super(tableName, hasName);
 	}
 
 	public abstract void resyncAll();

@@ -20,7 +20,6 @@ public class EditsManager {
 		if (edit.doEdit()) {
 			// Clear all edits past this point
 			for (int i = edits.size() - 1; i > curEdit; i--) {
-				System.out.println(i);
 				edits.remove(i);
 			}
 			edits.add(edit);

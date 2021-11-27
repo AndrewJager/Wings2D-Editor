@@ -107,7 +107,6 @@ public class Sprite extends SkeletonNode implements Drawable{
 	
 	@Override
 	public void deleteChildren(final String ID, final Connection con) {
-		System.out.println("delete " + points.size());
 		for(int i = 0; i < points.size(); i++) {
 			points.get(i).delete(con);
 		}
@@ -267,7 +266,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		double unscale = 1.0 / scale;
 		double unscaledX = x * unscale;
 		double unscaledY = y * unscale;
-		List<Point2D> points = getVertices();
+		List<Point2D> tmpPoints = getVertices();
 		// Set children first to avoid comparing shapes after this shape is changed
 		List<SkeletonBone> syncedBones = parent.getSyncedBones();
 		for (int i = 0; i < syncedBones.size(); i++)
@@ -276,24 +275,25 @@ public class Sprite extends SkeletonNode implements Drawable{
 			if (ShapeComparator.similarShapes(this.path, sprite.path))
 			{
 				if (relativeToParent) {
-					sprite.translateVertex(this.path, unscaledX - points.get(getSelectedVertex()).getX() - parent.getX(), 
-							unscaledY - points.get(getSelectedVertex()).getY() - parent.getY(), getSelectedVertex());
+					sprite.translateVertex(this.path, unscaledX - tmpPoints.get(getSelectedVertex()).getX() - parent.getX(), 
+							unscaledY - tmpPoints.get(getSelectedVertex()).getY() - parent.getY(), getSelectedVertex());
 				}
 				else {
-					sprite.translateVertex(this.path, unscaledX - points.get(getSelectedVertex()).getX(), 
-							unscaledY - points.get(getSelectedVertex()).getY(), getSelectedVertex());
+					sprite.translateVertex(this.path, unscaledX - tmpPoints.get(getSelectedVertex()).getX(), 
+							unscaledY - tmpPoints.get(getSelectedVertex()).getY(), getSelectedVertex());
 				}
 			}
 		}
 		if (relativeToParent) {
-			points.get(vertex).setLocation(unscaledX - parent.getX(), 
+			tmpPoints.get(vertex).setLocation(unscaledX - parent.getX(), 
 					unscaledY - parent.getY());
 		}
 		else {
-			points.get(vertex).setLocation(unscaledX, 
+			tmpPoints.get(vertex).setLocation(unscaledX, 
 					unscaledY);
 		}
-		recreatePathFromPoints(points, true);
+		points.get(vertex).setPoint(tmpPoints.get(vertex));
+		recreatePathFromPoints(tmpPoints, true);
 	}
 	private void recreatePathFromPoints(final List<SpritePoint> points) {
 		List<Point2D> otherPoints = new ArrayList<Point2D>();
@@ -306,7 +306,6 @@ public class Sprite extends SkeletonNode implements Drawable{
 	private void recreatePathFromPoints(final List<Point2D> points, final boolean close)
 	{
 		path = new Path2D.Double();
-		this.points = new ArrayList<SpritePoint>();
 		path.moveTo(points.get(0).getX(), points.get(0).getY());
 		if (points.size() > 1)
 		{

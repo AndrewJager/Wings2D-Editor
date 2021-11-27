@@ -1,5 +1,6 @@
 package com.wings2d.editor.objects.skeleton;
 
+import java.awt.geom.Point2D;
 import java.sql.Connection;
 import java.util.Enumeration;
 import java.util.List;
@@ -72,14 +73,19 @@ public class SpritePoint extends SkeletonNode{
 	public double getX() {
 		return x.getStoredValue();
 	}
-	public void setX(double x) {
+	public void setX(final double x) {
 		this.x.setStoredValue(x);;
 	}
 	public double getY() {
 		return y.getStoredValue();
 	}
-	public void setY(double y) {
+	public void setY(final double y) {
 		this.y.setStoredValue(y);
+	}
+	
+	public void setPoint(final Point2D point) {
+		this.x.setStoredValue(point.getX());
+		this.y.setStoredValue(point.getY());
 	}
 	
 	public Sprite getSprite() {

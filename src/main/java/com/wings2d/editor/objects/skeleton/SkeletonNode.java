@@ -22,11 +22,6 @@ public abstract class SkeletonNode extends DBObject implements MutableTreeNode{
 	public abstract List<SkeletonNode> getNodes();
 	public abstract boolean isMaster();
 	
-	public static final String NAME_TOKEN = "NAME";
-	public static final String END_TOKEN = "END";
-	public static final String ID_TOKEN = "ID";
-	public static final String COLOR_TOKEN = "COLOR";
-	
 	public static final String MOVE_UP_ERROR = "Cannot move up when item is first in list!";
 	public static final String MOVE_DOWN_ERROR = "Cannot move down when item is last in list!";
 }

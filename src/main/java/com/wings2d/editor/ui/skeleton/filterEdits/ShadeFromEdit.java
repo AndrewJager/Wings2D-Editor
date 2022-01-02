@@ -10,7 +10,7 @@ import javax.swing.SpinnerNumberModel;
 import com.wings2d.framework.imageFilters.DarkenFrom;
 import com.wings2d.framework.imageFilters.ImageFilter;
 import com.wings2d.framework.imageFilters.LightenFrom;
-import com.wings2d.framework.imageFilters.ShadeDir;
+import com.wings2d.framework.misc.CardinalDir;
 
 
 public abstract class ShadeFromEdit extends FilterEdit{
@@ -22,10 +22,10 @@ public abstract class ShadeFromEdit extends FilterEdit{
 	}
 	
 	private ShadeType type;
-	private ShadeDir dir;
+	private CardinalDir dir;
 	private double amt;
 	
-	private JComboBox<ShadeDir> directionSelect;
+	private JComboBox<CardinalDir> directionSelect;
 	private SpinnerModel spinModel;
 	private JSpinner filterAmt;
 	
@@ -34,14 +34,14 @@ public abstract class ShadeFromEdit extends FilterEdit{
 		super(owner);
 		this.type = type;
 		
-		ShadeDir[] directions = new ShadeDir[4];
-		for (int i = 0; i < ShadeDir.values().length; i++) 
+		CardinalDir[] directions = new CardinalDir[4];
+		for (int i = 0; i < CardinalDir.values().length; i++) 
 		{
-			directions[i] = ShadeDir.values()[i];
+			directions[i] = CardinalDir.values()[i];
 		}
 		
 		
-		directionSelect = new JComboBox<ShadeDir>(directions);
+		directionSelect = new JComboBox<CardinalDir>(directions);
 		this.add(directionSelect);
 		
 		spinModel = new SpinnerNumberModel(1, 0.001, 100, 0.05);
@@ -69,13 +69,13 @@ public abstract class ShadeFromEdit extends FilterEdit{
 
 	public DarkenFrom getDarken()
 	{
-		dir = (ShadeDir) directionSelect.getSelectedItem();
+		dir = (CardinalDir) directionSelect.getSelectedItem();
 		amt = (double) filterAmt.getValue();
 		return new DarkenFrom(dir, amt);
 	}
 	public LightenFrom getLighten()
 	{
-		dir = (ShadeDir) directionSelect.getSelectedItem();
+		dir = (CardinalDir) directionSelect.getSelectedItem();
 		amt = (double) filterAmt.getValue();
 		return new LightenFrom(dir, amt);
 	}

@@ -25,6 +25,7 @@ import com.wings2d.editor.ui.settings.SettingsEdit;
 import com.wings2d.editor.ui.skeleton.SkeletonEdit;
 import com.wings2d.framework.Level;
 import com.wings2d.framework.LevelManager;
+import com.wings2d.framework.imageFilters.BasicVariance;
 
 public class Editor {
 	private LevelManager manager;
@@ -61,7 +62,7 @@ public class Editor {
 		options = new EditOptions(this);
 		settings = new EditorSettings(db.getConnection());
 		
-		FlatLightLaf.install();
+		FlatLightLaf.setup();
 		UIManager.put( "ScrollBar.showButtons", true );
 		
 		frame = new JFrame("Editor");

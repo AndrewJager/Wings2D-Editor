@@ -10,7 +10,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import com.wings2d.framework.charImageCreator.CharImageCreator;
 import com.wings2d.framework.charImageCreator.CharImageOptions;
 import com.wings2d.framework.imageFilters.LightenFrom;
-import com.wings2d.framework.imageFilters.ShadeDir;
+import com.wings2d.framework.misc.CardinalDir;
 
 public class SkeletonTreeCellRenderer extends DefaultTreeCellRenderer{
 	private static final long serialVersionUID = 1L;
@@ -21,7 +21,7 @@ public class SkeletonTreeCellRenderer extends DefaultTreeCellRenderer{
 		super();
 		CharImageOptions options = new CharImageOptions(20, new double[] {1.0, 1.25, 1.50, 1.75, 2.0}, 3);
 		options.rotation = 15;
-		options.filters.add(new LightenFrom(ShadeDir.TOP, 5));
+		options.filters.add(new LightenFrom(CardinalDir.NORTH, 5));
 		
 		skeletonIcon = new ImageIcon(CharImageCreator.CreateMultiImage('\u2444', options));
 		masterFrameIcon = new ImageIcon(CharImageCreator.CreateMultiImage('\u2B1A', options));

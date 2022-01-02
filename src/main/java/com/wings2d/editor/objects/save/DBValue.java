@@ -1,9 +1,6 @@
 package com.wings2d.editor.objects.save;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.UUID;
 
 /** Represents a field in the database */
 public abstract class DBValue<T> {
@@ -26,4 +23,13 @@ public abstract class DBValue<T> {
 	
 	public abstract String asString();
 	public abstract void fromString(final String str);
+	
+	public static UUID getUUID(final DBValue<String> value) {
+		if ((value.getStoredValue() != null) && (!value.getStoredValue().equals("null"))) {
+			return UUID.fromString(value.getStoredValue());
+		}
+		else {
+			return null;
+		}
+	}
 }

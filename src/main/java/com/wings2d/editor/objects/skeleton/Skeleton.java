@@ -49,6 +49,8 @@ public class Skeleton extends SkeletonNode {
 	private Skeleton(final String skelID, final EditorSettings settings, final Connection con) {
 		this(settings);
 		this.query(con, skelID);
+		
+		setAllSyncNodes();
 	}
 	
 	private Skeleton(final EditorSettings settings) {
@@ -150,24 +152,26 @@ public class Skeleton extends SkeletonNode {
 	
 	public SkeletonBone getBoneBYID(final UUID id)
 	{
-		for (int i = 0; i < masterFrame.getBones().size(); i++)
-		{
-			if (masterFrame.getBones().get(i).getID().equals(id))
+		if (id != null) {
+			for (int i = 0; i < masterFrame.getBones().size(); i++)
 			{
-				return masterFrame.getBones().get(i);
-			}
-		}
-		for (int i = 1; i < animations.size(); i++) // Start at one to skip master frame
-		{
-			SkeletonAnimation anim = (SkeletonAnimation)animations.get(i);
-			for (int j = 0; j < anim.getFrames().size(); j++)
-			{
-				SkeletonFrame frame = anim.getFrames().get(j);
-				for (int k = 0; k < frame.getBones().size(); k++)
+				if (masterFrame.getBones().get(i).getID().equals(id.toString()))
 				{
-					if (frame.getBones().get(k).getID().equals(id))
+					return masterFrame.getBones().get(i);
+				}
+			}
+			for (int i = 1; i < animations.size(); i++) // Start at one to skip master frame
+			{
+				SkeletonAnimation anim = (SkeletonAnimation)animations.get(i);
+				for (int j = 0; j < anim.getFrames().size(); j++)
+				{
+					SkeletonFrame frame = anim.getFrames().get(j);
+					for (int k = 0; k < frame.getBones().size(); k++)
 					{
-						return frame.getBones().get(k);
+						if (frame.getBones().get(k).getID().equals(id.toString()))
+						{
+							return frame.getBones().get(k);
+						}
 					}
 				}
 			}
@@ -179,6 +183,33 @@ public class Skeleton extends SkeletonNode {
 	}
 	public EditorSettings getSettings() {
 		return settings;
+	}
+	
+	public void setAllSyncNodes() {
+		for (int i = 0; i < animations.size(); i++) {
+			if (animations.get(i) instanceof SkeletonFrame) { // Master Frame
+				SkeletonFrame frame = (SkeletonFrame)animations.get(i);
+				setSyncFrame(frame);
+			}
+			else if (animations.get(i) instanceof SkeletonAnimation) {
+				SkeletonAnimation anim = (SkeletonAnimation)animations.get(i);
+				for (int j = 0; j < anim.getFrames().size(); j++) {
+					SkeletonFrame frame = (SkeletonFrame)anim.getFrames().get(j);
+					setSyncFrame(frame);
+				}
+			}
+		}
+	}
+	private void setSyncFrame(final SkeletonFrame frame) {
+		frame.setParentSyncedFrame(this.getFrameByID(frame.getSyncFrameID()));
+		for (int i = 0; i < frame.getBones().size(); i++) {
+			SkeletonBone bone = (SkeletonBone)frame.getBones().get(i);
+			setSyncBone(bone);
+		}
+	}
+	private void setSyncBone(final SkeletonBone bone) {
+		bone.setParentSyncedBone(this.getBoneBYID(bone.getSyncBoneID()));
+		bone.setParentBone(this.getBoneBYID(bone.getParentBoneID()));
 	}
 	
 	// MutableTreeNode methods

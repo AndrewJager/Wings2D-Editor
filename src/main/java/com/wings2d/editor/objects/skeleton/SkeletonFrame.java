@@ -179,6 +179,14 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	public boolean getIsMaster() {
 		return isMaster.getStoredValue();
 	}
+	public UUID getSyncFrameID() {
+		if ((syncFrameID.getStoredValue() != null) && (!syncFrameID.getStoredValue().equals("null"))) {
+			return UUID.fromString(syncFrameID.getStoredValue());
+		}
+		else {
+			return null;
+		}
+	}
 	public boolean containsBoneWithName(final String boneName)
 	{
 		boolean hasName = false;

@@ -70,6 +70,9 @@ public class FrameControls extends SkeletonTreeControlsUIElement{
 		syncBones.add(cautiousSync);
 		syncBones.add(forceSync);
 		panel.add(syncBones);
+		// Disable sync buttons if no sync frame
+		cautiousSync.setEnabled(frame.getParentSyncedFrame() != null);
+		forceSync.setEnabled(frame.getParentSyncedFrame() != null);
 		
 		createList(frame.getSyncedFrameNames());
 		panel.add(new JSeparator());

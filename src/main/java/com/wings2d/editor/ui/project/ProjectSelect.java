@@ -17,7 +17,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.tree.DefaultTreeModel;
 
 import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.project.Project;

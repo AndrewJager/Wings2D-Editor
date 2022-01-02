@@ -1,0 +1,23 @@
+Frames, Bones, and Sprites may all be "synced" to a parent, meaning that when the parent is changed,
+its children may also be modified automatically. Not all information should be synced, so this document
+will attempt to catalog the intended syncing behavior. There are two types of syncing: automatic 
+syncing, which happens when a property is changed, and Manual Resyncing.
+
+The user may call a "Manual Resync" on any of these node types, which will sync all data (except ID) AND call a 
+Manual Resync on any of its children. This effectively makes the node identical to its sync node.
+
+Frames:
+No frame properties should automatically sync.
+
+Manual Resync - Call a Manual Resync on all child bones
+
+
+Bones:
+Name - Should always change the name of all child bones when the name of the parent is changed.
+Position/Rotation - Should not change normally, should copied during a manual resync
+Parent Bone - Should be automatically synced
+
+Manual Resync - Sync all data + Manually Resync all child Sprites
+
+
+Sprites:

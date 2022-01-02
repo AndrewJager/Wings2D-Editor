@@ -27,6 +27,7 @@ import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.save.DBDouble;
 import com.wings2d.editor.objects.save.DBPoint;
 import com.wings2d.editor.objects.save.DBString;
+import com.wings2d.editor.objects.save.DBValue;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
 
 public class SkeletonBone extends SkeletonNode implements Drawable{
@@ -43,6 +44,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	private Connection storedCon;
 	
 	private DBString syncBoneID;
+	private DBString parentBoneID;
 	/** Used to determine the parent bone when copying bones between frames **/
 	private DBString parentBoneName;
 	private DBPoint location;
@@ -99,17 +101,20 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	}
 	
 	/** Copy constructor **/
-	public SkeletonBone(final SkeletonBone syncBone, final SkeletonFrame boneParent, final Connection con)
+	public SkeletonBone(final SkeletonBone syncBone, final SkeletonFrame frame, final Connection con)
 	{
-		this(boneParent, con);
-		if (boneParent.containsBoneWithName(syncBone.toString()))
+		this(frame, con);
+		if (frame.containsBoneWithName(syncBone.toString()))
 		{
 			throw new IllegalArgumentException("A Bone with this name already exists in the Frame!");
 		}
 		
 		name.setStoredValue(syncBone.getName());
-		frameID.setStoredValue(boneParent.getID());	
+		frameID.setStoredValue(frame.getID());	
 		syncBoneID.setStoredValue(syncBone.getID());
+		if (parentBone != null) {
+			parentBoneID.setStoredValue(parentBone.getID());
+		}
 		parentBoneName.setStoredValue(syncBone.getName());
 
 		location.setStoredValue((Point2D)syncBone.getLocation().clone());
@@ -137,6 +142,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		fields.add(frameID = new DBString("Frame"));
 		fields.add(location = new DBPoint("Location"));
 		fields.add(syncBoneID = new DBString("SyncBone"));
+		fields.add(parentBoneID = new DBString("ParentBone"));
 		fields.add(parentBoneName = new DBString("ParentBoneName"));
 		fields.add(rotation = new DBDouble("Rotation"));
 	}
@@ -186,7 +192,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		if (syncedBone != null)
 		{
 			this.parentSyncedBone = syncedBone;
-//			this.syncBoneID = syncedBone.getID();
+			this.syncBoneID.setStoredValue(syncedBone.getID());
 			this.parentSyncedBone.getSyncedBones().add(this);
 		}
 		else
@@ -216,12 +222,14 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		if (bone != null)
 		{
 			parentBone = bone;
+			parentBoneID.setStoredValue(bone.getID());
 			parentBoneName.setStoredValue(bone.toString());
 			parentBone.getChildBones().add(this);
 		}
 		else
 		{
-			parentBoneName = null;
+			parentBoneID.setStoredValue(null);
+			parentBoneName.setStoredValue(null);
 			if (parentBone != null)
 			{
 				parentBone.getChildBones().remove(this);
@@ -442,7 +450,11 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	}
 	public UUID getSyncBoneID()
 	{
-		return UUID.fromString(syncBoneID.getStoredValue());
+		return DBValue.getUUID(syncBoneID);
+	}
+	public UUID getParentBoneID()
+	{
+		return DBValue.getUUID(parentBoneID);
 	}
 	public void addSprite(final Sprite newSprite) {
 		sprites.add(newSprite);
@@ -623,7 +635,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 
 	public void resyncAll()
 	{
-		if (!syncBoneID.getStoredValue().isEmpty() && (parentSyncedBone == null || (!parentSyncedBone.getID().equals(syncBoneID))))
+		if (!syncBoneID.getStoredValue().isEmpty() && (parentSyncedBone == null || (!parentSyncedBone.getID().equals(syncBoneID.getStoredValue()))))
 		{
 			SkeletonAnimation animation = (SkeletonAnimation)frame.getParent();
 			parentSyncedBone = animation.getSkeleton().getBoneBYID(UUID.fromString(syncBoneID.getStoredValue()));

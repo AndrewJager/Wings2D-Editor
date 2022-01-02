@@ -54,11 +54,12 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		return new SkeletonFrame(thisID, frameParent, con, settings);
 	}
 	public static SkeletonFrame read(final String thisID, final SkeletonAnimation frameParent, final Connection con, final EditorSettings settings, 
-			final boolean isMaster, final Skeleton skeleton) 
+			final Skeleton skeleton) 
 	{
-		return new SkeletonFrame(thisID, frameParent, con, settings, isMaster, skeleton);
+		return new SkeletonFrame(thisID, frameParent, con, settings, skeleton);
 	}
 	
+	// Insert constructors
 	private SkeletonFrame(final String frameName, final SkeletonAnimation frameParent, final EditorSettings settings, 
 			final Connection con)
 	{
@@ -102,18 +103,20 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		this.insert(con);
 		this.query(con, id.getStoredValue());
 	}
+	
+	// Read constructors
 	private SkeletonFrame(final String thisID, final SkeletonAnimation frameParent, final Connection con, final EditorSettings settings) {
-		this(thisID, frameParent, con, settings, false, null);
+		this(thisID, frameParent, con, settings, null);
 	}
 	private SkeletonFrame(final String thisID, final SkeletonAnimation frameParent, final Connection con, final EditorSettings settings, 
-			final boolean isMaster, final Skeleton skeleton)
+			final Skeleton skeleton)
 	{
 		super(TABLE_NAME);
 		if ((frameParent == null) && (skeleton == null)) {
 			throw new IllegalArgumentException("Frame must be provided a parent!");
 		}
 
-		if (isMaster) {
+		if (skeleton != null) {
 			setup(skeleton, settings, con);
 		}
 		else {
@@ -121,6 +124,8 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		}
 		
 		this.query(con, thisID);
+		
+		setupBoneParents();
 	}
 	
 	private void setup(final SkeletonNode frameParent, final EditorSettings settings, final Connection con)
@@ -199,6 +204,18 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 			}
 		}
 		return hasName;
+	}
+	public Skeleton getSkeleton() {
+		if (parent instanceof Skeleton) {
+			return (Skeleton)parent;
+		}
+		else if (parent instanceof SkeletonAnimation){
+			SkeletonAnimation anim = (SkeletonAnimation)parent;
+			return anim.getSkeleton();
+		}
+		else {
+			throw new IllegalStateException("Parent of Frame is neither Skeleton or SkeletonAnimation!");
+		}
 	}
 
 	public SkeletonFrame getParentSyncedFrame() {
@@ -484,6 +501,14 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		for (int i = 0; i < bones.size(); i++)
 		{
 			bones.get(i).unsyncAll();
+		}
+	}
+	public void setupBoneParents() {
+		for (int i = 0; i < bones.size(); i++) {
+			SkeletonBone bone = bones.get(i);
+			if (!bone.getParentBoneName().isEmpty()) {
+				bone.setParentBone(this.getBoneWithName(bone.getParentBoneName()), false);
+			}
 		}
 	}
 	

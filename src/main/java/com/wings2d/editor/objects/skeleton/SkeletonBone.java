@@ -112,10 +112,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		name.setStoredValue(syncBone.getName());
 		frameID.setStoredValue(frame.getID());	
 		syncBoneID.setStoredValue(syncBone.getID());
-		if (parentBone != null) {
-			parentBoneID.setStoredValue(parentBone.getID());
-		}
-		parentBoneName.setStoredValue(syncBone.getName());
+		parentBoneName.setStoredValue(syncBone.getParentBoneName());
 
 		location.setStoredValue((Point2D)syncBone.getLocation().clone());
 		rotation.setStoredValue(syncBone.getRotation());
@@ -200,7 +197,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 			if (this.parentSyncedBone != null) {
 				this.parentSyncedBone.getSyncedBones().remove(this);
 			}
-			this.syncBoneID = null;
+			this.syncBoneID.setStoredValue(null);
 			this.parentSyncedBone = null;
 		}
 	}
@@ -217,35 +214,44 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		}
 		return names;
 	}
-	public void setParentBone(final SkeletonBone bone)
+	public void setParentBone(final SkeletonBone bone) {
+		setParentBone(bone, true);
+	}
+	public void setParentBone(final SkeletonBone bone, final boolean setChildren)
 	{
 		if (bone != null)
 		{
 			parentBone = bone;
 			parentBoneID.setStoredValue(bone.getID());
 			parentBoneName.setStoredValue(bone.toString());
-			parentBone.getChildBones().add(this);
+			if (setChildren) {
+				parentBone.getChildBones().add(this);
+			}
 		}
 		else
 		{
 			parentBoneID.setStoredValue(null);
 			parentBoneName.setStoredValue(null);
-			if (parentBone != null)
-			{
-				parentBone.getChildBones().remove(this);
+			if (setChildren) {
+				if (parentBone != null)
+				{
+					parentBone.getChildBones().remove(this);
+				}
 			}
 			parentBone = null;
 		}
-		for (int i = 0; i < syncedBones.size(); i++)
-		{
-			if (bone != null)
+		if (setChildren) {
+			for (int i = 0; i < syncedBones.size(); i++)
 			{
-				syncedBones.get(i).setParentBone(bone.toString());
-			}
-			else
-			{
-				SkeletonBone nullBone = null;
-				syncedBones.get(i).setParentBone(nullBone);
+				if (bone != null)
+				{
+					syncedBones.get(i).setParentBone(bone.toString());
+				}
+				else
+				{
+					SkeletonBone nullBone = null;
+					syncedBones.get(i).setParentBone(nullBone, true);
+				}
 			}
 		}
 	}

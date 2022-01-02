@@ -78,7 +78,7 @@ public class Skeleton extends SkeletonNode {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				animations.add(SkeletonFrame.read(rs.getString("ID"), null, con, settings, true, this));
+				animations.add(SkeletonFrame.read(rs.getString("ID"), null, con, settings, this));
 				masterFrame = (SkeletonFrame)animations.get(0);
 			}
 		} catch (SQLException e) {
@@ -185,6 +185,9 @@ public class Skeleton extends SkeletonNode {
 		return settings;
 	}
 	
+	/** Call this after all children are created to sync object references that may not have been created
+	 * when the child was created
+	 */
 	public void setAllSyncNodes() {
 		for (int i = 0; i < animations.size(); i++) {
 			if (animations.get(i) instanceof SkeletonFrame) { // Master Frame

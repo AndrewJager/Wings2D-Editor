@@ -572,7 +572,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		for (int i = 0; i < syncedBones.size(); i++)
 		{
 			try {
-				syncedBones.get(i).insert(sprite.copy(syncedBones.get(i)), syncedBones.get(i).getSprites().size());
+				syncedBones.get(i).insert(sprite.copy(syncedBones.get(i), this.getStoredConnection()), syncedBones.get(i).getSprites().size());
 			} catch (Exception e) {
 				// TODO REMOVE THIS try/catch
 			}		

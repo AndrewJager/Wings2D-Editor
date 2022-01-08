@@ -134,18 +134,18 @@ public class Sprite extends SkeletonNode implements Drawable{
 		}
 	}
 
-	public Sprite copy(final SkeletonBone parent) throws Exception
+	public Sprite copy(final SkeletonBone parent, final Connection con) throws Exception
 	{
-		throw new Exception("Copy construtor not implemented!");
-//		Sprite newSprite = new Sprite(new String(this.name.getStoredValue()), parent);
-//		newSprite.color = new Color(this.color.getRGB());
-//		newSprite.path = new Path2D.Double(this.path);
-//		newSprite.points = new ArrayList<SpritePoint>();
-//		for (int i = 0; i < this.points.size(); i++) {
-//			newSprite.points.add(new SpritePoint(this.points.get(i).getX(), this.points.get(i).getY(), newSprite));
-//		}
-//		newSprite.syncID = this.syncID;
-//		return newSprite;
+		Sprite newSprite = new Sprite(this.getName(), parent, con);
+		newSprite.color.setStoredValue(new Color(this.color.getStoredValue().getRGB()));
+		newSprite.path = new Path2D.Double(this.path);
+		newSprite.points = new ArrayList<SpritePoint>();
+		for (int i = 0; i < this.points.size(); i++) {
+			newSprite.points.add(SpritePoint.insert(this.points.get(i).getX(), this.points.get(i).getY(),
+					newSprite.getAmountOfPoints(), newSprite, con));
+		}
+		newSprite.syncSpriteID.setStoredValue(this.getID());
+		return newSprite;
 	}
 	
 	public String toString()

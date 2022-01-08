@@ -34,7 +34,7 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 	
 	private ComboEditSetter<SkeletonEdit, SkeletonBone> parentBone;
 	private DoubleEditSetter<SkeletonEdit> xPos, yPos, rot;
-	private JButton addSprite;
+	private JButton addSprite, syncBone;
 
 	public BoneControls(final SkeletonTreeControls controls, final Connection con) {
 		super(controls, con);
@@ -85,7 +85,10 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 				});
 		panel.add(xPos.getPanel());
 		
+		syncBone = new JButton("Sync");
+		
 		spritesPanel = new JPanel();
+		spritesPanel.add(syncBone);
 		addSprite = new JButton("New Sprite");
 		spritesPanel.add(addSprite);
 		spritesPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, (int)addSprite.getPreferredSize().getHeight()));
@@ -160,7 +163,12 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 					}
 				}
 			}
-		});	
+		});
+		syncBone.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 	}
 
 	@Override 

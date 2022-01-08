@@ -7,13 +7,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import com.wings2d.editor.objects.EditorSettings;
-import com.wings2d.editor.objects.save.DBString;
 import com.wings2d.editor.objects.skeleton.DBObject;
 import com.wings2d.editor.objects.skeleton.Skeleton;
-import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 
 public class Project extends DBObject{
 	public static final String TABLE_NAME = "PROJECT";

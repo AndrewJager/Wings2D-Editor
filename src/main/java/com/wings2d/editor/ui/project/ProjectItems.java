@@ -2,6 +2,8 @@ package com.wings2d.editor.ui.project;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.Connection;
 import java.util.List;
 
@@ -60,6 +62,26 @@ public class ProjectItems extends UIElement<ProjectEdit>{
 					getEditPanel().setSelectedSkeleton(list.getSelectedValue());
 				}
 			}
+		});
+		list.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() >= 2) {
+					if (list.getSelectedValue() != null) {
+						getEditPanel().getEditor().showSkeleton(list.getSelectedValue());
+					}
+				}
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
 		});
 	}
 }

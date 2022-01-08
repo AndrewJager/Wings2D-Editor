@@ -15,7 +15,7 @@ import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.ui.edits.AddToTree;
-import com.wings2d.editor.ui.edits.SyncBonePositions;
+import com.wings2d.editor.ui.edits.SyncBones;
 
 public class FrameControls extends SkeletonTreeControlsUIElement{
 	public static final String CARD_ID = "Frame";
@@ -112,14 +112,14 @@ public class FrameControls extends SkeletonTreeControlsUIElement{
 		cautiousSync.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controls.getEditPanel().getEditor().getEditsManager().edit(new SyncBonePositions(frame, true));
+				controls.getEditPanel().getEditor().getEditsManager().edit(new SyncBones(frame, true));
 				controls.getDrawingArea().getDrawArea().repaint();
 			}
 		});
 		forceSync.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controls.getEditPanel().getEditor().getEditsManager().edit(new SyncBonePositions(frame, false));
+				controls.getEditPanel().getEditor().getEditsManager().edit(new SyncBones(frame, false));
 				controls.getDrawingArea().getDrawArea().repaint();
 			}
 		});

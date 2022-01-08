@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
 
 import com.wings2d.editor.ui.skeleton.SkeletonTree;
 
@@ -51,13 +52,29 @@ public class EditsManager {
 		}
 	}
 	
+	public int getCurEdit() {
+		return curEdit;
+	}
+	public int getEditsCount() {
+		return edits.size();
+	}
+	
+	public boolean isEditActive(final Edit edit) {
+		if (edits.indexOf(edit) > curEdit) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	
 	public void addToTree(final DefaultMutableTreeNode root) {
 		for (int i = 0; i < edits.size(); i++) {
 			addEdit(edits.get(i), root);
 		}
 	}
-	private void addEdit(final Edit edit, final DefaultMutableTreeNode node) {
-		DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(edit.getDescription());
+	private void addEdit(final Edit edit, final MutableTreeNode node) {
+		EditTreeNode newNode = new EditTreeNode(this, edit);
 		node.insert(newNode, 0);
 		if (edit.getChildEdits() != null) {
 			for (int i = 0; i < edit.getChildEdits().size(); i++) {

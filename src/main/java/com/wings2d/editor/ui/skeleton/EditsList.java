@@ -5,6 +5,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import com.wings2d.editor.ui.edits.EditCellRenderer;
 import com.wings2d.editor.ui.edits.EditsManager;
 
 public class EditsList extends JDialog{
@@ -20,6 +21,8 @@ public class EditsList extends JDialog{
 		tree.setShowsRootHandles(true);
 		tree.expandRow(0);
 		tree.setRootVisible(false);
+		tree.setCellRenderer(new EditCellRenderer());
+		tree.setSelectionRow(edits.getEditsCount() - edits.getCurEdit() - 1);
 		
 		JScrollPane pane = new JScrollPane(tree);
 		this.add(pane);
@@ -27,6 +30,7 @@ public class EditsList extends JDialog{
 		this.setTitle("Edits list");
 		this.setSize(650, 600);
 		this.setLocationRelativeTo(null);
+		this.setModal(true);
 		this.setVisible(true);
 	}
 

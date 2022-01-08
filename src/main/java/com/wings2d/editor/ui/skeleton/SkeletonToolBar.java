@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 import javax.swing.border.BevelBorder;
@@ -17,7 +16,7 @@ import com.wings2d.editor.ui.UIElement;
 
 public class SkeletonToolBar extends UIElement<SkeletonEdit>{
 	private JToolBar toolbar;
-	private JButton backButton, undoBtn, redoBtn, saveBtn;
+	private JButton backButton, undoBtn, redoBtn, saveBtn, editsBtn;
 	private JLabel header;
 
 	public SkeletonToolBar(final SkeletonEdit edit) {
@@ -39,6 +38,8 @@ public class SkeletonToolBar extends UIElement<SkeletonEdit>{
 		right.setUI(null);
 		toolbar.add(right);
 		
+		editsBtn = new JButton("Edits");
+		toolbar.add(editsBtn);
 		undoBtn = new JButton("Undo");
 		toolbar.add(undoBtn);
 		redoBtn = new JButton("Redo");
@@ -76,6 +77,12 @@ public class SkeletonToolBar extends UIElement<SkeletonEdit>{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				getEditPanel().getEditor().getSkeletonEdit().getSkeleton().update(getEditPanel().getEditor().getConnection());
+			}
+		});
+		editsBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new EditsList(getEditPanel().getEditor().getEditsManager());
 			}
 		});
 	}

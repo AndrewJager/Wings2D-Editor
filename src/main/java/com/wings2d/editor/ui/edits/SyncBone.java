@@ -41,4 +41,14 @@ public class SyncBone extends Edit{
 	public String getDescription() {
 		return "Sync " + bone.getName();
 	}
+	
+	@Override
+	public List<Edit> getChildEdits() {
+		List<Edit> edits = new ArrayList<Edit>();
+		edits.add(loc);
+		for (int i = 0; i < sprites.size(); i++) {
+			edits.add(sprites.get(i));
+		}
+		return edits;
+	}
 }

@@ -1,5 +1,7 @@
 package com.wings2d.editor.ui.edits;
 
+import java.util.List;
+
 import javax.swing.JOptionPane;
 
 public abstract class Edit {
@@ -39,5 +41,9 @@ public abstract class Edit {
 			}
 		}
 		return actionDone;
+	}
+	
+	public List<Edit> getChildEdits() {
+		return null;
 	}
 }

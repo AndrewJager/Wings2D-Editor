@@ -59,4 +59,13 @@ public class SyncBones extends Edit{
 		}
 		return result;
 	}
+	
+	@Override
+	public List<Edit> getChildEdits() {
+		List<Edit> edits = new ArrayList<Edit>();
+		for (int i = 0; i < bones.size(); i++) {
+			edits.add(bones.get(i));
+		}
+		return edits;
+	}
 }

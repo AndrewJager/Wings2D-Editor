@@ -19,10 +19,15 @@ public class EditCellRenderer extends DefaultTreeCellRenderer {
 	        this.setOpaque(true);
 	        if (!node.isActive()) {
 	        	this.setBackground(Color.LIGHT_GRAY);
+	        	this.setForeground(Color.WHITE);
 	        }
 	        else {
 	        	this.setBackground(Color.WHITE);
+	        	this.setForeground(Color.BLACK);
 	        }
+        }
+        else {
+        	this.setOpaque(false);
         }
         return this;
     }

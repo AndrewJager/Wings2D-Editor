@@ -33,7 +33,6 @@ public class SpritePoint extends SkeletonNode{
 	/** Insert constructor */
 	private SpritePoint(final double x, final double y, final int idx, final Sprite parent, final Connection con) {
 		this(parent);
-//		System.out.println(parent);
 		spriteID.setStoredValue(parent.getID());
 		this.x.setStoredValue(x);
 		this.y.setStoredValue(y);

@@ -73,7 +73,7 @@ public class Project extends DBObject{
 	}
 	
 	@Override
-	protected void deleteChildren(final UUID id, final Connection con) {
+	protected void deleteChildren(final Connection con) {
 		for (int i = 0; i < skeletons.size(); i++) {
 			skeletons.get(i).delete(con);
 		}

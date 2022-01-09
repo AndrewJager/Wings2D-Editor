@@ -71,7 +71,7 @@ public class EditorSettings extends DBObject{
 	}
 
 	@Override
-	protected void deleteChildren(final UUID id, final Connection con) {	
+	protected void deleteChildren(final Connection con) {	
 	}
 
 	@Override

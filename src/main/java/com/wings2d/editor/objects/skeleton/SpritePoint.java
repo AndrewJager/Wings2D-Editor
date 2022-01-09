@@ -61,7 +61,7 @@ public class SpritePoint extends SkeletonNode{
 	}
 	
 	@Override
-	public void deleteChildren(final UUID ID, final Connection con) {}
+	public void deleteChildren(final Connection con) {}
 	@Override
 	public void queryChildren(final UUID ID, final Connection con) {}
 	@Override

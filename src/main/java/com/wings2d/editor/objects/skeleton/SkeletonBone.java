@@ -145,7 +145,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	}
 	
 	@Override
-	public void deleteChildren(final UUID ID, final Connection con) {
+	public void deleteChildren(final Connection con) {
 		for(int i = 0; i < sprites.size(); i++) {
 			sprites.get(i).delete(con);
 		}

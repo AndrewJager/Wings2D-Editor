@@ -143,7 +143,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	}
 	
 	@Override
-	protected void deleteChildren(final UUID ID, final Connection con) {
+	protected void deleteChildren(final Connection con) {
 		for(int i = 0; i < bones.size(); i++) {
 			bones.get(i).delete(con);
 		}

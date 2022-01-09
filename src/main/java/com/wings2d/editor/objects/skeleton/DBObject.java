@@ -46,7 +46,7 @@ public abstract class DBObject {
 	/** Deletes the record from the database */
 	public void delete(final Connection con) {
 		UUID idValue = this.getID();
-		deleteChildren(idValue, con);
+		deleteChildren(con);
 		
 		String sql = "DELETE FROM " + this.getTableName() + " WHERE ID = " + quoteStr(idValue.toString());
 		try {
@@ -140,7 +140,7 @@ public abstract class DBObject {
 		}
 	}
 	
-	protected abstract void deleteChildren(final UUID id, final Connection con);
+	protected abstract void deleteChildren(final Connection con);
 	protected abstract void queryChildren(final UUID id, final Connection con);
 	protected abstract void updateChildren(final Connection con);
 	

@@ -104,7 +104,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	
 	
 	@Override
-	public void deleteChildren(final UUID ID, final Connection con) {
+	public void deleteChildren(final Connection con) {
 		for(int i = 0; i < points.size(); i++) {
 			points.get(i).delete(con);
 		}

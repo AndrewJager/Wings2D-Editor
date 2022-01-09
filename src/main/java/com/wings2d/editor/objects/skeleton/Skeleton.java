@@ -62,7 +62,7 @@ public class Skeleton extends SkeletonNode {
 	}
 	
 	@Override
-	protected void deleteChildren(final UUID id, final Connection con) {
+	protected void deleteChildren(final Connection con) {
 		// Delete Animations (and Master Frame) associated with the skeleton
 		for(int i = 0; i < animations.size(); i++) {
 			animations.get(i).delete(con);

@@ -11,8 +11,8 @@ public abstract class Edit {
 		actionDone = false;
 	}
 	
-	public abstract void edit() throws ActionNotDoneException;
-	public abstract void undo() throws ActionNotDoneException;
+	protected abstract void edit() throws ActionNotDoneException;
+	protected abstract void undo() throws ActionNotDoneException;
 	/** Return a description of the Edit **/
 	public abstract String getDescription();
 	

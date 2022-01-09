@@ -12,7 +12,7 @@ import com.wings2d.editor.objects.save.DBString;
 import com.wings2d.editor.objects.save.DBUUID;
 import com.wings2d.editor.objects.save.DBValue;
 
-/** Represents a table in the database */
+/** Represents a row in the database */
 public abstract class DBObject {
 	protected String tableName;
 	protected DBString name;
@@ -21,11 +21,19 @@ public abstract class DBObject {
 	/** Fields must be added to this list in the same order as they exist in the db */
 	protected List<DBValue<?>> fields;
 	
+	/**
+	 * Calls {@link DBObject#DBObject(String, boolean)} with tableName and true
+	 * @param tableName Name of the database table
+	 */
 	public DBObject(final String tableName) {
 		this(tableName, true);
 	}
 	
 	@SuppressWarnings({ "serial" })
+	/**
+	 * @param tableName Name of the database table
+	 * @param hasName If the table has a "Name" column. 
+	 */
 	public DBObject(final String tableName, final boolean hasName) {
 		this.tableName = tableName;
 		
@@ -144,6 +152,7 @@ public abstract class DBObject {
 	protected abstract void queryChildren(final UUID id, final Connection con);
 	protected abstract void updateChildren(final Connection con);
 	
+	/** Test */
 	public void setName(final String newName) {
 		this.name.setStoredValue(newName);
 	}

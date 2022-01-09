@@ -1,9 +1,12 @@
 package com.wings2d.editor.ui.edits;
 
-import com.wings2d.editor.objects.skeleton.SkeletonNode;
+import com.wings2d.editor.objects.skeleton.DBObject;
 
+/**
+ * Calls {@link DBObject#setName} with the given node
+ */
 public class SetName extends Edit{
-	private SkeletonNode node;
+	private DBObject node;
 	private String oldName, newName;
 
 	/**
@@ -12,7 +15,7 @@ public class SetName extends Edit{
 	 * @param newName Name to change to
 	 * @param oldName Name being changed from. Used when undoing the edit
 	 */
-	public SetName(final SkeletonNode node, final String newName, final String oldName) {
+	public SetName(final DBObject node, final String newName, final String oldName) {
 		super();
 		this.node = node;
 		this.newName = newName;
@@ -23,7 +26,7 @@ public class SetName extends Edit{
 	 * @param node The node to be renamed
 	 * @param newName Name to change to
 	 */
-	public SetName(final SkeletonNode node, final String newName) {
+	public SetName(final DBObject node, final String newName) {
 		this(node, newName, node.getName());
 	}
 	

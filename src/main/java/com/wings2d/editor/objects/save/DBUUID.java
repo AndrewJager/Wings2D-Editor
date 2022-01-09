@@ -2,7 +2,14 @@ package com.wings2d.editor.objects.save;
 
 import java.util.UUID;
 
+/**
+ * A GUID value in the database
+ */
 public class DBUUID extends DBValue<UUID>{
+	/**
+	 * Constructor for a GUID value in the database
+	 * @param column Database column name
+	 */
 	public DBUUID(final String column) {
 		super(column);
 	}

@@ -14,7 +14,7 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.EditorSettings;
-import com.wings2d.editor.objects.save.DBString;
+import com.wings2d.editor.objects.save.DBUUID;
 
 public class Skeleton extends SkeletonNode {
 	public static final String TABLE_NAME = "SKELETON";
@@ -22,17 +22,17 @@ public class Skeleton extends SkeletonNode {
 	private SkeletonFrame masterFrame;
 	private EditorSettings settings;
 	
-	private DBString projID;
+	private DBUUID projID;
 	
-	public static Skeleton insert(final String skeletonName, final String projID, final EditorSettings settings, final Connection con) {
+	public static Skeleton insert(final String skeletonName, final UUID projID, final EditorSettings settings, final Connection con) {
 		return new Skeleton(skeletonName, projID, settings, con);
 	}
-	public static Skeleton read(final String skelID, final EditorSettings settings, final Connection con) {
+	public static Skeleton read(final UUID skelID, final EditorSettings settings, final Connection con) {
 		return new Skeleton(skelID, settings, con);
 	}
 	
 	/** Insert constructor */
-	private Skeleton(final String skeletonName, final String projID, final EditorSettings settings, final Connection con)
+	private Skeleton(final String skeletonName, final UUID projID, final EditorSettings settings, final Connection con)
 	{	
 		this(settings);
 		this.projID.setStoredValue(projID);
@@ -46,7 +46,7 @@ public class Skeleton extends SkeletonNode {
 	}
 	
 	/** Read constructor */
-	private Skeleton(final String skelID, final EditorSettings settings, final Connection con) {
+	private Skeleton(final UUID skelID, final EditorSettings settings, final Connection con) {
 		this(settings);
 		this.query(con, skelID);
 		
@@ -58,11 +58,11 @@ public class Skeleton extends SkeletonNode {
 		animations = new ArrayList<SkeletonNode>();
 		this.settings = settings;
 		
-		fields.add(projID = new DBString("Project"));
+		fields.add(projID = new DBUUID("Project"));
 	}
 	
 	@Override
-	protected void deleteChildren(final String id, final Connection con) {
+	protected void deleteChildren(final UUID id, final Connection con) {
 		// Delete Animations (and Master Frame) associated with the skeleton
 		for(int i = 0; i < animations.size(); i++) {
 			animations.get(i).delete(con);
@@ -70,27 +70,27 @@ public class Skeleton extends SkeletonNode {
 	}
 	
 	@Override
-	protected void queryChildren(final String id, final Connection con)
+	protected void queryChildren(final UUID id, final Connection con)
 	{
 		animations.clear();
-		String sql = " SELECT * FROM " + SkeletonFrame.TABLE_NAME + " WHERE Skeleton = " + quoteStr(id);
+		String sql = " SELECT * FROM " + SkeletonFrame.TABLE_NAME + " WHERE Skeleton = " + quoteStr(id.toString());
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				animations.add(SkeletonFrame.read(rs.getString("ID"), null, con, settings, this));
+				animations.add(SkeletonFrame.read(UUID.fromString(rs.getString("ID")), null, con, settings, this));
 				masterFrame = (SkeletonFrame)animations.get(0);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		sql = " SELECT * FROM " + SkeletonAnimation.TABLE_NAME + " WHERE Skeleton = " + quoteStr(id);
+		sql = " SELECT * FROM " + SkeletonAnimation.TABLE_NAME + " WHERE Skeleton = " + quoteStr(id.toString());
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				animations.add(SkeletonAnimation.read(rs.getString("ID"), this, con));
+				animations.add(SkeletonAnimation.read(UUID.fromString(rs.getString("ID")), this, con));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

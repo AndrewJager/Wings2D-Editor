@@ -29,7 +29,7 @@ import javax.swing.tree.TreeNode;
 import com.wings2d.editor.objects.Drawable;
 import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.save.DBColor;
-import com.wings2d.editor.objects.save.DBString;
+import com.wings2d.editor.objects.save.DBUUID;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
 import com.wings2d.framework.imageFilters.ImageFilter;
 import com.wings2d.framework.shape.ShapeComparator;
@@ -37,9 +37,9 @@ import com.wings2d.framework.shape.ShapeComparator;
 public class Sprite extends SkeletonNode implements Drawable{
 	public static final String TABLE_NAME = "SPRITE";
 	
-	private DBString boneID;
+	private DBUUID boneID;
 	/** ID used to sync sprites between bones **/
-	private DBString syncSpriteID;
+	private DBUUID syncSpriteID;
 	private DBColor color;
 
 	private SkeletonBone parent;
@@ -57,7 +57,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	public static Sprite insert(final String spriteName, final SkeletonBone parent, final Connection con) {
 		return new Sprite(spriteName, parent, con);
 	}
-	public static Sprite read(final String spriteID, final SkeletonBone parent, final Connection con) {
+	public static Sprite read(final UUID spriteID, final SkeletonBone parent, final Connection con) {
 		return new Sprite(parent, spriteID, con);
 	}
 	
@@ -67,8 +67,6 @@ public class Sprite extends SkeletonNode implements Drawable{
 		this(parent);
 		name.setStoredValue(spriteName);
 		boneID.setStoredValue(parent.getID());
-
-//		syncID = UUID.randomUUID();
 		
 		color.setStoredValue(Color.LIGHT_GRAY);
 		
@@ -84,7 +82,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	}
 	
 	/** Read constructor */
-	public Sprite(final SkeletonBone parent, final String spriteID, final Connection con) {
+	public Sprite(final SkeletonBone parent, final UUID spriteID, final Connection con) {
 		this(parent);
 		
 		this.query(con, spriteID);
@@ -99,29 +97,29 @@ public class Sprite extends SkeletonNode implements Drawable{
 		points = new ArrayList<SpritePoint>();
 		path = new Path2D.Double();
 		
-		fields.add(boneID = new DBString("Bone"));
-		fields.add(syncSpriteID = new DBString("SyncSprite"));
+		fields.add(boneID = new DBUUID("Bone"));
+		fields.add(syncSpriteID = new DBUUID("SyncSprite"));
 		fields.add(color = new DBColor("Color"));
 	}
 	
 	
 	@Override
-	public void deleteChildren(final String ID, final Connection con) {
+	public void deleteChildren(final UUID ID, final Connection con) {
 		for(int i = 0; i < points.size(); i++) {
 			points.get(i).delete(con);
 		}
 	}
 	
 	@Override
-	public void queryChildren(final String ID, final Connection con) {
+	public void queryChildren(final UUID ID, final Connection con) {
 		points.clear();
-		String sql = " SELECT * FROM " + SpritePoint.TABLE_NAME + " WHERE Sprite = " + quoteStr(ID);
+		String sql = " SELECT * FROM " + SpritePoint.TABLE_NAME + " WHERE Sprite = " + quoteStr(ID.toString());
 		sql = sql + " ORDER BY Position DESC";
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				points.add(SpritePoint.read(rs.getString("ID"), this, con));
+				points.add(SpritePoint.read(UUID.fromString(rs.getString("ID")), this, con));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -227,9 +225,9 @@ public class Sprite extends SkeletonNode implements Drawable{
 		List<SkeletonBone> syncedBones = parent.getSyncedBones();
 		for (int i = 0; i < syncedBones.size(); i++)
 		{
-			if (syncedBones.get(i).getSpriteBySyncID(UUID.fromString(syncSpriteID.getStoredValue())) != null)
+			if (syncedBones.get(i).getSpriteBySyncID(syncSpriteID.getStoredValue()) != null)
 			{
-				syncedBones.get(i).getSpriteBySyncID(UUID.fromString(syncSpriteID.getStoredValue())).translate(deltaX, deltaY);
+				syncedBones.get(i).getSpriteBySyncID(syncSpriteID.getStoredValue()).translate(deltaX, deltaY);
 			}
 		}
 	}
@@ -271,7 +269,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		List<SkeletonBone> syncedBones = parent.getSyncedBones();
 		for (int i = 0; i < syncedBones.size(); i++)
 		{
-			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(UUID.fromString(syncSpriteID.getStoredValue()));
+			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncSpriteID.getStoredValue());
 			if (ShapeComparator.similarShapes(this.path, sprite.path))
 			{
 				if (relativeToParent) {
@@ -334,7 +332,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		List<SkeletonBone> syncedBones = parent.getSyncedBones();
 		for (int i = 0; i < syncedBones.size(); i++)
 		{
-			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(UUID.fromString(syncSpriteID.getStoredValue()));
+			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncSpriteID.getStoredValue());
 			if (ShapeComparator.similarShapes(this.path, sprite.path))
 			{
 				sprite.translateVertex(this.path, deltaX, deltaY, vertex);
@@ -376,13 +374,18 @@ public class Sprite extends SkeletonNode implements Drawable{
 		List<SkeletonBone> syncedBones = parent.getSyncedBones();
 		for (int i = 0; i < syncedBones.size(); i++)
 		{
-			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(UUID.fromString(syncSpriteID.getStoredValue()));
+			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncSpriteID.getStoredValue());
 			sprite.setColor(color);
 		}
 	}
 	public UUID getSyncID()
 	{
-		return UUID.fromString(syncSpriteID.getStoredValue());
+		if (syncSpriteID.getStoredValue() != null) {
+			return syncSpriteID.getStoredValue();
+		}
+		else {
+			return null;
+		}
 	}
 	public SkeletonBone getBone()
 	{

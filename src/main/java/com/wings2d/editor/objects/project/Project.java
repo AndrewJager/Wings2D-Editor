@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.skeleton.DBObject;
@@ -18,7 +19,7 @@ public class Project extends DBObject{
 	private List<Skeleton> skeletons;
 	private EditorSettings settings;
 	
-	public Project(final Connection con, final String id, final EditorSettings settings) {
+	public Project(final Connection con, final UUID id, final EditorSettings settings) {
 		super(TABLE_NAME);
 		skeletons = new ArrayList<Skeleton>();
 		this.settings = settings;
@@ -49,7 +50,7 @@ public class Project extends DBObject{
 			stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			while (rs.next()) {
-				projects.add(new Project(con, rs.getString("ID"), settings));
+				projects.add(new Project(con, UUID.fromString(rs.getString("ID")), settings));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -62,7 +63,7 @@ public class Project extends DBObject{
 	{
 		return name.getStoredValue();
 	}
-	public String getID() {
+	public UUID getID() {
 		return id.getStoredValue();
 	}
 	
@@ -72,20 +73,20 @@ public class Project extends DBObject{
 	}
 	
 	@Override
-	protected void deleteChildren(final String id, final Connection con) {
+	protected void deleteChildren(final UUID id, final Connection con) {
 		for (int i = 0; i < skeletons.size(); i++) {
 			skeletons.get(i).delete(con);
 		}
 	}
 	@Override
-	protected void queryChildren(final String id, final Connection con) {
+	protected void queryChildren(final UUID id, final Connection con) {
 		skeletons.clear();
-		String sql = " SELECT * FROM " + Skeleton.TABLE_NAME + " WHERE Project = " + quoteStr(id);
+		String sql = " SELECT * FROM " + Skeleton.TABLE_NAME + " WHERE Project = " + quoteStr(id.toString());
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				skeletons.add(Skeleton.read(rs.getString("ID"), settings, con));
+				skeletons.add(Skeleton.read(UUID.fromString(rs.getString("ID")), settings, con));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

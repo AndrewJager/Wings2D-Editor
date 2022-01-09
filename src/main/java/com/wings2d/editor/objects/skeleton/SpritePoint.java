@@ -4,20 +4,21 @@ import java.awt.geom.Point2D;
 import java.sql.Connection;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.UUID;
 
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import com.wings2d.editor.objects.save.DBDouble;
 import com.wings2d.editor.objects.save.DBInt;
-import com.wings2d.editor.objects.save.DBString;
+import com.wings2d.editor.objects.save.DBUUID;
 
 public class SpritePoint extends SkeletonNode{
 	public static final String TABLE_NAME = "SPRITEPOINT";
 	
 	private Sprite parent;
 	
-	private DBString spriteID;
+	private DBUUID spriteID;
 	private DBDouble x;
 	private DBDouble y;
 	private DBInt index;
@@ -25,7 +26,7 @@ public class SpritePoint extends SkeletonNode{
 	public static SpritePoint insert(final double x, final double y, final int idx, final Sprite parent, final Connection con) {
 		return new SpritePoint(x, y, idx, parent, con);
 	}
-	public static SpritePoint read(final String pointID, final Sprite parent, final Connection con) {
+	public static SpritePoint read(final UUID pointID, final Sprite parent, final Connection con) {
 		return new SpritePoint(pointID, con, parent);
 	}
 	
@@ -43,7 +44,7 @@ public class SpritePoint extends SkeletonNode{
 	}
 	
 	/** Read constructor */
-	private SpritePoint(final String pointID, final Connection con, final Sprite parent) {
+	private SpritePoint(final UUID pointID, final Connection con, final Sprite parent) {
 		this(parent);
 
 		this.query(con, pointID);
@@ -53,16 +54,16 @@ public class SpritePoint extends SkeletonNode{
 		super(TABLE_NAME, false);
 		this.parent = parent;
 		
-		fields.add(spriteID = new DBString("Sprite"));
+		fields.add(spriteID = new DBUUID("Sprite"));
 		fields.add(x = new DBDouble("X"));
 		fields.add(y = new DBDouble("Y"));
 		fields.add(index = new DBInt("Position"));
 	}
 	
 	@Override
-	public void deleteChildren(final String ID, final Connection con) {}
+	public void deleteChildren(final UUID ID, final Connection con) {}
 	@Override
-	public void queryChildren(final String ID, final Connection con) {}
+	public void queryChildren(final UUID ID, final Connection con) {}
 	@Override
 	protected void updateChildren(final Connection con) {}
 	

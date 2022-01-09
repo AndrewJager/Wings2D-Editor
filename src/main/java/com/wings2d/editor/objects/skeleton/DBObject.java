@@ -9,13 +9,14 @@ import java.util.List;
 import java.util.UUID;
 
 import com.wings2d.editor.objects.save.DBString;
+import com.wings2d.editor.objects.save.DBUUID;
 import com.wings2d.editor.objects.save.DBValue;
 
 /** Represents a table in the database */
 public abstract class DBObject {
 	protected String tableName;
 	protected DBString name;
-	protected DBString id;
+	protected DBUUID id;
 	
 	/** Fields must be added to this list in the same order as they exist in the db */
 	protected List<DBValue<?>> fields;
@@ -31,7 +32,7 @@ public abstract class DBObject {
 		if (hasName) {
 			name = new DBString("Name");
 		}
-		id = new DBString("ID");
+		id = new DBUUID("ID");
 		fields = new ArrayList<DBValue<?>>(){
 			{
                 add(id);
@@ -44,10 +45,10 @@ public abstract class DBObject {
 	
 	/** Deletes the record from the database */
 	public void delete(final Connection con) {
-		String idValue = this.getID();
+		UUID idValue = this.getID();
 		deleteChildren(idValue, con);
 		
-		String sql = "DELETE FROM " + this.getTableName() + " WHERE ID = " + quoteStr(idValue);
+		String sql = "DELETE FROM " + this.getTableName() + " WHERE ID = " + quoteStr(idValue.toString());
 		try {
 			Statement stmt = con.createStatement();
 			stmt.executeUpdate(sql);
@@ -59,7 +60,7 @@ public abstract class DBObject {
 	
 	/** Updates the record with the values in the object */
 	public void update(final Connection con) {
-		String idValue = this.getID();
+		UUID idValue = this.getID();
 		String sql = "UPDATE " + this.getTableName() + " SET ";
 		for (int i = 0; i < fields.size(); i++) {
 			sql = sql + fields.get(i).getColumn() + " = " + quoteStr(fields.get(i).asString());
@@ -67,7 +68,7 @@ public abstract class DBObject {
 				sql = sql + ",";
 			}
 		}
-		sql = sql + " WHERE ID = " + "'" + idValue +"'";
+		sql = sql + " WHERE ID = " + "'" + idValue.toString() +"'";
 		
 		try {
 			Statement stmt = con.createStatement();
@@ -82,7 +83,7 @@ public abstract class DBObject {
 	
 	/** Inserts a new record with the values in the object */
 	public void insert(final Connection con) {
-		String newID = UUID.randomUUID().toString();
+		UUID newID = UUID.randomUUID();
 		id.setStoredValue(newID);
 		String sql = "INSERT INTO " + tableName + " (";
 		for (int i = 0; i < fields.size(); i++) {
@@ -111,8 +112,8 @@ public abstract class DBObject {
 	}
 	
 	/** Updates the values in the object with the values in the database record */
-	public void query(final Connection con, final String idValue) {
-		String sql = " SELECT * FROM " + this.tableName + " WHERE ID = " + "'" + idValue + "'";
+	public void query(final Connection con, final UUID idValue) {
+		String sql = " SELECT * FROM " + this.tableName + " WHERE ID = " + "'" + idValue.toString() + "'";
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
@@ -139,8 +140,8 @@ public abstract class DBObject {
 		}
 	}
 	
-	protected abstract void deleteChildren(final String id, final Connection con);
-	protected abstract void queryChildren(final String id, final Connection con);
+	protected abstract void deleteChildren(final UUID id, final Connection con);
+	protected abstract void queryChildren(final UUID id, final Connection con);
 	protected abstract void updateChildren(final Connection con);
 	
 	public void setName(final String newName) {
@@ -149,7 +150,7 @@ public abstract class DBObject {
 	public String getName() {
 		return name.getStoredValue();
 	}
-	public String getID() {
+	public UUID getID() {
 		return id.getStoredValue();
 	}
 	public String getTableName() {

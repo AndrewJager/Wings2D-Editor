@@ -2,6 +2,8 @@ package com.wings2d.editor.objects;
 
 import java.awt.Color;
 import java.sql.Connection;
+import java.util.UUID;
+
 import com.wings2d.editor.objects.project.Project;
 import com.wings2d.editor.objects.save.DBColor;
 import com.wings2d.editor.objects.save.DBInt;
@@ -69,14 +71,11 @@ public class EditorSettings extends DBObject{
 	}
 
 	@Override
-	protected void deleteChildren(final String id, final Connection con) {
-		
-		
+	protected void deleteChildren(final UUID id, final Connection con) {	
 	}
 
 	@Override
-	protected void queryChildren(final String id, final Connection con) {
-		
+	protected void queryChildren(final UUID id, final Connection con) {
 	}
 	
 	@Override

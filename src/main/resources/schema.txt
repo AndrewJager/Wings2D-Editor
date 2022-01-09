@@ -15,7 +15,7 @@ CREATE TABLE EDITORSETTINGS (
 --Editor defaults
 INSERT INTO EDITORSETTINGS (ID, HandleSize, PosHandleOffset, RotHandleOffset, SelectedHandleColor,
 	UnselectedHandleColor)
-VALUES(0, 10, 20, 20, "255,0,0,255", "0,255,0,255")
+VALUES(acde8f80-c4cd-458c-a20e-a58809f0bc47, 10, 20, 20, "255,0,0,255", "0,255,0,255")
 ^
 
 CREATE TABLE PROJECT (

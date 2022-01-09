@@ -1,7 +1,5 @@
 package com.wings2d.editor.ui.edits;
 
-import java.util.UUID;
-
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.Sprite;
 
@@ -17,7 +15,7 @@ public class SetBoneSprite extends Edit{
 
 	@Override
 	public void edit() throws ActionNotDoneException {
-		oldSprite = bone.getSpriteBySyncID(UUID.fromString(sprite.getID()));
+		oldSprite = bone.getSpriteBySyncID(sprite.getID());
 		if (oldSprite != null) { // Synced sprite already exists
 			bone.getSprites().remove(oldSprite);
 		}

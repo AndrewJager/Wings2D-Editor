@@ -102,6 +102,8 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		
 		this.insert(con);
 		this.query(con, id.getStoredValue());
+		
+		setupBoneParentsAndSyncs();
 	}
 	
 	// Read constructors
@@ -125,7 +127,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		
 		this.query(con, thisID);
 		
-		setupBoneParents();
+		setupBoneParentsAndSyncs();
 	}
 	
 	private void setup(final SkeletonNode frameParent, final EditorSettings settings, final Connection con)
@@ -185,12 +187,13 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		return isMaster.getStoredValue();
 	}
 	public UUID getSyncFrameID() {
-		if ((syncFrameID.getStoredValue() != null) && (!syncFrameID.getStoredValue().equals("null"))) {
-			return syncFrameID.getStoredValue();
-		}
-		else {
-			return null;
-		}
+		return syncFrameID.getStoredValue();
+//		if ((syncFrameID.getStoredValue() != null) && (!syncFrameID.getStoredValue().equals("null"))) {
+//			return syncFrameID.getStoredValue();
+//		}
+//		else {
+//			return null;
+//		}
 	}
 	public boolean containsBoneWithName(final String boneName)
 	{
@@ -262,6 +265,18 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		for(int i = 0; i < bones.size(); i++)
 		{
 			if (bones.get(i).toString().equals(boneName))
+			{
+				bone = bones.get(i);
+			}
+		}
+		return bone;
+	}
+	public SkeletonBone getBoneWithID(final UUID id)
+	{
+		SkeletonBone bone = null;
+		for(int i = 0; i < bones.size(); i++)
+		{
+			if (bones.get(i).getID().equals(id));
 			{
 				bone = bones.get(i);
 			}
@@ -503,7 +518,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 			bones.get(i).unsyncAll();
 		}
 	}
-	public void setupBoneParents() {
+	public void setupBoneParentsAndSyncs() {
 		for (int i = 0; i < bones.size(); i++) {
 			SkeletonBone bone = bones.get(i);
 			if (!bone.getParentBoneName().isEmpty()) {

@@ -265,23 +265,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		double unscaledX = x * unscale;
 		double unscaledY = y * unscale;
 		List<Point2D> tmpPoints = getVertices();
-		// Set children first to avoid comparing shapes after this shape is changed
-		List<SkeletonBone> syncedBones = parent.getSyncedBones();
-		for (int i = 0; i < syncedBones.size(); i++)
-		{
-			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncSpriteID.getStoredValue());
-			if (ShapeComparator.similarShapes(this.path, sprite.path))
-			{
-				if (relativeToParent) {
-					sprite.translateVertex(this.path, unscaledX - tmpPoints.get(getSelectedVertex()).getX() - parent.getX(), 
-							unscaledY - tmpPoints.get(getSelectedVertex()).getY() - parent.getY(), getSelectedVertex());
-				}
-				else {
-					sprite.translateVertex(this.path, unscaledX - tmpPoints.get(getSelectedVertex()).getX(), 
-							unscaledY - tmpPoints.get(getSelectedVertex()).getY(), getSelectedVertex());
-				}
-			}
-		}
+
 		if (relativeToParent) {
 			tmpPoints.get(vertex).setLocation(unscaledX - parent.getX(), 
 					unscaledY - parent.getY());

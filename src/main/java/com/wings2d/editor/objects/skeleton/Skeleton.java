@@ -155,7 +155,7 @@ public class Skeleton extends SkeletonNode {
 		if (id != null) {
 			for (int i = 0; i < masterFrame.getBones().size(); i++)
 			{
-				if (masterFrame.getBones().get(i).getID().equals(id.toString()))
+				if (masterFrame.getBones().get(i).getID().equals(id))
 				{
 					return masterFrame.getBones().get(i);
 				}
@@ -168,7 +168,7 @@ public class Skeleton extends SkeletonNode {
 					SkeletonFrame frame = anim.getFrames().get(j);
 					for (int k = 0; k < frame.getBones().size(); k++)
 					{
-						if (frame.getBones().get(k).getID().equals(id.toString()))
+						if (frame.getBones().get(k).getID().equals(id))
 						{
 							return frame.getBones().get(k);
 						}
@@ -212,7 +212,7 @@ public class Skeleton extends SkeletonNode {
 	}
 	private void setSyncBone(final SkeletonBone bone) {
 		bone.setParentSyncedBone(this.getBoneBYID(bone.getSyncBoneID()));
-		bone.setParentBone(this.getBoneBYID(bone.getParentBoneID()));
+		bone.setParentBone(this.getBoneBYID(bone.getParentBoneID()), false);
 	}
 	
 	// MutableTreeNode methods

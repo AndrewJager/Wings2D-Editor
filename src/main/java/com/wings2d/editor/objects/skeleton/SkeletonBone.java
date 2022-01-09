@@ -483,12 +483,17 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	public Sprite getSpriteBySyncID(final UUID id)
 	{
 		Sprite selectedSprite = null;
-		for (int i = 0; i < sprites.size(); i++)
-		{
-			if (sprites.get(i).getSyncID().equals(id))
+		if (id != null) {
+			for (int i = 0; i < sprites.size(); i++)
 			{
-				selectedSprite = sprites.get(i);
-				break;
+				if (sprites.get(i).getSyncID() != null) 
+				{
+					if (sprites.get(i).getSyncID().equals(id))
+					{
+						selectedSprite = sprites.get(i);
+						break;
+					}
+				}
 			}
 		}
 		return selectedSprite;

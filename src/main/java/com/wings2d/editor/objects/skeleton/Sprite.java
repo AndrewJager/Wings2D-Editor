@@ -137,11 +137,6 @@ public class Sprite extends SkeletonNode implements Drawable{
 		Sprite newSprite = new Sprite(this.getName(), parent, con);
 		newSprite.color.setStoredValue(new Color(this.color.getStoredValue().getRGB()));
 		newSprite.path = new Path2D.Double(this.path);
-		newSprite.points = new ArrayList<SpritePoint>();
-		for (int i = 0; i < this.points.size(); i++) {
-			newSprite.points.add(SpritePoint.insert(this.points.get(i).getX(), this.points.get(i).getY(),
-					newSprite.getAmountOfPoints(), newSprite, con));
-		}
 		newSprite.syncSpriteID.setStoredValue(this.getID());
 		return newSprite;
 	}

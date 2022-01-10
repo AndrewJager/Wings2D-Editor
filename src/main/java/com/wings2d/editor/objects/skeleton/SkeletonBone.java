@@ -117,10 +117,14 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		location.setStoredValue((Point2D)syncBone.getLocation().clone());
 		rotation.setStoredValue(syncBone.getRotation());
 		
-		// Copy sprites
-		
 		this.insert(con);
-		this.query(con, id.getStoredValue());	
+		this.query(con, id.getStoredValue());
+		
+		for (int i = 0; i < syncBone.getSprites().size(); i++) {
+			Sprite newSprite = syncBone.getSprites().get(i).copy(this, this.getStoredConnection());
+			sprites.add(newSprite);
+		}
+		
 	}
 	
 	private SkeletonBone(final SkeletonFrame boneParent, final Connection con)
@@ -574,14 +578,6 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		Sprite sprite = (Sprite)child;
 		sprites.add(index, sprite);
 		this.setSelectedSprite(sprite);
-		for (int i = 0; i < syncedBones.size(); i++)
-		{
-			try {
-				syncedBones.get(i).insert(sprite.copy(syncedBones.get(i), this.getStoredConnection()), syncedBones.get(i).getSprites().size());
-			} catch (Exception e) {
-				// TODO REMOVE THIS try/catch
-			}		
-		}
 	}
 	@Override
 	public void remove(final int index) {

@@ -18,6 +18,7 @@ public class SetBoneSprite extends Edit{
 		oldSprite = bone.getSpriteBySyncID(sprite.getID());
 		if (oldSprite != null) { // Synced sprite already exists
 			bone.getSprites().remove(oldSprite);
+			oldSprite.delete(bone.getStoredConnection());
 		}
 		try {
 			newSprite = sprite.copy(bone, bone.getStoredConnection());
@@ -31,8 +32,10 @@ public class SetBoneSprite extends Edit{
 	@Override
 	public void undo() throws ActionNotDoneException {
 		bone.getSprites().remove(newSprite);
+		newSprite.delete(bone.getStoredConnection());
 		if (oldSprite != null) {
 			bone.getSprites().add(oldSprite);
+			oldSprite.insert(bone.getStoredConnection());
 		}
 	}
 

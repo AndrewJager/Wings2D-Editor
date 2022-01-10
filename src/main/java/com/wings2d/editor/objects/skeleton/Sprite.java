@@ -132,7 +132,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		}
 	}
 
-	public Sprite copy(final SkeletonBone parent, final Connection con) throws Exception
+	public Sprite copy(final SkeletonBone parent, final Connection con)
 	{
 		Sprite newSprite = new Sprite(this.getName(), parent, con);
 		newSprite.color.setStoredValue(new Color(this.color.getStoredValue().getRGB()));

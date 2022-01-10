@@ -15,7 +15,7 @@ CREATE TABLE EDITORSETTINGS (
 --Editor defaults
 INSERT INTO EDITORSETTINGS (ID, HandleSize, PosHandleOffset, RotHandleOffset, SelectedHandleColor,
 	UnselectedHandleColor)
-VALUES(acde8f80-c4cd-458c-a20e-a58809f0bc47, 10, 20, 20, "255,0,0,255", "0,255,0,255")
+VALUES("acde8f80-c4cd-458c-a20e-a58809f0bc47", 10, 20, 20, "255,0,0,255", "0,255,0,255")
 ^
 
 CREATE TABLE PROJECT (
@@ -59,7 +59,7 @@ CREATE TABLE FRAME (
 CREATE TABLE BONE (
 	ID TEXT PRIMARY KEY NOT NULL,
 	Name TEXT NOT NULL,
-	Frame TEXT,
+	Frame TEXT NOT NULL,
 	Location TEXT NOT NULL,
 	SyncBone TEXT,
 	ParentBone TEXT,
@@ -75,7 +75,7 @@ CREATE TABLE BONE (
 CREATE TABLE SPRITE (
 	ID TEXT PRIMARY KEY NOT NULL,
 	Name TEXT NOT NULL,
-	Bone TEXT,
+	Bone TEXT NOT NULL,
 	SyncSprite TEXT,
 	Color TEXT,
 	

@@ -229,7 +229,9 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		{
 			this.parentSyncedFrame = syncedFrame;
 			this.syncFrameID.setStoredValue(syncedFrame.getGUID());
-			this.parentSyncedFrame.getSyncedFrames().add(this);
+			if (!this.parentSyncedFrame.getSyncedFrames().contains(this)) {
+				this.parentSyncedFrame.getSyncedFrames().add(this);
+			}
 		}
 		else
 		{

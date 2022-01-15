@@ -439,6 +439,9 @@ public class Sprite extends SkeletonNode implements Drawable{
 		}
 		return filters2;
 	}
+	public List<SkeletonFilter> getSkeletonFilters() {
+		return filters;
+	}
 	public void addFilter(final ImageFilter filter) {
 		filters.add(SkeletonFilter.insert(filter, this, parent.getStoredConnection()));
 	}

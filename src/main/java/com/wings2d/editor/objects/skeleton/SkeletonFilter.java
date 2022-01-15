@@ -63,6 +63,12 @@ public class SkeletonFilter extends DBObject{
 	public ImageFilter getFilter() {
 		return filter;
 	}
+	public void setFilter(final ImageFilter filter) {
+		this.filter = filter;
+		filterType.setStoredValue(filter.getFilterName());
+		filterData.setStoredValue(filter.getFileString());
+		index.setStoredValue(0);
+	}
 
 	@Override
 	protected void deleteChildren(Connection con) {}

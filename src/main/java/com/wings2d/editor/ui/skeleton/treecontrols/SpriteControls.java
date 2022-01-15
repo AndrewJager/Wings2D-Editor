@@ -73,7 +73,7 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 					if (e.getClickCount() == 2) { // Double click
 						ImageFilter newFilter = FilterMap.runEditDialog(filters.getSelectedValue(), controls.getEditPanel().getEditor().getFrame());
 						if (newFilter != null) {
-							curSprite.getFilters().set(filters.getSelectedIndex(), newFilter);
+							curSprite.getSkeletonFilters().get(filters.getSelectedIndex()).setFilter(newFilter);
 							passThis.updatePanelInfo(curSprite);
 						}
 					}

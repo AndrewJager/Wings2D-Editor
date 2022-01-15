@@ -50,7 +50,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	private double imgXOffset;
 	private double imgYOffset;
 	private BaseMultiResolutionImage multiImage;
-	private List<ImageFilter> filters;
+	private List<SkeletonFilter> filters;
 	private List<SpritePoint> points;
 	
 	public static Sprite insert(final String spriteName, final SkeletonBone parent, final Connection con) {
@@ -92,7 +92,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		super(TABLE_NAME);
 		this.parent = parent;
 		this.settings = parent.getSettings();
-		filters = new ArrayList<ImageFilter>();
+		filters = new ArrayList<SkeletonFilter>();
 		points = new ArrayList<SpritePoint>();
 		path = new Path2D.Double();
 		
@@ -414,22 +414,21 @@ public class Sprite extends SkeletonNode implements Drawable{
 	
 	public List<ImageFilter> getFilters()
 	{
-		return filters;
+		List<ImageFilter> filters2 = new ArrayList<ImageFilter>();
+		for (int i = 0; i < filters.size(); i++) {
+			filters2.add(filters.get(i).getFilter());
+		}
+		return filters2;
 	}
 	public void addFilter(final ImageFilter filter) {
-		filters.add(filter);
-		for (int i = 0; i < this.parent.getSyncedBones().size(); i++)
-		{
-			SkeletonBone bone = this.parent.getSyncedBones().get(i);
-			bone.getSpriteBySyncID(this.getSyncID()).addFilter(filter);
-		}
+		filters.add(SkeletonFilter.insert(filter, this, parent.getStoredConnection()));
 	}
 	public void removeFilter(final ImageFilter filter) {
-		filters.remove(filter);
-		for (int i = 0; i < this.parent.getSyncedBones().size(); i++)
-		{
-			SkeletonBone bone = this.parent.getSyncedBones().get(i);
-			bone.getSpriteBySyncID(this.getSyncID()).removeFilter(filter);
+		for (int i = 0; i < filters.size(); i++) {
+			if (filters.get(i).getFilter() == filter) {
+				filters.remove(i);
+				break;
+			}
 		}
 	}
 	public List<SpritePoint> getPoints() {
@@ -455,7 +454,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		
 		for (int i = 0; i < filters.size(); i++)
 		{
-			filters.get(i).filter(newImage);
+			filters.get(i).getFilter().filter(newImage);
 		}
 		
 		return newImage;

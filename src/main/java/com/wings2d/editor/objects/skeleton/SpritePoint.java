@@ -27,7 +27,7 @@ public class SpritePoint extends SkeletonNode{
 		return new SpritePoint(x, y, idx, parent, con);
 	}
 	public static SpritePoint read(final UUID pointID, final Sprite parent, final Connection con) {
-		return new SpritePoint(pointID, con, parent);
+		return new SpritePoint(pointID, parent, con);
 	}
 	
 	/** Insert constructor */
@@ -43,7 +43,7 @@ public class SpritePoint extends SkeletonNode{
 	}
 	
 	/** Read constructor */
-	private SpritePoint(final UUID pointID, final Connection con, final Sprite parent) {
+	private SpritePoint(final UUID pointID, final Sprite parent, final Connection con) {
 		this(parent);
 
 		this.query(con, pointID);

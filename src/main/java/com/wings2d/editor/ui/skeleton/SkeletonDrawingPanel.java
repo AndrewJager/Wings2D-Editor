@@ -8,6 +8,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.geom.Point2D;
 
 import javax.swing.BorderFactory;
 import javax.swing.JScrollPane;
@@ -24,6 +25,7 @@ import com.wings2d.editor.objects.skeleton.Sprite;
 import com.wings2d.editor.ui.DrawingArea;
 import com.wings2d.editor.ui.UIElement;
 import com.wings2d.editor.ui.edits.MoveSprite;
+import com.wings2d.editor.ui.edits.MoveSpriteVertex;
 import com.wings2d.editor.ui.edits.SetBoneLocation;
 import com.wings2d.editor.ui.edits.SetBoneRotation;
 import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
@@ -165,6 +167,15 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 					else if (selectedItem ==  null && getEditPanel().getDrawMode() == DrawMode.SPRITE_EDIT)
 					{
 						selectedItem = frame.selectSpriteVertex(e.getPoint(), scale);
+						if (selectedItem != null) {
+							Sprite sprite = (Sprite)selectedItem;
+							if (sprite.getSelectedVertex() != -1) {
+								Point2D point = sprite.getCoordsOfSelectedVertex(true);
+								curX = point.getX();
+								curY = point.getY();
+								editMove = DrawMode.SPRITE_EDIT;
+							}
+						}
 					}
 					
 					if (selectedItem != null)
@@ -198,6 +209,10 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 						getEditPanel().getEditor().getEditsManager().edit(new MoveSprite(sprite, e.getPoint(),
 								curX, curY, scale));
 					}
+					case SPRITE_EDIT -> {
+						Sprite sprite = (Sprite)selectedItem;
+						getEditPanel().getEditor().getEditsManager().edit(new MoveSpriteVertex(sprite, e.getPoint(), curX, curY, scale));
+					}
 					}
 					
 					editMove = null;
@@ -221,7 +236,7 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 					double scale = getEditPanel().getEditor().getUIScale() * drawArea.getZoomScale();
 					switch(getEditPanel().getDrawMode())
 					{
-					case BONE_MOVE:
+					case BONE_MOVE -> {
 						SkeletonBone bone = (SkeletonBone)selectedItem;
 						switch(moveType) {
 							case MOVE_BOTH -> {
@@ -234,23 +249,22 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 								bone.setLocation(bone.getX() * scale, e.getPoint().getY() + settings.getPosHandleOffset(), scale, true);
 							}
 						}
-						
-						break;
-					case BONE_ROTATE:
-						bone = (SkeletonBone)selectedItem;
+					}	
+					case BONE_ROTATE -> {
+						SkeletonBone bone = (SkeletonBone)selectedItem;
 						bone.rotateByHandle(e.getPoint(), scale);
-						break;
-					case SPRITE_MOVE:
+					}
+					case SPRITE_MOVE -> {
 						Sprite sprite = (Sprite)selectedItem;
 						sprite.setLocation(e.getPoint(), scale);
-						break;
-					case SPRITE_EDIT:
-						sprite = (Sprite)selectedItem;
+					}
+					case SPRITE_EDIT -> {
+						Sprite sprite = (Sprite)selectedItem;
 						if (sprite.getSelectedVertex() != -1)
 						{
 							sprite.setVertexLocation(e.getPoint(), scale);
 						}
-						break;
+					}
 					}
 				}
 				

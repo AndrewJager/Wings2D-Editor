@@ -7,10 +7,7 @@ public class SetBoneRotation extends Edit{
 	private double rot, oldRot;
 	
 	public SetBoneRotation(final SkeletonBone bone, final double rot) {
-		super();
-		this.bone = bone;
-		this.rot = rot;
-		this.oldRot = bone.getRotation();
+		this(bone, rot, bone.getRotation());
 	}
 	public SetBoneRotation(final SkeletonBone bone, final double rot, final double oldRot) {
 		super();

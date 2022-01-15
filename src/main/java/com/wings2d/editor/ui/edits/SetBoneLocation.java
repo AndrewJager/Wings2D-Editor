@@ -8,13 +8,7 @@ public class SetBoneLocation extends Edit{
 	private boolean translateChildren;
 	
 	public SetBoneLocation(final SkeletonBone bone, final double x, final double y, final boolean translateChildren) {
-		super();
-		this.bone = bone;
-		this.x = x;
-		this.y = y;
-		this.translateChildren = translateChildren;
-		this.oldX = bone.getX();
-		this.oldY = bone.getY();
+		this(bone, x, y, bone.getX(), bone.getY(), translateChildren);
 	}
 	public SetBoneLocation(final SkeletonBone bone, final double x, final double y, final double curX, final double curY, 
 			final boolean translateChildren) {

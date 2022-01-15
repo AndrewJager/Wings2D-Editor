@@ -209,13 +209,9 @@ public class Sprite extends SkeletonNode implements Drawable{
 	{
 		return selectedVertex;
 	}
-	public Point2D getCoordsOfSelectedVertex(final double scale)
+	public Point2D getCoordsOfSelectedVertex(final boolean relativeToParent)
 	{
-		AffineTransform transform = new AffineTransform();
-		transform.scale(scale, scale);
-		transform.translate(parent.getX() - (path.getBounds2D().getWidth() / 2), 
-				parent.getY() - (path.getBounds2D().getHeight() / 2));
-		PathIterator iter = path.getPathIterator(transform);
+		PathIterator iter = path.getPathIterator(null);
 		int i = 0;
 		Point2D coordsPoint = null;
 		while(!iter.isDone())
@@ -228,6 +224,9 @@ public class Sprite extends SkeletonNode implements Drawable{
 				break;
 			}
 			i++;
+		}
+		if (relativeToParent) {
+			coordsPoint.setLocation(coordsPoint.getX() + parent.getX(), coordsPoint.getY() + parent.getY());
 		}
 		return coordsPoint;
 	}

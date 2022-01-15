@@ -23,6 +23,7 @@ import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.objects.skeleton.Sprite;
 import com.wings2d.editor.ui.DrawingArea;
 import com.wings2d.editor.ui.UIElement;
+import com.wings2d.editor.ui.edits.MoveSprite;
 import com.wings2d.editor.ui.edits.SetBoneLocation;
 import com.wings2d.editor.ui.edits.SetBoneRotation;
 import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
@@ -33,10 +34,6 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 		MOVE_X,
 		MOVE_Y
 	}
-	private enum CurrentMove {
-		MOVE_BONE,
-		ROTATE_BONE
-	}
 	
 	private DrawingArea drawArea;
 	private JScrollPane pane;
@@ -45,7 +42,7 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 	private SkeletonNode selectedItem;
 	private SkeletonTreeControls treeControls;
 	private MoveType moveType;
-	private CurrentMove move;
+	private DrawMode editMove;
 	private double curX, curY, curRot;
 
 	public SkeletonDrawingPanel(final SkeletonEdit edit) {
@@ -58,7 +55,7 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 		panel.setLayout(new GridLayout(0,1));
 		panel.add(pane);
 		tree = edit.getSkeletonTree().getTree();
-		move = null;
+		editMove = null;
 	}
 	public void setSelectedFrame(final SkeletonFrame f)
 	{
@@ -143,7 +140,7 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 							SkeletonBone bone = (SkeletonBone)selectedItem;
 							curX = bone.getX();
 							curY = bone.getY();
-							move = CurrentMove.MOVE_BONE;
+							editMove = DrawMode.BONE_MOVE;
 						}
 					}
 					if (selectedItem == null && getEditPanel().getDrawMode() == DrawMode.BONE_ROTATE)
@@ -152,12 +149,18 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 						if (selectedItem != null) {
 							SkeletonBone bone = (SkeletonBone)selectedItem;
 							curRot = bone.getRotation();
-							move = CurrentMove.ROTATE_BONE;
+							editMove = DrawMode.BONE_ROTATE;
 						}
 					}
 					else if (selectedItem ==  null && getEditPanel().getDrawMode() == DrawMode.SPRITE_MOVE)
 					{
 						selectedItem = frame.selectSprite(e.getPoint(), scale);
+						if (selectedItem != null) {
+							Sprite sprite = (Sprite)selectedItem;
+							curX = sprite.getLocation().getX();
+							curY = sprite.getLocation().getY();
+							editMove = DrawMode.SPRITE_MOVE;
+						}
 					}
 					else if (selectedItem ==  null && getEditPanel().getDrawMode() == DrawMode.SPRITE_EDIT)
 					{
@@ -179,19 +182,25 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				if (move != null) {
-					SkeletonBone bone = (SkeletonBone)selectedItem;
-					switch(move) {
-					case MOVE_BONE -> {
+				if (editMove != null) {
+					double scale = getEditPanel().getEditor().getUIScale() * drawArea.getZoomScale();
+					switch(editMove) {
+					case BONE_MOVE -> {
+						SkeletonBone bone = (SkeletonBone)selectedItem;
 						getEditPanel().getEditor().getEditsManager().edit(new SetBoneLocation(bone, bone.getX(), bone.getY(), curX, curY, true));
 					}
-					case ROTATE_BONE -> {
+					case BONE_ROTATE -> {
+						SkeletonBone bone = (SkeletonBone)selectedItem;
 						getEditPanel().getEditor().getEditsManager().edit(new SetBoneRotation(bone, bone.getRotation(), curRot));
 					}
-						
+					case SPRITE_MOVE -> {
+						Sprite sprite = (Sprite)selectedItem;
+						getEditPanel().getEditor().getEditsManager().edit(new MoveSprite(sprite, e.getPoint(),
+								curX, curY, scale));
+					}
 					}
 					
-					move = null;
+					editMove = null;
 				}
 				if (selectedItem != null)
 				{

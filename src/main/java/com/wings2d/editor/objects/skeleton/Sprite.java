@@ -246,9 +246,13 @@ public class Sprite extends SkeletonNode implements Drawable{
 		double unscale = 1.0 / scale;
 		double unscaledX = x * unscale;
 		double unscaledY = y * unscale;
-		double deltaX = unscaledX - (path.getBounds2D().getX() + (path.getBounds2D().getWidth() / 2) + parent.getX());
-		double deltaY = unscaledY - (path.getBounds2D().getY() + (path.getBounds2D().getHeight() / 2)+ parent.getY());
+		double deltaX = unscaledX - (path.getBounds2D().getCenterX() + parent.getX());
+		double deltaY = unscaledY - (path.getBounds2D().getCenterY() + parent.getY());
 		translate(deltaX, deltaY);
+	}
+	public Point2D getLocation() {
+		return new Point2D.Double(path.getBounds2D().getCenterX() + parent.getX(), 
+				path.getBounds2D().getCenterY() + parent.getY());
 	}
 	public void setLocation(final Point loc, final double scale)
 	{

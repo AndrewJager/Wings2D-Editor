@@ -25,7 +25,6 @@ import com.wings2d.editor.ui.settings.SettingsEdit;
 import com.wings2d.editor.ui.skeleton.SkeletonEdit;
 import com.wings2d.framework.Level;
 import com.wings2d.framework.LevelManager;
-import com.wings2d.framework.imageFilters.BasicVariance;
 
 public class Editor {
 	private LevelManager manager;

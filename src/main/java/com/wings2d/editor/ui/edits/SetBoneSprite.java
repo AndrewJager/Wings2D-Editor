@@ -41,8 +41,7 @@ public class SetBoneSprite extends Edit{
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Sync " + sprite.getName();
 	}
 
 }

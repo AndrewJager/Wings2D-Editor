@@ -156,6 +156,9 @@ public class Sprite extends SkeletonNode implements Drawable{
 		newSprite.color.setStoredValue(new Color(this.color.getStoredValue().getRGB()));
 		newSprite.path = new Path2D.Double(this.path);
 		newSprite.syncSpriteID.setStoredValue(this.getID());
+		for (int i = 0; i < this.filters.size(); i++) {
+			newSprite.filters.add(SkeletonFilter.insert(this.filters.get(i).getFilter().copy(), newSprite, parent.getStoredConnection()));
+		}
 		return newSprite;
 	}
 	

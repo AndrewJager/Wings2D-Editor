@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.wings2d.editor.objects.save.DBInt;
 import com.wings2d.editor.objects.save.DBString;
 import com.wings2d.editor.objects.save.DBUUID;
+import com.wings2d.framework.imageFilters.FilterFactory;
 import com.wings2d.framework.imageFilters.ImageFilter;
 
 public class SkeletonFilter extends DBObject{
@@ -44,6 +45,8 @@ public class SkeletonFilter extends DBObject{
 		this(parent);
 		
 		this.query(con, filterID);
+		
+		filter = FilterFactory.fromFileString(filterData.getStoredValue());
 	}
 	
 

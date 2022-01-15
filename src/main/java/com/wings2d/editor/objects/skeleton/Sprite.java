@@ -107,6 +107,9 @@ public class Sprite extends SkeletonNode implements Drawable{
 		for(int i = 0; i < points.size(); i++) {
 			points.get(i).delete(con);
 		}
+		for (int i = 0; i < filters.size(); i++) {
+			filters.get(i).delete(con);
+		}
 	}
 	
 	@Override
@@ -123,11 +126,27 @@ public class Sprite extends SkeletonNode implements Drawable{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		filters.clear();
+		sql = " SELECT * FROM " + SkeletonFilter.TABLE_NAME + " WHERE Sprite = " + quoteStr(ID.toString());
+		sql = sql + " ORDER BY Position DESC";
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				filters.add(SkeletonFilter.read(UUID.fromString(rs.getString("ID")), this, con));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	@Override
 	protected void updateChildren(final Connection con) {
 		for(int i = 0; i < points.size(); i++) {
 			points.get(i).update(con);
+		}
+		for (int i = 0; i < filters.size(); i++) {
+			filters.get(i).update(con);
 		}
 	}
 

@@ -41,7 +41,6 @@ public class Sprite extends SkeletonNode implements Drawable{
 	/** ID used to sync sprites between bones **/
 	private DBUUID syncSpriteID;
 	private DBColor color;
-
 	private SkeletonBone parent;
 	private EditorSettings settings;
 
@@ -217,14 +216,8 @@ public class Sprite extends SkeletonNode implements Drawable{
 		transform.translate(deltaX, deltaY);
 		transform.rotate(-Math.toRadians(parent.getRotation()));
 		path.transform(transform);
-		List<SkeletonBone> syncedBones = parent.getSyncedBones();
-		for (int i = 0; i < syncedBones.size(); i++)
-		{
-			if (syncedBones.get(i).getSpriteBySyncID(syncSpriteID.getStoredValue()) != null)
-			{
-				syncedBones.get(i).getSpriteBySyncID(syncSpriteID.getStoredValue()).translate(deltaX, deltaY);
-			}
-		}
+		
+		resetPoints();
 	}
 	public void setLocation(final double x, final double y, final double scale)
 	{
@@ -296,6 +289,21 @@ public class Sprite extends SkeletonNode implements Drawable{
 			path.closePath();
 		}
 	}
+	private void resetPoints() {
+		PathIterator iter = path.getPathIterator(null);
+		double[] coords = new double[6];
+		int i = 0;
+		while(!iter.isDone())
+		{
+			if (iter.currentSegment(coords) != PathIterator.SEG_CLOSE)
+			{
+				points.get(i).setX(coords[0]);
+				points.get(i).setY(coords[1]);
+				i++;
+			}
+			iter.next();
+		}
+	}
 	public void setVertexLocation(final Point2D loc, final int vertex, final double scale)
 	{
 		setVertexLocation(loc.getX(), loc.getY(), vertex, scale, true);
@@ -307,17 +315,6 @@ public class Sprite extends SkeletonNode implements Drawable{
 	}
 	public void translateVertex(final Shape parentPath, final double deltaX, final double deltaY, final int vertex)
 	{
-		// Set children first to avoid comparing shapes after this shape is changed
-		List<SkeletonBone> syncedBones = parent.getSyncedBones();
-		for (int i = 0; i < syncedBones.size(); i++)
-		{
-			Sprite sprite = syncedBones.get(i).getSpriteBySyncID(syncSpriteID.getStoredValue());
-			if (ShapeComparator.similarShapes(this.path, sprite.path))
-			{
-				sprite.translateVertex(this.path, deltaX, deltaY, vertex);
-			}
-		}
-
 		double angle = ShapeComparator.getRotationFrom(this.path, parentPath, false);
 		AffineTransform transform = new AffineTransform();
 		transform.rotate(Math.toRadians(angle));
@@ -378,6 +375,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		points.add(SpritePoint.insert(x, y, this.getAmountOfPoints(), this, parent.getStoredConnection()));
 		path.moveTo(x, y);
 	}
+
 	public void addVertex(final Point2D point)
 	{
 		List<SkeletonBone> syncedBones = parent.getSyncedBones();

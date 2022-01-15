@@ -15,7 +15,7 @@ public class SyncBone extends Edit{
 	public SyncBone(final SkeletonBone bone) {
 		this.bone = bone;
 		SkeletonBone sync = bone.getParentSyncedBone();
-		loc = new SetBoneLocation(bone, sync.getX(), sync.getY(), false, true);
+		loc = new SetBoneLocation(bone, sync.getX(), sync.getY(), false);
 		
 		sprites = new ArrayList<SetBoneSprite>();
 		for (int i = 0; i < sync.getSprites().size(); i++) {

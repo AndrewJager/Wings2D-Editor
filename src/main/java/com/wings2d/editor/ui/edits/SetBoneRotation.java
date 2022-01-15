@@ -12,6 +12,12 @@ public class SetBoneRotation extends Edit{
 		this.rot = rot;
 		this.oldRot = bone.getRotation();
 	}
+	public SetBoneRotation(final SkeletonBone bone, final double rot, final double oldRot) {
+		super();
+		this.bone = bone;
+		this.rot = rot;
+		this.oldRot = oldRot;
+	}
 
 	@Override
 	public void edit() throws ActionNotDoneException {

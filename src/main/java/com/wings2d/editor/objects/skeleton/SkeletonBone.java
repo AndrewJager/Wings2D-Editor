@@ -279,7 +279,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	{
 		return childBones;
 	}
-	public void setLocation(final double x, final double y, final double scale, final boolean translateChildren, final boolean buffer)
+	public void setLocation(final double x, final double y, final double scale, final boolean translateChildren)
 	{
 		double unscale = 1.0 / scale;
 		double unscaledX = x * unscale;
@@ -300,18 +300,18 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		}
 	}
 	/** Calls setLocation with scale = 1 **/
-	public void setLocation(final double x, final double y, final boolean translateChildren, final boolean buffer)
+	public void setLocation(final double x, final double y, final boolean translateChildren)
 	{
-		setLocation(x, y, 1, translateChildren, buffer);
+		setLocation(x, y, 1, translateChildren);
 	}
-	public void setLocation(final Point loc, final double scale, final boolean translateChildren, final boolean buffer)
+	public void setLocation(final Point loc, final double scale, final boolean translateChildren)
 	{
-		this.setLocation(loc.getX(), loc.getY(), scale, translateChildren, buffer);
+		this.setLocation(loc.getX(), loc.getY(), scale, translateChildren);
 	}
 	/** Calls setLocation with scale = 1 **/
-	public void setLocation(final Point loc, final boolean translateChildren, final boolean buffer)
+	public void setLocation(final Point loc, final boolean translateChildren)
 	{
-		setLocation(loc, 1, translateChildren, buffer);
+		setLocation(loc, 1, translateChildren);
 	}
 	public Point2D getLocation()
 	{

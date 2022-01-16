@@ -24,7 +24,7 @@ import com.wings2d.editor.ui.edits.AddFilter;
 import com.wings2d.editor.ui.edits.AddVertex;
 import com.wings2d.editor.ui.edits.SetSpriteColor;
 import com.wings2d.editor.ui.skeleton.filterEdits.CreateFilterDialog;
-import com.wings2d.editor.ui.skeleton.filterEdits.FilterMap;
+import com.wings2d.editor.ui.skeleton.filterEdits.FilterEditRunner;
 import com.wings2d.framework.imageFilters.ImageFilter;
 
 public class SpriteControls extends SkeletonTreeControlsUIElement{
@@ -71,7 +71,7 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 				else
 				{
 					if (e.getClickCount() == 2) { // Double click
-						ImageFilter newFilter = FilterMap.runEditDialog(filters.getSelectedValue(), controls.getEditPanel().getEditor().getFrame());
+						ImageFilter newFilter = FilterEditRunner.runEditDialog(filters.getSelectedValue(), controls.getEditPanel().getEditor().getFrame());
 						if (newFilter != null) {
 							curSprite.getSkeletonFilters().get(filters.getSelectedIndex()).setFilter(newFilter);
 							passThis.updatePanelInfo(curSprite);
@@ -146,7 +146,7 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 				Class<? extends ImageFilter> result = filterDlg.showDialog();
 				if (result != null)
 				{
-					ImageFilter newFilter = FilterMap.runCreateDialog(result, controls.getEditPanel().getEditor().getFrame());
+					ImageFilter newFilter = FilterEditRunner.runCreateDialog(result, controls.getEditPanel().getEditor().getFrame());
 					if (newFilter != null)
 					{
 						controls.getEditPanel().getEditor().getEditsManager().edit(new AddFilter(curSprite, newFilter));

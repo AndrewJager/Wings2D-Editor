@@ -16,8 +16,9 @@ public class PointControls extends SkeletonTreeControlsUIElement{
 	public static final String CARD_ID = "Point";
 	private SpritePoint point;
 
-	private JPanel xPosPanel, yPosPanel;
+	private JPanel xPosPanel, yPosPanel, indexPanel;
 	private JFormattedTextField xPos, yPos;
+	private JLabel index;
 	
 	public PointControls(final SkeletonTreeControls controls, final Connection con) {
 		super(controls, con);
@@ -31,6 +32,11 @@ public class PointControls extends SkeletonTreeControlsUIElement{
 		yPosPanel.add(new JLabel("Y:"));
 		yPos = new JFormattedTextField(new DecimalFormat());
 		yPosPanel.add(yPos);
+		
+		indexPanel = new JPanel();
+		indexPanel.add(new JLabel("Index:"));
+		index = new JLabel();
+		indexPanel.add(index);
 	}
 
 	@Override
@@ -43,6 +49,9 @@ public class PointControls extends SkeletonTreeControlsUIElement{
 		
 		panel.add(yPosPanel);
 		yPos.setValue(point.getY());
+		
+		panel.add(indexPanel);
+		index.setText(String.valueOf(point.getIndex()));
 	}
 	
 	@Override

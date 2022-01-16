@@ -216,10 +216,11 @@ public class Sprite extends SkeletonNode implements Drawable{
 		Point2D coordsPoint = null;
 		while(!iter.isDone())
 		{
-			if (i == selectedVertex)
+			double[] coords = new double[6];
+			iter.currentSegment(coords);
+			iter.next();
+			if ((i) == (selectedVertex))
 			{
-				double[] coords = new double[6];
-				iter.currentSegment(coords);
 				coordsPoint = new Point2D.Double(coords[0], coords[1]);
 				break;
 			}

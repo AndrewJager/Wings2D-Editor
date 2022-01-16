@@ -91,6 +91,9 @@ public class SpritePoint extends SkeletonNode{
 	public Sprite getSprite() {
 		return parent;
 	}
+	public int getIndex() {
+		return index.getStoredValue();
+	}
 
 	// MutableTreeNode methods
 	@Override

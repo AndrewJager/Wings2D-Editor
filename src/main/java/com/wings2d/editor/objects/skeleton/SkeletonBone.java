@@ -229,7 +229,9 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 			parentBoneID.setStoredValue(bone.getID());
 			parentBoneName.setStoredValue(bone.toString());
 			if (setChildren) {
-				parentBone.getChildBones().add(this);
+				if (!parentBone.getChildBones().contains(this)) {
+					parentBone.getChildBones().add(this);
+				}
 			}
 		}
 		else

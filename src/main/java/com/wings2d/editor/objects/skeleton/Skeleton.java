@@ -212,7 +212,7 @@ public class Skeleton extends SkeletonNode {
 	}
 	private void setSyncBone(final SkeletonBone bone) {
 		bone.setParentSyncedBone(this.getBoneBYID(bone.getSyncBoneID()));
-		bone.setParentBone(this.getBoneBYID(bone.getParentBoneID()), false);
+		bone.setParentBone(this.getBoneBYID(bone.getParentBoneID()), true);
 	}
 	
 	// MutableTreeNode methods

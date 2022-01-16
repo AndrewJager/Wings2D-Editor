@@ -158,7 +158,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	@Override
 	public void queryChildren(final UUID ID, final Connection con) {
 		sprites.clear();
-		String sql = " SELECT * FROM " + Sprite.TABLE_NAME + " WHERE Bone = " + quoteStr(ID.toString());
+		String sql = getBasicQuery(Sprite.TABLE_NAME, "Bone", ID);
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);

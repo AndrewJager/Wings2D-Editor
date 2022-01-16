@@ -115,7 +115,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	@Override
 	public void queryChildren(final UUID ID, final Connection con) {
 		points.clear();
-		String sql = " SELECT * FROM " + SpritePoint.TABLE_NAME + " WHERE Sprite = " + quoteStr(ID.toString());
+		String sql = getBasicQuery(SpritePoint.TABLE_NAME, "Sprite", ID);
 		sql = sql + " ORDER BY Position DESC";
 		try {
 			Statement stmt = con.createStatement();

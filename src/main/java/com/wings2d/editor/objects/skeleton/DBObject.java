@@ -169,4 +169,7 @@ public abstract class DBObject {
 	public static String quoteStr(final String str) {
 		return "'" + str + "'";
 	}
+	public String getBasicQuery(final String table, final String idCol, final UUID idValue) {
+		return " SELECT * FROM " + table + " WHERE " + idCol + " = " + quoteStr(idValue.toString());
+	}
 }

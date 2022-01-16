@@ -155,7 +155,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	protected void queryChildren(final UUID id, final Connection con)
 	{
 		bones.clear();
-		String sql = " SELECT * FROM " + SkeletonBone.TABLE_NAME + " WHERE Frame = " + quoteStr(id.toString());
+		String sql = getBasicQuery(SkeletonBone.TABLE_NAME, "Frame", id);
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
@@ -188,12 +188,6 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	}
 	public UUID getSyncFrameID() {
 		return syncFrameID.getStoredValue();
-//		if ((syncFrameID.getStoredValue() != null) && (!syncFrameID.getStoredValue().equals("null"))) {
-//			return syncFrameID.getStoredValue();
-//		}
-//		else {
-//			return null;
-//		}
 	}
 	public boolean containsBoneWithName(final String boneName)
 	{

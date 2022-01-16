@@ -73,7 +73,7 @@ public class Skeleton extends SkeletonNode {
 	protected void queryChildren(final UUID id, final Connection con)
 	{
 		animations.clear();
-		String sql = " SELECT * FROM " + SkeletonFrame.TABLE_NAME + " WHERE Skeleton = " + quoteStr(id.toString());
+		String sql = getBasicQuery(SkeletonFrame.TABLE_NAME, "Skeleton", id);
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
@@ -85,7 +85,7 @@ public class Skeleton extends SkeletonNode {
 			e.printStackTrace();
 		}
 		
-		sql = " SELECT * FROM " + SkeletonAnimation.TABLE_NAME + " WHERE Skeleton = " + quoteStr(id.toString());
+		sql = getBasicQuery(SkeletonAnimation.TABLE_NAME, "Skeleton", id);
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);

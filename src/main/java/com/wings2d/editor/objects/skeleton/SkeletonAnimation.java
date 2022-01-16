@@ -77,7 +77,7 @@ public class SkeletonAnimation extends SkeletonNode{
 	@Override
 	protected void queryChildren(final UUID id, final Connection con) {
 		frames.clear();
-		String sql = " SELECT * FROM " + SkeletonFrame.TABLE_NAME + " WHERE Animation = " + quoteStr(id.toString());
+		String sql = getBasicQuery(SkeletonFrame.TABLE_NAME, "Animation", id);
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);

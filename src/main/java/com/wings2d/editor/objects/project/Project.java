@@ -59,10 +59,12 @@ public class Project extends DBObject{
 		return projects;
 	}
 
+	@Override
 	public String getName()
 	{
 		return name.getStoredValue();
 	}
+	@Override
 	public UUID getID() {
 		return id.getStoredValue();
 	}

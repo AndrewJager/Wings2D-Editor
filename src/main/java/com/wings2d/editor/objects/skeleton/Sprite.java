@@ -162,6 +162,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		return newSprite;
 	}
 	
+	@Override
 	public String toString()
 	{
 		return name.getStoredValue();

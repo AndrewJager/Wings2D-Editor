@@ -86,6 +86,7 @@ public class FrameControls extends SkeletonTreeControlsUIElement{
 	@Override
 	protected void createOtherEvents() {
 		addBone.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				SkeletonNode selectedNode = (SkeletonNode)controls.getTree().getLastSelectedPathComponent();
 				if (selectedNode != null)

@@ -177,6 +177,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		}
 	}
 	
+	@Override
 	public String toString()
 	{
 		return name.getStoredValue();
@@ -642,6 +643,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		}
 	}
 
+	@Override
 	public void resyncAll()
 	{
 		if (((syncBoneID.getStoredValue() != null) && (parentSyncedBone == null || (!parentSyncedBone.getID().equals(syncBoneID.getStoredValue())))))
@@ -708,6 +710,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 			sprites.get(i).generateRender(scale);
 		}
 	}
+	@Override
 	public void drawRender(final Graphics2D g2d, final double scale)
 	{
 		for (int i = 0; i < sprites.size(); i++)

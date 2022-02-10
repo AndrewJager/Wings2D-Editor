@@ -174,6 +174,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		}
 	}
 
+	@Override
 	public String toString()
 	{
 		if (!isMaster.getStoredValue()) {
@@ -581,6 +582,8 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	}
 	
 	// SkeletonNode methods
+	
+	@Override
 	public void resyncAll()
 	{
 		if (syncFrameID.getStoredValue() != null)

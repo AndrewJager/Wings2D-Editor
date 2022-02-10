@@ -103,6 +103,7 @@ public class SkeletonTreeControls extends UIElement<SkeletonEdit>{
 		currentCard.updateVisibleInfo(node);
 	}
 	
+	@Override
 	public void createEvents()
 	{
 		skeletonControls.createEvents();

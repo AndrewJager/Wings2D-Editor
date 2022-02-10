@@ -72,6 +72,7 @@ public class ProjectSelect extends UIElement<ProjectEdit>{
 		
 	}
 
+	@Override
 	public void createEvents() {
 		newProject.addActionListener(new ActionListener() {
 			@Override
@@ -109,6 +110,7 @@ public class ProjectSelect extends UIElement<ProjectEdit>{
 			}
 		});
 		settingsBtn.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				getEditPanel().getEditor().showSettings();
 			}

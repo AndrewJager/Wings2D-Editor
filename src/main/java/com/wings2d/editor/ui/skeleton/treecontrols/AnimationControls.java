@@ -54,6 +54,7 @@ public class AnimationControls extends SkeletonTreeControlsUIElement{
 	@Override
 	public void createOtherEvents() {
 		addFrame.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				SkeletonNode selectedNode = (SkeletonNode)controls.getTree().getLastSelectedPathComponent();
 				if (selectedNode != null)

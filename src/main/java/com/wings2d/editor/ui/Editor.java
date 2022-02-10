@@ -89,6 +89,7 @@ public class Editor {
 		settingsEdit.initElements();
 
 	    frame.addWindowListener(new WindowAdapter(){
+	    	@Override
 	    	public void windowClosing(WindowEvent e){
 	    		db.closeConnection();
 	    		System.exit(0);
@@ -96,6 +97,7 @@ public class Editor {
 	    });	
 		frame.addComponentListener(new ComponentAdapter() 
 		{
+			@Override
 			public void componentResized(ComponentEvent evt) {		
 //				int width = frame.getWidth();
 //		        int height = frame.getHeight();

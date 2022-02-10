@@ -65,7 +65,7 @@ public class SpritePoint extends SkeletonNode{
 	public void queryChildren(final UUID ID, final Connection con) {}
 	@Override
 	protected void updateChildren(final Connection con) {}
-	
+	@Override
 	public String toString() {
 		return "X: " + Math.round(x.getStoredValue()) + " - Y: " + Math.round(y.getStoredValue()); 
 	}

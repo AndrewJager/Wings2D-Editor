@@ -144,6 +144,7 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 	@Override
 	protected void createOtherEvents() {
 		addSprite.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				SkeletonNode selectedNode = (SkeletonNode)controls.getTree().getLastSelectedPathComponent();
 				if (selectedNode != null)
@@ -165,6 +166,7 @@ public class BoneControls extends SkeletonTreeControlsUIElement{
 			}
 		});
 		syncBone.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				
 			}

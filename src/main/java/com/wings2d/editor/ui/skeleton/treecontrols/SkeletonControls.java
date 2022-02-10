@@ -51,6 +51,7 @@ public class SkeletonControls extends SkeletonTreeControlsUIElement{
 	@Override
 	public void createOtherEvents() {
 		addAnim.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				String animName = (String)JOptionPane.showInputDialog(panel, "","Animation Name",
 	    				JOptionPane.PLAIN_MESSAGE, null, null, "Animation");

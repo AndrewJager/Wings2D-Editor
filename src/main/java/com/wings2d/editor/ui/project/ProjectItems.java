@@ -54,6 +54,7 @@ public class ProjectItems extends UIElement<ProjectEdit>{
 		}
 	}
 
+	@Override
 	public void createEvents() {
 		list.addListSelectionListener(new ListSelectionListener() {
 			@Override

@@ -44,6 +44,7 @@ public class CurrentItemEdit extends UIElement<ProjectEdit>{
 		curItem = item;
 	}
 
+	@Override
 	public void createEvents() {
 		editItem.addActionListener(new ActionListener() {
 			@Override

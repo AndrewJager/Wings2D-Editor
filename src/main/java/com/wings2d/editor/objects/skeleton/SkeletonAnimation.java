@@ -95,6 +95,7 @@ public class SkeletonAnimation extends SkeletonNode{
 		}
 	}
 
+	@Override
 	public String toString()
 	{
 		return name.getStoredValue();

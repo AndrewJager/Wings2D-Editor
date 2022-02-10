@@ -52,6 +52,7 @@ public abstract class SkeletonTreeControlsUIElement {
 	{
 		createOtherEvents();
 		rename.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				SkeletonNode selectedNode = (SkeletonNode)controls.getTree().getLastSelectedPathComponent();
 				if (selectedNode != null)
@@ -66,6 +67,7 @@ public abstract class SkeletonTreeControlsUIElement {
 			}
 		});
 		delete.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				SkeletonNode selectedNode = (SkeletonNode)controls.getTree().getLastSelectedPathComponent();
 				if (selectedNode != null)

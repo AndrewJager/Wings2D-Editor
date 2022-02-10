@@ -39,6 +39,7 @@ public class ProjectEdit extends UIPanel<ProjectEdit>{
 		panel.add(horizontal);
 	}
 	
+	@Override
 	public void initElements()
 	{
 		for (int i = 0; i < elements.size(); i++)

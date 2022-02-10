@@ -141,6 +141,7 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 			}
 		});
 		addFilter.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e){
 				CreateFilterDialog filterDlg = new CreateFilterDialog(controls.getEditPanel().getEditor().getFrame());
 				Class<? extends ImageFilter> result = filterDlg.showDialog();

@@ -109,6 +109,7 @@ public class Skeleton extends SkeletonNode {
 		return masterFrame;
 	}
 
+	@Override
 	public String toString()
 	{
 		return name.getStoredValue();

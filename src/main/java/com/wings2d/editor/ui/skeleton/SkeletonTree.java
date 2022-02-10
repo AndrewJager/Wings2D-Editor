@@ -122,8 +122,10 @@ public class SkeletonTree extends UIElement<SkeletonEdit>{
 		return renderFrame;
 	}
 
+	@Override
 	public void createEvents() {
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
+			@Override
 			public void valueChanged(TreeSelectionEvent e)
 			{
 				SkeletonTreeControls treeControls = getEditPanel().getTreeControls();

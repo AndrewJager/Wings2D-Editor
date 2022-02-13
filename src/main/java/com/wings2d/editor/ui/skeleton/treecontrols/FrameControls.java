@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JToggleButton;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -28,7 +29,8 @@ public class FrameControls extends SkeletonTreeControlsUIElement{
 	
 	private SkeletonFrame frame;
 	private JPanel syncPanel, bonePanel, bottomPanel, timePanel;
-	private JButton addBone, cautiousSync, forceSync, resetTime;
+	private JButton addBone, cautiousSync, forceSync;
+	private JToggleButton resetTime;
 	private JLabel syncLabel, defaultTime;
 	private JSpinner time;
 
@@ -53,7 +55,7 @@ public class FrameControls extends SkeletonTreeControlsUIElement{
 		timePanel = new JPanel(new BorderLayout());
 		timePanel.add(new JLabel("Time:"), BorderLayout.WEST);
 		JPanel resetTimePanel = new JPanel();
-		resetTime = new JButton(Character.toString('\u238C')); 
+		resetTime = new JToggleButton(Character.toString('\u238C')); 
 		resetTimePanel.add(resetTime);
 		timePanel.add(resetTimePanel, BorderLayout.CENTER);
 		time = new JSpinner(new SpinnerNumberModel(0, 0, 50000, 10));
@@ -101,8 +103,9 @@ public class FrameControls extends SkeletonTreeControlsUIElement{
 		forceSync.setEnabled(frame.getParentSyncedFrame() != null);
 		
 		time.getModel().setValue(frame.getTime());
-		time.setEnabled(!frame.getIsMaster());
+		time.setEnabled(!frame.getIsMaster() && (frame.getTime() != 0));
 		resetTime.setEnabled(!frame.getIsMaster());
+		resetTime.setSelected(frame.getTime() != 0);
 		defaultTime.setText("Default: " + controls.getEditPanel().getEditor().getSettings().getDefaultTime());
 	
 //		createList(frame.getSyncedFrameNames());
@@ -161,8 +164,14 @@ public class FrameControls extends SkeletonTreeControlsUIElement{
 		resetTime.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				frame.setTime(0);
-				time.getModel().setValue(0);
+				if (resetTime.isSelected()) {
+					time.setEnabled(true);
+				}
+				else {
+					frame.setTime(0);
+					time.getModel().setValue(0);
+					time.setEnabled(false);
+				}
 			}
 		});
 	}

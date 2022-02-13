@@ -143,6 +143,7 @@ public abstract class DBObject {
 			for (int i = 0; i < fields.size(); i++) {
 				fields.get(i).fromString(rs.getString(fields.get(i).getColumn()));
 			}
+			queryChildren(UUID.fromString(rs.getString("ID")), con);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -2,8 +2,13 @@ package com.wings2d.editor.objects;
 
 import java.awt.Color;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
 import java.util.UUID;
 
+import com.wings2d.editor.objects.project.EditorKeyBind;
 import com.wings2d.editor.objects.project.Project;
 import com.wings2d.editor.objects.save.DBColor;
 import com.wings2d.editor.objects.save.DBInt;
@@ -22,6 +27,8 @@ public class EditorSettings extends DBObject{
 	private DBColor unselectedHandleColor;
 	private DBInt defaultTime;
 	
+	private HashMap<String, EditorKeyBind> keyBinds;
+	
 	public EditorSettings(final Connection con)
 	{
 		super(TABLE_NAME, false);
@@ -32,6 +39,7 @@ public class EditorSettings extends DBObject{
 		fields.add(unselectedHandleColor = new DBColor("UnselectedHandleColor"));
 		fields.add(projectID = new DBString("SelectedProject"));
 		fields.add(defaultTime = new DBInt("DefaultTime"));
+		keyBinds = new HashMap<String, EditorKeyBind>();
 		
 		this.querySingleRecord(con);
 //		selectedProj = new Project(projectLink.getValue(), con);
@@ -76,6 +84,9 @@ public class EditorSettings extends DBObject{
 	public String getProjectID() {
 		return this.projectID.getStoredValue();
 	}
+	public HashMap<String, EditorKeyBind> getKeyBinds() {
+		return keyBinds;
+	}
 
 	@Override
 	protected void deleteChildren(final Connection con) {	
@@ -83,10 +94,22 @@ public class EditorSettings extends DBObject{
 
 	@Override
 	protected void queryChildren(final UUID id, final Connection con) {
+		String sql = " SELECT * FROM " + EditorKeyBind.TABLE_NAME;
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				keyBinds.put(rs.getString("Name"), new EditorKeyBind(con, UUID.fromString(rs.getString("ID"))));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
 	protected void updateChildren(final Connection con) {
-
+		for (EditorKeyBind keyBind : keyBinds.values()) {
+		    keyBind.update(con);
+		}
 	}
 }

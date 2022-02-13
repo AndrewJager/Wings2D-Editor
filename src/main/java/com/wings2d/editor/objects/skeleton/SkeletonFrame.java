@@ -101,6 +101,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 			skelID.setStoredValue(skeleton.getID());
 		}
 		name.setStoredValue(frameName);
+		time.setStoredValue(0);
 		
 		this.insert(con);
 		this.query(con, id.getStoredValue());

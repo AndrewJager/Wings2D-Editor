@@ -48,7 +48,6 @@ public class BindingEdit extends JPanel{
 					}
 				}
 				if (!hasKey) {
-					System.out.println(e.getKeyCode());
 					keyBind.getBinding().addKey(new KeyBind(e.getKeyCode()));
 					
 				}

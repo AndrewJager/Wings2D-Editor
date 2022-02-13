@@ -25,6 +25,9 @@ public class DrawingSettings extends UIElement<SettingsEdit>{
 		IntSetter<SettingsEdit> rotHandleOffset = new IntSetter<SettingsEdit>(edit, "Rotation Edit Handle Offset:",
 				settings::getRotHandleOffset, settings::setRotHandleOffset);
 		panel.add(rotHandleOffset.getPanel());
+		IntSetter<SettingsEdit> defaultTime = new IntSetter<SettingsEdit>(edit, "Default Frame Time:",
+				settings::getDefaultTime, settings::setDefaultTime, 10);
+		panel.add(defaultTime.getPanel());
 		
 		ColorSetter selectedHandleSettings = new ColorSetter(edit, "Selected Handle Color:", 
 				settings::getSelectedHandleColor, settings::setSelectedHandleColor);

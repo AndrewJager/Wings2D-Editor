@@ -18,9 +18,13 @@ public class IntSetter<T extends UIPanel<T>> extends UIElement<T>{
 	private IntConsumer setter;
 	
 	private JSpinner spinner;
-
+	
 	public IntSetter(final T parent, final String caption,
 			final IntSupplier getter, final IntConsumer setter) {
+		this(parent, caption, getter, setter, 1);
+	}
+	public IntSetter(final T parent, final String caption,
+			final IntSupplier getter, final IntConsumer setter, final int step) {
 		super(parent);
 		this.setter = setter;
 		
@@ -28,7 +32,7 @@ public class IntSetter<T extends UIPanel<T>> extends UIElement<T>{
 		
 		panel.add(new JLabel(caption), BorderLayout.WEST);
 		
-		SpinnerModel handleModel = new SpinnerNumberModel(getter.getAsInt(), 0, 1000, 1);
+		SpinnerModel handleModel = new SpinnerNumberModel(getter.getAsInt(), 0, 1000, step);
 		spinner = new JSpinner(handleModel);
 		panel.add(spinner, BorderLayout.EAST);
 	}

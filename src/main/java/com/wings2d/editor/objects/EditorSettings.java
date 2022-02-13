@@ -20,7 +20,7 @@ public class EditorSettings extends DBObject{
 	private DBInt rotHandleOffset;
 	private DBColor selectedHandleColor;
 	private DBColor unselectedHandleColor;
-	
+	private DBInt defaultTime;
 	
 	public EditorSettings(final Connection con)
 	{
@@ -31,6 +31,7 @@ public class EditorSettings extends DBObject{
 		fields.add(selectedHandleColor = new DBColor("SelectedHandleColor"));
 		fields.add(unselectedHandleColor = new DBColor("UnselectedHandleColor"));
 		fields.add(projectID = new DBString("SelectedProject"));
+		fields.add(defaultTime = new DBInt("DefaultTime"));
 		
 		this.querySingleRecord(con);
 //		selectedProj = new Project(projectLink.getValue(), con);
@@ -65,6 +66,12 @@ public class EditorSettings extends DBObject{
 	}
 	public void setUnselectedHandleColor(final Color unselectedHandleColor) {
 		this.unselectedHandleColor.setStoredValue(unselectedHandleColor);;
+	}
+	public int getDefaultTime() {
+		return defaultTime.getStoredValue();
+	}
+	public void setDefaultTime(final int defaultTime) {
+		this.defaultTime.setStoredValue(defaultTime);
 	}
 	public String getProjectID() {
 		return this.projectID.getStoredValue();

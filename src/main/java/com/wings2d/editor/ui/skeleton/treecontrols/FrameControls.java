@@ -9,7 +9,12 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.tree.DefaultTreeModel;
 
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
@@ -22,9 +27,10 @@ public class FrameControls extends SkeletonTreeControlsUIElement{
 	public static final String CARD_ID = "Frame";
 	
 	private SkeletonFrame frame;
-	private JPanel syncPanel, bonePanel, bottomPanel;
-	private JButton addBone, cautiousSync, forceSync;
-	private JLabel syncLabel;
+	private JPanel syncPanel, bonePanel, bottomPanel, timePanel;
+	private JButton addBone, cautiousSync, forceSync, resetTime;
+	private JLabel syncLabel, defaultTime;
+	private JSpinner time;
 
 	public FrameControls(final SkeletonTreeControls controls, final Connection con) {
 		super(controls, con);
@@ -44,10 +50,23 @@ public class FrameControls extends SkeletonTreeControlsUIElement{
 		
 		bottomPanel = new JPanel(new BorderLayout());
 
+		timePanel = new JPanel(new BorderLayout());
+		timePanel.add(new JLabel("Time:"), BorderLayout.WEST);
+		JPanel resetTimePanel = new JPanel();
+		resetTime = new JButton(Character.toString('\u238C')); 
+		resetTimePanel.add(resetTime);
+		timePanel.add(resetTimePanel, BorderLayout.CENTER);
+		time = new JSpinner(new SpinnerNumberModel(0, 0, 50000, 10));
+		timePanel.add(time, BorderLayout.EAST);
+		defaultTime = new JLabel("Default:", SwingConstants.CENTER);
+		timePanel.add(defaultTime, BorderLayout.SOUTH);
+		
+		bottomPanel.add(timePanel, BorderLayout.NORTH);
 		bonePanel = new JPanel();
 		addBone = new JButton("New Bone");
 		bonePanel.add(addBone);
-		bottomPanel.add(bonePanel, BorderLayout.NORTH);
+		bottomPanel.add(bonePanel, BorderLayout.SOUTH);
+		bottomPanel.setBorder(new EmptyBorder(10, 2, 0, 2));
 		
 	}
 
@@ -80,6 +99,11 @@ public class FrameControls extends SkeletonTreeControlsUIElement{
 		// Disable sync buttons if no sync frame
 		cautiousSync.setEnabled(frame.getParentSyncedFrame() != null);
 		forceSync.setEnabled(frame.getParentSyncedFrame() != null);
+		
+		time.getModel().setValue(frame.getTime());
+		time.setEnabled(!frame.getIsMaster());
+		resetTime.setEnabled(!frame.getIsMaster());
+		defaultTime.setText("Default: " + controls.getEditPanel().getEditor().getSettings().getDefaultTime());
 	
 //		createList(frame.getSyncedFrameNames());
 		
@@ -126,6 +150,19 @@ public class FrameControls extends SkeletonTreeControlsUIElement{
 			public void actionPerformed(ActionEvent e) {
 				controls.getEditPanel().getEditor().getEditsManager().edit(new SyncBones(frame, false));
 				controls.getDrawingArea().getDrawArea().repaint();
+			}
+		});
+		time.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				frame.setTime((int)time.getModel().getValue());	
+			}
+		});
+		resetTime.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.setTime(0);
+				time.getModel().setValue(0);
 			}
 		});
 	}

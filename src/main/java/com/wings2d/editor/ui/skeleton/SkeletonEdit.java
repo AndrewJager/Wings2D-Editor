@@ -72,16 +72,16 @@ public class SkeletonEdit extends UIPanel<SkeletonEdit>{
 	public void setDrawMode(final DrawMode mode)
 	{
 		drawMode = mode;
-//		drawingControls.setControls(mode);
-//		drawingArea.getDrawArea().repaint();
-//		if (mode == DrawMode.BONE_MOVE || mode == DrawMode.BONE_ROTATE)
-//		{
-//			lastBoneDrawMode = mode;
-//		}
-//		else if (mode == DrawMode.SPRITE_MOVE || mode == DrawMode.SPRITE_EDIT)
-//		{
-//			lastSpriteDrawMode = mode;
-//		}
+		drawingArea.getControls().setControls(mode);
+		drawingArea.getDrawingPanel().getPanel().repaint();
+		if (mode == DrawMode.BONE_MOVE || mode == DrawMode.BONE_ROTATE)
+		{
+			lastBoneDrawMode = mode;
+		}
+		else if (mode == DrawMode.SPRITE_MOVE || mode == DrawMode.SPRITE_EDIT)
+		{
+			lastSpriteDrawMode = mode;
+		}
 	}
 	public DrawMode getDrawMode()
 	{

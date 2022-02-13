@@ -1,0 +1,40 @@
+Features
+	Snapping
+		Snap points to other points
+		Snap objects to other objects
+		Snap sprites to other sprites
+		Snap anything to the drawing cursor
+	
+	Map keys to undo/redo
+	
+	Create a system to allow user to remap keybinds
+		Generic keybind system should be created in Wings2D, to allow later use there
+	
+	Move the cursor to the current node (object/point/sprite, based on what is selected in the tree)
+	
+	Give the BasicVariance filter an option to pass in a seed, to allow for repeatability
+	
+	Create mirrored animations
+	
+	Insert a frame in an animation after a frame, and before the next
+		Will require setting the syncs of the third frame to the new frame, as well as removing the third frame from the children of the first
+		
+	Select and manipulate multiple items at once
+	
+	Rotate a bone or sprite around another bone/sprite, without rotating the second item
+		Also allow for rotation around the drawing cursor
+		
+	
+	
+UI Improvements
+	Remove wasted space in skeleton editor
+		Will require finalizing items in this editor first
+	
+	
+Fixes
+	Sync filters on cautious sync
+		Alternatively, create a sync that syncs filters without syncing position/rotation
+		Should probably create a new system that allows for various "modes" of syncing
+		
+		
+	

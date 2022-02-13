@@ -216,6 +216,78 @@ public class Skeleton extends SkeletonNode {
 		bone.setParentBone(this.getBoneBYID(bone.getParentBoneID()), true);
 	}
 	
+	public SkeletonFrame getNextFrame(final SkeletonFrame frame) {
+		SkeletonFrame nextFrame = null;
+		
+		if (!frame.getIsMaster()) {
+			SkeletonAnimation anim = null;
+			for (int i = 0; i < animations.size(); i++) {
+				if (animations.get(i) == (SkeletonAnimation)frame.getParent()) {
+					anim = (SkeletonAnimation)animations.get(i);
+					break;
+				}
+			}
+			
+			if (anim != null) {
+				int idx = -1;
+				for (int i = 0; i < anim.getFrames().size(); i++) {
+					if (anim.getFrames().get(i) == frame) {
+						idx = i;
+						if ((anim.getFrames().size() - 1) == idx) { // if this is the last frame, loop to the start
+							idx = 0;
+						}
+						else {
+							idx = idx + 1;
+						}
+						break;
+					}
+				}
+				
+				if (idx != -1) {
+					nextFrame = anim.getFrames().get(idx);
+				}
+			}
+		}
+		
+		return nextFrame;
+	}
+	
+	public SkeletonFrame getPreviousFrame(final SkeletonFrame frame) {
+		SkeletonFrame previousFrame = null;
+		
+		if (!frame.getIsMaster()) {
+			SkeletonAnimation anim = null;
+			for (int i = 0; i < animations.size(); i++) {
+				if (animations.get(i) == (SkeletonAnimation)frame.getParent()) {
+					anim = (SkeletonAnimation)animations.get(i);
+					break;
+				}
+			}
+			
+			if (anim != null) {
+				int idx = -1;
+				for (int i = 0; i < anim.getFrames().size(); i++) {
+					if (anim.getFrames().get(i) == frame) {
+						idx = i;
+						if (idx == 0) { // if this is the first frame, loop to the end
+							idx = anim.getFrames().size() - 1;
+						}
+						else {
+							idx = idx - 1;
+						}
+						break;
+					}
+				}
+				
+				if (idx != -1) {
+					previousFrame = anim.getFrames().get(idx);
+				}
+			}
+		}
+		
+		return previousFrame;
+	}
+	
 	// MutableTreeNode methods
 	@Override
 	public void insert(final MutableTreeNode child, final int index) {

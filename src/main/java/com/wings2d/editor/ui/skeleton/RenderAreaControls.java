@@ -14,11 +14,11 @@ import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.ui.UIElement;
 
 public class RenderAreaControls extends UIElement<SkeletonEdit>{
-	private SkeletonFrame frame;
-
 	private JButton render, previous, next;
 	private JLabel curFrame;
 	private JPanel idxPanel;
+	
+	private SkeletonFrame renderFrame;
 
 	public RenderAreaControls(SkeletonEdit edit) {
 		super(edit);
@@ -42,7 +42,13 @@ public class RenderAreaControls extends UIElement<SkeletonEdit>{
 	
 	private void renderFrame() {
 		getEditPanel().getSkeleton().generateRender(getEditPanel().getEditor().getUIScale());
-		getEditPanel().getRenderArea().getRenderPanel().getDrawArea().setDrawItem(getEditPanel().getSkeletonTree().getFrameToRender());
+		renderFrame = getEditPanel().getSkeletonTree().getFrameToRender();
+		drawRender();
+	}
+	
+	private void drawRender() {
+		curFrame.setText(renderFrame.getName());
+		getEditPanel().getRenderArea().getRenderPanel().getDrawArea().setDrawItem(renderFrame);
 		getEditPanel().getRenderArea().getRenderPanel().getDrawArea().repaint();
 	}
 
@@ -57,7 +63,15 @@ public class RenderAreaControls extends UIElement<SkeletonEdit>{
 		previous.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				renderFrame = getEditPanel().getSkeleton().getPreviousFrame(renderFrame);
+				drawRender();
+			}
+		});
+		next.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				renderFrame = getEditPanel().getSkeleton().getNextFrame(renderFrame);
+				drawRender();
 			}
 		});
 	}

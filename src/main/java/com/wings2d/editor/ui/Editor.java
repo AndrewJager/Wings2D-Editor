@@ -3,15 +3,19 @@ package com.wings2d.editor.ui;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
 import com.formdev.flatlaf.FlatLightLaf;
@@ -88,6 +92,19 @@ public class Editor {
 		skeletonEdit.initElements();
 		settingsEdit.initElements();
 
+		// Replace this with binding event keys later
+		Action test = new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+		    public void actionPerformed(ActionEvent e) {
+		        System.out.println("CAT");
+		    }
+		};
+		mainPanel.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "test");
+		mainPanel.getActionMap().put("test", test);
+		
+		
 	    frame.addWindowListener(new WindowAdapter(){
 	    	@Override
 	    	public void windowClosing(WindowEvent e){

@@ -35,6 +35,8 @@ public class DrawingSettings extends UIElement<SettingsEdit>{
 		ColorSetter unselectedHandleSettings = new ColorSetter(edit, "Unselected Handle Color:", 
 				settings::getUnselectedHandleColor, settings::setUnselectedHandleColor);
 		panel.add(unselectedHandleSettings.getPanel());
+
+		panel.add(new BindingEdit("Undo"));
 	}
 
 	@Override

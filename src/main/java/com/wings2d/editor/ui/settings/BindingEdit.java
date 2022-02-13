@@ -48,11 +48,12 @@ public class BindingEdit extends JPanel{
 					}
 				}
 				if (!hasKey) {
-					keyBind.getBinding().addKey(new KeyBind(KeyEvent.getKeyText(e.getKeyCode())));
+					System.out.println(e.getKeyCode());
+					keyBind.getBinding().addKey(new KeyBind(e.getKeyCode()));
 					
 				}
 				text.setText(keyBind.getBinding().getValue());
-				keyBind.setKeys(keyBind.getBinding().getValue());
+				keyBind.setKeys(keyBind.getBinding().getSaveStr());
 			}
 
 			@Override

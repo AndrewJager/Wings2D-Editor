@@ -1,5 +1,6 @@
 package com.wings2d.editor.ui.skeleton.treecontrols;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -8,7 +9,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 import javax.swing.tree.DefaultTreeModel;
 
 import com.wings2d.editor.objects.skeleton.Skeleton;
@@ -25,6 +25,7 @@ public class AnimationControls extends SkeletonTreeControlsUIElement{
 
 	public AnimationControls(final SkeletonTreeControls controls, final Connection con) {
 		super(controls, con);
+		panel.setLayout(new BorderLayout());
 		
 		namePanel = new JPanel();
 		
@@ -39,16 +40,14 @@ public class AnimationControls extends SkeletonTreeControlsUIElement{
 		super.updatePanelInfo(node);
 		if (node != null)
 		{
-			panel.add(namePanel);
+			panel.add(namePanel, BorderLayout.NORTH);
 			namePanel.removeAll();
 			namePanel.add(new JLabel(node.toString()));
 		}
-		panel.add(new JSeparator());
 		
-		panel.add(controlsPanel);
-		panel.add(new JSeparator());
+		panel.add(controlsPanel, BorderLayout.CENTER);
 
-		panel.add(framePanel);	
+		panel.add(framePanel, BorderLayout.SOUTH);	
 	}
 	
 	@Override

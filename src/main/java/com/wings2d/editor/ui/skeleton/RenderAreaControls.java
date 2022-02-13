@@ -9,6 +9,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.ui.UIElement;
@@ -22,10 +23,13 @@ public class RenderAreaControls extends UIElement<SkeletonEdit>{
 
 	public RenderAreaControls(SkeletonEdit edit) {
 		super(edit);
-		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		int PADDING = 5;
+		panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK), 
+				new EmptyBorder(PADDING, PADDING, PADDING, PADDING)));
+		panel.setLayout(new BorderLayout());
 		
 		render = new JButton("Render");
-		panel.add(render);
+		panel.add(render, BorderLayout.WEST);
 		
 		idxPanel = new JPanel();
 		idxPanel.setLayout(new BorderLayout());
@@ -37,7 +41,7 @@ public class RenderAreaControls extends UIElement<SkeletonEdit>{
 		idxPanel.add(curFrame, BorderLayout.CENTER);
 		next = new JButton(">");
 		idxPanel.add(next, BorderLayout.EAST);
-		panel.add(idxPanel);
+		panel.add(idxPanel, BorderLayout.EAST);
 	}
 	
 	private void renderFrame() {
@@ -47,9 +51,11 @@ public class RenderAreaControls extends UIElement<SkeletonEdit>{
 	}
 	
 	private void drawRender() {
-		curFrame.setText(renderFrame.getName());
-		getEditPanel().getRenderArea().getRenderPanel().getDrawArea().setDrawItem(renderFrame);
-		getEditPanel().getRenderArea().getRenderPanel().getDrawArea().repaint();
+		if (renderFrame != null) { 
+			curFrame.setText(renderFrame.getName());
+			getEditPanel().getRenderArea().getRenderPanel().getDrawArea().setDrawItem(renderFrame);
+			getEditPanel().getRenderArea().getRenderPanel().getDrawArea().repaint();
+		}
 	}
 
 	@Override

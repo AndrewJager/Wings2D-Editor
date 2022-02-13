@@ -21,6 +21,7 @@ import javax.swing.tree.TreeNode;
 import com.wings2d.editor.objects.Drawable;
 import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.save.DBBoolean;
+import com.wings2d.editor.objects.save.DBInt;
 import com.wings2d.editor.objects.save.DBUUID;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
 
@@ -38,6 +39,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	private DBBoolean isMaster;
 	private DBUUID animID;
 	private DBUUID skelID;
+	private DBInt time;
 	
 	private Connection con;
 	
@@ -142,6 +144,7 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		fields.add(isMaster = new DBBoolean("IsMaster"));
 		fields.add(animID = new DBUUID("Animation"));
 		fields.add(skelID = new DBUUID("Skeleton"));
+		fields.add(time = new DBInt("Time"));
 	}
 	
 	@Override
@@ -499,6 +502,12 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	}
 	public EditorSettings getSettings() {
 		return settings;
+	}
+	public int getTime() {
+		return time.getStoredValue();
+	}
+	public void setTime(final int newTime) {
+		time.setStoredValue(newTime);
 	}
 	public void deselectAllBones()
 	{

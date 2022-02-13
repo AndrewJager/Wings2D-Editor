@@ -1,5 +1,6 @@
 package com.wings2d.editor.ui.skeleton.treecontrols;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -8,7 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 import javax.swing.tree.DefaultTreeModel;
 
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
@@ -21,41 +22,49 @@ public class FrameControls extends SkeletonTreeControlsUIElement{
 	public static final String CARD_ID = "Frame";
 	
 	private SkeletonFrame frame;
-	private JPanel namePanel, syncPanel, bonePanel;
+	private JPanel syncPanel, bonePanel, bottomPanel;
 	private JButton addBone, cautiousSync, forceSync;
 	private JLabel syncLabel;
 
 	public FrameControls(final SkeletonTreeControls controls, final Connection con) {
 		super(controls, con);
-		
-		namePanel = new JPanel();
+		panel.setLayout(new BorderLayout());
 		
 		syncPanel = new JPanel();
-		syncLabel = new JLabel();
-		syncPanel.add(syncLabel);
+		syncPanel.setLayout(new BorderLayout());
+		syncLabel = new JLabel("", SwingConstants.CENTER);
+		syncPanel.add(syncLabel, BorderLayout.NORTH);
 		
+		JPanel syncButtonsPanel = new JPanel(new BorderLayout());
 		cautiousSync = new JButton("Cautious Sync");
+		syncButtonsPanel.add(cautiousSync, BorderLayout.WEST);
 		forceSync = new JButton("Force Sync");
+		syncButtonsPanel.add(forceSync, BorderLayout.EAST);
+		syncPanel.add(syncButtonsPanel, BorderLayout.SOUTH);
 		
+		bottomPanel = new JPanel(new BorderLayout());
+
 		bonePanel = new JPanel();
 		addBone = new JButton("New Bone");
 		bonePanel.add(addBone);
+		bottomPanel.add(bonePanel, BorderLayout.NORTH);
+		
 	}
 
 	@Override
 	protected void updatePanelInfo(final SkeletonNode node) {
 		super.updatePanelInfo(node);
+		JPanel topPanel = new JPanel();
+		topPanel.setLayout(new BorderLayout());
 		if (node != null)
 		{
-			panel.add(namePanel);
-			namePanel.removeAll();
-			namePanel.add(new JLabel(node.toString()));
+			topPanel.add(new JLabel(node.toString(), SwingConstants.CENTER), BorderLayout.NORTH);
 		}
-		panel.add(new JSeparator());
 		
-		panel.add(controlsPanel);
+		topPanel.add(controlsPanel, BorderLayout.CENTER);
+		panel.add(topPanel, BorderLayout.NORTH);
 		
-		panel.add(syncPanel);
+		panel.add(syncPanel, BorderLayout.CENTER);
 		frame = (SkeletonFrame)node;
 		if (frame.getParentSyncedFrame() != null)
 		{
@@ -66,18 +75,13 @@ public class FrameControls extends SkeletonTreeControlsUIElement{
 			syncLabel.setText("No parent sync frame");
 		}
 		
-		JPanel syncBones = new JPanel();
-		syncBones.add(cautiousSync);
-		syncBones.add(forceSync);
-		panel.add(syncBones);
+		panel.add(bottomPanel, BorderLayout.SOUTH);
+		
 		// Disable sync buttons if no sync frame
 		cautiousSync.setEnabled(frame.getParentSyncedFrame() != null);
 		forceSync.setEnabled(frame.getParentSyncedFrame() != null);
-		
-		createList(frame.getSyncedFrameNames());
-		panel.add(new JSeparator());
-		
-		panel.add(bonePanel);
+	
+//		createList(frame.getSyncedFrameNames());
 		
 		controls.getDrawingArea().setSelectedFrame(frame);
 		controls.getDrawingArea().getDrawArea().setDrawItem(frame);

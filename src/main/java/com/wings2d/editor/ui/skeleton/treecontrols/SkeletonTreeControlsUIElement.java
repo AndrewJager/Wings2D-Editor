@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -33,7 +32,6 @@ public abstract class SkeletonTreeControlsUIElement {
 		this.con = con;
 		
 		panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		controlsPanel = new JPanel();
 		delete = new JButton("Delete");
 		rename = new JButton("Rename");

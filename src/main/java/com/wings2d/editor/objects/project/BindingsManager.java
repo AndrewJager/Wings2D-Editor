@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.AbstractAction;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
@@ -27,7 +28,11 @@ public class BindingsManager {
 
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
-	        pressedKeys.remove(key);
+	    	for (int i = pressedKeys.size() - 1; i >= 0; i--) {
+	    		if (pressedKeys.get(i).equals(key)) {
+	    			pressedKeys.remove(i);
+	    		}
+	    	}
 	    }
 	};
 	@SuppressWarnings("serial")
@@ -45,6 +50,7 @@ public class BindingsManager {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 	    	pressedKeys.add(key);
+	    	System.out.println(key);
 	    	parseEvents();
 	    }
 	};
@@ -74,15 +80,20 @@ public class BindingsManager {
 		
 		for (int i = 0; i < mappedKeys.size(); i++) {
 			Integer keyCode = mappedKeys.get(i);
-			mainPanel.getInputMap().put(KeyStroke.getKeyStroke(keyCode, InputEvent.CTRL_DOWN_MASK
+			mainPanel.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(keyCode, InputEvent.CTRL_DOWN_MASK
 					, false), keyCode.toString() + "DOWN");
 			mainPanel.getActionMap().put(keyCode.toString() + "DOWN", new KeyDown(keyCode, pressedKeys));
-			mainPanel.getInputMap().put(KeyStroke.getKeyStroke(keyCode, 0, true), keyCode.toString() + "UP");
+			mainPanel.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(keyCode, 0, true), keyCode.toString() + "UP");
 			mainPanel.getActionMap().put(keyCode.toString() + "UP", new KeyUp(keyCode, pressedKeys));
 		}
 	}
 	
 	public void parseEvents() {
+		String test= "";
+		for (int i = 0; i  < pressedKeys.size(); i++) {
+			test = test + pressedKeys.get(i) + " ";
+		}
+		System.out.println(test);
 		for (EditorKeyBind keyBind : keyBinds.values()) {
 			boolean fireEvent = true;
 			String[] keys = keyBind.getKeys().split(KeyBind.DELIMITER);

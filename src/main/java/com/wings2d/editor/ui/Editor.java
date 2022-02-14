@@ -93,6 +93,7 @@ public class Editor {
 		
 		HashMap<String, Runnable> keyActions = new HashMap<String, Runnable>();
 		keyActions.put("Undo", () -> getEditsManager().undo());
+		keyActions.put("Redo", () -> getEditsManager().redo());
 		new BindingsManager(settings.getKeyBinds(), keyActions, mainPanel);
 		
 		

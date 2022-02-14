@@ -119,3 +119,6 @@ CREATE TABLE KEYBIND (
 INSERT INTO KEYBIND (ID, Name, Keys)
 VALUES("ee243610-875c-445d-84d9-bd7cbec56cdf", "Undo", "17,90")
 ^
+INSERT INTO KEYBIND (ID, Name, Keys)
+VALUES("aa3dd341-9b14-4ff2-a80b-5adba39c4394", "Redo", "17,89")
+^

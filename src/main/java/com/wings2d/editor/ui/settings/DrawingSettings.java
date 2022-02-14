@@ -37,6 +37,7 @@ public class DrawingSettings extends UIElement<SettingsEdit>{
 		panel.add(unselectedHandleSettings.getPanel());
 
 		panel.add(new BindingEdit("Undo", settings.getKeyBinds().get("Undo")));
+		panel.add(new BindingEdit("Redo", settings.getKeyBinds().get("Redo")));
 	}
 
 	@Override

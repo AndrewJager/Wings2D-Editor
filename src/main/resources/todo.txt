@@ -7,9 +7,6 @@ Features
 	
 	Map keys to undo/redo
 	
-	Create a system to allow user to remap keybinds
-		Generic keybind system should be created in Wings2D, to allow later use there
-	
 	Move the cursor to the current node (object/point/sprite, based on what is selected in the tree)
 	
 	Give the BasicVariance filter an option to pass in a seed, to allow for repeatability
@@ -35,6 +32,8 @@ Fixes
 	Sync filters on cautious sync
 		Alternatively, create a sync that syncs filters without syncing position/rotation
 		Should probably create a new system that allows for various "modes" of syncing
+		
+	Fix keybinds not being consistent
 		
 		
 	

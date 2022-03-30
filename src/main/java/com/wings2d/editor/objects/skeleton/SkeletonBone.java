@@ -28,6 +28,7 @@ import com.wings2d.editor.objects.save.DBDouble;
 import com.wings2d.editor.objects.save.DBPoint;
 import com.wings2d.editor.objects.save.DBString;
 import com.wings2d.editor.objects.save.DBUUID;
+import com.wings2d.editor.objects.skeleton.path.Sprite;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
 
 public class SkeletonBone extends SkeletonNode implements Drawable{
@@ -421,7 +422,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		double delta = angle - oldRotation;
 		for (int i = 0; i < sprites.size(); i++)
 		{
-			sprites.get(i).rotateAroundBone(delta);
+			sprites.get(i).rotate(delta);
 		}
 		for (int i = 0; i < childBones.size(); i++)
 		{
@@ -436,7 +437,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		double delta = rotation.getStoredValue() - oldRotation;
 		for (int i = 0; i < sprites.size(); i++)
 		{
-			sprites.get(i).rotateAroundBone(delta);
+			sprites.get(i).rotate(delta);
 		}
 		for (int i = 0; i < childBones.size(); i++)
 		{
@@ -454,7 +455,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		
 		for (int i = 0; i < sprites.size(); i++)
 		{
-			sprites.get(i).rotateAroundBone(amt);
+			sprites.get(i).rotate(amt);
 		}
 		for (int i = 0; i < childBones.size(); i++)
 		{
@@ -509,7 +510,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	{
 		for (int i = 0; i < sprites.size(); i++)
 		{
-			sprites.get(i).setSelectedVertex(-1);
+			sprites.get(i).deselect();
 		}
 	}
 	public Sprite selectSpriteVertex(final Point loc, final double scale)
@@ -561,7 +562,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 			if (dist <= MIN_DISTANCE)
 			{
 				isSpriteSelected = true;
-				sprite.setSelectedVertex(vertex);
+//				sprite.setSelectedVertex(vertex);
 				break;
 			}
 			

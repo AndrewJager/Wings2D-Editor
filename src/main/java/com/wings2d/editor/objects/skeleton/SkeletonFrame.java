@@ -23,6 +23,7 @@ import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.save.DBBoolean;
 import com.wings2d.editor.objects.save.DBInt;
 import com.wings2d.editor.objects.save.DBUUID;
+import com.wings2d.editor.objects.skeleton.path.Sprite;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
 
 public class SkeletonFrame extends SkeletonNode implements Drawable{

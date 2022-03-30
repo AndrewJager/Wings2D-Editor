@@ -38,4 +38,13 @@ public abstract class DBValue<T> {
 	 * @param str String to use to set the value 
 	 */
 	public abstract void fromString(final String str);
+	
+	protected String nullSafeFromString() {
+		if (value == null) {
+			return "";
+		}
+		else {
+			return value.toString();
+		}
+	}
 }

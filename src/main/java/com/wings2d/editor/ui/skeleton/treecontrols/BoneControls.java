@@ -17,7 +17,7 @@ import javax.swing.tree.DefaultTreeModel;
 
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
-import com.wings2d.editor.objects.skeleton.Sprite;
+import com.wings2d.editor.objects.skeleton.path.Sprite;
 import com.wings2d.editor.ui.edits.AddToTree;
 import com.wings2d.editor.ui.edits.SetBoneLocation;
 import com.wings2d.editor.ui.edits.SetBoneRotation;

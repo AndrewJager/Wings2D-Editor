@@ -30,8 +30,8 @@ import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.objects.skeleton.SkeletonTreeCellRenderer;
 import com.wings2d.editor.objects.skeleton.SkeletonTreeModelListener;
-import com.wings2d.editor.objects.skeleton.Sprite;
-import com.wings2d.editor.objects.skeleton.SpritePoint;
+import com.wings2d.editor.objects.skeleton.path.Part;
+import com.wings2d.editor.objects.skeleton.path.Sprite;
 import com.wings2d.editor.ui.UIElement;
 import com.wings2d.editor.ui.edits.MoveDownInTree;
 import com.wings2d.editor.ui.edits.MoveUpInTree;
@@ -114,8 +114,8 @@ public class SkeletonTree extends UIElement<SkeletonEdit>{
 				Sprite sprite = (Sprite)selectedNode;
 				renderFrame = sprite.getBone().getFrame();
 			}
-			else if (selectedNode instanceof SpritePoint) {
-				SpritePoint point = (SpritePoint)selectedNode;
+			else if (selectedNode instanceof Part) {
+				Part point = (Part)selectedNode;
 				renderFrame = point.getSprite().getBone().getFrame();
 			}
 		}
@@ -157,10 +157,10 @@ public class SkeletonTree extends UIElement<SkeletonEdit>{
 						SkeletonBone bone = (SkeletonBone)selectedNode.getParent();
 						bone.setSelectedSprite((Sprite)selectedNode);
 					}
-					else if (selectedNode instanceof SpritePoint) {
+					else if (selectedNode instanceof Part) {
 						treeControls.showPointControls(selectedNode);
-						SpritePoint point = (SpritePoint)selectedNode;
-						point.getSprite().setSelectedVertex(point.getSprite().getPoints().indexOf(point));
+						Part point = (Part)selectedNode;
+						point.getSprite().setSelectedPart(point.getSprite().getParts().indexOf(point));
 					}
 					getEditPanel().getDrawingArea().getDrawingPanel().getDrawArea().repaint();
 				}
@@ -222,7 +222,7 @@ public class SkeletonTree extends UIElement<SkeletonEdit>{
 						editItem.setEnabled(false);
 					}
 				}
-				else if (selectedNode instanceof SpritePoint) {
+				else if (selectedNode instanceof Part) {
 					editItem.setEnabled(false);
 					moveUpItem.setEnabled(false);
 					moveDownItem.setEnabled(false);

@@ -21,11 +21,9 @@ import com.wings2d.editor.objects.skeleton.DrawMode;
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
-import com.wings2d.editor.objects.skeleton.Sprite;
+import com.wings2d.editor.objects.skeleton.path.Sprite;
 import com.wings2d.editor.ui.DrawingArea;
 import com.wings2d.editor.ui.UIElement;
-import com.wings2d.editor.ui.edits.MoveSprite;
-import com.wings2d.editor.ui.edits.MoveSpriteVertex;
 import com.wings2d.editor.ui.edits.SetBoneLocation;
 import com.wings2d.editor.ui.edits.SetBoneRotation;
 import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
@@ -159,8 +157,8 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 						selectedItem = frame.selectSprite(e.getPoint(), scale);
 						if (selectedItem != null) {
 							Sprite sprite = (Sprite)selectedItem;
-							curX = sprite.getLocation().getX();
-							curY = sprite.getLocation().getY();
+//							curX = sprite.getLocation().getX();
+//							curY = sprite.getLocation().getY();
 							editMove = DrawMode.SPRITE_MOVE;
 						}
 					}
@@ -169,12 +167,13 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 						selectedItem = frame.selectSpriteVertex(e.getPoint(), scale);
 						if (selectedItem != null) {
 							Sprite sprite = (Sprite)selectedItem;
-							if (sprite.getSelectedVertex() != -1) {
-								Point2D point = sprite.getCoordsOfSelectedVertex(true);
-								curX = point.getX();
-								curY = point.getY();
-								editMove = DrawMode.SPRITE_EDIT;
-							}
+							sprite.processPressed(e.getPoint());
+//							if (sprite.getSelectedVertex() != -1) {
+//								Point2D point = sprite.getCoordsOfSelectedVertex(true);
+//								curX = point.getX();
+//								curY = point.getY();
+//								editMove = DrawMode.SPRITE_EDIT;
+//							}
 						}
 					}
 					
@@ -193,6 +192,7 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
+				System.out.println(selectedItem);
 				if (editMove != null) {
 					double scale = getEditPanel().getEditor().getUIScale() * drawArea.getZoomScale();
 					switch(editMove) {
@@ -205,13 +205,14 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 						getEditPanel().getEditor().getEditsManager().edit(new SetBoneRotation(bone, bone.getRotation(), curRot));
 					}
 					case SPRITE_MOVE -> {
-						Sprite sprite = (Sprite)selectedItem;
-						getEditPanel().getEditor().getEditsManager().edit(new MoveSprite(sprite, e.getPoint(),
-								curX, curY, scale));
+//						Sprite sprite = (Sprite)selectedItem;
+//						getEditPanel().getEditor().getEditsManager().edit(new MoveSprite(sprite, e.getPoint(),
+//								curX, curY, scale));
 					}
 					case SPRITE_EDIT -> {
 						Sprite sprite = (Sprite)selectedItem;
-						getEditPanel().getEditor().getEditsManager().edit(new MoveSpriteVertex(sprite, e.getPoint(), curX, curY, scale));
+						sprite.processRelease();
+//						getEditPanel().getEditor().getEditsManager().edit(new MoveSpriteVertex(sprite, e.getPoint(), curX, curY, scale));
 					}
 					}
 					
@@ -255,15 +256,17 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 						bone.rotateByHandle(e.getPoint(), scale);
 					}
 					case SPRITE_MOVE -> {
-						Sprite sprite = (Sprite)selectedItem;
-						sprite.setLocation(e.getPoint(), scale);
+//						Sprite sprite = (Sprite)selectedItem;
+//						sprite.setLocation(e.getPoint(), scale);
 					}
 					case SPRITE_EDIT -> {
 						Sprite sprite = (Sprite)selectedItem;
-						if (sprite.getSelectedVertex() != -1)
-						{
-							sprite.setVertexLocation(e.getPoint(), scale);
-						}
+						System.out.println("HI");
+						sprite.processDrag(e.getPoint());
+//						if (sprite.getSelectedVertex() != -1)
+//						{
+//							sprite.setVertexLocation(e.getPoint(), scale);
+//						}
 					}
 					}
 				}

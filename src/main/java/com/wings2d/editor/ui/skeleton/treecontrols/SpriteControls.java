@@ -10,6 +10,7 @@ import java.sql.Connection;
 
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -19,9 +20,8 @@ import javax.swing.SwingUtilities;
 
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
-import com.wings2d.editor.objects.skeleton.Sprite;
+import com.wings2d.editor.objects.skeleton.path.Sprite;
 import com.wings2d.editor.ui.edits.AddFilter;
-import com.wings2d.editor.ui.edits.AddVertex;
 import com.wings2d.editor.ui.edits.SetSpriteColor;
 import com.wings2d.editor.ui.skeleton.filterEdits.CreateFilterDialog;
 import com.wings2d.editor.ui.skeleton.filterEdits.FilterEditRunner;
@@ -30,9 +30,10 @@ import com.wings2d.framework.imageFilters.ImageFilter;
 public class SpriteControls extends SkeletonTreeControlsUIElement{
 	public static final String CARD_ID = "Sprite";
 	
-	private JPanel namePanel, colorPanel, colorIndicator, vertexPanel, filterAddPanel;
-	private JButton changeColor, newVertex, addFilter;
+	private JPanel namePanel, colorPanel, colorIndicator, vertexPanel, pathPanel, filterAddPanel;
+	private JButton changeColor, newVertex, newPath, addFilter;
 	private JList<ImageFilter> filters;
+	private JComboBox<String> pathMode;
 	private Sprite curSprite;
 
 	public SpriteControls(final SkeletonTreeControls controls, final Connection con) {
@@ -50,6 +51,15 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 		vertexPanel = new JPanel();
 		newVertex = new JButton("New Vertex");
 		vertexPanel.add(newVertex);
+		
+		pathPanel = new JPanel();
+		newPath = new JButton("New Path");
+		pathPanel.add(newPath);
+		pathMode = new JComboBox<String>();
+		pathMode.addItem("Line");
+		pathMode.addItem("Quad");
+		pathMode.addItem("Cubic");
+		pathPanel.add(pathMode);
 		
 		filterAddPanel = new JPanel();
 		addFilter = new JButton("New Filter");
@@ -104,6 +114,7 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 		panel.add(colorPanel);
 		colorIndicator.setBackground(curSprite.getColor());
 		panel.add(vertexPanel);
+		panel.add(pathPanel);
 		panel.add(new JSeparator());
 		
 		panel.add(filterAddPanel);
@@ -136,8 +147,8 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 		newVertex.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controls.getEditPanel().getEditor().getEditsManager().edit(new AddVertex(curSprite, 
-						controls.getDrawingArea().getDrawArea().getUserLoc()));
+//				controls.getEditPanel().getEditor().getEditsManager().edit(new AddVertex(curSprite, 
+//						controls.getDrawingArea().getDrawArea().getUserLoc()));
 			}
 		});
 		addFilter.addActionListener(new ActionListener() {

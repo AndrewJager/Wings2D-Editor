@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
+import com.wings2d.editor.objects.skeleton.path.Sprite;
 import com.wings2d.framework.charImageCreator.CharImageCreator;
 import com.wings2d.framework.charImageCreator.CharImageOptions;
 import com.wings2d.framework.imageFilters.LightenFrom;

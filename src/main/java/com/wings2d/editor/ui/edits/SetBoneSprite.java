@@ -1,7 +1,7 @@
 package com.wings2d.editor.ui.edits;
 
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
-import com.wings2d.editor.objects.skeleton.Sprite;
+import com.wings2d.editor.objects.skeleton.path.Sprite;
 
 public class SetBoneSprite extends Edit{
 	private Sprite sprite, oldSprite, newSprite;

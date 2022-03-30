@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
-import com.wings2d.editor.objects.skeleton.Sprite;
+import com.wings2d.editor.objects.skeleton.path.Sprite;
 
 public class SyncBone extends Edit{
 	private SkeletonBone bone;

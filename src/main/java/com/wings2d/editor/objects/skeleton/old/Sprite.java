@@ -1,4 +1,4 @@
-package com.wings2d.editor.objects.skeleton;
+package com.wings2d.editor.objects.skeleton.old;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

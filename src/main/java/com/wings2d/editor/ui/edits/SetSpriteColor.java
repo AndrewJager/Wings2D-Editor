@@ -2,7 +2,7 @@ package com.wings2d.editor.ui.edits;
 
 import java.awt.Color;
 
-import com.wings2d.editor.objects.skeleton.Sprite;
+import com.wings2d.editor.objects.skeleton.path.Sprite;
 
 public class SetSpriteColor extends Edit{
 	private Sprite sprite;

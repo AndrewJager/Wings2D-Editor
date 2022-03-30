@@ -1,6 +1,6 @@
 package com.wings2d.editor.ui.edits;
 
-import com.wings2d.editor.objects.skeleton.Sprite;
+import com.wings2d.editor.objects.skeleton.path.Sprite;
 import com.wings2d.framework.imageFilters.ImageFilter;
 
 public class AddFilter extends Edit{

@@ -8,11 +8,16 @@ public class DBDouble extends DBValue<Double>{
 
 	@Override
 	public String asString() {
-		return value.toString();
+		return nullSafeFromString();
 	}
 
 	@Override
 	public void fromString(String str) {
-		value = Double.parseDouble(str);	
+		if (str != null && !str.equals("")) {
+			value = Double.parseDouble(str);	
+		}
+		else {
+			value = null;
+		}
 	}
 }

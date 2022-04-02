@@ -10,6 +10,11 @@ public enum DrawMode {
 		BONE,
 		SPRITE,
 	}
+	public enum MoveType {
+		MOVE_BOTH,
+		MOVE_X,
+		MOVE_Y
+	}
 	
 	public SuperDrawMode getSuperMode()
 	{

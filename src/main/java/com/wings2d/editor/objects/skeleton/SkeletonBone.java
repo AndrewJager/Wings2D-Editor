@@ -291,6 +291,9 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		
 		double deltaX = unscaledX - location.getStoredValue().getX();
 		double deltaY = unscaledY - location.getStoredValue().getY();
+		for (int i = 0; i < sprites.size(); i++) {
+			sprites.get(i).translate(deltaX, deltaY);
+		}
 		if ((unscaledX > 0 && unscaledY > 0) && checkTranslate(deltaX, deltaY))
 		{
 			location.setStoredValue(new Point2D.Double(unscaledX, unscaledY));
@@ -422,7 +425,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		double delta = angle - oldRotation;
 		for (int i = 0; i < sprites.size(); i++)
 		{
-			sprites.get(i).rotate(delta);
+			sprites.get(i).rotateAround(location.getStoredValue(), delta);
 		}
 		for (int i = 0; i < childBones.size(); i++)
 		{
@@ -437,7 +440,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		double delta = rotation.getStoredValue() - oldRotation;
 		for (int i = 0; i < sprites.size(); i++)
 		{
-			sprites.get(i).rotate(delta);
+			sprites.get(i).rotateAround(location.getStoredValue(), delta);
 		}
 		for (int i = 0; i < childBones.size(); i++)
 		{
@@ -455,7 +458,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		
 		for (int i = 0; i < sprites.size(); i++)
 		{
-			sprites.get(i).rotate(amt);
+			sprites.get(i).rotateAround(location.getStoredValue(), amt);
 		}
 		for (int i = 0; i < childBones.size(); i++)
 		{

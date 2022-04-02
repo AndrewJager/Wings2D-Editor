@@ -27,6 +27,7 @@ import com.wings2d.editor.objects.skeleton.path.Sprite;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
 
 public class SkeletonFrame extends SkeletonNode implements Drawable{
+	
 	public static final String TABLE_NAME = "FRAME";
 	
 	protected List<SkeletonBone> bones;
@@ -497,7 +498,6 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		}
 		return selected;
 	}
-	
 	
 	public UUID getGUID() {
 		return id.getStoredValue();

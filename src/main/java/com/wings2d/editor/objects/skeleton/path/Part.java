@@ -79,13 +79,13 @@ public class Part extends SkeletonNode{
 		if ((type != PathIterator.SEG_MOVETO) && (type != PathIterator.SEG_LINETO)) {
 			throw new IllegalArgumentException("Invalid type " + type);
 		}
-		handles.add(new Handle(x1, y1, true));
+		handles.add(new Handle(this.x1, this.y1, true));
 		
 		spriteID.setStoredValue(parent.getID());
 		index.setStoredValue(idx);
 		this.type.setStoredValue(type);
-		this.x1.setStoredValue(x1);
-		this.y1.setStoredValue(y1);
+		
+		handles.get(0).setLocation(x1, y1);
 		
 		this.insert(con);
 		this.query(con, id.getStoredValue());
@@ -98,16 +98,15 @@ public class Part extends SkeletonNode{
 			throw new IllegalArgumentException("Invalid type " + type);
 		}
 		
-		handles.add(new Handle(x1, y1));
-		handles.add(new Handle(x2, y2, true));
+		handles.add(new Handle(this.x1, this.y1));
+		handles.add(new Handle(this.x2, this.y2, true));
 		
 		spriteID.setStoredValue(parent.getID());
 		index.setStoredValue(idx);
 		this.type.setStoredValue(type);
-		this.x1.setStoredValue(x1);
-		this.y1.setStoredValue(y1);
-		this.x2.setStoredValue(x2);
-		this.y2.setStoredValue(y2);
+		
+		handles.get(0).setLocation(x1, y1);
+		handles.get(1).setLocation(x2, y2);
 		
 		this.insert(con);
 		this.query(con, id.getStoredValue());
@@ -120,19 +119,17 @@ public class Part extends SkeletonNode{
 			throw new IllegalArgumentException("Invalid type " + type);
 		}
 		
-		handles.add(new Handle(x1, y1));
-		handles.add(new Handle(x2, y2));
-		handles.add(new Handle(x3, y3, true));
+		handles.add(new Handle(this.x1, this.y1));
+		handles.add(new Handle(this.x2, this.y2));
+		handles.add(new Handle(this.x3, this.y3, true));
 		
 		spriteID.setStoredValue(parent.getID());
 		index.setStoredValue(idx);
 		this.type.setStoredValue(type);
-		this.x1.setStoredValue(x1);
-		this.y1.setStoredValue(y1);
-		this.x2.setStoredValue(x2);
-		this.y2.setStoredValue(y2);
-		this.x3.setStoredValue(x3);
-		this.y3.setStoredValue(y3);
+		
+		handles.get(0).setLocation(x1, y1);
+		handles.get(1).setLocation(x2, y2);
+		handles.get(2).setLocation(x3, y3);
 		
 		this.insert(con);
 		this.query(con, id.getStoredValue());
@@ -144,16 +141,16 @@ public class Part extends SkeletonNode{
 
 		this.query(con, partID);
 		if (type.getStoredValue() == PathIterator.SEG_MOVETO || type.getStoredValue() == PathIterator.SEG_LINETO) {
-			handles.add(new Handle(x1.getStoredValue(), y1.getStoredValue(), true));
+			handles.add(new Handle(x1, y1, true));
 		}
 		if (type.getStoredValue() == PathIterator.SEG_QUADTO) {
-			handles.add(new Handle(x1.getStoredValue(), y1.getStoredValue()));
-			handles.add(new Handle(x2.getStoredValue(), y2.getStoredValue(), true));
+			handles.add(new Handle(x1, y1));
+			handles.add(new Handle(x2, y2, true));
 		}
 		if (type.getStoredValue() == PathIterator.SEG_CUBICTO) {
-			handles.add(new Handle(x1.getStoredValue(), y1.getStoredValue()));
-			handles.add(new Handle(x2.getStoredValue(), y2.getStoredValue()));
-			handles.add(new Handle(x3.getStoredValue(), y3.getStoredValue(), true));
+			handles.add(new Handle(x1, y1));
+			handles.add(new Handle(x2, y2));
+			handles.add(new Handle(x3, y3, true));
 		}
 	}
 	

@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
@@ -198,7 +199,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		}
 		return path;
 	}
-	
+
 	public void processPressed(final Point p) {
 		int DIST = 20;
 		selectedPoint = -1;
@@ -246,8 +247,8 @@ public class Sprite extends SkeletonNode implements Drawable{
 		
 		Collections.sort(distances);
 	}
-	
-	public void processDrag(final Point p) {
+
+	public void processDragged(final Point p) {
 		int SNAP_DIST = 10;
 		snapX = false;
 		snapY = false;
@@ -302,7 +303,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 			}
 		}
 	}
-	
+
 	public void processRelease() {
 		snapping = false;
 		snapX = false;
@@ -347,11 +348,13 @@ public class Sprite extends SkeletonNode implements Drawable{
 		return (x + y) / 2;
 	}
 	
-	private void drawHandle(final double x, final double y, final Graphics2D g2d) {
-		g2d.drawRect((int)x - (HANDLE_SIZE / 2), (int)y - (HANDLE_SIZE / 2), HANDLE_SIZE, HANDLE_SIZE);
+	private void drawHandle(final double x, final double y, final Graphics2D g2d, final double scale) {
+		g2d.drawRect((int)(x * scale) - (HANDLE_SIZE / 2), (int)(y * scale) - (HANDLE_SIZE / 2),
+				HANDLE_SIZE, HANDLE_SIZE);
 	}
-	private void drawPoint(final double x, final double y, final Graphics2D g2d) {
-		g2d.drawArc((int)x - (HANDLE_SIZE / 2), (int)y - (HANDLE_SIZE / 2), HANDLE_SIZE, HANDLE_SIZE, 0, 360);
+	private void drawPoint(final double x, final double y, final Graphics2D g2d, final double scale) {
+		g2d.drawArc((int)(x * scale) - (HANDLE_SIZE / 2), (int)(y * scale) - (HANDLE_SIZE / 2), 
+				HANDLE_SIZE, HANDLE_SIZE, 0, 360);
 	}
 	
 	public static boolean inRange(final double x, final double min, final double max) {
@@ -378,6 +381,14 @@ public class Sprite extends SkeletonNode implements Drawable{
 		Path2D path = getPath();
 		AffineTransform transform = new AffineTransform();
 		transform.rotate(Math.toRadians(delta), path.getBounds2D().getCenterX(), path.getBounds2D().getCenterY());
+		path = (Path2D)transform.createTransformedShape(path);
+		recreatePartsFromPath(path);
+	}
+	
+	public void rotateAround(final Point2D p, final double delta) {
+		Path2D path = getPath();
+		AffineTransform transform = new AffineTransform();
+		transform.rotate(Math.toRadians(delta), p.getX(), p.getY());
 		path = (Path2D)transform.createTransformedShape(path);
 		recreatePartsFromPath(path);
 	}
@@ -445,9 +456,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	public void translate(final double deltaX, final double deltaY)
 	{
 		AffineTransform transform = new AffineTransform();
-		transform.rotate(Math.toRadians(parent.getRotation()));
 		transform.translate(deltaX, deltaY);
-		transform.rotate(-Math.toRadians(parent.getRotation()));
 		Path2D path = getPath();
 		path.transform(transform);
 		recreatePartsFromPath(path);
@@ -572,7 +581,11 @@ public class Sprite extends SkeletonNode implements Drawable{
 	public void draw(Graphics2D g2d, double scale, DrawMode mode) {
 		g2d.setStroke(new BasicStroke(5));
 		g2d.setColor(getColor());
+//		g2d.scale(scale, scale);
 		Path2D path = getPath();
+		AffineTransform trans = new AffineTransform();
+		trans.scale(scale, scale);
+		path = (Path2D)trans.createTransformedShape(path);
 		g2d.fill(path);
 		
 		for (int i = 0; i < parts.size(); i++) 
@@ -588,11 +601,11 @@ public class Sprite extends SkeletonNode implements Drawable{
 					g2d.setColor(Color.BLUE);
 				}
 				if (h.getIsEnd()) {
-					drawPoint(h.getX(), h.getY(), g2d);
+					drawPoint(h.getX(), h.getY(), g2d, scale);
 				}
 				else {
 					if (!multi) {
-						drawHandle(h.getX(), h.getY(), g2d);
+						drawHandle(h.getX(), h.getY(), g2d, scale);
 					}
 				}
 			}
@@ -613,8 +626,11 @@ public class Sprite extends SkeletonNode implements Drawable{
 
 	@Override
 	public Dimension getDrawSize(double scale) {
-		// TODO Auto-generated method stub
-		return null;
+		Shape bounds = getPath().getBounds2D();
+		AffineTransform transform = new AffineTransform();
+		transform.scale(scale, scale);
+		bounds = transform.createTransformedShape(bounds);
+		return new Dimension((int)bounds.getBounds().getWidth(), (int)bounds.getBounds().getHeight());
 	}
 
 	@Override

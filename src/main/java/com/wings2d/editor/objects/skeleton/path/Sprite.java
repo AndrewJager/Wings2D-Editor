@@ -453,33 +453,36 @@ public class Sprite extends SkeletonNode implements Drawable{
 		return parent;
 	}
 	
-	public void translate(final double deltaX, final double deltaY)
+	private void translate(final Path2D path, final double deltaX, final double deltaY)
 	{
 		AffineTransform transform = new AffineTransform();
 		transform.translate(deltaX, deltaY);
-		Path2D path = getPath();
 		path.transform(transform);
 		recreatePartsFromPath(path);
 	}
-	public void setLocation(final double x, final double y, final double scale) throws Exception
+	public void translate(final double deltaX, final double deltaY) {
+		Path2D path = getPath();
+		translate(path, deltaX, deltaY);
+	}
+	public void setLocation(final double x, final double y, final double scale)
 	{
-		throw new Exception("Not implemented!");
-//		double unscale = 1.0 / scale;
-//		double unscaledX = x * unscale;
-//		double unscaledY = y * unscale;
-//		double deltaX = unscaledX - (path.getBounds2D().getCenterX() + parent.getX());
-//		double deltaY = unscaledY - (path.getBounds2D().getCenterY() + parent.getY());
-//		translate(deltaX, deltaY);
+		Path2D path = getPath();
+		double unscale = 1.0 / scale;
+		double unscaledX = x * unscale;
+		double unscaledY = y * unscale;
+		double deltaX = unscaledX - (path.getBounds2D().getCenterX());
+		double deltaY = unscaledY - (path.getBounds2D().getCenterY());
+		translate(path, deltaX, deltaY);
 	}
-	public Point2D getLocation() throws Exception {
-		throw new Exception("Not implemented!");
-//		return new Point2D.Double(path.getBounds2D().getCenterX() + parent.getX(), 
-//				path.getBounds2D().getCenterY() + parent.getY());
+	public void setLocation(final Point loc, final double scale)
+	{
+		setLocation(loc.getX(), loc.getY(), scale);
 	}
-//	public void setLocation(final Point loc, final double scale)
-//	{
-//		setLocation(loc.getX(), loc.getY(), scale);
-//	}
+	public Point2D getLocation() {
+		Path2D path = getPath();
+		return new Point2D.Double(path.getBounds2D().getCenterX(), path.getBounds2D().getCenterY());
+	}
+
 	
 	public void setSelectedPart(final int part) {
 		

@@ -1,6 +1,7 @@
 package com.wings2d.editor.objects.skeleton.path;
 
 import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
 
 import com.wings2d.editor.objects.skeleton.DrawMode;
 import com.wings2d.editor.objects.skeleton.DrawMode.MoveType;
@@ -70,7 +71,13 @@ public class DrawingLogic {
 				}
 			}
 			case SPRITE_MOVE -> {
-				
+				item = frame.getSelectedBone().getSelectedSprite();
+				if (item != null) {
+					Sprite sprite = (Sprite)item;
+					Point2D center = sprite.getLocation();
+					curX = center.getX();
+					curY = center.getY();
+				}
 			}
 			case SPRITE_EDIT -> {
 				item = frame.getSelectedBone().getSelectedSprite();
@@ -107,7 +114,8 @@ public class DrawingLogic {
 					bone.rotateByHandle(e.getPoint(), scale);
 				}
 				case SPRITE_MOVE -> {
-					
+					Sprite sprite = (Sprite)item;
+					sprite.setLocation(e.getPoint(), scale);
 				}
 				case SPRITE_EDIT -> {
 					Sprite sprite = (Sprite)item;

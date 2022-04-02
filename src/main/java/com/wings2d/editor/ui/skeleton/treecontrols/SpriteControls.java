@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.PathIterator;
 import java.sql.Connection;
 
 import javax.swing.JButton;
@@ -30,11 +31,15 @@ import com.wings2d.framework.imageFilters.ImageFilter;
 public class SpriteControls extends SkeletonTreeControlsUIElement{
 	public static final String CARD_ID = "Sprite";
 	
-	private JPanel namePanel, colorPanel, colorIndicator, vertexPanel, pathPanel, filterAddPanel;
-	private JButton changeColor, newVertex, newPath, addFilter;
+	private JPanel namePanel, colorPanel, colorIndicator, pathPanel, filterAddPanel;
+	private JButton changeColor, newPath, addFilter;
 	private JList<ImageFilter> filters;
 	private JComboBox<String> pathMode;
 	private Sprite curSprite;
+	
+	private static final String LINE = "Line";
+	private static final String QUAD = "Quad";
+	private static final String CUBIC = "Cubic";
 
 	public SpriteControls(final SkeletonTreeControls controls, final Connection con) {
 		super(controls, con);
@@ -48,17 +53,13 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 		changeColor = new JButton("Change Color");
 		colorPanel.add(changeColor);
 		
-		vertexPanel = new JPanel();
-		newVertex = new JButton("New Vertex");
-		vertexPanel.add(newVertex);
-		
 		pathPanel = new JPanel();
 		newPath = new JButton("New Path");
 		pathPanel.add(newPath);
 		pathMode = new JComboBox<String>();
-		pathMode.addItem("Line");
-		pathMode.addItem("Quad");
-		pathMode.addItem("Cubic");
+		pathMode.addItem(LINE);
+		pathMode.addItem(QUAD);
+		pathMode.addItem(CUBIC);
 		pathPanel.add(pathMode);
 		
 		filterAddPanel = new JPanel();
@@ -113,7 +114,6 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 		panel.add(controlsPanel);
 		panel.add(colorPanel);
 		colorIndicator.setBackground(curSprite.getColor());
-		panel.add(vertexPanel);
 		panel.add(pathPanel);
 		panel.add(new JSeparator());
 		
@@ -144,11 +144,12 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 				}
 			}
 		});
-		newVertex.addActionListener(new ActionListener() {
+		newPath.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-//				controls.getEditPanel().getEditor().getEditsManager().edit(new AddVertex(curSprite, 
-//						controls.getDrawingArea().getDrawArea().getUserLoc()));
+			public void actionPerformed(ActionEvent e) {	
+				curSprite.addPath(controls.getEditPanel().getPathAddMode(), 
+						controls.getEditPanel().getDrawingArea().getDrawingPanel().getDrawArea().getUserLoc());
+				controls.getDrawingArea().getDrawArea().repaint();
 			}
 		});
 		addFilter.addActionListener(new ActionListener() {
@@ -163,6 +164,20 @@ public class SpriteControls extends SkeletonTreeControlsUIElement{
 					{
 						controls.getEditPanel().getEditor().getEditsManager().edit(new AddFilter(curSprite, newFilter));
 					}
+				}
+			}
+		});
+		pathMode.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (pathMode.getSelectedItem().equals(LINE)) {
+					controls.getEditPanel().setPathAddMode(PathIterator.SEG_LINETO);
+				}
+				else if (pathMode.getSelectedItem().equals(QUAD)) {
+					controls.getEditPanel().setPathAddMode(PathIterator.SEG_QUADTO);
+				}
+				else if (pathMode.getSelectedItem().equals(CUBIC)) {
+					controls.getEditPanel().setPathAddMode(PathIterator.SEG_CUBICTO);
 				}
 			}
 		});

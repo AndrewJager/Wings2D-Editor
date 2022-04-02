@@ -83,10 +83,8 @@ public class Sprite extends SkeletonNode implements Drawable{
 		double y = parent.getY();
 		parts.add(Part.insert(this, PathIterator.SEG_MOVETO, 0, x - 50, y - 50, con));
 		parts.add(Part.insert(this, PathIterator.SEG_LINETO, 1, x - 50, y + 50, con));
-		parts.add(Part.insert(this, PathIterator.SEG_LINETO, 1, x + 50, y + 50, con));
-		parts.add(Part.insert(this, PathIterator.SEG_LINETO, 1, x + 50, y - 50, con));
-//		parts.add(Part.insert(this, 2, 350, 300, 400, 250, con));
-//		parts.add(Part.insert(this, 3, 425, 300, 450, 300, 475, 250, con));
+		parts.add(Part.insert(this, PathIterator.SEG_LINETO, 2, x + 50, y + 50, con));
+		parts.add(Part.insert(this, PathIterator.SEG_LINETO, 3, x + 50, y - 50, con));
 	}
 
 	/** Read constructor */
@@ -200,7 +198,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		return path;
 	}
 
-	public void processPressed(final Point p) {
+	public void processPressed(final Point p, final double scale) {
 		int DIST = 20;
 		selectedPoint = -1;
 		selectedPart = null;
@@ -212,8 +210,8 @@ public class Sprite extends SkeletonNode implements Drawable{
 			for (int j = 0; (j < handles.size() && !found); j++) {
 				Handle h = handles.get(j);	
 				if ((!multi) || h.getIsEnd()) {
-					if ((x > (h.getX() - DIST)) && (x < (h.getX() + DIST))) {
-						if ((y > (h.getY() - DIST)) && (y < (h.getY() + DIST))) {
+					if ((x > (h.getX() * scale - DIST)) && (x < (h.getX() * scale + DIST))) {
+						if ((y > (h.getY() * scale - DIST)) && (y < (h.getY() * scale + DIST))) {
 							selectedPart = parts.get(i);
 							selectedPoint = j;
 							buildDistances();
@@ -248,7 +246,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		Collections.sort(distances);
 	}
 
-	public void processDragged(final Point p) {
+	public void processDragged(final Point p, final double scale) {
 		int SNAP_DIST = 10;
 		snapX = false;
 		snapY = false;
@@ -276,7 +274,6 @@ public class Sprite extends SkeletonNode implements Drawable{
 
 			if (snapX) {
 				x = snapPointX.getX(); 
-				
 			}
 			else {
 				x = p.getX();
@@ -287,7 +284,11 @@ public class Sprite extends SkeletonNode implements Drawable{
 			else {
 				y = p.getY();
 			}
-			
+
+			double reverseScale = 1 / scale;
+			x = x * reverseScale;
+			y = y * reverseScale;
+
 			Handle h = selectedPart.getHandles().get(selectedPoint);
 			double xTrans = x - h.getX();
 			double yTrans = y - h.getY();
@@ -309,20 +310,32 @@ public class Sprite extends SkeletonNode implements Drawable{
 		snapX = false;
 		snapY = false;
 	}
-	
-	public void addLine(final Point p) {
+	public void addPath(final int type, final Point2D p) {
+		switch(type) {
+			case PathIterator.SEG_LINETO -> {
+				this.addLine(p);
+			}
+			case PathIterator.SEG_QUADTO -> {
+				this.addQuad(p);
+			}
+			case PathIterator.SEG_CUBICTO -> {
+				this.addCubic(p);
+			}
+		}
+	}
+	public void addLine(final Point2D p) {
 		parts.add(Part.insert(this, PathIterator.SEG_LINETO, this.getParts().size(), p.getX(), p.getY(), this.getBone().getStoredConnection()));
 	}
-	public void addQuad(final Point p) {
+	public void addQuad(final Point2D p) {
 		Point2D end = parts.get(parts.size() - 1).getEndPoint();
 		
 		parts.add(Part.insert(this, PathIterator.SEG_QUADTO, this.getParts().size(), avg(end.getX(), p.getX()), 
 				avg(end.getY(), p.getY()), p.getX(), p.getY(), this.getBone().getStoredConnection()));
 	}
-	public void addCubic(final Point p) {
+	public void addCubic(final Point2D p) {
 		Point2D end = parts.get(parts.size() - 1).getEndPoint();
 		Point2D center = new Point2D.Double(avg(end.getX(), p.getX()), avg(end.getY(), p.getY()));
-		parts.add(Part.insert(this, PathIterator.SEG_QUADTO, this.getParts().size(), 
+		parts.add(Part.insert(this, PathIterator.SEG_CUBICTO, this.getParts().size(), 
 				avg(end.getX(), center.getX()), avg(end.getY(), center.getY()),
 				avg(center.getX(), p.getX()), avg(center.getY(), p.getY()), p.getX(), p.getY(), this.getBone().getStoredConnection()));
 	}
@@ -412,7 +425,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 				case PathIterator.SEG_CUBICTO -> {
 					parts.get(part).setHandle(0, coords[0], coords[1]);
 					parts.get(part).setHandle(1, coords[2], coords[3]);
-					parts.get(part).setHandle(2, coords[3], coords[4]);
+					parts.get(part).setHandle(2, coords[4], coords[5]);
 				}
 			};
 			

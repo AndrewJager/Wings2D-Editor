@@ -34,9 +34,6 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 	
 	private DrawingArea drawArea;
 	private JScrollPane pane;
-	private JTree tree;
-	private SkeletonTreeControls treeControls;
-	private double curX, curY, curRot;
 	
 	private DrawingLogic logic;
 
@@ -49,7 +46,6 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 		pane = new JScrollPane(drawArea);
 		panel.setLayout(new GridLayout(0,1));
 		panel.add(pane);
-		tree = edit.getSkeletonTree().getTree();
 		
 		logic = new DrawingLogic(getEditPanel(), drawArea);
 	}
@@ -61,16 +57,15 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 	{
 		return drawArea;
 	}
-	public void setTreeControls(final SkeletonTreeControls c)
-	{
-		treeControls = c;
-	}
 
 	@Override
 	public void createEvents() {
 		drawArea.addMouseListener(new MouseListener() {
 			@Override
-			public void mouseClicked(MouseEvent e) {}
+			public void mouseClicked(MouseEvent e) {
+				drawArea.setUserLoc(e.getPoint());
+				panel.repaint();
+			}
 			@Override
 			public void mousePressed(MouseEvent e) {
 				logic.processPressed(e);

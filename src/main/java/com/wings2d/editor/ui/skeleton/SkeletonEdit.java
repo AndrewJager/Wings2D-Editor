@@ -1,6 +1,7 @@
 package com.wings2d.editor.ui.skeleton;
 
 import java.awt.BorderLayout;
+import java.awt.geom.PathIterator;
 import java.sql.Connection;
 
 import javax.swing.JPanel;
@@ -21,6 +22,7 @@ public class SkeletonEdit extends UIPanel<SkeletonEdit>{
 	private DrawMode drawMode;
 	private DrawMode lastBoneDrawMode;
 	private DrawMode lastSpriteDrawMode;
+	private int pathAddMode;
 	
 	private SkeletonToolBar bar;
 	private SkeletonTree tree;
@@ -33,6 +35,7 @@ public class SkeletonEdit extends UIPanel<SkeletonEdit>{
 		drawMode = DrawMode.BONE_MOVE;
 		lastBoneDrawMode = DrawMode.BONE_MOVE;
 		lastSpriteDrawMode = DrawMode.SPRITE_MOVE;
+		pathAddMode = PathIterator.SEG_LINETO;
 
 		panel.setLayout(new BorderLayout());
 		
@@ -54,8 +57,6 @@ public class SkeletonEdit extends UIPanel<SkeletonEdit>{
 		centerPanel.add(pane3);
 		
 		panel.add(centerPanel, BorderLayout.WEST);
-		
-		drawingArea.setTreeControls(treeControls);
 	}
 	
 	public void setCurrentSkeleton(final Skeleton s)
@@ -114,5 +115,11 @@ public class SkeletonEdit extends UIPanel<SkeletonEdit>{
 	public RenderArea getRenderArea()
 	{
 		return renderArea;
+	}
+	public int getPathAddMode() {
+		return pathAddMode;
+	}
+	public void setPathAddMode(final int mode) {
+		this.pathAddMode = mode;
 	}
 }

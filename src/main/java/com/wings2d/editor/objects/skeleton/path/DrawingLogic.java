@@ -9,7 +9,6 @@ import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonFrame;
 import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.ui.DrawingArea;
-import com.wings2d.editor.ui.Editor;
 import com.wings2d.editor.ui.edits.SetBoneLocation;
 import com.wings2d.editor.ui.edits.SetBoneRotation;
 import com.wings2d.editor.ui.skeleton.SkeletonEdit;
@@ -83,7 +82,7 @@ public class DrawingLogic {
 				item = frame.getSelectedBone().getSelectedSprite();
 				if (item != null) {
 					Sprite sprite = (Sprite)item;
-					sprite.processPressed(e.getPoint());
+					sprite.processPressed(e.getPoint(), scale);
 				}
 			}
 		}
@@ -119,7 +118,7 @@ public class DrawingLogic {
 				}
 				case SPRITE_EDIT -> {
 					Sprite sprite = (Sprite)item;
-					sprite.processDragged(e.getPoint());
+					sprite.processDragged(e.getPoint(), scale);
 				}
 			}
 		}

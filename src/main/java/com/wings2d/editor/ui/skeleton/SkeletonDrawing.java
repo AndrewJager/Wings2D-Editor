@@ -32,8 +32,4 @@ public class SkeletonDrawing extends UIElement<SkeletonEdit>{
 	public SkeletonDrawingControls getControls() {
 		return controls;
 	}
-	
-	public void setTreeControls(final SkeletonTreeControls controls) {
-		drawingPanel.setTreeControls(controls);
-	}
 }

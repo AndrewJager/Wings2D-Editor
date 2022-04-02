@@ -176,6 +176,26 @@ public class Part extends SkeletonNode{
 		return newPart;
 	}
 	
+	@Override
+	public String toString() {
+		switch (type.getStoredValue()) {
+			case PathIterator.SEG_MOVETO, PathIterator.SEG_LINETO -> {
+				return "Point (X:" + x1.getStoredValue() + " Y:" + y1.getStoredValue() +")";
+			}
+			case PathIterator.SEG_QUADTO -> {
+				return "Quad (X:" + x2.getStoredValue() + " Y:" + y2.getStoredValue() + ")" 
+				+ " Handle (X:" + x1.getStoredValue() + " Y:" + y1.getStoredValue() + ")";
+			}
+			case PathIterator.SEG_CUBICTO -> {
+				return "Cubic (X:" + x3.getStoredValue() + " Y:" + y3.getStoredValue() + ")" 
+				+ " Handle 1 (X:" + x1.getStoredValue() + " Y:" + y1.getStoredValue() + ")"
+				+ " Handle 2 (X:" + x2.getStoredValue() + " Y:" + y2.getStoredValue() + ")";
+			}
+			default -> {
+				return "Invalid type " + type.getStoredValue();
+			}
+		}
+	}
 	
 	public void setHandle(final int handle, final double x, final double y) {
 		handles.get(handle).setLocation(x, y);

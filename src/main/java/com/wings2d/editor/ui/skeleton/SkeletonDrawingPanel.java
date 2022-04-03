@@ -93,12 +93,15 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 						getEditPanel().setDrawMode(getEditPanel().getLastBoneDrawMode());
 					}
 				}
-				
-				logic.processPressed(e);
+				else if (SwingUtilities.isLeftMouseButton(e)) {
+					logic.processPressed(e);
+				}
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				logic.processRelease(e);
+				if (SwingUtilities.isLeftMouseButton(e)) {
+					logic.processRelease(e);
+				}
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {}
@@ -108,10 +111,12 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 		drawArea.addMouseMotionListener(new MouseMotionListener() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				logic.processDragged(e);
-				
-				drawArea.resizeToDrawItem(getEditPanel().getEditor().getUIScale());
-				panel.repaint();
+				if (SwingUtilities.isLeftMouseButton(e)) {
+					logic.processDragged(e);
+					
+					drawArea.resizeToDrawItem(getEditPanel().getEditor().getUIScale());
+					panel.repaint();
+				}
 			}
 
 			@Override

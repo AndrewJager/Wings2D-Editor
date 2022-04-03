@@ -340,7 +340,8 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 	public Sprite getSpriteAtPosition(final Point loc, final double scale) {
 		boolean found = false;
 		Sprite selectedSprite = null;
-		Point2D scaledPoint = new Point2D.Double(loc.getX() * scale, loc.getY() * scale);
+		double invertScale = 1 / scale;
+		Point2D scaledPoint = new Point2D.Double(loc.getX() * invertScale, loc.getY() * invertScale);
 		for (int i = 0; (i < bones.size()) && !found; i++)
 		{
 			SkeletonBone bone = bones.get(i);

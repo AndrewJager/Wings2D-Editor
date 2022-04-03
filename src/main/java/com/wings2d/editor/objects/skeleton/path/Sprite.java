@@ -42,6 +42,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	
 	private int selectedPoint = -1;
 	private Part selectedPart = null;
+	private boolean isSelected = false;
 	private List<Part> parts;
 	private boolean snap = false;
 	private boolean snapping = false;
@@ -200,6 +201,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 				}
 			};
 		}
+		path.closePath();
 	}
 	
 	public Path2D getPath() {
@@ -457,6 +459,10 @@ public class Sprite extends SkeletonNode implements Drawable{
 	public void deselect() {
 		selectedPart = null;
 		selectedPoint = -1;
+		isSelected = false;
+	}
+	public void setIsSelected(final boolean isSelected) {
+		this.isSelected = isSelected;
 	}
 	
 	public Path2D getScaledPath(final double scale)
@@ -658,6 +664,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 
 	@Override
 	public void draw(Graphics2D g2d, double scale, DrawMode mode) {
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setStroke(new BasicStroke(5));
 		g2d.setColor(getColor());
 		Path2D path = getPath();
@@ -665,8 +672,12 @@ public class Sprite extends SkeletonNode implements Drawable{
 		trans.scale(scale, scale);
 		path = (Path2D)trans.createTransformedShape(path);
 		g2d.fill(path);
+		if (isSelected) {
+			g2d.setColor(Color.YELLOW);
+			g2d.draw(path);
+		}
 		
-		if (mode == DrawMode.SPRITE_EDIT) {
+		if ((mode == DrawMode.SPRITE_EDIT) && isSelected) {
 			for (int i = 0; i < parts.size(); i++) 
 			{
 				Part part = parts.get(i);

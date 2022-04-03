@@ -80,6 +80,8 @@ public class DrawingLogic {
 					item = frame.getSpriteAtPosition(e.getPoint(), scale);
 					if (item != null) {
 						Sprite sprite = (Sprite)item;
+						sprite.getBone().deselectAllVertices();
+						sprite.setIsSelected(true);
 						Point2D center = sprite.getLocation();
 						curX = center.getX();
 						curY = center.getY();
@@ -89,6 +91,8 @@ public class DrawingLogic {
 					item = frame.getSelectedBone().getSelectedSprite();
 					if (item != null) {
 						Sprite sprite = (Sprite)item;
+						sprite.getBone().deselectAllVertices();
+						sprite.setIsSelected(true);
 						sprite.processPressed(e.getPoint(), scale);
 					}
 				}

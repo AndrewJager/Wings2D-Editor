@@ -63,11 +63,46 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 		drawArea.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				drawArea.setUserLoc(e.getPoint());
-				panel.repaint();
+
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
+				if (SwingUtilities.isRightMouseButton(e))
+				{
+					if (getEditPanel().getDrawMode().getSuperMode() == DrawMode.SuperDrawMode.BONE)
+					{
+						if (getEditPanel().getDrawMode() == DrawMode.BONE_ROTATE)
+						{
+							getEditPanel().setDrawMode(DrawMode.BONE_MOVE);
+						}
+						else
+						{
+							getEditPanel().setDrawMode(DrawMode.BONE_ROTATE);
+						}
+					}
+					else if (getEditPanel().getDrawMode().getSuperMode() == DrawMode.SuperDrawMode.SPRITE)
+					{
+						if (getEditPanel().getDrawMode() == DrawMode.SPRITE_MOVE)
+						{
+							getEditPanel().setDrawMode(DrawMode.SPRITE_EDIT);
+						}
+						else if (getEditPanel().getDrawMode() == DrawMode.SPRITE_EDIT)
+						{
+							getEditPanel().setDrawMode(DrawMode.SPRITE_MOVE);
+						}
+					}
+				}
+				else if (SwingUtilities.isMiddleMouseButton(e))
+				{	
+					if (getEditPanel().getDrawMode().getSuperMode() == DrawMode.SuperDrawMode.BONE)
+					{
+						getEditPanel().setDrawMode(getEditPanel().getLastSpriteDrawMode());
+					}
+					else if (getEditPanel().getDrawMode().getSuperMode() == DrawMode.SuperDrawMode.SPRITE)
+					{
+						getEditPanel().setDrawMode(getEditPanel().getLastBoneDrawMode());
+					}
+				}
 				logic.processPressed(e);
 			}
 			@Override

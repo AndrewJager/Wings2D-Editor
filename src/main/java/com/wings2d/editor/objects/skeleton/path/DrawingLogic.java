@@ -3,6 +3,9 @@ package com.wings2d.editor.objects.skeleton.path;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
+import javax.swing.JTree;
+import javax.swing.tree.TreePath;
+
 import com.wings2d.editor.objects.skeleton.DrawMode;
 import com.wings2d.editor.objects.skeleton.DrawMode.MoveType;
 import com.wings2d.editor.objects.skeleton.SkeletonBone;
@@ -17,6 +20,7 @@ public class DrawingLogic {
 	private SkeletonFrame frame;
 	private SkeletonEdit edit;
 	private DrawingArea drawArea;
+	private JTree tree;
 	
 	private DrawMode.MoveType moveType;
 	private SkeletonNode item;
@@ -25,6 +29,7 @@ public class DrawingLogic {
 	public DrawingLogic(final SkeletonEdit edit, final DrawingArea drawArea) {
 		this.edit = edit;
 		this.drawArea = drawArea;
+		this.tree = edit.getSkeletonTree().getTree();
 	}
 	
 	public void setFrame(final SkeletonFrame frame) {
@@ -37,53 +42,69 @@ public class DrawingLogic {
 	public void processPressed(final MouseEvent e) {
 		double scale = edit.getEditor().getUIScale() * drawArea.getZoomScale();
 		
-		switch (edit.getDrawMode()) {
-			case BONE_MOVE -> {
-				item = frame.getBoneAtPosition(e.getPoint(), scale);
-				if (item != null) {
-					moveType = MoveType.MOVE_BOTH;
-				}
-				else {
-					item = frame.getBoneByXHandle(e.getPoint(), scale);
+		if (frame != null) {
+			switch (edit.getDrawMode()) {
+				case BONE_MOVE -> {
+					item = frame.getBoneAtPosition(e.getPoint(), scale);
+					SkeletonBone bone = (SkeletonBone)item;
+					
+					frame.setSelectedBone(bone);
 					if (item != null) {
-						moveType = MoveType.MOVE_X;
+						moveType = MoveType.MOVE_BOTH;
 					}
 					else {
-						item = frame.getBoneByYHandle(e.getPoint(), scale);
+						item = frame.getBoneByXHandle(e.getPoint(), scale);
 						if (item != null) {
-							moveType = MoveType.MOVE_Y;
+							moveType = MoveType.MOVE_X;
+						}
+						else {
+							item = frame.getBoneByYHandle(e.getPoint(), scale);
+							if (item != null) {
+								moveType = MoveType.MOVE_Y;
+							}
 						}
 					}
+					
+					if (item != null) {
+						curX = bone.getX();
+						curY = bone.getY();
+					}
 				}
-				
-				if (item != null) {
-					SkeletonBone bone = (SkeletonBone)item;
-					curX = bone.getX();
-					curY = bone.getY();
+				case BONE_ROTATE -> {
+					item = frame.getBoneByRotHandle(e.getPoint(), scale);
+					if (item != null) {
+						SkeletonBone bone = (SkeletonBone)item;
+						curRot = bone.getRotation();
+					}
+				}
+				case SPRITE_MOVE -> {
+					item = frame.getSelectedBone().getSelectedSprite();
+					if (item != null) {
+						Sprite sprite = (Sprite)item;
+						Point2D center = sprite.getLocation();
+						curX = center.getX();
+						curY = center.getY();
+					}
+				}
+				case SPRITE_EDIT -> {
+					item = frame.getSelectedBone().getSelectedSprite();
+					if (item != null) {
+						Sprite sprite = (Sprite)item;
+						sprite.processPressed(e.getPoint(), scale);
+					}
 				}
 			}
-			case BONE_ROTATE -> {
-				item = frame.getBoneByRotHandle(e.getPoint(), scale);
-				if (item != null) {
-					SkeletonBone bone = (SkeletonBone)item;
-					curRot = bone.getRotation();
-				}
+			
+			if (item != null)
+			{
+				TreePath path = new TreePath(frame);
+				path = path.pathByAddingChild(item);
+				tree.setSelectionPath(path);
 			}
-			case SPRITE_MOVE -> {
-				item = frame.getSelectedBone().getSelectedSprite();
-				if (item != null) {
-					Sprite sprite = (Sprite)item;
-					Point2D center = sprite.getLocation();
-					curX = center.getX();
-					curY = center.getY();
-				}
-			}
-			case SPRITE_EDIT -> {
-				item = frame.getSelectedBone().getSelectedSprite();
-				if (item != null) {
-					Sprite sprite = (Sprite)item;
-					sprite.processPressed(e.getPoint(), scale);
-				}
+			else
+			{
+				drawArea.setUserLoc(e.getPoint());
+				drawArea.repaint();
 			}
 		}
 	}

@@ -5,11 +5,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
+import java.awt.image.BaseMultiResolutionImage;
+import java.awt.image.BufferedImage;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -59,6 +62,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	private SkeletonBone parent;
 	private EditorSettings settings;
 	private List<SkeletonFilter> filters;
+	private BaseMultiResolutionImage multiImage;
 	
 	public static Sprite insert(final String spriteName, final SkeletonBone parent, final Connection con) {
 		return new Sprite(spriteName, parent, con);
@@ -441,6 +445,12 @@ public class Sprite extends SkeletonNode implements Drawable{
 		selectedPoint = -1;
 	}
 	
+	public Path2D getScaledPath(final double scale)
+	{
+		AffineTransform transform = new AffineTransform();
+		transform.scale(scale, scale);
+		return (Path2D)transform.createTransformedShape(getPath());
+	}
 	public Path2D getScaledAndTranslatedPath(final double scale)
 	{
 		AffineTransform transform = new AffineTransform();
@@ -525,6 +535,39 @@ public class Sprite extends SkeletonNode implements Drawable{
 	}
 	public List<SkeletonFilter> getSkeletonFilters() {
 		return filters;
+	}
+	
+	private BufferedImage createImage(final double scale)
+	{
+		Shape drawShape = getScaledPath(scale);
+		BufferedImage newImage = new BufferedImage((int)drawShape.getBounds2D().getWidth(), (int)drawShape.getBounds2D().getHeight(), BufferedImage.TYPE_INT_ARGB);
+		double imgXOffset = drawShape.getBounds2D().getX();
+		double imgYOffset = drawShape.getBounds2D().getY();
+		AffineTransform transform = new AffineTransform();
+		transform.translate(-imgXOffset, -imgYOffset);
+		drawShape = transform.createTransformedShape(drawShape);
+		Graphics2D g2d = (Graphics2D)newImage.getGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setColor(color.getStoredValue());
+		g2d.fill(drawShape);
+		
+		for (int i = 0; i < filters.size(); i++)
+		{
+			filters.get(i).getFilter().filter(newImage);
+		}
+		
+		return newImage;
+	}
+	private BaseMultiResolutionImage createMultiImage(final double displayScale)
+	{
+		double[] imgSizes = new double[] {1.0, 1.25, 1.5};
+		BufferedImage[] imgs = new BufferedImage[imgSizes.length];
+		for (int i = 0; i < imgSizes.length; i++)
+		{
+			imgs[i] = createImage(displayScale * imgSizes[i]);
+		}
+		
+		return new BaseMultiResolutionImage(imgs);
 	}
 
 	@Override
@@ -652,8 +695,9 @@ public class Sprite extends SkeletonNode implements Drawable{
 
 	@Override
 	public void drawRender(Graphics2D g2d, double scale) {
-		// TODO Auto-generated method stub
-		
+		Path2D path = getPath();
+		g2d.drawImage(multiImage, (int)(path.getBounds2D().getX() * scale),
+				(int)(path.getBounds2D().getY() * scale), null);
 	}
 
 	@Override
@@ -664,31 +708,42 @@ public class Sprite extends SkeletonNode implements Drawable{
 
 	@Override
 	public void generateRender(double scale) {
-		// TODO Auto-generated method stub
-		
+		this.multiImage = this.createMultiImage(scale);
 	}
 
 	@Override
 	public void moveUp() throws ActionNotDoneException {
-		// TODO Auto-generated method stub
-		
+		List<Sprite> sprites = parent.getSprites();
+		int index = sprites.indexOf(this);
+		if (index > 0) 
+		{
+			Collections.swap(sprites, index, index - 1);
+		}
+		else {
+			throw new ActionNotDoneException(MOVE_UP_ERROR, false);
+		}	
 	}
 
 	@Override
 	public void moveDown() throws ActionNotDoneException {
-		// TODO Auto-generated method stub
-		
+		List<Sprite> sprites = parent.getSprites();
+		int index = sprites.indexOf(this);
+		if (index < sprites.size() - 1) 
+		{
+			Collections.swap(sprites, index, index + 1);
+		}
+		else {
+			throw new ActionNotDoneException(MOVE_DOWN_ERROR, false);
+		}	
 	}
 
 	@Override
 	public List<SkeletonNode> getNodes() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean isMaster() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.getBone().isMaster();
 	}
 }

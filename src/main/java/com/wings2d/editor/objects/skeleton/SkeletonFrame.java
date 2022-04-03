@@ -336,6 +336,25 @@ public class SkeletonFrame extends SkeletonNode implements Drawable{
 		
 		return selectedBone;
 	}
+	
+	public Sprite getSpriteAtPosition(final Point loc, final double scale) {
+		boolean found = false;
+		Sprite selectedSprite = null;
+		Point2D scaledPoint = new Point2D.Double(loc.getX() * scale, loc.getY() * scale);
+		for (int i = 0; (i < bones.size()) && !found; i++)
+		{
+			SkeletonBone bone = bones.get(i);
+			for (int j = 0; (j < bone.getSprites().size()) && !found; j++) {
+				Sprite sprite = bone.getSprites().get(j);
+				if (sprite.getPath().contains(scaledPoint)) {
+					selectedSprite = sprite;
+					found = true;
+				}
+			}
+		}
+		
+		return selectedSprite;
+	}
 	/** 
 	 * Returns the a bone by comparing the locations of the X position handle with the {@code loc} Parameter
 	 * @param loc Location to check for X position handle

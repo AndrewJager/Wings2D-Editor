@@ -8,26 +8,16 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.awt.geom.Point2D;
 
 import javax.swing.BorderFactory;
 import javax.swing.JScrollPane;
-import javax.swing.JTree;
 import javax.swing.SwingUtilities;
-import javax.swing.tree.TreePath;
 
-import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.skeleton.DrawMode;
-import com.wings2d.editor.objects.skeleton.SkeletonBone;
 import com.wings2d.editor.objects.skeleton.SkeletonFrame;
-import com.wings2d.editor.objects.skeleton.SkeletonNode;
 import com.wings2d.editor.objects.skeleton.path.DrawingLogic;
-import com.wings2d.editor.objects.skeleton.path.Sprite;
 import com.wings2d.editor.ui.DrawingArea;
 import com.wings2d.editor.ui.UIElement;
-import com.wings2d.editor.ui.edits.SetBoneLocation;
-import com.wings2d.editor.ui.edits.SetBoneRotation;
-import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
 
 public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 
@@ -103,6 +93,7 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 						getEditPanel().setDrawMode(getEditPanel().getLastBoneDrawMode());
 					}
 				}
+				
 				logic.processPressed(e);
 			}
 			@Override

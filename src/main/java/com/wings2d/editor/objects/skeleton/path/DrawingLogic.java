@@ -46,9 +46,6 @@ public class DrawingLogic {
 			switch (edit.getDrawMode()) {
 				case BONE_MOVE -> {
 					item = frame.getBoneAtPosition(e.getPoint(), scale);
-					SkeletonBone bone = (SkeletonBone)item;
-					
-					frame.setSelectedBone(bone);
 					if (item != null) {
 						moveType = MoveType.MOVE_BOTH;
 					}
@@ -66,6 +63,8 @@ public class DrawingLogic {
 					}
 					
 					if (item != null) {
+						SkeletonBone bone = (SkeletonBone)item;
+						frame.setSelectedBone(bone);
 						curX = bone.getX();
 						curY = bone.getY();
 					}
@@ -78,7 +77,7 @@ public class DrawingLogic {
 					}
 				}
 				case SPRITE_MOVE -> {
-					item = frame.getSelectedBone().getSelectedSprite();
+					item = frame.getSpriteAtPosition(e.getPoint(), scale);
 					if (item != null) {
 						Sprite sprite = (Sprite)item;
 						Point2D center = sprite.getLocation();

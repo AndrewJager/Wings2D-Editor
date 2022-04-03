@@ -61,6 +61,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 	private DBColor color;
 	private SkeletonBone parent;
 	private EditorSettings settings;
+	private Path2D path;
 	private List<SkeletonFilter> filters;
 	private BaseMultiResolutionImage multiImage;
 	
@@ -89,6 +90,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		parts.add(Part.insert(this, PathIterator.SEG_LINETO, 1, x - 50, y + 50, con));
 		parts.add(Part.insert(this, PathIterator.SEG_LINETO, 2, x + 50, y + 50, con));
 		parts.add(Part.insert(this, PathIterator.SEG_LINETO, 3, x + 50, y - 50, con));
+		recalcPath();
 	}
 
 	/** Read constructor */
@@ -96,6 +98,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		this(parent);
 		
 		this.query(con, spriteID);
+		recalcPath();
 	}
 	
 	public Sprite(final SkeletonBone parent) {
@@ -175,9 +178,8 @@ public class Sprite extends SkeletonNode implements Drawable{
 		}
 	}
 
-	
-	public Path2D getPath() {
-		Path2D path = new Path2D.Double();
+	public void recalcPath() {
+		path = new Path2D.Double();
 		for (int i = 0; i < parts.size(); i++) {
 			Part part = parts.get(i);
 			List<Handle> points = part.getHandles();
@@ -197,8 +199,10 @@ public class Sprite extends SkeletonNode implements Drawable{
 							points.get(2).getX(), points.get(2).getY());
 				}
 			};
-			
 		}
+	}
+	
+	public Path2D getPath() {
 		return path;
 	}
 
@@ -306,6 +310,8 @@ public class Sprite extends SkeletonNode implements Drawable{
 					}
 				}
 			}
+			
+			this.recalcPath();
 		}
 	}
 
@@ -394,20 +400,25 @@ public class Sprite extends SkeletonNode implements Drawable{
 		}
 	}
 	
-	public void rotate(final double delta) {
-		Path2D path = getPath();
+	public void rotate(final double delta, final boolean recalcParts) {
 		AffineTransform transform = new AffineTransform();
 		transform.rotate(Math.toRadians(delta), path.getBounds2D().getCenterX(), path.getBounds2D().getCenterY());
 		path = (Path2D)transform.createTransformedShape(path);
-		recreatePartsFromPath(path);
+		if (recalcParts) {
+			recreatePartsFromPath(path);
+		}
 	}
 	
-	public void rotateAround(final Point2D p, final double delta) {
-		Path2D path = getPath();
+	public void rotateAround(final Point2D p, final double delta, final boolean recalcParts) {
 		AffineTransform transform = new AffineTransform();
 		transform.rotate(Math.toRadians(delta), p.getX(), p.getY());
 		path = (Path2D)transform.createTransformedShape(path);
-		recreatePartsFromPath(path);
+		if (recalcParts) {
+			recreatePartsFromPath(path);
+		}
+	}
+	public void rotateAround(final Point2D point, final double delta) {
+		rotateAround(point, delta, true);
 	}
 	
 	/** Assumes that path will have the same points, except for position */
@@ -438,6 +449,9 @@ public class Sprite extends SkeletonNode implements Drawable{
 		}
 		
 		this.updateChildren(this.getBone().getStoredConnection());
+	}
+	public void recreatePartsFromPath() {
+		recreatePartsFromPath(this.path);
 	}
 	
 	public void deselect() {
@@ -476,39 +490,45 @@ public class Sprite extends SkeletonNode implements Drawable{
 		return parent;
 	}
 	
-	private void translate(final Path2D path, final double deltaX, final double deltaY)
+	private void translate(final Path2D path, final double deltaX, final double deltaY, final boolean recalcParts)
 	{
 		AffineTransform transform = new AffineTransform();
 		transform.translate(deltaX, deltaY);
 		path.transform(transform);
-		recreatePartsFromPath(path);
+		if (recalcParts) {
+			recreatePartsFromPath(path);
+		}
+	}
+	public void translate(final double deltaX, final double deltaY, final boolean recalcParts) {
+		Path2D path = getPath();
+		translate(path, deltaX, deltaY, recalcParts);
 	}
 	public void translate(final double deltaX, final double deltaY) {
-		Path2D path = getPath();
-		translate(path, deltaX, deltaY);
+		translate(deltaX, deltaY, true);
 	}
-	public void setLocation(final double x, final double y, final double scale)
+	public void setLocation(final double x, final double y, final double scale, final boolean recalcParts)
 	{
-		Path2D path = getPath();
 		double unscale = 1.0 / scale;
 		double unscaledX = x * unscale;
 		double unscaledY = y * unscale;
 		double deltaX = unscaledX - (path.getBounds2D().getCenterX());
 		double deltaY = unscaledY - (path.getBounds2D().getCenterY());
-		translate(path, deltaX, deltaY);
+		translate(path, deltaX, deltaY, recalcParts);
+	}
+	public void setLocation(final double x, final double y, final double scale) {
+		setLocation(x, y, scale, true);
 	}
 	public void setLocation(final Point loc, final double scale)
 	{
 		setLocation(loc.getX(), loc.getY(), scale);
 	}
 	public Point2D getLocation() {
-		Path2D path = getPath();
 		return new Point2D.Double(path.getBounds2D().getCenterX(), path.getBounds2D().getCenterY());
 	}
 
 	
 	public void setSelectedPart(final int part) {
-		
+		this.selectedPart = parts.get(part);
 	}
 	
 	public Color getColor()

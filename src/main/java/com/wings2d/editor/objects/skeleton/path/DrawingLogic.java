@@ -96,21 +96,21 @@ public class DrawingLogic {
 					SkeletonBone bone = (SkeletonBone)item;
 					switch(moveType) {
 						case MOVE_BOTH -> {
-							bone.setLocation(e.getPoint(), scale, true);
+							bone.setLocation(e.getPoint(), scale, true, false);
 						}
 						case MOVE_X -> {
 							bone.setLocation(e.getPoint().getX() - edit.getEditor().getSettings().getPosHandleOffset(), 
-									bone.getY() * scale, scale, true);
+									bone.getY() * scale, scale, true, false);
 						}
 						case MOVE_Y -> {
 							bone.setLocation(bone.getX() * scale, e.getPoint().getY() + edit.getEditor().getSettings().getPosHandleOffset(),
-									scale, true);
+									scale, true, false);
 						}
 					}
 				}
 				case BONE_ROTATE -> {
 					SkeletonBone bone = (SkeletonBone)item;
-					bone.rotateByHandle(e.getPoint(), scale);
+					bone.rotateByHandle(e.getPoint(), scale, false);
 				}
 				case SPRITE_MOVE -> {
 					Sprite sprite = (Sprite)item;
@@ -129,11 +129,11 @@ public class DrawingLogic {
 			switch (edit.getDrawMode()) {
 				case BONE_MOVE -> {
 					SkeletonBone bone = (SkeletonBone)item;
-					edit.getEditor().getEditsManager().edit(new SetBoneLocation(bone, bone.getX(), bone.getY(), curX, curY, true));
+					edit.getEditor().getEditsManager().edit(new SetBoneLocation(bone, bone.getX(), bone.getY(), curX, curY, true, true));
 				}
 				case BONE_ROTATE -> {
 					SkeletonBone bone = (SkeletonBone)item;
-					edit.getEditor().getEditsManager().edit(new SetBoneRotation(bone, bone.getRotation(), curRot));
+					edit.getEditor().getEditsManager().edit(new SetBoneRotation(bone, bone.getRotation(), curRot, true));
 				}
 				case SPRITE_MOVE -> {
 

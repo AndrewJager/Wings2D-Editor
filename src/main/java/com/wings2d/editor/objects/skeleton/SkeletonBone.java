@@ -283,7 +283,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 	{
 		return childBones;
 	}
-	public void setLocation(final double x, final double y, final double scale, final boolean translateChildren)
+	public void setLocation(final double x, final double y, final double scale, final boolean translateChildren, final boolean recalcParts)
 	{
 		double unscale = 1.0 / scale;
 		double unscaledX = x * unscale;
@@ -292,7 +292,10 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		double deltaX = unscaledX - location.getStoredValue().getX();
 		double deltaY = unscaledY - location.getStoredValue().getY();
 		for (int i = 0; i < sprites.size(); i++) {
-			sprites.get(i).translate(deltaX, deltaY);
+			sprites.get(i).translate(deltaX, deltaY, false);
+			if (recalcParts) {
+				sprites.get(i).recreatePartsFromPath();
+			}
 		}
 		if ((unscaledX > 0 && unscaledY > 0) && checkTranslate(deltaX, deltaY))
 		{
@@ -301,24 +304,24 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 			{
 				for (int i = 0; i < childBones.size(); i++)
 				{
-					childBones.get(i).translateBy(deltaX, deltaY);
+					childBones.get(i).translateBy(deltaX, deltaY, recalcParts);
 				}
 			}
 		}
 	}
 	/** Calls setLocation with scale = 1 **/
-	public void setLocation(final double x, final double y, final boolean translateChildren)
+	public void setLocation(final double x, final double y, final boolean translateChildren, final boolean recalcParts)
 	{
-		setLocation(x, y, 1, translateChildren);
+		setLocation(x, y, 1, translateChildren, recalcParts);
 	}
-	public void setLocation(final Point loc, final double scale, final boolean translateChildren)
+	public void setLocation(final Point loc, final double scale, final boolean translateChildren, final boolean recalcParts)
 	{
-		this.setLocation(loc.getX(), loc.getY(), scale, translateChildren);
+		this.setLocation(loc.getX(), loc.getY(), scale, translateChildren, recalcParts);
 	}
 	/** Calls setLocation with scale = 1 **/
-	public void setLocation(final Point loc, final boolean translateChildren)
+	public void setLocation(final Point loc, final boolean translateChildren, final boolean recalcParts)
 	{
-		setLocation(loc, 1, translateChildren);
+		setLocation(loc, 1, translateChildren, recalcParts);
 	}
 	public Point2D getLocation()
 	{
@@ -333,17 +336,25 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		return location.getStoredValue().getY();
 	}
 
-	public void translateBy(final double x, final double y)
+	public void translateBy(final double x, final double y, final boolean recalcParts)
 	{
 		double newX = getX() + x;
 		double newY = getY() + y;
 		location.setStoredValue(new Point2D.Double(newX, newY));
 		for (int i = 0; i < sprites.size(); i++) {
-			sprites.get(i).translate(x, y);
+			sprites.get(i).translate(x, y, false);
+			if (recalcParts) {
+				sprites.get(i).recreatePartsFromPath();
+			}
 		}
 		for (int i = 0; i < childBones.size(); i++)
 		{
-			childBones.get(i).translateBy(x, y);
+			childBones.get(i).translateBy(x, y, recalcParts);
+		}
+	}
+	public void recalcSpritePoints() {
+		for (int i = 0; i < sprites.size(); i++) {
+			sprites.get(i).recreatePartsFromPath();
 		}
 	}
 	/** Returns true if this bone and all child bones are not being moved outside the edit zone **/
@@ -421,21 +432,24 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		transform.transform(yHandleLoc, yHandleLoc);
 		return yHandleLoc;
 	}
-	public void setRotation(final double angle)
+	public void setRotation(final double angle, final boolean recalcParts)
 	{
 		double oldRotation = rotation.getStoredValue();
 		rotation.setStoredValue(angle);
 		double delta = angle - oldRotation;
 		for (int i = 0; i < sprites.size(); i++)
 		{
-			sprites.get(i).rotateAround(location.getStoredValue(), delta);
+			sprites.get(i).rotateAround(location.getStoredValue(), delta, false);
+			if (recalcParts) {
+				sprites.get(i).recreatePartsFromPath();
+			}
 		}
 		for (int i = 0; i < childBones.size(); i++)
 		{
-			childBones.get(i).rotateAround(location.getStoredValue(), delta);
+			childBones.get(i).rotateAround(location.getStoredValue(), delta, recalcParts);
 		}
 	}
-	public void rotateByHandle(final Point loc, final double scale)
+	public void rotateByHandle(final Point loc, final double scale, final boolean recalcParts)
 	{
 		double oldRotation = rotation.getStoredValue();
 		rotation.setStoredValue(Math.toDegrees(Math.atan2((location.getStoredValue().getY() * scale) - loc.getY(), 
@@ -443,14 +457,17 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		double delta = rotation.getStoredValue() - oldRotation;
 		for (int i = 0; i < sprites.size(); i++)
 		{
-			sprites.get(i).rotateAround(location.getStoredValue(), delta);
+			sprites.get(i).rotateAround(location.getStoredValue(), delta, false);
+			if (recalcParts) {
+				sprites.get(i).recreatePartsFromPath();
+			}
 		}
 		for (int i = 0; i < childBones.size(); i++)
 		{
-			childBones.get(i).rotateAround(location.getStoredValue(), delta);
+			childBones.get(i).rotateAround(location.getStoredValue(), delta, recalcParts);
 		}
 	}
-	public void rotateAround(final Point2D point, final double amt)
+	public void rotateAround(final Point2D point, final double amt, final boolean recalcParts)
 	{
 		AffineTransform transform = new AffineTransform();
 		transform.setToRotation(Math.toRadians(amt), point.getX(), point.getY());
@@ -461,11 +478,14 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		
 		for (int i = 0; i < sprites.size(); i++)
 		{
-			sprites.get(i).rotateAround(point, amt);
+			sprites.get(i).rotateAround(point, amt, false);
+			if (recalcParts) {
+				sprites.get(i).recreatePartsFromPath();
+			}
 		}
 		for (int i = 0; i < childBones.size(); i++)
 		{
-			childBones.get(i).rotateAround(point, amt);
+			childBones.get(i).rotateAround(point, amt, recalcParts);
 		}
 	}
 	public UUID getSyncBoneID()

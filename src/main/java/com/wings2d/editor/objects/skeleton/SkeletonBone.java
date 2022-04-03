@@ -338,6 +338,9 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		double newX = getX() + x;
 		double newY = getY() + y;
 		location.setStoredValue(new Point2D.Double(newX, newY));
+		for (int i = 0; i < sprites.size(); i++) {
+			sprites.get(i).translate(x, y);
+		}
 		for (int i = 0; i < childBones.size(); i++)
 		{
 			childBones.get(i).translateBy(x, y);
@@ -458,7 +461,7 @@ public class SkeletonBone extends SkeletonNode implements Drawable{
 		
 		for (int i = 0; i < sprites.size(); i++)
 		{
-			sprites.get(i).rotateAround(location.getStoredValue(), amt);
+			sprites.get(i).rotateAround(point, amt);
 		}
 		for (int i = 0; i < childBones.size(); i++)
 		{

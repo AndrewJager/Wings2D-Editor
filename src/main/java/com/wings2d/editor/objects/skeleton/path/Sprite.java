@@ -597,44 +597,45 @@ public class Sprite extends SkeletonNode implements Drawable{
 	public void draw(Graphics2D g2d, double scale, DrawMode mode) {
 		g2d.setStroke(new BasicStroke(5));
 		g2d.setColor(getColor());
-//		g2d.scale(scale, scale);
 		Path2D path = getPath();
 		AffineTransform trans = new AffineTransform();
 		trans.scale(scale, scale);
 		path = (Path2D)trans.createTransformedShape(path);
 		g2d.fill(path);
 		
-		for (int i = 0; i < parts.size(); i++) 
-		{
-			Part part = parts.get(i);
-			List<Handle> handles = part.getHandles();
-			for (int j = 0; j < handles.size(); j++) {
-				Handle h = handles.get(j);
-				if (selectedHandles.contains(h)) {
-					g2d.setColor(Color.RED);
-				}
-				else {
-					g2d.setColor(Color.BLUE);
-				}
-				if (h.getIsEnd()) {
-					drawPoint(h.getX(), h.getY(), g2d, scale);
-				}
-				else {
-					if (!multi) {
-						drawHandle(h.getX(), h.getY(), g2d, scale);
+		if (mode == DrawMode.SPRITE_EDIT) {
+			for (int i = 0; i < parts.size(); i++) 
+			{
+				Part part = parts.get(i);
+				List<Handle> handles = part.getHandles();
+				for (int j = 0; j < handles.size(); j++) {
+					Handle h = handles.get(j);
+					if (selectedHandles.contains(h)) {
+						g2d.setColor(Color.RED);
+					}
+					else {
+						g2d.setColor(Color.BLUE);
+					}
+					if (h.getIsEnd()) {
+						drawPoint(h.getX(), h.getY(), g2d, scale);
+					}
+					else {
+						if (!multi) {
+							drawHandle(h.getX(), h.getY(), g2d, scale);
+						}
 					}
 				}
-			}
-			
-			if (snapping) {
-				Handle p = selectedPart.getHandles().get(selectedPoint);
-				if (snapX) {
-					g2d.drawLine((int)p.getX() - (HANDLE_SIZE / 2), (int)p.getY(), (int)snapPointX.getX() - (HANDLE_SIZE / 2), (int)snapPointX.getY());
-					g2d.drawLine((int)p.getX() + (HANDLE_SIZE / 2), (int)p.getY(), (int)snapPointX.getX() + (HANDLE_SIZE / 2), (int)snapPointX.getY());
-				}
-				if (snapY) {
-					g2d.drawLine((int)p.getX(), (int)p.getY() - (HANDLE_SIZE / 2), (int)snapPointY.getX(), (int)snapPointY.getY() - (HANDLE_SIZE / 2));
-					g2d.drawLine((int)p.getX(), (int)p.getY() + (HANDLE_SIZE / 2), (int)snapPointY.getX(), (int)snapPointY.getY() + (HANDLE_SIZE / 2));
+				
+				if (snapping) {
+					Handle p = selectedPart.getHandles().get(selectedPoint);
+					if (snapX) {
+						g2d.drawLine((int)p.getX() - (HANDLE_SIZE / 2), (int)p.getY(), (int)snapPointX.getX() - (HANDLE_SIZE / 2), (int)snapPointX.getY());
+						g2d.drawLine((int)p.getX() + (HANDLE_SIZE / 2), (int)p.getY(), (int)snapPointX.getX() + (HANDLE_SIZE / 2), (int)snapPointX.getY());
+					}
+					if (snapY) {
+						g2d.drawLine((int)p.getX(), (int)p.getY() - (HANDLE_SIZE / 2), (int)snapPointY.getX(), (int)snapPointY.getY() - (HANDLE_SIZE / 2));
+						g2d.drawLine((int)p.getX(), (int)p.getY() + (HANDLE_SIZE / 2), (int)snapPointY.getX(), (int)snapPointY.getY() + (HANDLE_SIZE / 2));
+					}
 				}
 			}
 		}

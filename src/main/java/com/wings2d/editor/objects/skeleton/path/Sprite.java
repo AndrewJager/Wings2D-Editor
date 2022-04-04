@@ -334,6 +334,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 				this.addCubic(p);
 			}
 		}
+		recalcPath();
 	}
 	public void addLine(final Point2D p) {
 		parts.add(Part.insert(this, PathIterator.SEG_LINETO, this.getParts().size(), p.getX(), p.getY(), this.getBone().getStoredConnection()));

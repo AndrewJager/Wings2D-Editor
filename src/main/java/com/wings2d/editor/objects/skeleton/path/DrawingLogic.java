@@ -104,11 +104,8 @@ public class DrawingLogic {
 				path = path.pathByAddingChild(item);
 				tree.setSelectionPath(path);
 			}
-			else
-			{
-				drawArea.setUserLoc(e.getPoint());
-				drawArea.repaint();
-			}
+			drawArea.setUserLoc(e.getPoint());
+			drawArea.repaint();
 		}
 	}
 	

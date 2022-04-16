@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 
 import com.wings2d.editor.objects.project.EditorKeyBind;
 import com.wings2d.framework.misc.KeyBind;
@@ -20,6 +21,7 @@ public class BindingEdit extends JPanel{
 	
 	private JLabel label;
 	private JTextField text;
+	private JToggleButton ctrl, shift, alt;
 	private JButton reset;
 
 	public BindingEdit(final String name, final EditorKeyBind keyBind) {
@@ -29,47 +31,67 @@ public class BindingEdit extends JPanel{
 		
 		label = new JLabel(name + ":");
 		this.add(label, BorderLayout.WEST);
-		
+
+		JPanel textPanel = new JPanel();
 		text = new JTextField();
 		text.setEditable(false);
-		text.setPreferredSize(new Dimension(100, 20));
-		text.setText(keyBind.getBinding().getValue());
+		text.setPreferredSize(new Dimension(40, 20));
+		text.setHorizontalAlignment(JTextField.CENTER);
+		text.setText(keyBind.getKey());
 		text.addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				boolean hasKey = false;
-				for (int i = 0; i < keyBind.getBinding().getKeys().size(); i++) {
-					if (keyBind.getBinding().getKeys().get(i).getValue().equals(String.valueOf(e.getKeyChar()))) {
-						hasKey = true;
-						break;
-					}
-				}
-				if (!hasKey) {
-					keyBind.getBinding().addKey(new KeyBind(e.getKeyCode()));
-					
-				}
-				text.setText(keyBind.getBinding().getValue());
-				keyBind.setKeys(keyBind.getBinding().getSaveStr());
+				text.setText(KeyEvent.getKeyText(e.getKeyCode()));
+				keyBind.setKey(e.getKeyCode());
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {}
 		});
-		JPanel textPanel = new JPanel();
-		textPanel.add(text);
-		this.add(textPanel, BorderLayout.CENTER);
-		
-		reset = new JButton("Clear");
-		reset.addActionListener(new ActionListener() {
+		ctrl = new JToggleButton("CTRL");
+		ctrl.setSelected(keyBind.getCtrl());
+		ctrl.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				keyBind.getBinding().getKeys().clear();
-				text.setText(keyBind.getBinding().getValue());
+				keyBind.setCtrl(ctrl.isSelected());
+				shift.setSelected(false);
+				keyBind.setShift(false);
+				alt.setSelected(false);
+				keyBind.setAlt(false);
 			}
 		});
-		this.add(reset, BorderLayout.EAST);
+		textPanel.add(ctrl);
+		shift = new JToggleButton("SHIFT");
+		shift.setSelected(keyBind.getShift());
+		shift.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				keyBind.setShift(shift.isSelected());
+				ctrl.setSelected(false);
+				keyBind.setCtrl(false);
+				alt.setSelected(false);
+				keyBind.setAlt(false);
+			}
+		});
+		textPanel.add(shift);
+		alt = new JToggleButton("ALT");
+		alt.setSelected(keyBind.getAlt());
+		alt.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				keyBind.setAlt(alt.isSelected());
+				ctrl.setSelected(false);
+				keyBind.setCtrl(false);
+				shift.setSelected(false);
+				keyBind.setShift(false);
+			}
+		});
+		textPanel.add(alt);
+		
+		textPanel.add(text);
+		this.add(textPanel, BorderLayout.EAST);
 	}
 }

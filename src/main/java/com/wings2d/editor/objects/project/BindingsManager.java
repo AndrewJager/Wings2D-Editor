@@ -11,101 +11,53 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
-import com.wings2d.framework.misc.KeyBind;
-
 public class BindingsManager {
+	private record KeyBind(int keycode, int modifier, String name) {}
+	
 	@SuppressWarnings("serial")
-	class KeyUp extends AbstractAction 
+	class KeyAction extends AbstractAction 
 	{
-	    private Integer key;
-	    private List<Integer> pressedKeys;
+	    private Runnable r;
 
-	    public KeyUp(final Integer key, final List<Integer> keys)
+	    public KeyAction(final Runnable r)
 	    {
-	        this.key = key;
-	        this.pressedKeys = keys;
+	        this.r = r;
 	    }
 
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
-	    	for (int i = pressedKeys.size() - 1; i >= 0; i--) {
-	    		if (pressedKeys.get(i).equals(key)) {
-	    			pressedKeys.remove(i);
-	    		}
-	    	}
-	    }
-	};
-	@SuppressWarnings("serial")
-	class KeyDown extends AbstractAction 
-	{
-	    private Integer key;
-	    private List<Integer> pressedKeys;
-
-	    public KeyDown(final Integer key, final List<Integer> keys)
-	    {
-	        this.key = key;
-	        this.pressedKeys = keys;
-	    }
-
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-	    	pressedKeys.add(key);
-	    	System.out.println(key);
-	    	parseEvents();
+	    	r.run();
 	    }
 	};
 	
-	private List<Integer> mappedKeys;
-	private List<Integer> pressedKeys;
-	private HashMap<String, EditorKeyBind> keyBinds;
-	private HashMap<String, Runnable> actions;
+	private List<KeyBind> mappedKeys;
 	
 	public BindingsManager(final HashMap<String, EditorKeyBind> keyBinds, final HashMap<String, Runnable> actions,
 			final JPanel mainPanel) {
-		mappedKeys = new ArrayList<Integer>();
-		pressedKeys = new ArrayList<Integer>();
-		this.keyBinds = keyBinds;
-		this.actions = actions;
+		mappedKeys = new ArrayList<KeyBind>();
 		
 		for (EditorKeyBind keyBind : keyBinds.values()) {
-			String[] keys = keyBind.getKeys().split(KeyBind.DELIMITER);
-			for (int i = 0; i < keys.length; i++) {
-				Integer keyCode = Integer.parseInt(keys[i]);
-				if (!mappedKeys.contains(keyCode)) {
-					mappedKeys.add(keyCode);
-				}
+			if (keyBind.getCtrl()) {
+				mappedKeys.add(new KeyBind(keyBind.getKeyCode(), InputEvent.CTRL_DOWN_MASK, keyBind.getName()));
 			}
+			else if (keyBind.getShift()) {
+				mappedKeys.add(new KeyBind(keyBind.getKeyCode(), InputEvent.SHIFT_DOWN_MASK, keyBind.getName()));
+			}
+			else if (keyBind.getAlt()) {
+				mappedKeys.add(new KeyBind(keyBind.getKeyCode(), InputEvent.ALT_DOWN_MASK, keyBind.getName()));
+			}
+			else {
+				mappedKeys.add(new KeyBind(keyBind.getKeyCode(), 0, keyBind.getName()));
+			}
+			
 		}
 		actions.get("Undo").run();
 		
 		for (int i = 0; i < mappedKeys.size(); i++) {
-			Integer keyCode = mappedKeys.get(i);
-			mainPanel.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(keyCode, InputEvent.CTRL_DOWN_MASK
-					, false), keyCode.toString() + "DOWN");
-			mainPanel.getActionMap().put(keyCode.toString() + "DOWN", new KeyDown(keyCode, pressedKeys));
-			mainPanel.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(keyCode, 0, true), keyCode.toString() + "UP");
-			mainPanel.getActionMap().put(keyCode.toString() + "UP", new KeyUp(keyCode, pressedKeys));
-		}
-	}
-	
-	public void parseEvents() {
-		String test= "";
-		for (int i = 0; i  < pressedKeys.size(); i++) {
-			test = test + pressedKeys.get(i) + " ";
-		}
-		System.out.println(test);
-		for (EditorKeyBind keyBind : keyBinds.values()) {
-			boolean fireEvent = true;
-			String[] keys = keyBind.getKeys().split(KeyBind.DELIMITER);
-			for (int i = 0; i < keys.length; i++) {
-				if (!pressedKeys.contains(Integer.parseInt(keys[i]))) {
-					fireEvent = false;
-					break;
-				}
-			}
-			if (fireEvent) {
-				actions.get(keyBind.getName()).run();
-			}
+			KeyBind k = mappedKeys.get(i);
+			mainPanel.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(k.keycode, k.modifier), k.name);
+			mainPanel.getActionMap().put(k.name, new KeyAction(actions.get(k.name)));
+
 		}
 	}
 }

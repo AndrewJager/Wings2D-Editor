@@ -100,7 +100,10 @@ CREATE TABLE FILTER (
 CREATE TABLE KEYBIND (
 	ID TEXT PRIMARY KEY NOT NULL,
 	Name TEXT NOT NULL,
-	Keys TEXT NOT NULL
+	Key INT NOT NULL,
+	Ctrl BOOLEAN NOT NULL,
+	Shift BOOLEAN NOT NULL,
+	Alt BOOLEAN NOT NULL
 )
 ^
 
@@ -121,9 +124,9 @@ CREATE TABLE PATH (
 ^
 
 --Keybind defaults
-INSERT INTO KEYBIND (ID, Name, Keys)
-VALUES("ee243610-875c-445d-84d9-bd7cbec56cdf", "Undo", "17,90")
+INSERT INTO KEYBIND (ID, Name, Key, Ctrl, Shift, Alt)
+VALUES("ee243610-875c-445d-84d9-bd7cbec56cdf", "Undo", 90, True, False, False)
 ^
-INSERT INTO KEYBIND (ID, Name, Keys)
-VALUES("aa3dd341-9b14-4ff2-a80b-5adba39c4394", "Redo", "17,89")
+INSERT INTO KEYBIND (ID, Name, Key, Ctrl, Shift, Alt)
+VALUES("aa3dd341-9b14-4ff2-a80b-5adba39c4394", "Redo", 89, True, False, False)
 ^

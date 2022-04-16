@@ -44,7 +44,6 @@ public class Sprite extends SkeletonNode implements Drawable{
 	private Part selectedPart = null;
 	private boolean isSelected = false;
 	private List<Part> parts;
-	private boolean snap = false;
 	private boolean snapping = false;
 	private boolean snapX = false;
 	private boolean snapY = false;
@@ -264,17 +263,20 @@ public class Sprite extends SkeletonNode implements Drawable{
 		snapping = false;
 		snapPointX = null;
 		snapPointY = null;
+		double reverseScale = 1 / scale;
 		
 		if (selectedPart != null) {
-			if (snap && selectedPart.getHandles().get(selectedPoint).getIsEnd()) {
+			if (getSnap() && selectedPart.getHandles().get(selectedPoint).getIsEnd()) {
 				for (int i = 0; (i < distances.size()) && !(snapX && snapY); i++) {
 					Point2D h = distances.get(i).getHandle();
-					if (!snapX && (Sprite.inRange(p.getX(), h.getX() - SNAP_DIST, h.getX() + SNAP_DIST))) {
+					if (!snapX && (Sprite.inRange(p.getX() * reverseScale, h.getX() - (SNAP_DIST * reverseScale), 
+							h.getX() + (SNAP_DIST * reverseScale)))) {
 						snapX = true;
 						snapping = true;
 						snapPointX = h;
 					}
-					if (!snapY && (Sprite.inRange(p.getY(), h.getY() - SNAP_DIST, h.getY() + SNAP_DIST))) {
+					if (!snapY && (Sprite.inRange(p.getY() * reverseScale, h.getY() - (SNAP_DIST * reverseScale), 
+							h.getY() + (SNAP_DIST * reverseScale)))) {
 						snapY = true;
 						snapping = true;
 						snapPointY = h;
@@ -283,19 +285,19 @@ public class Sprite extends SkeletonNode implements Drawable{
 			}
 
 			if (snapX) {
-				x = snapPointX.getX(); 
+				x = snapPointX.getX() * scale; 
 			}
 			else {
 				x = p.getX();
 			}
 			if (snapY) {
-				y = snapPointY.getY(); 
+				y = snapPointY.getY() * scale; 
 			}
 			else {
 				y = p.getY();
 			}
 
-			double reverseScale = 1 / scale;
+			
 			x = x * reverseScale;
 			y = y * reverseScale;
 
@@ -352,8 +354,8 @@ public class Sprite extends SkeletonNode implements Drawable{
 				avg(end.getX(), center.getX()), avg(end.getY(), center.getY()),
 				avg(center.getX(), p.getX()), avg(center.getY(), p.getY()), p.getX(), p.getY(), this.getBone().getStoredConnection()));
 	}
-	public void setSnap(final boolean snap) {
-		this.snap = snap;
+	public boolean getSnap() {
+		return this.getBone().getSettings().getDrawingLogic().getSnap();
 	}
 	public void setMulti(final boolean multi) {
 		this.multi = multi;
@@ -704,12 +706,16 @@ public class Sprite extends SkeletonNode implements Drawable{
 				if (snapping) {
 					Handle p = selectedPart.getHandles().get(selectedPoint);
 					if (snapX) {
-						g2d.drawLine((int)p.getX() - (HANDLE_SIZE / 2), (int)p.getY(), (int)snapPointX.getX() - (HANDLE_SIZE / 2), (int)snapPointX.getY());
-						g2d.drawLine((int)p.getX() + (HANDLE_SIZE / 2), (int)p.getY(), (int)snapPointX.getX() + (HANDLE_SIZE / 2), (int)snapPointX.getY());
+						g2d.drawLine((int)(p.getX() * scale - (HANDLE_SIZE / 2)), (int)(p.getY() * scale), 
+								(int)(snapPointX.getX() * scale - (HANDLE_SIZE / 2)), (int)(snapPointX.getY() * scale));
+						g2d.drawLine((int)(p.getX() * scale + (HANDLE_SIZE / 2)), (int)(p.getY() * scale), 
+								(int)(snapPointX.getX() * scale + (HANDLE_SIZE / 2)), (int)(snapPointX.getY() * scale));
 					}
 					if (snapY) {
-						g2d.drawLine((int)p.getX(), (int)p.getY() - (HANDLE_SIZE / 2), (int)snapPointY.getX(), (int)snapPointY.getY() - (HANDLE_SIZE / 2));
-						g2d.drawLine((int)p.getX(), (int)p.getY() + (HANDLE_SIZE / 2), (int)snapPointY.getX(), (int)snapPointY.getY() + (HANDLE_SIZE / 2));
+						g2d.drawLine((int)(p.getX() * scale), (int)(p.getY() * scale - (HANDLE_SIZE / 2)), 
+								(int)(snapPointY.getX() * scale), (int)(snapPointY.getY() * scale - (HANDLE_SIZE / 2)));
+						g2d.drawLine((int)(p.getX() * scale), (int)(p.getY() * scale + (HANDLE_SIZE / 2)), 
+								(int)(snapPointY.getX() * scale), (int)(snapPointY.getY() * scale + (HANDLE_SIZE / 2)));
 					}
 				}
 			}

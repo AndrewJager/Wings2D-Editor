@@ -26,6 +26,7 @@ public class DrawingLogic {
 	private DrawMode.MoveType moveType;
 	private SkeletonNode item;
 	private double curX, curY, curRot, offsetX, offsetY;
+	private boolean snap = false;
 	
 	public DrawingLogic(final SkeletonEdit edit, final DrawingArea drawArea) {
 		this.edit = edit;
@@ -38,6 +39,12 @@ public class DrawingLogic {
 	}
 	public void setMode(final DrawMode mode) {
 		
+	}
+	public void setSnap(final boolean snap) {
+		this.snap = snap;
+	}
+	public boolean getSnap() {
+		return snap;
 	}
 	
 	public void processPressed(final MouseEvent e) {

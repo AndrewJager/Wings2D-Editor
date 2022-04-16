@@ -21,6 +21,8 @@ Features
 	Rotate a bone or sprite around another bone/sprite, without rotating the second item
 		Also allow for rotation around the drawing cursor
 		
+	Implement order for sprites
+		
 	
 	
 UI Improvements

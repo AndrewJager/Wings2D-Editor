@@ -38,6 +38,7 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 		panel.add(pane);
 		
 		logic = new DrawingLogic(getEditPanel(), drawArea);
+		this.getEditPanel().getEditor().getSettings().setDrawingLogic(logic);
 	}
 	public void setSelectedFrame(final SkeletonFrame f)
 	{

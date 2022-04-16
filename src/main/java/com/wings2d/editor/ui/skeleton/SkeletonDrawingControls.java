@@ -12,7 +12,7 @@ import com.wings2d.editor.objects.skeleton.DrawMode;
 import com.wings2d.editor.ui.UIElement;
 
 public class SkeletonDrawingControls extends UIElement<SkeletonEdit>{
-	private JToggleButton moveBtn, rotateBtn, spriteMoveBtn, spriteEditBtn;
+	private JToggleButton moveBtn, rotateBtn, spriteMoveBtn, spriteEditBtn, snapBtn;
 	private SkeletonDrawingPanel drawingPanel;
 
 	public SkeletonDrawingControls(final SkeletonEdit edit, final SkeletonDrawingPanel drawingPanel) {
@@ -39,6 +39,10 @@ public class SkeletonDrawingControls extends UIElement<SkeletonEdit>{
 		spriteEditBtn.setToolTipText("Edit Sprite");
 		spriteEditBtn.setFont(spriteMoveBtn.getFont().deriveFont(fontSize));
 		panel.add(spriteEditBtn);
+		panel.add(new JSeparator(JSeparator.VERTICAL));
+		snapBtn = new JToggleButton("Snap");
+		snapBtn.setFont(snapBtn.getFont().deriveFont(fontSize));
+		panel.add(snapBtn);
 		
 		setControls(getEditPanel().getDrawMode());
 	}
@@ -102,6 +106,12 @@ public class SkeletonDrawingControls extends UIElement<SkeletonEdit>{
 				setControls(DrawMode.SPRITE_EDIT);
 				getEditPanel().setDrawMode(DrawMode.SPRITE_EDIT);
 				drawingPanel.getDrawArea().repaint();
+			}
+		});
+		snapBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getEditPanel().getEditor().getSettings().getDrawingLogic().setSnap(snapBtn.isSelected());
 			}
 		});
 	}

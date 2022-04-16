@@ -1,5 +1,6 @@
 package com.wings2d.editor.objects.skeleton.path;
 
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
@@ -24,7 +25,7 @@ public class DrawingLogic {
 	
 	private DrawMode.MoveType moveType;
 	private SkeletonNode item;
-	private double curX, curY, curRot;
+	private double curX, curY, curRot, offsetX, offsetY;
 	
 	public DrawingLogic(final SkeletonEdit edit, final DrawingArea drawArea) {
 		this.edit = edit;
@@ -85,6 +86,8 @@ public class DrawingLogic {
 						Point2D center = sprite.getLocation();
 						curX = center.getX();
 						curY = center.getY();
+						offsetX = e.getPoint().getX() - (curX * scale);
+						offsetY = e.getPoint().getY() - (curY * scale);
 					}
 				}
 				case SPRITE_EDIT -> {
@@ -135,7 +138,8 @@ public class DrawingLogic {
 				}
 				case SPRITE_MOVE -> {
 					Sprite sprite = (Sprite)item;
-					sprite.setLocation(e.getPoint(), scale);
+					Point loc = new Point((int)(e.getPoint().getX() - offsetX), (int)(e.getPoint().getY() - offsetY));
+					sprite.setLocation(loc, scale);
 				}
 				case SPRITE_EDIT -> {
 					Sprite sprite = (Sprite)item;

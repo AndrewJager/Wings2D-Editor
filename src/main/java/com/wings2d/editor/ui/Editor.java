@@ -23,6 +23,7 @@ import com.wings2d.editor.objects.save.DBAccess;
 import com.wings2d.editor.objects.skeleton.Skeleton;
 import com.wings2d.editor.ui.edits.EditsManager;
 import com.wings2d.editor.ui.project.ProjectEdit;
+import com.wings2d.editor.ui.settings.Hotkeys;
 import com.wings2d.editor.ui.settings.SettingsEdit;
 import com.wings2d.editor.ui.skeleton.SkeletonEdit;
 import com.wings2d.framework.Level;
@@ -92,8 +93,12 @@ public class Editor {
 		
 		
 		HashMap<String, Runnable> keyActions = new HashMap<String, Runnable>();
-		keyActions.put("Undo", () -> getEditsManager().undo());
-		keyActions.put("Redo", () -> getEditsManager().redo());
+		keyActions.put(Hotkeys.Undo.name(), () -> getEditsManager().undo());
+		keyActions.put(Hotkeys.Redo.name(), () -> getEditsManager().redo());
+		keyActions.put(Hotkeys.Snap.name(), () -> skeletonEdit.getDrawingArea().getControls().getSnapBtn().doClick());
+		keyActions.put(Hotkeys.Render.name(), () -> skeletonEdit.getRenderArea().getControls().getRenderBtn().doClick());
+		keyActions.put(Hotkeys.Save.name(), () -> skeletonEdit.getTopBar().getSaveBtn().doClick());
+
 		new BindingsManager(settings.getKeyBinds(), keyActions, mainPanel);
 		
 		

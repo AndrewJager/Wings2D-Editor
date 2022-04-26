@@ -38,7 +38,8 @@ public class SettingsEdit extends UIPanel<SettingsEdit>{
 		saveBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				settings.update(edit.getConnection());	
+				settings.update(edit.getConnection());
+				
 			}
 		});
 	}

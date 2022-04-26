@@ -7,14 +7,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
 import com.wings2d.editor.objects.project.EditorKeyBind;
-import com.wings2d.framework.misc.KeyBind;
 
 public class BindingEdit extends JPanel{
 	private static final long serialVersionUID = 1L;
@@ -22,7 +20,6 @@ public class BindingEdit extends JPanel{
 	private JLabel label;
 	private JTextField text;
 	private JToggleButton ctrl, shift, alt;
-	private JButton reset;
 
 	public BindingEdit(final String name, final EditorKeyBind keyBind) {
 		super();

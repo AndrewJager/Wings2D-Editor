@@ -10,7 +10,7 @@ import com.wings2d.editor.objects.skeleton.path.Sprite;
 import com.wings2d.framework.imageFilters.FilterFactory;
 import com.wings2d.framework.imageFilters.ImageFilter;
 
-public class SkeletonFilter extends DBObject{
+public class SkeletonFilter extends DBEditObject{
 	public static final String TABLE_NAME = "FILTER"; 
 	
 	private ImageFilter filter;

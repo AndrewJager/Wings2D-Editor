@@ -130,3 +130,12 @@ VALUES("ee243610-875c-445d-84d9-bd7cbec56cdf", "Undo", 90, True, False, False)
 INSERT INTO KEYBIND (ID, Name, Key, Ctrl, Shift, Alt)
 VALUES("aa3dd341-9b14-4ff2-a80b-5adba39c4394", "Redo", 89, True, False, False)
 ^
+INSERT INTO KEYBIND (ID, Name, Key, Ctrl, Shift, Alt)
+VALUES("4a36dcb0-d379-49d4-9093-b07bc9215aa1", "Snap", 16, False, False, False)
+^
+INSERT INTO KEYBIND (ID, Name, Key, Ctrl, Shift, Alt)
+VALUES("f2792d5e-7e8d-4d27-8eee-0d2d01bdc703", "Render", 82, False, False, False)
+^
+INSERT INTO KEYBIND (ID, Name, Key, Ctrl, Shift, Alt)
+VALUES("c939e78d-6c1d-495b-9ad4-780bf87a1d8f", "Save", 83, True, False, False)
+^

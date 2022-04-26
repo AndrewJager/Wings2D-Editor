@@ -6,9 +6,10 @@ import java.util.UUID;
 
 import com.wings2d.editor.objects.save.DBBoolean;
 import com.wings2d.editor.objects.save.DBInt;
+import com.wings2d.editor.objects.skeleton.DBEditObject;
 import com.wings2d.editor.objects.skeleton.DBObject;
 
-public class EditorKeyBind extends DBObject{
+public class EditorKeyBind extends DBEditObject{
 	public static final String TABLE_NAME = "KEYBIND";
 	
 	private DBInt key;

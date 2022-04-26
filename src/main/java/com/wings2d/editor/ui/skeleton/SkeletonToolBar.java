@@ -90,4 +90,7 @@ public class SkeletonToolBar extends UIElement<SkeletonEdit>{
 	public JToolBar getToolbar() {
 		return toolbar;
 	};
+	public JButton getSaveBtn() {
+		return saveBtn;
+	}
 }

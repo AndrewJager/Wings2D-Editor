@@ -10,10 +10,11 @@ import java.util.List;
 import java.util.UUID;
 
 import com.wings2d.editor.objects.EditorSettings;
+import com.wings2d.editor.objects.skeleton.DBEditObject;
 import com.wings2d.editor.objects.skeleton.DBObject;
 import com.wings2d.editor.objects.skeleton.Skeleton;
 
-public class Project extends DBObject{
+public class Project extends DBEditObject{
 	public static final String TABLE_NAME = "PROJECT";
 	
 	private List<Skeleton> skeletons;

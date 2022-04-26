@@ -147,4 +147,8 @@ public class RenderAreaControls extends UIElement<SkeletonEdit>{
 			}	
 		});
 	}
+	
+	public JButton getRenderBtn() {
+		return render;
+	}
 }

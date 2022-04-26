@@ -30,11 +30,18 @@ public class BindingsManager {
 	    }
 	};
 	
-	private List<KeyBind> mappedKeys;
 	
 	public BindingsManager(final HashMap<String, EditorKeyBind> keyBinds, final HashMap<String, Runnable> actions,
 			final JPanel mainPanel) {
-		mappedKeys = new ArrayList<KeyBind>();
+		bindHotkeys(keyBinds, actions, mainPanel);
+	}
+	
+	public void bindHotkeys(final HashMap<String, EditorKeyBind> keyBinds, final HashMap<String, Runnable> actions,
+			final JPanel mainPanel) {
+		mainPanel.getInputMap().clear();
+		mainPanel.getActionMap().clear();
+		
+		List<KeyBind> mappedKeys = new ArrayList<KeyBind>();
 		
 		for (EditorKeyBind keyBind : keyBinds.values()) {
 			if (keyBind.getCtrl()) {
@@ -51,13 +58,11 @@ public class BindingsManager {
 			}
 			
 		}
-		actions.get("Undo").run();
 		
 		for (int i = 0; i < mappedKeys.size(); i++) {
 			KeyBind k = mappedKeys.get(i);
 			mainPanel.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(k.keycode, k.modifier), k.name);
 			mainPanel.getActionMap().put(k.name, new KeyAction(actions.get(k.name)));
-
 		}
 	}
 }

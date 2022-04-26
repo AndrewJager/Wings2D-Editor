@@ -115,4 +115,8 @@ public class SkeletonDrawingControls extends UIElement<SkeletonEdit>{
 			}
 		});
 	}
+	
+	public JToggleButton getSnapBtn() {
+		return snapBtn;
+	}
 }

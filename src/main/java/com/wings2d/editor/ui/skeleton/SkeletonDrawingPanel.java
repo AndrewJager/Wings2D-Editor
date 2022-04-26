@@ -97,11 +97,13 @@ public class SkeletonDrawingPanel extends UIElement<SkeletonEdit>{
 				else if (SwingUtilities.isLeftMouseButton(e)) {
 					logic.processPressed(e);
 				}
+				panel.repaint();
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				if (SwingUtilities.isLeftMouseButton(e)) {
 					logic.processRelease(e);
+					panel.repaint();
 				}
 			}
 			@Override

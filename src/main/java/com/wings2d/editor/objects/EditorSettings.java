@@ -13,9 +13,11 @@ import com.wings2d.editor.objects.project.Project;
 import com.wings2d.editor.objects.save.DBColor;
 import com.wings2d.editor.objects.save.DBInt;
 import com.wings2d.editor.objects.save.DBString;
+import com.wings2d.editor.objects.skeleton.DBEditObject;
 import com.wings2d.editor.objects.skeleton.DBObject;
 import com.wings2d.editor.objects.skeleton.path.DrawingLogic;
-public class EditorSettings extends DBObject{
+
+public class EditorSettings extends DBEditObject{
 	public static final String TABLE_NAME = "EDITORSETTINGS";
 	
 	private DBString projectID;

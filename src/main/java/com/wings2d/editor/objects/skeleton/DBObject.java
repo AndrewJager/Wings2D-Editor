@@ -51,74 +51,6 @@ public abstract class DBObject {
         };
 	}
 	
-	/** Deletes the record from the database */
-	public void delete(final Connection con) {
-		UUID idValue = this.getID();
-		deleteChildren(con);
-		
-		String sql = "DELETE FROM " + this.getTableName() + " WHERE ID = " + quoteStr(idValue.toString());
-		try {
-			Statement stmt = con.createStatement();
-			stmt.executeUpdate(sql);
-			stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/** Updates the record with the values in the object */
-	public void update(final Connection con) {
-		UUID idValue = this.getID();
-		String sql = "UPDATE " + this.getTableName() + " SET ";
-		for (int i = 0; i < fields.size(); i++) {
-			sql = sql + fields.get(i).getColumn() + " = " + quoteStr(fields.get(i).asString());
-			if (i < (fields.size() - 1)) {
-				sql = sql + ",";
-			}
-		}
-		sql = sql + " WHERE ID = " + "'" + idValue.toString() +"'";
-		
-		try {
-			Statement stmt = con.createStatement();
-			stmt.executeUpdate(sql);
-			stmt.close();
-			
-			updateChildren(con);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/** Inserts a new record with the values in the object */
-	public void insert(final Connection con) {
-		UUID newID = UUID.randomUUID();
-		id.setStoredValue(newID);
-		String sql = "INSERT INTO " + tableName + " (";
-		for (int i = 0; i < fields.size(); i++) {
-			sql = sql + fields.get(i).getColumn();
-			if (i < (fields.size() - 1)) {
-				sql = sql + ",";
-			}
-		}
-		sql = sql + ") VALUES(";
-		for (int i = 0; i < fields.size(); i++) {
-			sql = sql + quoteStr(fields.get(i).asString());
-			if (i < (fields.size() - 1)) {
-				sql = sql + ",";
-			}
-		}
-		sql = sql + ")";
-
-		Statement stmt;
-		try {
-			stmt = con.createStatement();
-			stmt.executeUpdate(sql);
-			stmt.close();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-	}
-	
 	/** Updates the values in the object with the values in the database record */
 	public void query(final Connection con, final UUID idValue) {
 		String sql = " SELECT * FROM " + this.tableName + " WHERE ID = " + "'" + idValue.toString() + "'";
@@ -149,9 +81,7 @@ public abstract class DBObject {
 		}
 	}
 	
-	protected abstract void deleteChildren(final Connection con);
 	protected abstract void queryChildren(final UUID id, final Connection con);
-	protected abstract void updateChildren(final Connection con);
 	
 	/** Test */
 	public void setName(final String newName) {

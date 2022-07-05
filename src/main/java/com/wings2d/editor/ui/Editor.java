@@ -14,6 +14,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import javax.swing.tree.TreePath;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import com.wings2d.editor.objects.EditOptions;
@@ -160,6 +161,8 @@ public class Editor {
 	{
 		skeletonEdit.setCurrentSkeleton(skeleton);
 		skeletonEdit.getTopBar().setHeaderText(skeleton.getName());
+		TreePath path = new TreePath(skeleton.getMasterFrame());
+		skeletonEdit.getSkeletonTree().getTree().setSelectionPath(path);
 		cards.show(mainPanel, SkeletonEdit.CARD_ID);
 	}
 	public void showSettings() {

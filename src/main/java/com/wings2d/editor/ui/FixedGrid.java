@@ -99,7 +99,6 @@ public class FixedGrid extends JPanel{
 		
 		super.add(comp);
 		panels.add(new ChildComp(comp, x, y, length, height));
-		comp.addComponentListener(new ResizeListener());
 		recalcChildren();
 	}
 	

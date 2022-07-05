@@ -22,8 +22,7 @@ public class ProjectEdit extends UIGridPanel<ProjectEdit>{
 
 	public ProjectEdit(final Editor edit, final Connection con, final EditorSettings settings) {
 		super(edit, 5, 8);
-		
-		panel.setLayout(new FlowLayout());
+
 		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		
 		projectSelect = new ProjectSelect(this, con, settings);
@@ -33,14 +32,6 @@ public class ProjectEdit extends UIGridPanel<ProjectEdit>{
 		this.getGrid().addChild(projectSelect.getPanel(), 0, 0, 4, 1);
 		this.getGrid().addChild(currentItemEdit.getPanel(), 0, 1, 4, 1);
 		this.getGrid().addChild(projectItems.getPanel(), 4, 0, 1, 2);
-		
-//		JScrollPane pane = new JScrollPane(projectSelect.getPanel());
-//		JScrollPane pane2 = new JScrollPane(currentItemEdit.getPanel());
-//		JScrollPane pane3 = new JScrollPane(projectItems.getPanel());
-//		vertical = new JSplitPane(JSplitPane.VERTICAL_SPLIT, pane, pane2);
-//		horizontal = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, vertical, pane3);
-//
-//		panel.add(horizontal);
 	}
 	
 	@Override

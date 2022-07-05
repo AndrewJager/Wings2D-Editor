@@ -51,7 +51,7 @@ public class ProjectSelect extends UIElement<ProjectEdit>{
 			model.addElement(projects.get(i));
 		}
 		projList = new JList<Project>(model);
-//		projList.setPreferredSize(new Dimension(200, 50));
+		projList.setPreferredSize(new Dimension(200, 50));
 		projectsPnl.add(projList, BorderLayout.CENTER);
 		panel.add(projectsPnl);
 		

@@ -1,7 +1,6 @@
 package com.wings2d.editor.ui.skeleton;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 
 import com.wings2d.editor.ui.UIElement;
 
@@ -12,7 +11,6 @@ public class RenderArea extends UIElement<SkeletonEdit>{
 	public RenderArea(SkeletonEdit edit) {
 		super(edit);
 		panel.setLayout(new BorderLayout());
-		panel.setPreferredSize(new Dimension(400, 400));
 		
 		renderPanel = new RenderAreaPanel(edit);
 		controls = new RenderAreaControls(edit);

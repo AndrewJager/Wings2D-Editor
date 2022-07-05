@@ -1,22 +1,25 @@
 package com.wings2d.editor.ui.skeleton;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.geom.PathIterator;
 import java.sql.Connection;
 
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import com.wings2d.editor.objects.skeleton.DrawMode;
 import com.wings2d.editor.objects.skeleton.Skeleton;
 import com.wings2d.editor.ui.Editor;
+import com.wings2d.editor.ui.FixedGrid;
 import com.wings2d.editor.ui.UIPanel;
 import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
 
 public class SkeletonEdit extends UIPanel<SkeletonEdit>{
 	public static String CARD_ID = "Skeleton";
-	private JPanel centerPanel;
+	private FixedGrid centerPanel;
 	
 	private Skeleton skeleton;
 	private DrawMode drawMode;
@@ -39,24 +42,23 @@ public class SkeletonEdit extends UIPanel<SkeletonEdit>{
 
 		panel.setLayout(new BorderLayout());
 		
-		centerPanel = new JPanel();
+		centerPanel = new FixedGrid(6, 4);
 		centerPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		
 		bar = new SkeletonToolBar(this);
 		panel.add(bar.getToolbar(), BorderLayout.NORTH);
 		
 		tree = new SkeletonTree(this);
-		
 		drawingArea = new SkeletonDrawing(this);	
 		treeControls = new SkeletonTreeControls(this, con);
 		renderArea = new RenderArea(this);
 		
-		JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tree.getPanel(), treeControls.getPanel());
-		JSplitPane pane2 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, pane, drawingArea.getPanel());
-		JSplitPane pane3 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, pane2, renderArea.getPanel());
-		centerPanel.add(pane3);
+		centerPanel.addChild(tree.getPanel(), 0, 0, 1, 4);
+		centerPanel.addChild(treeControls.getPanel(), 1, 0, 1, 2);
+		centerPanel.addChild(drawingArea.getPanel(), 2, 0, 2, 2);
+		centerPanel.addChild(renderArea.getPanel(), 4, 0, 2, 2);
 		
-		panel.add(centerPanel, BorderLayout.WEST);
+		panel.add(centerPanel, BorderLayout.CENTER);
 	}
 	
 	public void setCurrentSkeleton(final Skeleton s)

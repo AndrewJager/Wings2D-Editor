@@ -1,10 +1,8 @@
 package com.wings2d.editor.ui.skeleton;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 
 import com.wings2d.editor.ui.UIElement;
-import com.wings2d.editor.ui.skeleton.treecontrols.SkeletonTreeControls;
 
 public class SkeletonDrawing extends UIElement<SkeletonEdit>{
 	private SkeletonDrawingPanel drawingPanel;
@@ -13,7 +11,6 @@ public class SkeletonDrawing extends UIElement<SkeletonEdit>{
 	public SkeletonDrawing(SkeletonEdit edit) {
 		super(edit);
 		panel.setLayout(new BorderLayout());
-		panel.setPreferredSize(new Dimension(400, 400));
 		
 		drawingPanel = new SkeletonDrawingPanel(edit);
 		panel.add(drawingPanel.getPanel(), BorderLayout.CENTER);

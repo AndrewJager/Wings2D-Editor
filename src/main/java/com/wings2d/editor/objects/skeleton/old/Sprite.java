@@ -30,6 +30,7 @@ import com.wings2d.editor.objects.Drawable;
 import com.wings2d.editor.objects.EditorSettings;
 import com.wings2d.editor.objects.save.DBColor;
 import com.wings2d.editor.objects.save.DBUUID;
+import com.wings2d.editor.objects.skeleton.DrawMode;
 import com.wings2d.editor.ui.edits.ActionNotDoneException;
 import com.wings2d.framework.imageFilters.ImageFilter;
 import com.wings2d.framework.shape.ShapeComparator;

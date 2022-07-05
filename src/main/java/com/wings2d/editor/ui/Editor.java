@@ -26,8 +26,8 @@ import com.wings2d.editor.ui.project.ProjectEdit;
 import com.wings2d.editor.ui.settings.Hotkeys;
 import com.wings2d.editor.ui.settings.SettingsEdit;
 import com.wings2d.editor.ui.skeleton.SkeletonEdit;
-import com.wings2d.framework.Level;
-import com.wings2d.framework.LevelManager;
+import com.wings2d.framework.core.Level;
+import com.wings2d.framework.core.LevelManager;
 
 public class Editor {
 	private LevelManager manager;
@@ -82,7 +82,7 @@ public class Editor {
 		
 		undo = new EditsManager(skeletonEdit.getSkeletonTree());
 		
-		mainPanel.add(projectEdit.getPanel(), ProjectEdit.CARD_ID);		
+		mainPanel.add(projectEdit.getGrid(), ProjectEdit.CARD_ID);		
 		mainPanel.add(skeletonEdit.getPanel(), SkeletonEdit.CARD_ID);
 		mainPanel.add(settingsEdit.getPanel(), SettingsEdit.CARD_ID);
 		showProject();

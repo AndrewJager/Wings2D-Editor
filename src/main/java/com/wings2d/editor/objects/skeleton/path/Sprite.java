@@ -577,6 +577,7 @@ public class Sprite extends SkeletonNode implements Drawable{
 		drawShape = transform.createTransformedShape(drawShape);
 		Graphics2D g2d = (Graphics2D)newImage.getGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g2d.setColor(color.getStoredValue());
 		g2d.fill(drawShape);
 		
